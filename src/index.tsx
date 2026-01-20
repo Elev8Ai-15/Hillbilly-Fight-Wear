@@ -315,36 +315,35 @@ app.get('/', (c) => {
       border-radius: 4px;
     }
     
-    /* Hero Logo Section */
+    /* Hero Logo Section - Logo on top, fighter below */
     .hero-logo-section {
-      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-      padding: 60px 20px;
+      background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+      padding: 60px 20px 80px;
       text-align: center;
     }
     
     .hero-logo-container {
-      max-width: 1200px;
+      max-width: 900px;
       margin: 0 auto;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 60px;
-      flex-wrap: wrap;
+      gap: 50px;
     }
     
     .hero-logo {
-      max-width: 500px;
+      max-width: 700px;
       width: 100%;
     }
     
     .hero-logo img {
       width: 100%;
       height: auto;
-      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 10px 40px rgba(0,0,0,0.6));
     }
     
     .hero-fighter {
-      max-width: 400px;
+      max-width: 600px;
       width: 100%;
     }
     
@@ -352,16 +351,19 @@ app.get('/', (c) => {
       width: 100%;
       height: auto;
       border-radius: 12px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+      border: 3px solid rgba(255,255,255,0.1);
     }
     
-    @media (max-width: 900px) {
-      .hero-logo-container {
-        flex-direction: column;
-        gap: 40px;
+    @media (max-width: 768px) {
+      .hero-logo {
+        max-width: 90%;
       }
-      .hero-logo, .hero-fighter {
-        max-width: 350px;
+      .hero-fighter {
+        max-width: 90%;
+      }
+      .hero-logo-section {
+        padding: 40px 15px 60px;
       }
     }
     
@@ -509,7 +511,7 @@ app.get('/', (c) => {
     </div>
   </div>
   
-  <!-- Hero Logo Section with Fighter Image -->
+  <!-- Hero Logo Section - Logo on top, Fighter below -->
   <section class="hero-logo-section">
     <div class="hero-logo-container">
       <div class="hero-logo">
