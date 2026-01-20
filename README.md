@@ -14,35 +14,35 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 ## Features
 
 ### Homepage
-- ✅ Announcement bar with promotional messaging
-- ✅ Hero slideshow with 4 rotating slides (5-second auto-advance)
-- ✅ Pause/Play functionality for slideshow
-- ✅ Slide navigation dots
-- ✅ "Official Store" overlay text on first slide
-- ✅ **"Build Your Own" CTA section**
-- ✅ Featured product grid (6 t-shirt products)
-- ✅ Product cards linking to builder with pre-selections
-- ✅ Feature row promoting custom apparel builder
-- ✅ Fully responsive design (mobile, tablet, desktop)
+- Announcement bar with promotional messaging
+- Hero slideshow with 4 rotating slides (5-second auto-advance)
+- Pause/Play functionality for slideshow
+- Slide navigation dots
+- "Official Store" overlay text on first slide
+- **"Build Your Own" CTA section**
+- Featured product grid (6 t-shirt products)
+- Product cards linking to builder with pre-selections
+- Feature row promoting custom apparel builder
+- Fully responsive design (mobile, tablet, desktop)
 
 ### Custom Garment Builder (/build)
-- ✅ **5-Step Wizard Interface**:
+- **5-Step Wizard Interface**:
   1. Choose Garment (T-Shirt, Sweatshirt, Hoodie, Tank Tops, Trucker Hat)
   2. Select Size (XS - XXXL, or hat sizes)
   3. Select Color (White, Grey, Black)
-  4. Choose Graphics (7 HFW logos/designs)
-  5. Select Placement (Full Front/Back, Left/Right Chest)
-- ✅ **Real-time Fabric.js Canvas Preview**
+  4. Choose Graphics (11 HFW logos/designs)
+  5. Select Placement (Full Front/Back, Left/Right Chest, Hat Front)
+- **Real-time Fabric.js Canvas Preview**
   - Live preview of garment with graphic overlay
-  - Front/Back view toggle
-  - Automatic view switching based on placement
-- ✅ **Multiple Graphics Support**
+  - **Front/Back view toggle** (automatic switching based on placement)
+  - Graphics overlay with proper positioning
+- **Multiple Graphics Support**
   - Add additional graphics (+$10 each)
   - Choose different placements for each
-- ✅ **Dynamic Pricing**
+- **Dynamic Pricing**
   - Real-time price calculation
   - Order summary with itemized breakdown
-- ✅ **Stripe Checkout Integration**
+- **Stripe Checkout Integration**
   - Secure payment processing
   - Configuration metadata preserved
   - Success/Cancel pages
@@ -58,14 +58,18 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 | Hoodie | $55.00 |
 | Additional Graphic | +$10.00 |
 
-### Graphics Library
-- Hillbilly Fightwear (NEW logo)
-- HFW Logo
-- Human Cockfighter
-- Thump A Stranger
-- GPG Design
-- YYCF Logo
-- FUN Logo
+### Graphics Library (11 Total)
+- **HFW Original** - Main Hillbilly Fightwear logo
+- **HFW 3D Black** - 3D effect black logo
+- **HFW Metal Gloves** - Metal gloves variant
+- **HFW Black Shadow** - Black with shadow
+- **HFW White Outline** - White outline variant
+- **HFW Logo** - Original HFW logo
+- **Human Cockfighter** - Fighter artwork
+- **Thump A Stranger** - Brand slogan design
+- **GPG Design** - Partner graphic
+- **YYCF Logo** - Partner logo
+- **FUN Logo** - Brand variant
 
 ## API Endpoints
 
@@ -81,6 +85,7 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 | `/api/calculate-price` | POST | Calculate order price |
 | `/api/create-checkout` | POST | Create Stripe checkout session |
 | `/checkout/success` | GET | Order confirmation page |
+| `/favicon.ico` | GET | Favicon (returns 204) |
 
 ## Tech Stack
 - **Framework**: Hono
@@ -93,15 +98,38 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 
 ## Data Architecture
 
-### Garment Images
-AI-generated mockup images for each garment type in 3 colors (white, black, grey):
-- 18 total garment images hosted on GenSpark CDN
-- Consistent flat-lay style for accurate preview
+### Garment Images (33 Total)
+All AI-generated flat-lay mockup images served locally:
+- **Front/Back views** for all tops (T-Shirt, Sweatshirt, Hoodie, Tank Tops)
+- **Single view** for Trucker Hats
+- **3 colors each**: White, Black, Grey
+- Location: `/images/garments/`
+
+### Graphics Assets (11 Total)
+All locally hosted in `/images/graphics/`:
+- No external Shopify CDN dependencies
+- Optimized for canvas overlay
+
+### Homepage Assets
+- **Slides**: 4 locally hosted images (`/images/slides/`)
+- **Hero Background**: Local hero image (`/images/hero-bg.jpg`)
+- **Product Thumbnails**: Local graphics images
 
 ### Storage
-- **Product Data**: In-memory (scales with Workers)
+- **Static Assets**: Cloudflare Pages (auto-served from public/)
+- **Product Data**: In-memory TypeScript arrays
 - **Payments**: Stripe (external service)
 - **Future**: Cloudflare D1 for order history
+
+## Asset Summary
+| Category | Count | Size |
+|----------|-------|------|
+| Garment Images | 33 | 16MB |
+| Graphics | 11 | 1.9MB |
+| Slides | 4 | 1.1MB |
+| Hero Background | 1 | 80KB |
+| Worker Bundle | 1 | 76KB |
+| **Total** | **50** | **~19MB** |
 
 ## User Guide
 
@@ -117,9 +145,10 @@ AI-generated mockup images for each garment type in 3 colors (white, black, grey
 4. **Step 3**: Pick a color (watch preview update!)
 5. **Step 4**: Select a graphic from the gallery
 6. **Step 5**: Choose where to place the graphic
-7. Optional: Add more graphics (+$10 each)
-8. Review your order summary
-9. Click "Proceed to Checkout" for Stripe payment
+7. **Toggle Front/Back** to see different placements
+8. Optional: Add more graphics (+$10 each)
+9. Review your order summary
+10. Click "Proceed to Checkout" for Stripe payment
 
 ## Environment Variables
 
@@ -151,9 +180,12 @@ webapp/
 ├── src/
 │   └── index.tsx          # Main Hono app (routes, data, APIs)
 ├── public/
-│   └── images/
-│       └── graphics/
-│           └── hillbilly-fightwear-logo.png
+│   ├── images/
+│   │   ├── garments/      # 33 garment mockup images (front/back)
+│   │   ├── graphics/      # 11 logo/artwork images
+│   │   ├── slides/        # 4 slideshow images
+│   │   └── hero-bg.jpg    # Hero section background
+│   └── _routes.json       # Static file routing config
 ├── dist/                  # Build output
 ├── package.json
 ├── vite.config.ts
@@ -163,10 +195,20 @@ webapp/
 └── README.md
 ```
 
+## Recent Updates (v2.1.0)
+- Generated 33 flat-lay garment images with front/back views
+- Added 4 new user-provided logo variants
+- Downloaded and localized all 11 graphics (no Shopify CDN)
+- Downloaded slides and hero images locally
+- Fixed front/back toggle wiring for canvas preview
+- Updated all product/slide arrays with local paths
+- Zero external Shopify dependencies
+- Optimized image assets
+
 ## Original Source
 Enhanced from: https://hillbilly-fightwear.myshopify.com/
 
 ---
-**Status**: ✅ Active  
+**Status**: Active  
 **Last Updated**: 2026-01-20  
-**Version**: 2.0.0 (Custom Builder Release)
+**Version**: 2.1.0 (Full Local Assets Release)
