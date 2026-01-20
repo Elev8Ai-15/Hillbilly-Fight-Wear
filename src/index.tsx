@@ -23,9 +23,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: 'https://www.genspark.ai/api/files/s/bWaOBkHP',
-      black: 'https://www.genspark.ai/api/files/s/e9QbrtJN',
-      grey: 'https://www.genspark.ai/api/files/s/dnEiOvNT'
+      white: '/images/garments/tshirt-white.png',
+      black: '/images/garments/tshirt-black.png',
+      grey: '/images/garments/tshirt-grey.png'
     }
   },
   {
@@ -36,9 +36,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: 'https://www.genspark.ai/api/files/s/Vw3O8hq6',
-      black: 'https://www.genspark.ai/api/files/s/CyYg2IkN',
-      grey: 'https://www.genspark.ai/api/files/s/Rp7aeKGQ'
+      white: '/images/garments/sweatshirt-white.png',
+      black: '/images/garments/sweatshirt-black.png',
+      grey: '/images/garments/sweatshirt-grey.png'
     }
   },
   {
@@ -49,9 +49,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: 'https://www.genspark.ai/api/files/s/PH5iyThW',
-      black: 'https://www.genspark.ai/api/files/s/r7DDqVnj',
-      grey: 'https://www.genspark.ai/api/files/s/YeSyYMBJ'
+      white: '/images/garments/hoodie-white.png',
+      black: '/images/garments/hoodie-black.png',
+      grey: '/images/garments/hoodie-grey.png'
     }
   },
   {
@@ -62,9 +62,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: 'https://www.genspark.ai/api/files/s/q4o1NRtU',
-      black: 'https://www.genspark.ai/api/files/s/qwm3EzNA',
-      grey: 'https://www.genspark.ai/api/files/s/B072UQue'
+      white: '/images/garments/tank-mens-white.png',
+      black: '/images/garments/tank-mens-black.png',
+      grey: '/images/garments/tank-mens-grey.png'
     }
   },
   {
@@ -75,9 +75,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: 'https://www.genspark.ai/api/files/s/aPtosQ7I',
-      black: 'https://www.genspark.ai/api/files/s/cCJlUVtO',
-      grey: 'https://www.genspark.ai/api/files/s/0zmiQQdj'
+      white: '/images/garments/tank-womens-white.png',
+      black: '/images/garments/tank-womens-black.png',
+      grey: '/images/garments/tank-womens-grey.png'
     }
   },
   {
@@ -88,9 +88,9 @@ const garments = [
     sizes: ['One Size', 'S/M', 'L/XL'],
     supportsPlacement: true,
     images: {
-      white: 'https://www.genspark.ai/api/files/s/6IHlrrTk',
-      black: 'https://www.genspark.ai/api/files/s/pJEHMEGL',
-      grey: 'https://www.genspark.ai/api/files/s/WcabuxqX'
+      white: '/images/garments/trucker-hat-white.png',
+      black: '/images/garments/trucker-hat-black.png',
+      grey: '/images/garments/trucker-hat-grey.png'
     }
   }
 ]
@@ -99,8 +99,8 @@ const graphics = [
   {
     id: 'hfw-main',
     name: 'Hillbilly Fightwear',
-    thumbnail: 'https://www.genspark.ai/api/files/s/UsYMsP4o',
-    fullImage: 'https://www.genspark.ai/api/files/s/UsYMsP4o'
+    thumbnail: '/images/hero-logo.png',
+    fullImage: '/images/hero-logo.png'
   },
   {
     id: 'hfw-logo',
@@ -319,7 +319,7 @@ app.get('/', (c) => {
     .main-hero {
       position: relative;
       min-height: 80vh;
-      background-image: url('https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Croom_finishing_MrD_w_Luttrell_in_corner_540x.jpg?v=1613509348');
+      background-image: url('https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Croom_finishing_MrD_w_Luttrell_in_corner_1950x.jpg?v=1613509348');
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
@@ -558,7 +558,7 @@ app.get('/', (c) => {
   <section class="main-hero">
     <div class="main-hero-content">
       <div class="main-hero-logo">
-        <img src="https://www.genspark.ai/api/files/s/UsYMsP4o" alt="Hillbilly Fightwear">
+        <img src="/images/hero-logo.png" alt="Hillbilly Fightwear">
       </div>
       <p class="main-hero-tagline">Official Fight Gear</p>
       <div class="main-hero-cta">
@@ -1845,9 +1845,6 @@ app.get('/checkout/success', (c) => {
 </html>`)
 })
 
-// Catch-all for undefined routes (must be last)
-app.all('*', (c) => {
-  return c.redirect('/')
-})
+// Note: Static files from /images/* are served by Cloudflare Pages automatically
 
 export default app
