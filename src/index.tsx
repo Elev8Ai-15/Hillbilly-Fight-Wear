@@ -315,67 +315,109 @@ app.get('/', (c) => {
       border-radius: 4px;
     }
     
-    /* MAIN HERO Section - Big logo at top of page */
+    /* MAIN HERO Section - Fighter background with logo overlay */
     .main-hero {
-      background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%);
-      padding: 80px 20px 100px;
-      text-align: center;
-      min-height: 70vh;
+      position: relative;
+      min-height: 80vh;
+      background-image: url('https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Croom_finishing_MrD_w_Luttrell_in_corner_540x.jpg?v=1613509348');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
     
+    .main-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.6) 100%
+      );
+      z-index: 1;
+    }
+    
+    .main-hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 900px;
+    }
+    
     .main-hero-logo {
-      max-width: 800px;
-      width: 90%;
-      margin-bottom: 60px;
+      width: 100%;
+      max-width: 750px;
+      margin: 0 auto;
     }
     
     .main-hero-logo img {
       width: 100%;
       height: auto;
-      filter: drop-shadow(0 20px 60px rgba(139, 0, 0, 0.4));
-    }
-    
-    .main-hero-fighter {
-      max-width: 700px;
-      width: 85%;
-    }
-    
-    .main-hero-fighter img {
-      width: 100%;
-      height: auto;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      border: 4px solid rgba(139, 0, 0, 0.5);
+      filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.8))
+              drop-shadow(0 0 60px rgba(139, 0, 0, 0.5));
     }
     
     .main-hero-tagline {
       color: #fff;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       text-transform: uppercase;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
+      margin-top: 30px;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+      font-weight: 500;
+    }
+    
+    .main-hero-cta {
       margin-top: 40px;
-      opacity: 0.8;
+    }
+    
+    .main-hero-cta a {
+      display: inline-block;
+      background: #8B0000;
+      color: #fff;
+      padding: 18px 50px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 30px rgba(139, 0, 0, 0.4);
+    }
+    
+    .main-hero-cta a:hover {
+      background: #a50000;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(139, 0, 0, 0.6);
     }
     
     @media (max-width: 768px) {
       .main-hero {
-        padding: 50px 15px 70px;
-        min-height: 60vh;
+        min-height: 70vh;
+      }
+      .main-hero-content {
+        padding: 30px 15px;
       }
       .main-hero-logo {
-        max-width: 95%;
-        margin-bottom: 40px;
-      }
-      .main-hero-fighter {
-        max-width: 95%;
+        max-width: 90%;
       }
       .main-hero-tagline {
-        font-size: 1.1rem;
-        letter-spacing: 2px;
+        font-size: 1.2rem;
+        letter-spacing: 3px;
+        margin-top: 20px;
+      }
+      .main-hero-cta a {
+        padding: 14px 35px;
+        font-size: 1rem;
       }
     }
     
@@ -512,15 +554,17 @@ app.get('/', (c) => {
     <p style="margin: 0;">🔥 NEW: Build Your Own Custom Apparel! 🔥</p>
   </div>
   
-  <!-- MAIN HERO - Logo + Fighter Image -->
+  <!-- MAIN HERO - Fighter Background + Logo Banner Overlay -->
   <section class="main-hero">
-    <div class="main-hero-logo">
-      <img src="https://www.genspark.ai/api/files/s/UsYMsP4o" alt="Hillbilly Fightwear">
+    <div class="main-hero-content">
+      <div class="main-hero-logo">
+        <img src="https://www.genspark.ai/api/files/s/UsYMsP4o" alt="Hillbilly Fightwear">
+      </div>
+      <p class="main-hero-tagline">Official Fight Gear</p>
+      <div class="main-hero-cta">
+        <a href="/build"><i class="fas fa-paint-brush"></i> Build Your Own</a>
+      </div>
     </div>
-    <div class="main-hero-fighter">
-      <img src="https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Croom_finishing_MrD_w_Luttrell_in_corner_540x.jpg?v=1613509348" alt="Fighter in cage">
-    </div>
-    <p class="main-hero-tagline">Official Fight Gear</p>
   </section>
   
   <!-- Slideshow - Secondary -->
