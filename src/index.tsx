@@ -315,55 +315,67 @@ app.get('/', (c) => {
       border-radius: 4px;
     }
     
-    /* Hero Logo Section - Logo on top, fighter below */
-    .hero-logo-section {
-      background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
-      padding: 60px 20px 80px;
+    /* MAIN HERO Section - Big logo at top of page */
+    .main-hero {
+      background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%);
+      padding: 80px 20px 100px;
       text-align: center;
-    }
-    
-    .hero-logo-container {
-      max-width: 900px;
-      margin: 0 auto;
+      min-height: 70vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 50px;
+      justify-content: center;
     }
     
-    .hero-logo {
+    .main-hero-logo {
+      max-width: 800px;
+      width: 90%;
+      margin-bottom: 60px;
+    }
+    
+    .main-hero-logo img {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 20px 60px rgba(139, 0, 0, 0.4));
+    }
+    
+    .main-hero-fighter {
       max-width: 700px;
-      width: 100%;
+      width: 85%;
     }
     
-    .hero-logo img {
+    .main-hero-fighter img {
       width: 100%;
       height: auto;
-      filter: drop-shadow(0 10px 40px rgba(0,0,0,0.6));
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border: 4px solid rgba(139, 0, 0, 0.5);
     }
     
-    .hero-fighter {
-      max-width: 600px;
-      width: 100%;
-    }
-    
-    .hero-fighter img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.5);
-      border: 3px solid rgba(255,255,255,0.1);
+    .main-hero-tagline {
+      color: #fff;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-top: 40px;
+      opacity: 0.8;
     }
     
     @media (max-width: 768px) {
-      .hero-logo {
-        max-width: 90%;
+      .main-hero {
+        padding: 50px 15px 70px;
+        min-height: 60vh;
       }
-      .hero-fighter {
-        max-width: 90%;
+      .main-hero-logo {
+        max-width: 95%;
+        margin-bottom: 40px;
       }
-      .hero-logo-section {
-        padding: 40px 15px 60px;
+      .main-hero-fighter {
+        max-width: 95%;
+      }
+      .main-hero-tagline {
+        font-size: 1.1rem;
+        letter-spacing: 2px;
       }
     }
     
@@ -500,7 +512,18 @@ app.get('/', (c) => {
     <p style="margin: 0;">🔥 NEW: Build Your Own Custom Apparel! 🔥</p>
   </div>
   
-  <!-- Slideshow -->
+  <!-- MAIN HERO - Logo + Fighter Image -->
+  <section class="main-hero">
+    <div class="main-hero-logo">
+      <img src="https://www.genspark.ai/api/files/s/UsYMsP4o" alt="Hillbilly Fightwear">
+    </div>
+    <div class="main-hero-fighter">
+      <img src="https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Croom_finishing_MrD_w_Luttrell_in_corner_540x.jpg?v=1613509348" alt="Fighter in cage">
+    </div>
+    <p class="main-hero-tagline">Official Fight Gear</p>
+  </section>
+  
+  <!-- Slideshow - Secondary -->
   <div class="slideshow-wrapper">
     <button class="slideshow-pause" id="pauseBtn" onclick="togglePause()">
       <i class="fas fa-pause" id="pauseIcon"></i>
@@ -510,18 +533,6 @@ app.get('/', (c) => {
       ${dotsHtml}
     </div>
   </div>
-  
-  <!-- Hero Logo Section - Logo on top, Fighter below -->
-  <section class="hero-logo-section">
-    <div class="hero-logo-container">
-      <div class="hero-logo">
-        <img src="https://www.genspark.ai/api/files/s/UsYMsP4o" alt="Hillbilly Fightwear Logo">
-      </div>
-      <div class="hero-fighter">
-        <img src="https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Croom_finishing_MrD_w_Luttrell_in_corner_540x.jpg?v=1613509348" alt="Fighter in cage">
-      </div>
-    </div>
-  </section>
   
   <!-- Build Your Own CTA -->
   <section class="build-cta">
