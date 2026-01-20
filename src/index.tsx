@@ -99,8 +99,8 @@ const graphics = [
   {
     id: 'hfw-main',
     name: 'Hillbilly Fightwear',
-    thumbnail: '/images/hero-logo.png',
-    fullImage: '/images/hero-logo.png'
+    thumbnail: '/images/graphics/hillbilly-fightwear-logo.png',
+    fullImage: '/images/graphics/hillbilly-fightwear-logo.png'
   },
   {
     id: 'hfw-logo',
@@ -558,7 +558,7 @@ app.get('/', (c) => {
   <section class="main-hero">
     <div class="main-hero-content">
       <div class="main-hero-logo">
-        <img src="/images/hero-logo.png" alt="Hillbilly Fightwear">
+        <img src="/images/graphics/hillbilly-fightwear-logo.png" alt="Hillbilly Fightwear">
       </div>
       <p class="main-hero-tagline">Official Fight Gear</p>
       <div class="main-hero-cta">
@@ -1762,7 +1762,7 @@ app.post('/api/create-checkout', async (c) => {
         color,
         graphic: gr.name,
         placement,
-        additionalGraphics: additionalGraphics.map(ag => ({
+        additionalGraphics: additionalGraphics.map((ag: { graphic: string; placement: string }) => ({
           graphic: graphics.find(x => x.id === ag.graphic)?.name,
           placement: ag.placement
         })),
@@ -1796,7 +1796,7 @@ app.post('/api/create-checkout', async (c) => {
       })
     })
     
-    const session = await stripeResponse.json()
+    const session = await stripeResponse.json() as { error?: { message: string }; url?: string }
     
     if (session.error) {
       return c.json({ error: session.error.message }, 400)
