@@ -23,9 +23,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: '/images/garments/tshirt-white.png',
-      black: '/images/garments/tshirt-black.png',
-      grey: '/images/garments/tshirt-grey.png'
+      white: { front: '/images/garments/tshirt-white-front.png', back: '/images/garments/tshirt-white-back.png' },
+      black: { front: '/images/garments/tshirt-black-front.png', back: '/images/garments/tshirt-black-back.png' },
+      grey: { front: '/images/garments/tshirt-grey-front.png', back: '/images/garments/tshirt-grey-back.png' }
     }
   },
   {
@@ -36,9 +36,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: '/images/garments/sweatshirt-white.png',
-      black: '/images/garments/sweatshirt-black.png',
-      grey: '/images/garments/sweatshirt-grey.png'
+      white: { front: '/images/garments/sweatshirt-white-front.png', back: '/images/garments/sweatshirt-white-back.png' },
+      black: { front: '/images/garments/sweatshirt-black-front.png', back: '/images/garments/sweatshirt-black-back.png' },
+      grey: { front: '/images/garments/sweatshirt-grey-front.png', back: '/images/garments/sweatshirt-grey-back.png' }
     }
   },
   {
@@ -49,9 +49,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: '/images/garments/hoodie-white.png',
-      black: '/images/garments/hoodie-black.png',
-      grey: '/images/garments/hoodie-grey.png'
+      white: { front: '/images/garments/hoodie-white-front.png', back: '/images/garments/hoodie-white-back.png' },
+      black: { front: '/images/garments/hoodie-black-front.png', back: '/images/garments/hoodie-black-back.png' },
+      grey: { front: '/images/garments/hoodie-grey-front.png', back: '/images/garments/hoodie-grey-back.png' }
     }
   },
   {
@@ -62,9 +62,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: '/images/garments/tank-mens-white.png',
-      black: '/images/garments/tank-mens-black.png',
-      grey: '/images/garments/tank-mens-grey.png'
+      white: { front: '/images/garments/tank-mens-white-front.png', back: '/images/garments/tank-mens-white-back.png' },
+      black: { front: '/images/garments/tank-mens-black-front.png', back: '/images/garments/tank-mens-black-back.png' },
+      grey: { front: '/images/garments/tank-mens-grey-front.png', back: '/images/garments/tank-mens-grey-back.png' }
     }
   },
   {
@@ -75,9 +75,9 @@ const garments = [
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: '/images/garments/tank-womens-white.png',
-      black: '/images/garments/tank-womens-black.png',
-      grey: '/images/garments/tank-womens-grey.png'
+      white: { front: '/images/garments/tank-womens-white-front.png', back: '/images/garments/tank-womens-white-back.png' },
+      black: { front: '/images/garments/tank-womens-black-front.png', back: '/images/garments/tank-womens-black-back.png' },
+      grey: { front: '/images/garments/tank-womens-grey-front.png', back: '/images/garments/tank-womens-grey-back.png' }
     }
   },
   {
@@ -88,9 +88,9 @@ const garments = [
     sizes: ['One Size', 'S/M', 'L/XL'],
     supportsPlacement: true,
     images: {
-      white: '/images/garments/trucker-hat-white.png',
-      black: '/images/garments/trucker-hat-black.png',
-      grey: '/images/garments/trucker-hat-grey.png'
+      white: { front: '/images/garments/trucker-hat-white.png' },
+      black: { front: '/images/garments/trucker-hat-black.png' },
+      grey: { front: '/images/garments/trucker-hat-grey.png' }
     }
   }
 ]
@@ -98,45 +98,69 @@ const garments = [
 const graphics = [
   {
     id: 'hfw-main',
-    name: 'Hillbilly Fightwear',
+    name: 'HFW Original',
     thumbnail: '/images/graphics/hillbilly-fightwear-logo.png',
     fullImage: '/images/graphics/hillbilly-fightwear-logo.png'
   },
   {
+    id: 'hfw-black-3d',
+    name: 'HFW 3D Black',
+    thumbnail: '/images/graphics/hfw-logo-black-3d.png',
+    fullImage: '/images/graphics/hfw-logo-black-3d.png'
+  },
+  {
+    id: 'hfw-metal-gloves',
+    name: 'HFW Metal Gloves',
+    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png',
+    fullImage: '/images/graphics/hfw-logo-metal-gloves.png'
+  },
+  {
+    id: 'hfw-black-shadow',
+    name: 'HFW Black Shadow',
+    thumbnail: '/images/graphics/hfw-logo-black-shadow.png',
+    fullImage: '/images/graphics/hfw-logo-black-shadow.png'
+  },
+  {
+    id: 'hfw-white-outline',
+    name: 'HFW White Outline',
+    thumbnail: '/images/graphics/hfw-logo-white-outline.png',
+    fullImage: '/images/graphics/hfw-logo-white-outline.png'
+  },
+  {
     id: 'hfw-logo',
     name: 'HFW Logo',
-    thumbnail: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/hfwf_300x300.png?v=1541520222',
-    fullImage: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/hfwf_300x300.png?v=1541520222'
+    thumbnail: '/images/graphics/hfw-logo-original.png',
+    fullImage: '/images/graphics/hfw-logo-original.png'
   },
   {
     id: 'human-cockfighter',
     name: 'Human Cockfighter',
-    thumbnail: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/hcff_300x300.png?v=1541521169',
-    fullImage: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/files/human_cockfighter_logo_1950x.jpg?v=1613509348'
+    thumbnail: '/images/graphics/human-cockfighter.png',
+    fullImage: '/images/graphics/human-cockfighter.png'
   },
   {
     id: 'thump-a-stranger',
     name: 'Thump A Stranger',
-    thumbnail: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/thumpf_300x300.png?v=1541521247',
-    fullImage: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Thump_A_Stranger_logo_1950x.jpg?v=1613509348'
+    thumbnail: '/images/graphics/thump-a-stranger.png',
+    fullImage: '/images/graphics/thump-a-stranger.png'
   },
   {
     id: 'gpg-design',
     name: 'GPG Design',
-    thumbnail: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/gnff_300x300.png?v=1541520600',
-    fullImage: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Imes_GPG_announcement_9734a02f-5320-47b8-9429-e95437e29d9d_1950x.jpg?v=1613509348'
+    thumbnail: '/images/graphics/gpg-design.png',
+    fullImage: '/images/graphics/gpg-design.png'
   },
   {
     id: 'yycf-logo',
     name: 'YYCF Logo',
-    thumbnail: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/yycf_300x300.png?v=1541520348',
-    fullImage: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/yycf_300x300.png?v=1541520348'
+    thumbnail: '/images/graphics/yycf-logo.png',
+    fullImage: '/images/graphics/yycf-logo.png'
   },
   {
     id: 'fun-logo',
     name: 'FUN Logo',
-    thumbnail: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/funf_300x300.png?v=1541520465',
-    fullImage: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/funf_300x300.png?v=1541520465'
+    thumbnail: '/images/graphics/fun-logo.png',
+    fullImage: '/images/graphics/fun-logo.png'
   }
 ]
 
@@ -149,19 +173,19 @@ const placements = [
 ]
 
 const products = [
-  { id: 1, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/hfwf_300x300.png?v=1541520222', url: '/build?garment=tshirt&graphic=hfw-logo' },
-  { id: 2, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/yycf_300x300.png?v=1541520348', url: '/build?garment=tshirt&graphic=yycf-logo' },
-  { id: 3, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/funf_300x300.png?v=1541520465', url: '/build?garment=tshirt&graphic=fun-logo' },
-  { id: 4, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/gnff_300x300.png?v=1541520600', url: '/build?garment=tshirt&graphic=gpg-design' },
-  { id: 5, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/hcff_300x300.png?v=1541521169', url: '/build?garment=tshirt&graphic=human-cockfighter' },
-  { id: 6, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/products/thumpf_300x300.png?v=1541521247', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
+  { id: 1, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/hfw-logo-original.png', url: '/build?garment=tshirt&graphic=hfw-logo' },
+  { id: 2, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/yycf-logo.png', url: '/build?garment=tshirt&graphic=yycf-logo' },
+  { id: 3, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/fun-logo.png', url: '/build?garment=tshirt&graphic=fun-logo' },
+  { id: 4, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/gpg-design.png', url: '/build?garment=tshirt&graphic=gpg-design' },
+  { id: 5, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/human-cockfighter.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
+  { id: 6, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/thump-a-stranger.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
 ]
 
 const slides = [
-  { id: 0, image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Imes_GPG_announcement_9734a02f-5320-47b8-9429-e95437e29d9d_1950x.jpg?v=1613509348', title: 'Official Store', subtitle: 'Check Out Products Below', hasOverlay: true },
-  { id: 1, image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/files/IMG_1414_1950x.JPG?v=1615922396', title: '', subtitle: '', hasOverlay: false },
-  { id: 2, image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/files/human_cockfighter_logo_1950x.jpg?v=1613509348', title: '', subtitle: '', hasOverlay: false },
-  { id: 3, image: 'https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Thump_A_Stranger_logo_1950x.jpg?v=1613509348', title: '', subtitle: '', hasOverlay: false }
+  { id: 0, image: '/images/slides/slide-gpg.jpg', title: 'Official Store', subtitle: 'Check Out Products Below', hasOverlay: true },
+  { id: 1, image: '/images/slides/slide-fighter.jpg', title: '', subtitle: '', hasOverlay: false },
+  { id: 2, image: '/images/slides/slide-cockfighter.jpg', title: '', subtitle: '', hasOverlay: false },
+  { id: 3, image: '/images/slides/slide-thump.jpg', title: '', subtitle: '', hasOverlay: false }
 ]
 
 // ============================================
@@ -319,7 +343,7 @@ app.get('/', (c) => {
     .main-hero {
       position: relative;
       min-height: 80vh;
-      background-image: url('https://hillbilly-fightwear.myshopify.com/cdn/shop/files/Croom_finishing_MrD_w_Luttrell_in_corner_1950x.jpg?v=1613509348');
+      background-image: url('/images/hero-bg.jpg');
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
@@ -607,7 +631,7 @@ app.get('/', (c) => {
   <!-- Feature Row -->
   <section class="feature-row">
     <div class="feature-image">
-      <img src="https://hillbilly-fightwear.myshopify.com/cdn/shop/files/IMG_1414_1950x.JPG?v=1615922396" alt="Fighter image">
+      <img src="/images/slides/slide-fighter.jpg" alt="Fighter image">
     </div>
     <div class="feature-text">
       <h2>Custom Apparel Builder</h2>
@@ -1294,7 +1318,7 @@ app.get('/build', (c) => {
       const grid = document.getElementById('garmentGrid');
       grid.innerHTML = garments.map(function(g) {
         return '<div class="garment-option" data-id="' + g.id + '" onclick="selectGarment(\\'' + g.id + '\\')">' +
-          '<img src="' + g.images.black + '" alt="' + g.name + '">' +
+          '<img src="' + g.images.black.front + '" alt="' + g.name + '">' +
           '<div class="name">' + g.name + '</div>' +
           '<div class="price">$' + g.basePrice.toFixed(2) + '</div>' +
         '</div>';
@@ -1408,8 +1432,8 @@ app.get('/build', (c) => {
       // Update garment thumbnails
       document.querySelectorAll('.garment-option').forEach(function(el) {
         var g = garments.find(function(x) { return x.id === el.dataset.id; });
-        if (g) {
-          el.querySelector('img').src = g.images[color];
+        if (g && g.images[color]) {
+          el.querySelector('img').src = g.images[color].front;
         }
       });
       
@@ -1538,7 +1562,8 @@ app.get('/build', (c) => {
       var garment = garments.find(function(g) { return g.id === state.garment; });
       if (!garment) return;
       
-      var imageUrl = garment.images[state.color];
+      var colorImages = garment.images[state.color];
+      var imageUrl = colorImages[state.view] || colorImages.front;
       
       fabric.Image.fromURL(imageUrl, function(img) {
         var scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.9;
