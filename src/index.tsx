@@ -602,7 +602,7 @@ app.get('/', (c) => {
     <!-- Hero Content Overlay -->
     <div class="hero-content">
       <div class="hero-logo">
-        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=2" alt="Hillbilly Fightwear">
+        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear">
       </div>
       <p class="hero-tagline">Official Fight Gear</p>
       <div class="hero-cta">
