@@ -8,17 +8,19 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 - **Features**: Hero slideshow, product grid, custom garment designer with Fabric.js canvas, Stripe checkout
 
 ## URLs
-- **Development**: https://3000-ik0qpv8i47hoxolmj0mr3-b32ec7bb.sandbox.novita.ai
-- **Builder**: https://3000-ik0qpv8i47hoxolmj0mr3-b32ec7bb.sandbox.novita.ai/build
+- **Development**: (sandbox URL - check GetServiceUrl)
+- **Builder**: /build
 
 ## Features
 
 ### Homepage
 - Announcement bar with promotional messaging
-- Hero slideshow with 4 rotating slides (5-second auto-advance)
+- **Full-screen hero carousel** with 6 rotating MMA/rodeo action images (4K upscaled)
+- Logo overlay with transparent background
 - Pause/Play functionality for slideshow
 - Slide navigation dots
-- "Official Store" overlay text on first slide
+- Dual CTA buttons: "Build Your Own" + "Shop Now"
+- Scroll indicator animation
 - **"Build Your Own" CTA section**
 - Featured product grid (6 t-shirt products)
 - Product cards linking to builder with pre-selections
@@ -111,8 +113,14 @@ All locally hosted in `/images/graphics/`:
 - Optimized for canvas overlay
 
 ### Homepage Assets
-- **Slides**: 4 locally hosted images (`/images/slides/`)
-- **Hero Background**: Local hero image (`/images/hero-bg.jpg`)
+- **Slides**: 6 locally hosted 4K images (`/images/slides/`)
+  - slide-cage-coach.jpg - Coach through cage fence
+  - slide-gpg-handshake.jpg - GPG fighter handshake
+  - slide-backstage.jpg - Backstage after fight
+  - slide-cage-grapple.jpg - Cage grappling with HFW branding
+  - slide-ring-fight.jpg - Ring fight action
+  - slide-bullrider.jpg - Bull riding with HFW gear
+- **Hero Logo**: Transparent 3D embossed logo (`/images/graphics/hillbilly-fightwear-logo.png`)
 - **Product Thumbnails**: Local graphics images
 
 ### Storage
@@ -125,11 +133,10 @@ All locally hosted in `/images/graphics/`:
 | Category | Count | Size |
 |----------|-------|------|
 | Garment Images | 33 | 16MB |
-| Graphics | 11 | 1.9MB |
-| Slides | 4 | 1.1MB |
-| Hero Background | 1 | 80KB |
-| Worker Bundle | 1 | 76KB |
-| **Total** | **50** | **~19MB** |
+| Graphics | 10 | 8.3MB |
+| Slides (4K) | 6 | 15MB |
+| Worker Bundle | 1 | 78KB |
+| **Total** | **50** | **~39MB** |
 
 ## User Guide
 
@@ -182,9 +189,8 @@ webapp/
 ├── public/
 │   ├── images/
 │   │   ├── garments/      # 33 garment mockup images (front/back)
-│   │   ├── graphics/      # 11 logo/artwork images
-│   │   ├── slides/        # 4 slideshow images
-│   │   └── hero-bg.jpg    # Hero section background
+│   │   ├── graphics/      # 10 logo/artwork images + hero logo
+│   │   └── slides/        # 6 slideshow images (4K)
 │   └── _routes.json       # Static file routing config
 ├── dist/                  # Build output
 ├── package.json
@@ -195,20 +201,24 @@ webapp/
 └── README.md
 ```
 
-## Recent Updates (v2.1.0)
+## Recent Updates (v3.0.0)
+- **Full-screen hero carousel** with 6 new MMA/rodeo action images
+- **4K upscaled images** for crisp display on all devices
+- **New 3D embossed logo** with transparent background
+- **Dual CTA buttons** (Build Your Own + Shop Now)
+- **System cleanup**: Removed ~5MB of unused assets
+- **Optimized CSS**: background-size: contain for full image visibility
+- Zero external dependencies for assets
+
+## Previous Updates (v2.1.0)
 - Generated 33 flat-lay garment images with front/back views
-- Added 4 new user-provided logo variants
-- Downloaded and localized all 11 graphics (no Shopify CDN)
-- Downloaded slides and hero images locally
+- Downloaded and localized all graphics (no Shopify CDN)
 - Fixed front/back toggle wiring for canvas preview
-- Updated all product/slide arrays with local paths
-- Zero external Shopify dependencies
-- Optimized image assets
 
 ## Original Source
 Enhanced from: https://hillbilly-fightwear.myshopify.com/
 
 ---
 **Status**: Active  
-**Last Updated**: 2026-01-20  
-**Version**: 2.1.0 (Full Local Assets Release)
+**Last Updated**: 2026-01-21  
+**Version**: 3.0.0 (Full-Screen Hero Carousel + System Cleanup)
