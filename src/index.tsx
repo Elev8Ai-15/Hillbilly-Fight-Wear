@@ -99,38 +99,38 @@ const graphics = [
   {
     id: 'hfw-main',
     name: 'HFW Original',
-    thumbnail: '/images/graphics/hillbilly-fightwear-logo.png',
-    fullImage: '/images/graphics/hillbilly-fightwear-logo.png'
+    thumbnail: '/images/graphics/hillbilly-fightwear-logo.png?v=4',
+    fullImage: '/images/graphics/hillbilly-fightwear-logo.png?v=4'
   },
   {
     id: 'hfw-black-3d',
     name: 'HFW 3D Black',
-    thumbnail: '/images/graphics/hfw-logo-black-3d.png',
-    fullImage: '/images/graphics/hfw-logo-black-3d.png'
+    thumbnail: '/images/graphics/hfw-logo-black-3d.png?v=4',
+    fullImage: '/images/graphics/hfw-logo-black-3d.png?v=4'
   },
   {
     id: 'hfw-metal-gloves',
     name: 'HFW Metal Gloves',
-    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png',
-    fullImage: '/images/graphics/hfw-logo-metal-gloves.png'
+    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png?v=4',
+    fullImage: '/images/graphics/hfw-logo-metal-gloves.png?v=4'
   },
   {
     id: 'hfw-black-shadow',
     name: 'HFW Black Shadow',
-    thumbnail: '/images/graphics/hfw-logo-black-shadow.png',
-    fullImage: '/images/graphics/hfw-logo-black-shadow.png'
+    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=4',
+    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=4'
   },
   {
     id: 'hfw-white-outline',
     name: 'HFW White Outline',
-    thumbnail: '/images/graphics/hfw-logo-white-outline.png',
-    fullImage: '/images/graphics/hfw-logo-white-outline.png'
+    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=4',
+    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=4'
   },
   {
     id: 'hfw-dark-embossed',
     name: 'HFW Dark Embossed',
-    thumbnail: '/images/graphics/hfw-logo-dark-embossed.png',
-    fullImage: '/images/graphics/hfw-logo-dark-embossed.png'
+    thumbnail: '/images/graphics/hfw-logo-dark-embossed.png?v=4',
+    fullImage: '/images/graphics/hfw-logo-dark-embossed.png?v=4'
   },
   {
     id: 'hfw-logo',
@@ -1612,7 +1612,7 @@ app.get('/build', (c) => {
         
         fabric.Image.fromURL(graphic.fullImage, function(img) {
           var pos = getPlacementPosition(item.placementId, canvas.width, canvas.height);
-          var maxSize = placement.isSmall ? 70 : 150;
+          var maxSize = placement.isSmall ? 80 : 320;
           
           var scale = Math.min(maxSize / img.width, maxSize / img.height);
           img.scale(scale * garmentScale);
