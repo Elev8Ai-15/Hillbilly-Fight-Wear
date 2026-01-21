@@ -792,7 +792,7 @@ app.get('/', (c) => {
     </div>
     
     <div class="product-grid shop-grid">
-      \${shopProductsHtml}
+      ${shopProductsHtml}
     </div>
     
     <div class="view-all-wrapper">
