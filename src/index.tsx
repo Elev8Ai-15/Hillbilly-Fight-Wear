@@ -272,13 +272,6 @@ app.get('/', (c) => {
     
     .slide.active { opacity: 1; }
     
-    /* For wider screens, use cover to fill but keep images visible */
-    @media (min-aspect-ratio: 16/9) {
-      .slide {
-        background-size: cover;
-      }
-    }
-    
     /* Dark overlay on carousel for text readability */
     .hero-carousel::after {
       content: '';
