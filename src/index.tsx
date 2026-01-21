@@ -135,38 +135,38 @@ const graphics = [
   {
     id: 'hfw-logo',
     name: 'HFW Logo',
-    thumbnail: '/images/graphics/hfw-logo-original.png',
-    fullImage: '/images/graphics/hfw-logo-original.png'
+    thumbnail: '/images/graphics/hfw-logo-original.png?v=3',
+    fullImage: '/images/graphics/hfw-logo-original.png?v=3'
   },
   {
     id: 'human-cockfighter',
     name: 'Human Cockfighter',
-    thumbnail: '/images/graphics/human-cockfighter.png',
-    fullImage: '/images/graphics/human-cockfighter.png'
+    thumbnail: '/images/graphics/human-cockfighter.png?v=3',
+    fullImage: '/images/graphics/human-cockfighter.png?v=3'
   },
   {
     id: 'thump-a-stranger',
     name: 'Thump A Stranger',
-    thumbnail: '/images/graphics/thump-a-stranger.png',
-    fullImage: '/images/graphics/thump-a-stranger.png'
+    thumbnail: '/images/graphics/thump-a-stranger.png?v=3',
+    fullImage: '/images/graphics/thump-a-stranger.png?v=3'
   },
   {
     id: 'gpg-design',
     name: 'GPG Design',
-    thumbnail: '/images/graphics/gpg-design.png',
-    fullImage: '/images/graphics/gpg-design.png'
+    thumbnail: '/images/graphics/gpg-design.png?v=3',
+    fullImage: '/images/graphics/gpg-design.png?v=3'
   },
   {
     id: 'yycf-logo',
     name: 'YYCF Logo',
-    thumbnail: '/images/graphics/yycf-logo.png',
-    fullImage: '/images/graphics/yycf-logo.png'
+    thumbnail: '/images/graphics/yycf-logo.png?v=3',
+    fullImage: '/images/graphics/yycf-logo.png?v=3'
   },
   {
     id: 'fun-logo',
     name: 'FUN Logo',
-    thumbnail: '/images/graphics/fun-logo.png',
-    fullImage: '/images/graphics/fun-logo.png'
+    thumbnail: '/images/graphics/fun-logo.png?v=3',
+    fullImage: '/images/graphics/fun-logo.png?v=3'
   }
 ]
 
