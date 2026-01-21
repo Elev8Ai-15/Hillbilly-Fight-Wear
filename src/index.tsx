@@ -2280,143 +2280,151 @@ app.get('/build', (c) => {
       updateSummary();
     }
     
-    // Canvas preview
+    // Canvas preview - completely rewritten for stability
     function updatePreview() {
       // Increment update ID to cancel any pending async operations
       var currentUpdateId = ++previewUpdateId;
       
+      // Clear canvas completely and force render
       canvas.clear();
       canvas.backgroundColor = '#f8f8f8';
+      canvas.renderAll(); // Force render after clear
       
       if (!state.garment || !state.color) {
-        canvas.renderAll();
         return;
       }
       
       var garment = garments.find(function(g) { return g.id === state.garment; });
-      if (!garment) return;
+      if (!garment) {
+        canvas.renderAll();
+        return;
+      }
       
       var colorImages = garment.images[state.color];
       if (!colorImages) {
-        console.error('No images for color:', state.color);
         canvas.renderAll();
         return;
       }
-      var imageUrl = colorImages[state.view] || colorImages.front;
       
+      // Get the correct image URL based on current view
+      var imageUrl = colorImages[state.view];
       if (!imageUrl) {
-        console.error('No image URL for view:', state.view);
-        canvas.renderAll();
-        return;
+        imageUrl = colorImages.front; // Fallback to front
       }
       
-      fabric.Image.fromURL(imageUrl, function(img) {
-        // Check if this update is still current (not superseded by a newer update)
-        if (currentUpdateId !== previewUpdateId) {
-          return; // Stale update, ignore
-        }
-        
-        if (!img) {
-          console.error('Failed to load garment image:', imageUrl);
+      // Load garment image first
+      fabric.Image.fromURL(imageUrl, function(garmentImg) {
+        // Check if this update is still current
+        if (currentUpdateId !== previewUpdateId) return;
+        if (!garmentImg) {
           canvas.renderAll();
           return;
         }
         
-        var scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.9;
+        var garmentScale = Math.min(canvas.width / garmentImg.width, canvas.height / garmentImg.height) * 0.9;
         
-        img.scale(scale);
-        img.set({
+        garmentImg.scale(garmentScale);
+        garmentImg.set({
           left: canvas.width / 2,
           top: canvas.height / 2,
           originX: 'center',
           originY: 'center',
-          selectable: false
+          selectable: false,
+          evented: false,
+          objectCaching: false // Disable caching to prevent render artifacts
         });
         
-        canvas.add(img);
-        canvas.sendToBack(img);
+        // Add garment to canvas
+        canvas.add(garmentImg);
         
-        addGraphicsToCanvas(scale, currentUpdateId);
+        // Now load and add graphics ON TOP of garment
+        loadGraphicsOnTop(currentUpdateId, garmentScale);
+        
       }, { crossOrigin: 'anonymous' });
     }
     
-    function addGraphicsToCanvas(garmentScale, updateId) {
+    function loadGraphicsOnTop(updateId, garmentScale) {
+      // Determine which graphics to show based on current view
       var graphicsToShow = [];
       
-      if (state.graphic) {
-        if (shouldShowPlacement(state.placement, state.view)) {
+      // Check main graphic
+      if (state.graphic && state.placement) {
+        // Only show if placement matches current view
+        var shouldShow = (state.placement === 'full-back' && state.view === 'back') ||
+            ((state.placement === 'full-front' || state.placement === 'left-chest' || state.placement === 'right-chest') && state.view === 'front') ||
+            (state.placement === 'hat-front');
+        if (shouldShow) {
           graphicsToShow.push({ graphicId: state.graphic, placementId: state.placement });
         }
       }
       
+      // Check additional graphics - use same logic as main graphic
       state.additionalGraphics.forEach(function(ag) {
-        if (shouldShowPlacement(ag.placement, state.view)) {
+        var agShouldShow = (ag.placement === 'full-back' && state.view === 'back') ||
+            ((ag.placement === 'full-front' || ag.placement === 'left-chest' || ag.placement === 'right-chest') && state.view === 'front') ||
+            (ag.placement === 'hat-front');
+        if (agShouldShow) {
           graphicsToShow.push({ graphicId: ag.graphic, placementId: ag.placement });
         }
       });
       
+      // If no graphics to show, just render canvas
       if (graphicsToShow.length === 0) {
         canvas.renderAll();
         return;
       }
       
-      // Check if current garment is headwear (hat/beanie)
+      // Load each graphic
       var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
+      var loadedCount = 0;
       
-      graphicsToShow.forEach(function(item) {
+      graphicsToShow.forEach(function(item, index) {
         var graphic = graphics.find(function(g) { return g.id === item.graphicId; });
         var placement = placements.find(function(p) { return p.id === item.placementId; });
-        if (!graphic || !placement) return;
         
-        fabric.Image.fromURL(graphic.fullImage, function(img) {
-          // Check if this update is still current
-          if (updateId !== previewUpdateId) {
-            return; // Stale update, ignore
-          }
+        if (!graphic || !placement) {
+          loadedCount++;
+          if (loadedCount === graphicsToShow.length) canvas.renderAll();
+          return;
+        }
+        
+        fabric.Image.fromURL(graphic.fullImage, function(graphicImg) {
+          // Check if still current update
+          if (updateId !== previewUpdateId) return;
           
-          if (!img) {
-            console.error('Failed to load graphic image');
+          loadedCount++;
+          
+          if (!graphicImg) {
+            if (loadedCount === graphicsToShow.length) canvas.renderAll();
             return;
           }
           
+          // Calculate position
           var pos = getPlacementPosition(item.placementId, canvas.width, canvas.height);
           
-          // Calculate max print area based on garment type
-          // For headwear: much smaller area (front panel only ~25% of width)
-          // For clothing full placements: ~40% of garment preview
-          // For small placements (chest): ~18%
+          // Calculate scale based on placement type
           var maxPrintWidth, maxPrintHeight;
-          
           if (isHeadwear) {
-            // Headwear: small front panel area only
             maxPrintWidth = canvas.width * 0.25;
             maxPrintHeight = canvas.height * 0.18;
           } else if (placement.isSmall) {
-            // Small placements (left/right chest)
             maxPrintWidth = canvas.width * 0.18;
             maxPrintHeight = canvas.height * 0.13;
           } else {
-            // Full front/back placements
             maxPrintWidth = canvas.width * 0.40;
             maxPrintHeight = canvas.height * 0.35;
           }
           
-          // Calculate scale to fit within max print area
-          var scaleToFitWidth = maxPrintWidth / img.width;
-          var scaleToFitHeight = maxPrintHeight / img.height;
+          var scaleToFitWidth = maxPrintWidth / graphicImg.width;
+          var scaleToFitHeight = maxPrintHeight / graphicImg.height;
           var maxScale = Math.min(scaleToFitWidth, scaleToFitHeight);
-          
-          // Start at 90% of max size to give room for slight adjustment
           var initialScale = maxScale * 0.9;
           
-          img.scale(initialScale);
+          graphicImg.scale(initialScale);
+          graphicImg.maxScale = maxScale;
+          graphicImg.minScale = maxScale * 0.15;
           
-          // Store the max scale for limiting resize
-          img.maxScale = maxScale;
-          img.minScale = maxScale * 0.15; // Allow shrinking to 15% of max
-          
-          // Mark as graphic for event handling and make interactive
-          img.set({
+          graphicImg.set({
             left: pos.x,
             top: pos.y,
             originX: 'center',
@@ -2432,21 +2440,34 @@ app.get('/build', (c) => {
             cornerStyle: 'circle',
             transparentCorners: false,
             padding: 5,
+            objectCaching: false, // Disable caching to prevent render artifacts
             isGraphic: true,
             graphicId: item.graphicId,
             placementId: item.placementId
           });
           
-          canvas.add(img);
-          canvas.bringToFront(img);  // Ensure graphic is on top of garment
-          canvas.renderAll();
+          // Add graphic to canvas - it will be on top since garment was added first
+          canvas.add(graphicImg);
+          
+          // Final render when all graphics loaded
+          if (loadedCount === graphicsToShow.length) {
+            canvas.renderAll();
+          }
         }, { crossOrigin: 'anonymous' });
       });
     }
     
+    // Keep old function name for compatibility but it's no longer used
+    function addGraphicsToCanvas(garmentScale, updateId) {
+      loadGraphicsOnTop(updateId, garmentScale);
+    }
+    
     function shouldShowPlacement(placementId, view) {
+      // Full Back only shows on back view
       if (placementId === 'full-back') return view === 'back';
+      // Front placements only show on front view
       if (placementId === 'full-front' || placementId === 'left-chest' || placementId === 'right-chest') return view === 'front';
+      // Hat placements always show
       if (placementId === 'hat-front') return true;
       return true;
     }
