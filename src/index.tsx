@@ -97,46 +97,64 @@ const garments = [
 
 const graphics = [
   {
+    id: 'hfw-black-3d',
+    name: 'HFW 3D Black',
+    thumbnail: '/images/graphics/hfw-logo-black-3d.png?v=6',
+    fullImage: '/images/graphics/hfw-logo-black-3d.png?v=6'
+  },
+  {
+    id: 'hfw-black-shadow',
+    name: 'HFW Black Shadow',
+    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=6',
+    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=6'
+  },
+  {
+    id: 'hfw-metal-gloves',
+    name: 'HFW Metal Gloves',
+    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png?v=6',
+    fullImage: '/images/graphics/hfw-logo-metal-gloves.png?v=6'
+  },
+  {
     id: 'hfw-white-outline',
     name: 'HFW White Outline',
-    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=5',
-    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=5'
+    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=6',
+    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=6'
   },
   {
     id: 'hfw-logo',
     name: 'HFW Logo',
-    thumbnail: '/images/graphics/hfw-logo-original.png?v=3',
-    fullImage: '/images/graphics/hfw-logo-original.png?v=3'
+    thumbnail: '/images/graphics/hfw-logo-original.png?v=6',
+    fullImage: '/images/graphics/hfw-logo-original.png?v=6'
   },
   {
     id: 'human-cockfighter',
     name: 'Human Cockfighter',
-    thumbnail: '/images/graphics/human-cockfighter.png?v=3',
-    fullImage: '/images/graphics/human-cockfighter.png?v=3'
+    thumbnail: '/images/graphics/human-cockfighter.png?v=6',
+    fullImage: '/images/graphics/human-cockfighter.png?v=6'
   },
   {
     id: 'thump-a-stranger',
     name: 'Thump A Stranger',
-    thumbnail: '/images/graphics/thump-a-stranger.png?v=3',
-    fullImage: '/images/graphics/thump-a-stranger.png?v=3'
+    thumbnail: '/images/graphics/thump-a-stranger.png?v=6',
+    fullImage: '/images/graphics/thump-a-stranger.png?v=6'
   },
   {
     id: 'gpg-design',
     name: 'GPG Design',
-    thumbnail: '/images/graphics/gpg-design.png?v=3',
-    fullImage: '/images/graphics/gpg-design.png?v=3'
+    thumbnail: '/images/graphics/gpg-design.png?v=6',
+    fullImage: '/images/graphics/gpg-design.png?v=6'
   },
   {
     id: 'yycf-logo',
     name: 'YYCF Logo',
-    thumbnail: '/images/graphics/yycf-logo.png?v=3',
-    fullImage: '/images/graphics/yycf-logo.png?v=3'
+    thumbnail: '/images/graphics/yycf-logo.png?v=6',
+    fullImage: '/images/graphics/yycf-logo.png?v=6'
   },
   {
     id: 'fun-logo',
     name: 'FUN Logo',
-    thumbnail: '/images/graphics/fun-logo.png?v=3',
-    fullImage: '/images/graphics/fun-logo.png?v=3'
+    thumbnail: '/images/graphics/fun-logo.png?v=6',
+    fullImage: '/images/graphics/fun-logo.png?v=6'
   }
 ]
 
@@ -319,7 +337,7 @@ app.get('/', (c) => {
     .main-hero {
       position: relative;
       min-height: 80vh;
-      background-image: url('/images/hero-bg.jpg');
+      background-image: url('/images/hero-background.jpg');
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
