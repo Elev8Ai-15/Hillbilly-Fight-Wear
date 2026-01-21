@@ -786,6 +786,37 @@ app.get('/build', (c) => {
       width: 100%;
     }
     
+    /* Canvas styling for graphics selection */
+    .canvas-container {
+      cursor: default !important;
+    }
+    
+    .canvas-container canvas {
+      cursor: default !important;
+    }
+    
+    /* Drag hint styling */
+    .drag-hint {
+      margin-top: 12px;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+      border: 1px solid #f0c0c0;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: #8B0000;
+      text-align: center;
+      animation: pulse-hint 2s ease-in-out infinite;
+    }
+    
+    .drag-hint i {
+      margin-right: 6px;
+    }
+    
+    @keyframes pulse-hint {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
     .view-toggle {
       display: flex;
       gap: 10px;
@@ -1253,6 +1284,10 @@ app.get('/build', (c) => {
         <canvas id="previewCanvas" width="350" height="467"></canvas>
       </div>
       
+      <div class="drag-hint" id="dragHint" style="display: none;">
+        <i class="fas fa-hand-pointer"></i> Click and drag graphics to reposition. Use corners to resize.
+      </div>
+      
       <div class="view-toggle" id="viewToggle">
         <button class="view-btn active" data-view="front" onclick="setView('front')">Front</button>
         <button class="view-btn" data-view="back" onclick="setView('back')">Back</button>
@@ -1337,8 +1372,30 @@ app.get('/build', (c) => {
       canvas = new fabric.Canvas('previewCanvas', {
         width: 350,
         height: 467,
-        selection: false,
+        selection: true,
         backgroundColor: '#f8f8f8'
+      });
+      
+      // Add visual feedback for selected objects
+      canvas.on('object:selected', function(e) {
+        var obj = e.target;
+        if (obj && obj.isGraphic) {
+          obj.set({
+            borderColor: '#8B0000',
+            cornerColor: '#8B0000',
+            cornerSize: 10,
+            transparentCorners: false
+          });
+          canvas.renderAll();
+        }
+      });
+      
+      // Update graphic positions after moving
+      canvas.on('object:modified', function(e) {
+        var obj = e.target;
+        if (obj && obj.isGraphic) {
+          console.log('Graphic moved to:', obj.left, obj.top);
+        }
       });
     }
     
@@ -1479,6 +1536,13 @@ app.get('/build', (c) => {
       renderAdditionalGraphics();
       updatePreview();
       updateSummary();
+      updateDragHint();
+    }
+    
+    function updateDragHint() {
+      var dragHint = document.getElementById('dragHint');
+      var hasGraphics = state.graphic !== null;
+      dragHint.style.display = hasGraphics ? 'block' : 'none';
     }
     
     function selectPlacement(id) {
@@ -1634,17 +1698,39 @@ app.get('/build', (c) => {
         
         fabric.Image.fromURL(graphic.fullImage, function(img) {
           var pos = getPlacementPosition(item.placementId, canvas.width, canvas.height);
-          var maxSize = placement.isSmall ? 80 : 320;
           
-          var scale = Math.min(maxSize / img.width, maxSize / img.height);
-          img.scale(scale * garmentScale);
+          // Calculate the print area dimensions based on the garment
+          // For full placements: use ~45% of canvas width, for small: use ~20%
+          var printAreaWidth = placement.isSmall ? canvas.width * 0.20 : canvas.width * 0.45;
+          var printAreaHeight = placement.isSmall ? canvas.height * 0.15 : canvas.height * 0.40;
           
+          // Scale the graphic to fit within the print area while maintaining aspect ratio
+          var scaleToFitWidth = printAreaWidth / img.width;
+          var scaleToFitHeight = printAreaHeight / img.height;
+          var scale = Math.min(scaleToFitWidth, scaleToFitHeight);
+          
+          img.scale(scale);
+          
+          // Mark as graphic for event handling and make interactive
           img.set({
             left: pos.x,
             top: pos.y,
             originX: 'center',
             originY: 'center',
-            selectable: false
+            selectable: true,
+            hasControls: true,
+            hasBorders: true,
+            lockRotation: false,
+            lockScalingFlip: true,
+            borderColor: '#8B0000',
+            cornerColor: '#8B0000',
+            cornerSize: 10,
+            cornerStyle: 'circle',
+            transparentCorners: false,
+            padding: 5,
+            isGraphic: true,
+            graphicId: item.graphicId,
+            placementId: item.placementId
           });
           
           canvas.add(img);
