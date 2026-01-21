@@ -1918,6 +1918,9 @@ app.get('/build', (c) => {
       const params = new URLSearchParams(window.location.search);
       if (params.get('garment')) {
         selectGarment(params.get('garment'));
+      } else {
+        // Auto-select first garment (T-Shirt) if none specified
+        selectGarment('tshirt');
       }
       if (params.get('graphic')) {
         selectGraphic(params.get('graphic'));
