@@ -179,13 +179,65 @@ const placements = [
   { id: 'hat-front', name: 'Hat Front', isSmall: true, forHats: true }
 ]
 
+// Shop products from hillbillyfightwear.com (external links)
+const shopProducts = [
+  { id: 1, title: 'Beanie', handle: 'beanie', vendor: 'Hillbilly Fightwear', price: '$30.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.59.43PM.png?v=1764961239', url: 'https://hillbillyfightwear.com/products/beanie' },
+  { id: 2, title: 'MYOB Hoodie', handle: 'myob-hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM_6c519925-dfd5-4982-b8c8-c01f4c572668.png?v=1764960913', url: 'https://hillbillyfightwear.com/products/myob-hoodie' },
+  { id: 3, title: 'Youth Hoodie', handle: 'youth-hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM.png?v=1764960668', url: 'https://hillbillyfightwear.com/products/youth-hoodie' },
+  { id: 4, title: 'Thump a Stranger Hoodie', handle: 'thump-a-stranger-hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.39.09PM.png?v=1764959976', url: 'https://hillbillyfightwear.com/products/thump-a-stranger-hoodie' },
+  { id: 5, title: 'Decal - Good for Community', handle: 'decal-12', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/g1.png?v=1762085215', url: 'https://hillbillyfightwear.com/products/decal-12' },
+  { id: 6, title: 'Decal - Thumpin Is Lovin', handle: 'decal-11', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s11.png?v=1761931349', url: 'https://hillbillyfightwear.com/products/decal-11' },
+  { id: 7, title: 'Decal - GNF', handle: 'decal-10', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s10.png?v=1761931324', url: 'https://hillbillyfightwear.com/products/decal-10' },
+  { id: 8, title: 'Decal - HFW', handle: 'decal-9', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s9.png?v=1761931297', url: 'https://hillbillyfightwear.com/products/decal-9' },
+  { id: 9, title: 'Decal - CHM', handle: 'decal-8', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s8_d2e4786c-9d02-4bc7-bd2a-dab7d55b7007.png?v=1761931285', url: 'https://hillbillyfightwear.com/products/decal-8' },
+  { id: 10, title: 'Decal - Obama', handle: 'decal-7', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s7.png?v=1761931192', url: 'https://hillbillyfightwear.com/products/decal-7' },
+  { id: 11, title: 'Decal - Yes You Can', handle: 'decal-6', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s6.png?v=1761931168', url: 'https://hillbillyfightwear.com/products/decal-6' },
+  { id: 12, title: 'Decal - Thump a Stranger', handle: 'decal-5', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s5.png?v=1761931143', url: 'https://hillbillyfightwear.com/products/decal-5' },
+  { id: 13, title: 'Decal - Put It On Em', handle: 'decal-4', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s4.png?v=1761931096', url: 'https://hillbillyfightwear.com/products/decal-4' },
+  { id: 14, title: 'Decal - Fun Ride', handle: 'decal-3', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s3.png?v=1761931065', url: 'https://hillbillyfightwear.com/products/decal-3' },
+  { id: 15, title: 'Decal - Human Cockfighter', handle: 'decal-2', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s2.png?v=1761931036', url: 'https://hillbillyfightwear.com/products/decal-2' },
+  { id: 16, title: 'Decal - Cling to Guns', handle: 'decal-1', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s1.png?v=1761930946', url: 'https://hillbillyfightwear.com/products/decal-1' },
+  { id: 17, title: 'Staunch Properties - CHM Edition', handle: 'staunch-properties-chm-edition', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/ch1.png?v=1608731816', url: 'https://hillbillyfightwear.com/products/staunch-properties-chm-edition' },
+  { id: 18, title: 'T-Shirt - Cling to Guns', handle: 'short-sleeve-t-shirt-9', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/FullSizeRender.jpg?v=1593877737', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-9' },
+  { id: 19, title: 'Decals Pack', handle: 'decals', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/8a141392-0eeb-45c2-823b-0a40a220777e.jpg?v=1593784509', url: 'https://hillbillyfightwear.com/products/decals' },
+  { id: 20, title: 'Decal - Classic', handle: 'decal', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_2906.jpg?v=1590966250', url: 'https://hillbillyfightwear.com/products/decal' },
+  { id: 21, title: 'Adjustable Trucker Hat', handle: 'adjustable-trucker-hat-6', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_6519.JPG?v=1559137929', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-6' },
+  { id: 22, title: 'Adjustable Trucker Hat', handle: 'adjustable-trucker-hat-5', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_1265.JPG?v=1559137825', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-5' },
+  { id: 23, title: 'Adjustable Trucker Hat', handle: 'adjustable-trucker-hat-4', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_4304.JPG?v=1559137530', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-4' },
+  { id: 24, title: 'Fitted Trucker Hat', handle: 'fitted-trucker-hat-4', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_9227.JPG?v=1559137116', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat-4' },
+  { id: 25, title: "Women's Tank Top - GNF", handle: 'womens-tank-top-5', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_-_tank_-_10_15.jpg?v=1556681770', url: 'https://hillbillyfightwear.com/products/womens-tank-top-5' },
+  { id: 26, title: "Women's Tank Top", handle: 'womens-tank-top-4', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.06_PM.png?v=1556681691', url: 'https://hillbillyfightwear.com/products/womens-tank-top-4' },
+  { id: 27, title: "Women's Tank Top", handle: 'womens-tank-top-3', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.41_PM.png?v=1556681516', url: 'https://hillbillyfightwear.com/products/womens-tank-top-3' },
+  { id: 28, title: "Women's Tank Top", handle: 'womens-tank-top-2', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.19_PM.png?v=1556681368', url: 'https://hillbillyfightwear.com/products/womens-tank-top-2' },
+  { id: 29, title: "Women's Tank Top", handle: 'womens-tank-top-1', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', url: 'https://hillbillyfightwear.com/products/womens-tank-top-1' },
+  { id: 30, title: "Women's Tank Top", handle: 'womens-tank-top', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', url: 'https://hillbillyfightwear.com/products/womens-tank-top' },
+  { id: 31, title: 'Adjustable Trucker Hat - GNF', handle: 'adjustable-trucker-hat-3', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_adjustable_trucker.jpg?v=1556678861', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-3' },
+  { id: 32, title: 'Adjustable Trucker Hat - Cockfighter', handle: 'adjustable-trucker-hat-2', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfigher_adjustable.jpg?v=1556679321', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-2' },
+  { id: 33, title: 'Adjustable Trucker Hat - HFW', handle: 'adjustable-trucker-hat-1', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_adjusted.jpg?v=1556679508', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-1' },
+  { id: 34, title: 'Adjustable Trucker Hat - Fun Ride', handle: 'adjustable-trucker-hat', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/It_s_A_Fun_Ride_adjustable_trucker.jpg?v=1556678568', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat' },
+  { id: 35, title: 'Fitted Trucker Hat - HFW', handle: 'fitted-trucker-hat-3', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_fitted.jpg?v=1556679540', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat-3' },
+  { id: 36, title: 'Fitted Trucker Hat - Cockfighter', handle: 'fitted-trucker-hat-2', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfighter_fitted.jpg?v=1556679360', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat-2' },
+  { id: 37, title: 'Fitted Trucker Hat - GNF Black', handle: 'fitted-trucker-hat-1', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_site_pic.jpg?v=1544660239', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat-1' },
+  { id: 38, title: 'Fitted Trucker Hat - GNF White', handle: 'fitted-trucker-hat', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_-white.jpg?v=1544660186', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat' },
+  { id: 39, title: 'T-Shirt - MYOB', handle: 'short-sleeve-t-shirt-10', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/myobf_1a40e805-dc40-4499-a8f7-b35cb8876393.png?v=1544660076', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-10' },
+  { id: 40, title: 'T-Shirt - Plain', handle: 'short-sleeve-t-shirt-8', vendor: 'Hillbilly Fightwear', price: '$23.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2018-11-15_at_6.55.18_PM.png?v=1542327315', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-8' },
+  { id: 41, title: 'T-Shirt - WIMB', handle: 'short-sleeve-t-shirt-7', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/wimb.png?v=1541521448', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-7' },
+  { id: 42, title: 'T-Shirt - Thump a Stranger', handle: 'short-sleeve-t-shirt-6', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/thumpf.png?v=1541521247', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-6' },
+  { id: 43, title: 'T-Shirt - Human Cockfighter', handle: 'short-sleeve-t-shirt-5', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hcff.png?v=1541521169', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-5' },
+  { id: 44, title: 'T-Shirt - GNF', handle: 'short-sleeve-t-shirt-4', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/gnff.png?v=1541520600', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-4' },
+  { id: 45, title: 'T-Shirt - Fun Ride', handle: 'short-sleeve-t-shirt-3', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/funf.png?v=1541520465', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-3' },
+  { id: 46, title: 'T-Shirt - YYCF', handle: 'short-sleeve-t-shirt-2', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/yycf.png?v=1541520348', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-2' },
+  { id: 47, title: 'T-Shirt - HFW Classic', handle: 'short-sleeve-t-shirt-1', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hfwf.png?v=1541520222', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-1' }
+]
+
+// Featured products for Build Your Own section (internal links)
 const products = [
-  { id: 1, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/hfw-logo-original.png', url: '/build?garment=tshirt&graphic=hfw-logo' },
-  { id: 2, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/yycf-logo.png', url: '/build?garment=tshirt&graphic=yycf-logo' },
-  { id: 3, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/fun-logo.png', url: '/build?garment=tshirt&graphic=fun-logo' },
-  { id: 4, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/gpg-design.png', url: '/build?garment=tshirt&graphic=gpg-design' },
-  { id: 5, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/human-cockfighter.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
-  { id: 6, title: 'Short Sleeve T-Shirt', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/thump-a-stranger.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
+  { id: 1, title: 'T-Shirt - HFW Logo', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/hfw-logo-original.png', url: '/build?garment=tshirt&graphic=hfw-logo' },
+  { id: 2, title: 'T-Shirt - YYCF Logo', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/yycf-logo.png', url: '/build?garment=tshirt&graphic=yycf-logo' },
+  { id: 3, title: 'T-Shirt - Fun Logo', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/fun-logo.png', url: '/build?garment=tshirt&graphic=fun-logo' },
+  { id: 4, title: 'T-Shirt - GPG Design', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/gpg-design.png', url: '/build?garment=tshirt&graphic=gpg-design' },
+  { id: 5, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/human-cockfighter.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
+  { id: 6, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/thump-a-stranger.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
 ]
 
 const slides = [
@@ -227,6 +279,19 @@ app.get('/', (c) => {
       <h4 class="product-title">${product.title}</h4>
       <div class="product-vendor">${product.vendor}</div>
       <div class="product-price">${product.price}</div>
+    </a>
+  `).join('')
+
+  // Shop products from hillbillyfightwear.com
+  const shopProductsHtml = shopProducts.map(product => `
+    <a href="${product.url}" target="_blank" rel="noopener" class="product-card">
+      <div class="product-image-wrapper">
+        <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
+      </div>
+      <h4 class="product-title">${product.title}</h4>
+      <div class="product-vendor">${product.vendor}</div>
+      <div class="product-price">${product.price}</div>
+      <span class="external-link"><i class="fas fa-external-link-alt"></i></span>
     </a>
   `).join('')
 
@@ -525,6 +590,45 @@ app.get('/', (c) => {
     .product-vendor { font-size: 0.9rem; color: #666; margin-bottom: 8px; }
     .product-price { font-size: 1rem; font-weight: 600; color: #333; }
     
+    /* Shop grid for all products */
+    .shop-grid {
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 1400px;
+    }
+    
+    @media (max-width: 1024px) {
+      .shop-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    
+    @media (max-width: 768px) {
+      .shop-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media (max-width: 480px) {
+      .shop-grid { grid-template-columns: 1fr; }
+    }
+    
+    .product-card {
+      position: relative;
+    }
+    
+    .external-link {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(139, 0, 0, 0.9);
+      color: #fff;
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .product-card:hover .external-link {
+      opacity: 1;
+    }
+    
     .section-header { text-align: center; padding: 50px 20px 20px; }
     .section-header h2 { font-size: 1.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: #333; margin: 0; }
     
@@ -677,6 +781,24 @@ app.get('/', (c) => {
     <div class="feature-text">
       <h2>Custom Apparel Builder</h2>
       <p>Now you can create your own custom apparel with all of our artwork and logos. Choose your garment style, size, color, and graphics to create something unique. T-shirts, hoodies, sweatshirts, tank tops, and trucker hats available!</p>
+    </div>
+  </section>
+  
+  <!-- Shop Now Section - All Products from Official Store -->
+  <section id="shop" style="background: #f5f5f5; padding: 40px 0;">
+    <div class="section-header">
+      <h2><i class="fas fa-shopping-bag"></i> Shop Now</h2>
+      <p style="color: #666; margin-top: 10px; font-size: 0.95rem;">Official Hillbilly Fightwear merchandise - 47 products available</p>
+    </div>
+    
+    <div class="product-grid shop-grid">
+      \${shopProductsHtml}
+    </div>
+    
+    <div class="view-all-wrapper">
+      <a href="https://hillbillyfightwear.com/collections/all" target="_blank" rel="noopener" class="view-all-btn">
+        <i class="fas fa-external-link-alt"></i> View All on Official Store
+      </a>
     </div>
   </section>
   
@@ -1274,10 +1396,10 @@ app.get('/build', (c) => {
         <div class="graphics-grid" id="graphicsGrid"></div>
         
         <div class="additional-graphics" id="additionalGraphics" style="display: none;">
-          <h4 style="margin: 0 0 12px; font-size: 0.85rem; color: #666;">Additional Graphics (+$10 each)</h4>
+          <h4 style="margin: 0 0 12px; font-size: 0.85rem; color: #666;">Additional Graphics (+$10 small / +$20 full)</h4>
           <div id="additionalList"></div>
           <button class="add-graphic-btn" onclick="showAddGraphicModal()">
-            <i class="fas fa-plus"></i> Add Another Graphic (+$10)
+            <i class="fas fa-plus"></i> Add Another Graphic
           </button>
         </div>
       </div>
@@ -1329,8 +1451,8 @@ app.get('/build', (c) => {
   <!-- Add Graphic Modal -->
   <div class="modal-overlay" id="addGraphicModal">
     <div class="modal-content">
-      <h3>Add Another Graphic (+$10)</h3>
-      <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Select a graphic and placement location.</p>
+      <h3>Add Another Graphic</h3>
+      <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Select a graphic and placement. Small placements (chest/hat): +$10 | Full placements (front/back): +$20</p>
       <div class="graphics-grid" id="modalGraphicsGrid"></div>
       <div style="margin-top: 20px;">
         <h4 style="margin: 0 0 10px; font-size: 0.9rem;">Placement</h4>
@@ -1489,6 +1611,13 @@ app.get('/build', (c) => {
       document.getElementById('viewToggle').style.display = isHeadwear ? 'none' : 'flex';
     }
     
+    // Helper function to get price for additional graphic based on placement
+    function getAdditionalGraphicPrice(placementId) {
+      var p = placements.find(function(x) { return x.id === placementId; });
+      // Small placements (chest, hat): $10, Full placements (front/back): $20
+      return (p && p.isSmall) ? 10 : 20;
+    }
+    
     function renderAdditionalGraphics() {
       const container = document.getElementById('additionalGraphics');
       const list = document.getElementById('additionalList');
@@ -1500,12 +1629,13 @@ app.get('/build', (c) => {
           list.innerHTML = state.additionalGraphics.map(function(ag, i) {
             var g = graphics.find(function(x) { return x.id === ag.graphic; });
             var p = placements.find(function(x) { return x.id === ag.placement; });
+            var price = getAdditionalGraphicPrice(ag.placement);
             return '<div class="additional-item">' +
               '<div class="info">' +
                 '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
                 '<div>' +
                   '<div style="font-weight: 600; font-size: 0.85rem;">' + g.name + '</div>' +
-                  '<div style="font-size: 0.75rem; color: #666;">' + p.name + ' • +$10.00</div>' +
+                  '<div style="font-size: 0.75rem; color: #666;">' + p.name + ' • +$' + price.toFixed(2) + '</div>' +
                 '</div>' +
               '</div>' +
               '<button class="remove-btn" onclick="removeAdditionalGraphic(' + i + ')">' +
@@ -1859,8 +1989,9 @@ app.get('/build', (c) => {
         var gr = graphics.find(function(x) { return x.id === ag.graphic; });
         var pl = placements.find(function(x) { return x.id === ag.placement; });
         if (gr && pl) {
-          lines.push({ label: '+ ' + gr.name + ' (' + pl.name + ')', price: 10 });
-          total += 10;
+          var price = getAdditionalGraphicPrice(ag.placement);
+          lines.push({ label: '+ ' + gr.name + ' (' + pl.name + ')', price: price });
+          total += price;
         }
       });
       
@@ -1929,6 +2060,7 @@ app.get('/api/garments', (c) => c.json(garments))
 app.get('/api/graphics', (c) => c.json(graphics))
 app.get('/api/placements', (c) => c.json(placements))
 app.get('/api/products', (c) => c.json(products))
+app.get('/api/shop-products', (c) => c.json(shopProducts))
 app.get('/api/slides', (c) => c.json(slides))
 
 app.post('/api/calculate-price', async (c) => {
@@ -1939,7 +2071,11 @@ app.post('/api/calculate-price', async (c) => {
   if (!g) return c.json({ error: 'Invalid garment' }, 400)
   
   const basePrice = g.basePrice
-  const additionalCost = additionalGraphics.length * 10
+  // Calculate additional cost: $10 for small placements, $20 for full placements
+  const additionalCost = additionalGraphics.reduce((acc: number, ag: { placement: string }) => {
+    const p = placements.find(x => x.id === ag.placement)
+    return acc + (p && p.isSmall ? 10 : 20)
+  }, 0)
   const total = basePrice + additionalCost
   
   return c.json({ basePrice, additionalCost, total })
@@ -1957,7 +2093,11 @@ app.post('/api/create-checkout', async (c) => {
   }
   
   const basePrice = g.basePrice
-  const additionalCost = additionalGraphics.length * 10
+  // Calculate additional cost: $10 for small placements, $20 for full placements
+  const additionalCost = additionalGraphics.reduce((acc: number, ag: { graphic: string; placement: string }) => {
+    const p = placements.find(x => x.id === ag.placement)
+    return acc + (p && p.isSmall ? 10 : 20)
+  }, 0)
   const total = basePrice + additionalCost
   
   const stripeKey = c.env?.STRIPE_SECRET_KEY
