@@ -176,10 +176,12 @@ const products = [
 ]
 
 const slides = [
-  { id: 0, image: '/images/slides/slide-gpg.jpg', title: 'Official Store', subtitle: 'Check Out Products Below', hasOverlay: true },
-  { id: 1, image: '/images/slides/slide-fighter.jpg', title: '', subtitle: '', hasOverlay: false },
-  { id: 2, image: '/images/slides/slide-cockfighter.jpg', title: '', subtitle: '', hasOverlay: false },
-  { id: 3, image: '/images/slides/slide-thump.jpg', title: '', subtitle: '', hasOverlay: false }
+  { id: 0, image: '/images/slides/slide-cage-coach.jpg', title: '', subtitle: '', hasOverlay: false },
+  { id: 1, image: '/images/slides/slide-gpg-handshake.jpg', title: '', subtitle: '', hasOverlay: false },
+  { id: 2, image: '/images/slides/slide-backstage.jpg', title: '', subtitle: '', hasOverlay: false },
+  { id: 3, image: '/images/slides/slide-cage-grapple.jpg', title: '', subtitle: '', hasOverlay: false },
+  { id: 4, image: '/images/slides/slide-ring-fight.jpg', title: '', subtitle: '', hasOverlay: false },
+  { id: 5, image: '/images/slides/slide-bullrider.jpg', title: '', subtitle: '', hasOverlay: false }
 ]
 
 // ============================================
@@ -244,11 +246,12 @@ app.get('/', (c) => {
       letter-spacing: 1px;
     }
     
-    .slideshow-wrapper {
+    /* HERO CAROUSEL - Full screen background carousel */
+    .hero-carousel {
       position: relative;
       width: 100%;
-      height: 60vh;
-      min-height: 400px;
+      height: 100vh;
+      min-height: 600px;
       overflow: hidden;
     }
     
@@ -259,94 +262,15 @@ app.get('/', (c) => {
       width: 100%;
       height: 100%;
       opacity: 0;
-      transition: opacity 0.5s ease-in-out;
+      transition: opacity 1s ease-in-out;
       background-size: cover;
       background-position: center center;
     }
     
     .slide.active { opacity: 1; }
     
-    .slide-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-    
-    .slide-title {
-      color: #fff;
-      font-size: 4rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-      margin: 0;
-      letter-spacing: 3px;
-    }
-    
-    .slide-subtitle {
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: 400;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-      margin-top: 10px;
-      letter-spacing: 2px;
-    }
-    
-    .slideshow-dots {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 10;
-    }
-    
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.5);
-      cursor: pointer;
-      border: 2px solid #fff;
-      transition: all 0.3s;
-    }
-    
-    .dot.active { background: #fff; }
-    
-    .slideshow-pause {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(0,0,0,0.5);
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      z-index: 10;
-      border-radius: 4px;
-    }
-    
-    /* MAIN HERO Section - Fighter background with logo overlay */
-    .main-hero {
-      position: relative;
-      min-height: 80vh;
-      background-image: url('/images/hero-background.jpg');
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .main-hero::before {
+    /* Dark overlay on carousel for text readability */
+    .hero-carousel::after {
       content: '';
       position: absolute;
       top: 0;
@@ -355,87 +279,187 @@ app.get('/', (c) => {
       height: 100%;
       background: linear-gradient(
         180deg,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.3) 50%,
-        rgba(0, 0, 0, 0.6) 100%
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.2) 40%,
+        rgba(0, 0, 0, 0.3) 70%,
+        rgba(0, 0, 0, 0.7) 100%
       );
       z-index: 1;
+      pointer-events: none;
     }
     
-    .main-hero-content {
-      position: relative;
-      z-index: 2;
+    .slideshow-dots {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+    
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      cursor: pointer;
+      border: 2px solid rgba(255,255,255,0.8);
+      transition: all 0.3s;
+    }
+    
+    .dot:hover { background: rgba(255,255,255,0.7); }
+    .dot.active { background: #fff; transform: scale(1.2); }
+    
+    .slideshow-pause {
+      position: absolute;
+      top: 80px;
+      right: 20px;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      z-index: 10;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    
+    .slideshow-pause:hover { background: rgba(0,0,0,0.7); }
+    
+    /* Hero Content - Overlaid on carousel */
+    .hero-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
       text-align: center;
       padding: 40px 20px;
+      width: 100%;
       max-width: 900px;
     }
     
-    .main-hero-logo {
+    .hero-logo {
       width: 100%;
-      max-width: 750px;
+      max-width: 700px;
       margin: 0 auto;
     }
     
-    .main-hero-logo img {
+    .hero-logo img {
       width: 100%;
       height: auto;
-      filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.8))
-              drop-shadow(0 0 60px rgba(139, 0, 0, 0.5));
+      filter: drop-shadow(0 10px 50px rgba(0, 0, 0, 0.9))
+              drop-shadow(0 0 80px rgba(139, 0, 0, 0.6));
     }
     
-    .main-hero-tagline {
+    .hero-tagline {
       color: #fff;
       font-size: 1.8rem;
       text-transform: uppercase;
-      letter-spacing: 6px;
+      letter-spacing: 8px;
       margin-top: 30px;
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+      text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.9);
       font-weight: 500;
     }
     
-    .main-hero-cta {
+    .hero-cta {
       margin-top: 40px;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     
-    .main-hero-cta a {
+    .hero-cta a {
       display: inline-block;
-      background: #8B0000;
-      color: #fff;
       padding: 18px 50px;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 2px;
       text-decoration: none;
       border-radius: 4px;
       transition: all 0.3s ease;
-      box-shadow: 0 8px 30px rgba(139, 0, 0, 0.4);
     }
     
-    .main-hero-cta a:hover {
+    .hero-cta .btn-primary {
+      background: #8B0000;
+      color: #fff;
+      box-shadow: 0 8px 30px rgba(139, 0, 0, 0.5);
+    }
+    
+    .hero-cta .btn-primary:hover {
       background: #a50000;
       transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(139, 0, 0, 0.6);
+      box-shadow: 0 12px 40px rgba(139, 0, 0, 0.7);
+    }
+    
+    .hero-cta .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.8);
+    }
+    
+    .hero-cta .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: #fff;
+      transform: translateY(-3px);
+    }
+    
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      color: #fff;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.7;
+      animation: bounce 2s infinite;
+    }
+    
+    .scroll-indicator i {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.5rem;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+      40% { transform: translateX(-50%) translateY(-10px); }
+      60% { transform: translateX(-50%) translateY(-5px); }
     }
     
     @media (max-width: 768px) {
-      .main-hero {
-        min-height: 70vh;
+      .hero-carousel {
+        min-height: 100vh;
+        height: 100vh;
       }
-      .main-hero-content {
+      .hero-content {
         padding: 30px 15px;
       }
-      .main-hero-logo {
+      .hero-logo {
         max-width: 90%;
       }
-      .main-hero-tagline {
-        font-size: 1.2rem;
-        letter-spacing: 3px;
+      .hero-tagline {
+        font-size: 1.1rem;
+        letter-spacing: 4px;
         margin-top: 20px;
       }
-      .main-hero-cta a {
-        padding: 14px 35px;
-        font-size: 1rem;
+      .hero-cta a {
+        padding: 14px 30px;
+        font-size: 0.95rem;
+      }
+      .hero-cta {
+        flex-direction: column;
+        align-items: center;
+      }
+      .scroll-indicator {
+        bottom: 100px;
       }
     }
     
@@ -450,8 +474,6 @@ app.get('/', (c) => {
     
     @media (max-width: 768px) {
       .product-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-      .slide-title { font-size: 2.5rem; }
-      .slide-subtitle { font-size: 1rem; }
     }
     
     @media (max-width: 480px) {
@@ -572,29 +594,38 @@ app.get('/', (c) => {
     <p style="margin: 0;">🔥 NEW: Build Your Own Custom Apparel! 🔥</p>
   </div>
   
-  <!-- MAIN HERO - Fighter Background + Logo Banner Overlay -->
-  <section class="main-hero">
-    <div class="main-hero-content">
-      <div class="main-hero-logo">
+  <!-- HERO CAROUSEL - Full screen background carousel with content overlay -->
+  <section class="hero-carousel">
+    <!-- Carousel Slides -->
+    ${slidesHtml}
+    
+    <!-- Hero Content Overlay -->
+    <div class="hero-content">
+      <div class="hero-logo">
         <img src="/images/graphics/hillbilly-fightwear-logo.png?v=2" alt="Hillbilly Fightwear">
       </div>
-      <p class="main-hero-tagline">Official Fight Gear</p>
-      <div class="main-hero-cta">
-        <a href="/build"><i class="fas fa-paint-brush"></i> Build Your Own</a>
+      <p class="hero-tagline">Official Fight Gear</p>
+      <div class="hero-cta">
+        <a href="/build" class="btn-primary"><i class="fas fa-paint-brush"></i> Build Your Own</a>
+        <a href="#products" class="btn-secondary"><i class="fas fa-shopping-bag"></i> Shop Now</a>
       </div>
     </div>
-  </section>
-  
-  <!-- Slideshow - Secondary -->
-  <div class="slideshow-wrapper">
+    
+    <!-- Slideshow Controls -->
     <button class="slideshow-pause" id="pauseBtn" onclick="togglePause()">
       <i class="fas fa-pause" id="pauseIcon"></i>
     </button>
-    ${slidesHtml}
+    
     <div class="slideshow-dots">
       ${dotsHtml}
     </div>
-  </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+      Scroll Down
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
   
   <!-- Build Your Own CTA -->
   <section class="build-cta">
@@ -606,7 +637,7 @@ app.get('/', (c) => {
   </section>
   
   <!-- Featured Collection -->
-  <section>
+  <section id="products">
     <div class="section-header">
       <h2>Featured collection</h2>
     </div>
@@ -625,7 +656,7 @@ app.get('/', (c) => {
   <!-- Feature Row -->
   <section class="feature-row">
     <div class="feature-image">
-      <img src="/images/slides/slide-fighter.jpg" alt="Fighter image">
+      <img src="/images/slides/slide-cage-grapple.jpg" alt="Fighter image">
     </div>
     <div class="feature-text">
       <h2>Custom Apparel Builder</h2>
