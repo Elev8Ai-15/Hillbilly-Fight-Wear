@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { secureHeaders } from 'hono/secure-headers'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
@@ -8,7 +9,44 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-app.use('/api/*', cors())
+// ============================================
+// SECURITY: Comprehensive Security Headers
+// ============================================
+app.use('*', secureHeaders({
+  contentSecurityPolicy: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+    imgSrc: ["'self'", "data:", "https:", "blob:"],
+    fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
+    connectSrc: ["'self'", "https://api.stripe.com", "https://cdn.shopify.com"],
+    frameSrc: ["'self'", "https://js.stripe.com"],
+    objectSrc: ["'none'"],
+    baseUri: ["'self'"],
+    formAction: ["'self'"],
+    upgradeInsecureRequests: []
+  },
+  xContentTypeOptions: 'nosniff',
+  xFrameOptions: 'DENY',
+  xXssProtection: '1; mode=block',
+  referrerPolicy: 'strict-origin-when-cross-origin',
+  permissionsPolicy: {
+    camera: [],
+    microphone: [],
+    geolocation: [],
+    payment: ['self']
+  }
+}))
+
+// CORS for API endpoints
+app.use('/api/*', cors({
+  origin: ['https://hillbillyfightwear.com', 'https://www.hillbillyfightwear.com'],
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  exposeHeaders: ['Content-Length'],
+  maxAge: 86400,
+  credentials: true
+}))
 
 // ============================================
 // DATA: Garments, Graphics, Placements
@@ -301,16 +339,16 @@ app.get('/', (c) => {
     </a>
   `).join('')
 
-  // Helper function to generate product cards
+  // Helper function to generate product cards with accessibility
   const generateProductCards = (products: any[]) => products.map(product => `
-    <a href="${product.url}" target="_blank" rel="noopener" class="product-card">
+    <a href="${product.url}" target="_blank" rel="noopener noreferrer" class="product-card" role="listitem" aria-label="${product.title} - ${product.price} (opens in new window)">
       <div class="product-image-wrapper">
-        <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
+        <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy" width="280" height="280">
       </div>
       <h4 class="product-title">${product.title}</h4>
       <div class="product-vendor">${product.vendor}</div>
-      <div class="product-price">${product.price}</div>
-      <span class="external-link"><i class="fas fa-external-link-alt"></i></span>
+      <div class="product-price" aria-label="Price: ${product.price}">${product.price}</div>
+      <span class="external-link" aria-hidden="true"><i class="fas fa-external-link-alt"></i></span>
     </a>
   `).join('')
 
@@ -322,11 +360,79 @@ app.get('/', (c) => {
   const decalsHtml = generateProductCards(decals)
 
   return c.html(`<!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hillbilly Fightwear - Official Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- SEO Meta Tags -->
+  <title>Hillbilly Fightwear - Official MMA & Combat Sports Apparel Store</title>
+  <meta name="description" content="Official Hillbilly Fightwear store. Shop premium MMA apparel, custom fight gear, hoodies, t-shirts, hats, and decals. Build your own custom designs with our unique graphics.">
+  <meta name="keywords" content="MMA apparel, fight gear, Hillbilly Fightwear, custom t-shirts, hoodies, combat sports, UFC gear, wrestling apparel, BJJ clothing">
+  <meta name="author" content="Hillbilly Fightwear">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://hillbillyfightwear.com/">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hillbillyfightwear.com/">
+  <meta property="og:title" content="Hillbilly Fightwear - Official MMA & Combat Sports Apparel">
+  <meta property="og:description" content="Shop premium MMA apparel and custom fight gear. Hoodies, t-shirts, hats, and more. Build your own custom designs.">
+  <meta property="og:image" content="/images/graphics/hillbilly-fightwear-logo.png">
+  <meta property="og:site_name" content="Hillbilly Fightwear">
+  <meta property="og:locale" content="en_US">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://hillbillyfightwear.com/">
+  <meta name="twitter:title" content="Hillbilly Fightwear - Official MMA & Combat Sports Apparel">
+  <meta name="twitter:description" content="Shop premium MMA apparel and custom fight gear. Build your own custom designs.">
+  <meta name="twitter:image" content="/images/graphics/hillbilly-fightwear-logo.png">
+  
+  <!-- Mobile & PWA -->
+  <meta name="theme-color" content="#8B0000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="HFW Store">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  
+  <!-- Preconnect for Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.shopify.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  
+  <!-- Critical CSS Preload -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" as="style">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/graphics/hillbilly-fightwear-logo.png">
+  <link rel="apple-touch-icon" href="/images/graphics/hillbilly-fightwear-logo.png">
+  
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "Hillbilly Fightwear",
+    "description": "Official MMA and combat sports apparel store",
+    "url": "https://hillbillyfightwear.com",
+    "logo": "https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png",
+    "priceRange": "$$",
+    "sameAs": [
+      "https://www.facebook.com/hillbillyfightwear",
+      "https://www.instagram.com/hillbillyfightwear"
+    ],
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://hillbillyfightwear.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -334,11 +440,59 @@ app.get('/', (c) => {
     
     * { box-sizing: border-box; }
     
+    /* Accessibility: Focus visible for keyboard navigation */
+    *:focus-visible {
+      outline: 3px solid #8B0000;
+      outline-offset: 2px;
+    }
+    
+    /* Accessibility: Reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* Accessibility: Skip to main content link */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #8B0000;
+      color: #fff;
+      padding: 8px 16px;
+      z-index: 10000;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .skip-link:focus {
+      top: 0;
+    }
+    
+    /* Accessibility: Screen reader only class */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    
     body {
       font-family: 'Oswald', Arial, sans-serif;
       margin: 0;
       padding: 0;
       background: #fff;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
     
     .announcement-bar {
@@ -593,15 +747,26 @@ app.get('/', (c) => {
       color: inherit;
       display: block;
       transition: transform 0.3s;
+      border-radius: 8px;
+      padding: 10px;
     }
     
     .product-card:hover { transform: translateY(-5px); }
+    .product-card:focus-visible { 
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(139, 0, 0, 0.3);
+    }
     
     .product-image-wrapper {
       background: #f7f7f7;
       padding: 20px;
-      border-radius: 4px;
+      border-radius: 8px;
       margin-bottom: 15px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
     
     .product-image {
@@ -610,11 +775,39 @@ app.get('/', (c) => {
       max-width: 280px;
       margin: 0 auto;
       display: block;
+      object-fit: contain;
     }
     
-    .product-title { font-size: 1.1rem; font-weight: 600; margin: 10px 0 5px; color: #333; }
+    .product-title { 
+      font-size: 1.1rem; 
+      font-weight: 600; 
+      margin: 10px 0 5px; 
+      color: #333;
+      /* Prevent long titles from breaking layout */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
     .product-vendor { font-size: 0.9rem; color: #666; margin-bottom: 8px; }
     .product-price { font-size: 1rem; font-weight: 600; color: #333; }
+    
+    /* Mobile touch targets - minimum 44px for accessibility */
+    @media (max-width: 768px) {
+      .product-card {
+        min-height: 44px;
+      }
+      .btn-primary, .btn-secondary, .view-all-btn, .build-cta-btn {
+        min-height: 48px;
+        min-width: 48px;
+        padding: 14px 24px;
+      }
+      .dot {
+        width: 16px;
+        height: 16px;
+      }
+    }
     
     /* Shop grid for all products */
     .shop-grid {
@@ -764,31 +957,36 @@ app.get('/', (c) => {
   </style>
 </head>
 <body>
+  <!-- Accessibility: Skip to main content link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
   <!-- Announcement Bar -->
-  <div class="announcement-bar">
-    <p style="margin: 0;">🔥 NEW: Build Your Own Custom Apparel! 🔥</p>
-  </div>
+  <header role="banner">
+    <div class="announcement-bar" aria-label="Announcement">
+      <p style="margin: 0;">🔥 NEW: Build Your Own Custom Apparel! 🔥</p>
+    </div>
+  </header>
   
   <!-- HERO CAROUSEL - Full screen background carousel with content overlay -->
-  <section class="hero-carousel">
+  <section class="hero-carousel" aria-label="Featured images slideshow" role="region">
     <!-- Carousel Slides -->
     ${slidesHtml}
     
     <!-- Hero Content Overlay -->
     <div class="hero-content">
       <div class="hero-logo">
-        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear">
+        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear - Official MMA and Combat Sports Apparel" width="300" height="auto">
       </div>
       <p class="hero-tagline">Official Fight Gear</p>
-      <div class="hero-cta">
-        <a href="/build" class="btn-primary"><i class="fas fa-paint-brush"></i> Build Your Own</a>
-        <a href="#shop" class="btn-secondary"><i class="fas fa-shopping-bag"></i> Shop Now</a>
-      </div>
+      <nav class="hero-cta" aria-label="Primary navigation">
+        <a href="/build" class="btn-primary" aria-label="Build your own custom apparel"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Your Own</a>
+        <a href="#shop" class="btn-secondary" aria-label="Shop now - browse products"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
+      </nav>
     </div>
     
     <!-- Slideshow Controls -->
-    <button class="slideshow-pause" id="pauseBtn" onclick="togglePause()">
-      <i class="fas fa-pause" id="pauseIcon"></i>
+    <button class="slideshow-pause" id="pauseBtn" onclick="togglePause()" aria-label="Pause slideshow" aria-pressed="false">
+      <i class="fas fa-pause" id="pauseIcon" aria-hidden="true"></i>
     </button>
     
     <div class="slideshow-dots">
@@ -802,56 +1000,59 @@ app.get('/', (c) => {
     </div>
   </section>
   
+  <!-- Main Content -->
+  <main id="main-content" role="main">
+  
   <!-- Shop Now Section - All Products from Official Store (Organized by Category) -->
-  <section id="shop" style="background: #f5f5f5; padding: 40px 0;">
+  <section id="shop" style="background: #f5f5f5; padding: 40px 0;" aria-labelledby="shop-heading">
     <div class="section-header">
-      <h2><i class="fas fa-shopping-bag"></i> Shop Now</h2>
-      <p style="color: #666; margin-top: 10px; font-size: 0.95rem;">Official Hillbilly Fightwear merchandise - 47 products available</p>
+      <h2 id="shop-heading"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</h2>
+      <p style="color: #666; margin-top: 10px; font-size: 0.95rem;">Official Hillbilly Fightwear merchandise - 46 products available</p>
     </div>
     
     <!-- MENS CLOTHING -->
-    <div class="category-section">
-      <h3 class="category-title"><i class="fas fa-male"></i> Men's Clothing</h3>
-      <div class="product-grid shop-grid">
+    <div class="category-section" role="region" aria-labelledby="mens-heading">
+      <h3 class="category-title" id="mens-heading"><i class="fas fa-male" aria-hidden="true"></i> Men's Clothing</h3>
+      <div class="product-grid shop-grid" role="list">
         ${mensClothingHtml}
       </div>
     </div>
     
     <!-- WOMENS CLOTHING -->
-    <div class="category-section">
-      <h3 class="category-title"><i class="fas fa-female"></i> Women's Clothing</h3>
-      <div class="product-grid shop-grid">
+    <div class="category-section" role="region" aria-labelledby="womens-heading">
+      <h3 class="category-title" id="womens-heading"><i class="fas fa-female" aria-hidden="true"></i> Women's Clothing</h3>
+      <div class="product-grid shop-grid" role="list">
         ${womensClothingHtml}
       </div>
     </div>
     
     <!-- KIDS CLOTHING -->
-    <div class="category-section">
-      <h3 class="category-title"><i class="fas fa-child"></i> Kids' Clothing</h3>
-      <div class="product-grid shop-grid">
+    <div class="category-section" role="region" aria-labelledby="kids-heading">
+      <h3 class="category-title" id="kids-heading"><i class="fas fa-child" aria-hidden="true"></i> Kids' Clothing</h3>
+      <div class="product-grid shop-grid" role="list">
         ${kidsClothingHtml}
       </div>
     </div>
     
     <!-- HATS -->
-    <div class="category-section">
-      <h3 class="category-title"><i class="fas fa-hat-cowboy"></i> Hats</h3>
-      <div class="product-grid shop-grid">
+    <div class="category-section" role="region" aria-labelledby="hats-heading">
+      <h3 class="category-title" id="hats-heading"><i class="fas fa-hat-cowboy" aria-hidden="true"></i> Hats</h3>
+      <div class="product-grid shop-grid" role="list">
         ${hatsHtml}
       </div>
     </div>
     
     <!-- DECALS / STICKERS -->
-    <div class="category-section">
-      <h3 class="category-title"><i class="fas fa-sticky-note"></i> Decals & Stickers</h3>
-      <div class="product-grid shop-grid">
+    <div class="category-section" role="region" aria-labelledby="decals-heading">
+      <h3 class="category-title" id="decals-heading"><i class="fas fa-sticky-note" aria-hidden="true"></i> Decals & Stickers</h3>
+      <div class="product-grid shop-grid" role="list">
         ${decalsHtml}
       </div>
     </div>
     
     <div class="view-all-wrapper">
-      <a href="https://hillbillyfightwear.com/collections/all" target="_blank" rel="noopener" class="view-all-btn">
-        <i class="fas fa-external-link-alt"></i> View All on Official Store
+      <a href="https://hillbillyfightwear.com/collections/all" target="_blank" rel="noopener noreferrer" class="view-all-btn" aria-label="View all products on Official Store (opens in new window)">
+        <i class="fas fa-external-link-alt" aria-hidden="true"></i> View All on Official Store
       </a>
     </div>
   </section>
@@ -892,7 +1093,20 @@ app.get('/', (c) => {
     </div>
   </section>
   
-  <div style="height: 50px;"></div>
+  </main>
+  
+  <!-- Footer -->
+  <footer role="contentinfo" style="background: #1a1a1a; color: #fff; padding: 40px 20px; text-align: center;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <p style="margin: 0 0 10px;"><strong>Hillbilly Fightwear</strong> - Official MMA & Combat Sports Apparel</p>
+      <p style="margin: 0; font-size: 0.9rem; color: #999;">© ${new Date().getFullYear()} Hillbilly Fightwear. All rights reserved.</p>
+      <nav aria-label="Footer navigation" style="margin-top: 20px;">
+        <a href="/build" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Build Your Own</a>
+        <a href="#shop" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Shop Now</a>
+        <a href="https://hillbillyfightwear.com" target="_blank" rel="noopener noreferrer" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Official Store</a>
+      </nav>
+    </div>
+  </footer>
   
   <script>
     let currentSlide = 0;
