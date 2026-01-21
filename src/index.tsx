@@ -92,6 +92,19 @@ const garments = [
       black: { front: '/images/garments/trucker-hat-black.png' },
       grey: { front: '/images/garments/trucker-hat-grey.png' }
     }
+  },
+  {
+    id: 'beanie',
+    name: 'Beanie',
+    basePrice: 22.00,
+    category: 'headwear',
+    sizes: ['One Size'],
+    supportsPlacement: true,
+    images: {
+      white: { front: '/images/garments/beanie-white.png' },
+      black: { front: '/images/garments/beanie-black.png' },
+      grey: { front: '/images/garments/beanie-grey.png' }
+    }
   }
 ]
 
@@ -1397,6 +1410,36 @@ app.get('/build', (c) => {
           console.log('Graphic moved to:', obj.left, obj.top);
         }
       });
+      
+      // Enforce max/min scale limits during scaling
+      canvas.on('object:scaling', function(e) {
+        var obj = e.target;
+        if (obj && obj.isGraphic && obj.maxScale) {
+          var currentScaleX = obj.scaleX;
+          var currentScaleY = obj.scaleY;
+          
+          // Enforce maximum scale (cannot enlarge beyond max print area)
+          if (currentScaleX > obj.maxScale) {
+            obj.scaleX = obj.maxScale;
+          }
+          if (currentScaleY > obj.maxScale) {
+            obj.scaleY = obj.maxScale;
+          }
+          
+          // Enforce minimum scale (15% of max)
+          if (currentScaleX < obj.minScale) {
+            obj.scaleX = obj.minScale;
+          }
+          if (currentScaleY < obj.minScale) {
+            obj.scaleY = obj.minScale;
+          }
+          
+          // Keep uniform scaling
+          var avgScale = (obj.scaleX + obj.scaleY) / 2;
+          obj.scaleX = avgScale;
+          obj.scaleY = avgScale;
+        }
+      });
     }
     
     function renderGarments() {
@@ -1432,10 +1475,10 @@ app.get('/build', (c) => {
     
     function renderPlacements() {
       const grid = document.getElementById('placementGrid');
-      const isHat = state.garment === 'trucker-hat';
+      const isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
       
       const available = placements.filter(function(p) {
-        return isHat ? p.forHats : !p.forHats;
+        return isHeadwear ? p.forHats : !p.forHats;
       });
       
       grid.innerHTML = available.map(function(p) {
@@ -1443,7 +1486,7 @@ app.get('/build', (c) => {
         return '<div class="placement-option' + selected + '" data-id="' + p.id + '" onclick="selectPlacement(\\'' + p.id + '\\')">' + p.name + '</div>';
       }).join('');
       
-      document.getElementById('viewToggle').style.display = isHat ? 'none' : 'flex';
+      document.getElementById('viewToggle').style.display = isHeadwear ? 'none' : 'flex';
     }
     
     function renderAdditionalGraphics() {
@@ -1489,8 +1532,8 @@ app.get('/build', (c) => {
       
       renderSizes(id);
       
-      var isHat = id === 'trucker-hat';
-      state.placement = isHat ? 'hat-front' : 'full-front';
+      var isHeadwear = id === 'trucker-hat' || id === 'beanie';
+      state.placement = isHeadwear ? 'hat-front' : 'full-front';
       renderPlacements();
       
       updatePreview();
@@ -1586,9 +1629,9 @@ app.get('/build', (c) => {
       }).join('');
       
       var usedPlacements = [state.placement].concat(state.additionalGraphics.map(function(ag) { return ag.placement; }));
-      var isHat = state.garment === 'trucker-hat';
+      var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
       var available = placements.filter(function(p) {
-        return (isHat ? p.forHats : !p.forHats) && usedPlacements.indexOf(p.id) === -1;
+        return (isHeadwear ? p.forHats : !p.forHats) && usedPlacements.indexOf(p.id) === -1;
       });
       
       var placementGrid = document.getElementById('modalPlacementGrid');
@@ -1691,6 +1734,9 @@ app.get('/build', (c) => {
         }
       });
       
+      // Check if current garment is headwear (hat/beanie)
+      var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
+      
       graphicsToShow.forEach(function(item) {
         var graphic = graphics.find(function(g) { return g.id === item.graphicId; });
         var placement = placements.find(function(p) { return p.id === item.placementId; });
@@ -1699,17 +1745,39 @@ app.get('/build', (c) => {
         fabric.Image.fromURL(graphic.fullImage, function(img) {
           var pos = getPlacementPosition(item.placementId, canvas.width, canvas.height);
           
-          // Calculate the print area dimensions based on the garment
-          // For full placements: use ~45% of canvas width, for small: use ~20%
-          var printAreaWidth = placement.isSmall ? canvas.width * 0.20 : canvas.width * 0.45;
-          var printAreaHeight = placement.isSmall ? canvas.height * 0.15 : canvas.height * 0.40;
+          // Calculate max print area based on garment type
+          // For headwear: much smaller area (front panel only ~25% of width)
+          // For clothing full placements: ~40% of garment preview
+          // For small placements (chest): ~18%
+          var maxPrintWidth, maxPrintHeight;
           
-          // Scale the graphic to fit within the print area while maintaining aspect ratio
-          var scaleToFitWidth = printAreaWidth / img.width;
-          var scaleToFitHeight = printAreaHeight / img.height;
-          var scale = Math.min(scaleToFitWidth, scaleToFitHeight);
+          if (isHeadwear) {
+            // Headwear: small front panel area only
+            maxPrintWidth = canvas.width * 0.25;
+            maxPrintHeight = canvas.height * 0.18;
+          } else if (placement.isSmall) {
+            // Small placements (left/right chest)
+            maxPrintWidth = canvas.width * 0.18;
+            maxPrintHeight = canvas.height * 0.13;
+          } else {
+            // Full front/back placements
+            maxPrintWidth = canvas.width * 0.40;
+            maxPrintHeight = canvas.height * 0.35;
+          }
           
-          img.scale(scale);
+          // Calculate scale to fit within max print area
+          var scaleToFitWidth = maxPrintWidth / img.width;
+          var scaleToFitHeight = maxPrintHeight / img.height;
+          var maxScale = Math.min(scaleToFitWidth, scaleToFitHeight);
+          
+          // Start at 90% of max size to give room for slight adjustment
+          var initialScale = maxScale * 0.9;
+          
+          img.scale(initialScale);
+          
+          // Store the max scale for limiting resize
+          img.maxScale = maxScale;
+          img.minScale = maxScale * 0.15; // Allow shrinking to 15% of max
           
           // Mark as graphic for event handling and make interactive
           img.set({
@@ -1747,12 +1815,15 @@ app.get('/build', (c) => {
     }
     
     function getPlacementPosition(placementId, w, h) {
+      // For headwear, position graphic in upper-center area (front panel)
+      var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
+      
       var positions = {
         'full-front': { x: w / 2, y: h * 0.45 },
         'full-back': { x: w / 2, y: h * 0.45 },
         'left-chest': { x: w * 0.35, y: h * 0.32 },
         'right-chest': { x: w * 0.65, y: h * 0.32 },
-        'hat-front': { x: w / 2, y: h * 0.45 }
+        'hat-front': { x: w / 2, y: isHeadwear ? h * 0.42 : h * 0.45 }
       };
       return positions[placementId] || { x: w / 2, y: h / 2 };
     }
