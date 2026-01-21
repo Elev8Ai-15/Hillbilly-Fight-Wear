@@ -146,66 +146,164 @@ const garments = [
   }
 ]
 
+// Graphics with optional restrictions for specific garments
+// restrictToGarments: array of garment IDs this graphic is available for (empty = all)
 const graphics = [
   {
     id: 'hfw-black-3d',
     name: 'HFW 3D Black',
-    thumbnail: '/images/graphics/hfw-logo-black-3d.png?v=6',
-    fullImage: '/images/graphics/hfw-logo-black-3d.png?v=6'
+    thumbnail: '/images/graphics/hfw-logo-black-3d.png?v=7',
+    fullImage: '/images/graphics/hfw-logo-black-3d.png?v=7',
+    restrictToGarments: []
   },
   {
     id: 'hfw-black-shadow',
     name: 'HFW Black Shadow',
-    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=6',
-    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=6'
+    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=7',
+    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=7',
+    restrictToGarments: []
   },
   {
     id: 'hfw-metal-gloves',
     name: 'HFW Metal Gloves',
-    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png?v=6',
-    fullImage: '/images/graphics/hfw-logo-metal-gloves.png?v=6'
+    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png?v=7',
+    fullImage: '/images/graphics/hfw-logo-metal-gloves.png?v=7',
+    restrictToGarments: []
   },
   {
     id: 'hfw-white-outline',
     name: 'HFW White Outline',
-    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=6',
-    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=6'
+    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=7',
+    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=7',
+    restrictToGarments: []
   },
   {
     id: 'hfw-logo',
     name: 'HFW Logo',
-    thumbnail: '/images/graphics/hfw-logo-original.png?v=6',
-    fullImage: '/images/graphics/hfw-logo-original.png?v=6'
+    thumbnail: '/images/graphics/hfw-logo-original.png?v=7',
+    fullImage: '/images/graphics/hfw-logo-original.png?v=7',
+    restrictToGarments: []
   },
   {
     id: 'human-cockfighter',
     name: 'Human Cockfighter',
-    thumbnail: '/images/graphics/human-cockfighter.png?v=6',
-    fullImage: '/images/graphics/human-cockfighter.png?v=6'
+    thumbnail: '/images/graphics/human-cockfighter.png?v=7',
+    fullImage: '/images/graphics/human-cockfighter.png?v=7',
+    restrictToGarments: []
   },
   {
     id: 'thump-a-stranger',
     name: 'Thump A Stranger',
-    thumbnail: '/images/graphics/thump-a-stranger.png?v=6',
-    fullImage: '/images/graphics/thump-a-stranger.png?v=6'
+    thumbnail: '/images/graphics/thump-a-stranger.png?v=7',
+    fullImage: '/images/graphics/thump-a-stranger.png?v=7',
+    restrictToGarments: []
   },
   {
     id: 'gpg-design',
     name: 'GPG Design',
-    thumbnail: '/images/graphics/gpg-design.png?v=6',
-    fullImage: '/images/graphics/gpg-design.png?v=6'
+    thumbnail: '/images/graphics/gpg-design.png?v=7',
+    fullImage: '/images/graphics/gpg-design.png?v=7',
+    restrictToGarments: []
   },
   {
     id: 'yycf-logo',
     name: 'YYCF Logo',
-    thumbnail: '/images/graphics/yycf-logo.png?v=6',
-    fullImage: '/images/graphics/yycf-logo.png?v=6'
+    thumbnail: '/images/graphics/yycf-logo.png?v=7',
+    fullImage: '/images/graphics/yycf-logo.png?v=7',
+    restrictToGarments: []
   },
   {
     id: 'fun-logo',
     name: 'FUN Logo',
-    thumbnail: '/images/graphics/fun-logo.png?v=6',
-    fullImage: '/images/graphics/fun-logo.png?v=6'
+    thumbnail: '/images/graphics/fun-logo.png?v=7',
+    fullImage: '/images/graphics/fun-logo.png?v=7',
+    restrictToGarments: []
+  },
+  // NEW GRAPHICS - Added from Shop Now products
+  {
+    id: 'myob',
+    name: 'MYOB (Mind Y\'own Business)',
+    thumbnail: '/images/graphics/myob.png?v=7',
+    fullImage: '/images/graphics/myob.png?v=7',
+    restrictToGarments: []
+  },
+  {
+    id: 'gnf',
+    name: 'GNF',
+    thumbnail: '/images/graphics/gnf.png?v=7',
+    fullImage: '/images/graphics/gnf.png?v=7',
+    restrictToGarments: []
+  },
+  {
+    id: 'wimb',
+    name: 'WIMB (What\'s It Mean To You?)',
+    thumbnail: '/images/graphics/wimb.png?v=7',
+    fullImage: '/images/graphics/wimb.png?v=7',
+    restrictToGarments: []
+  },
+  {
+    id: 'cling-to-guns',
+    name: 'Cling to Guns',
+    thumbnail: '/images/graphics/cling-to-guns.png?v=7',
+    fullImage: '/images/graphics/cling-to-guns.png?v=7',
+    restrictToGarments: []
+  },
+  {
+    id: 'yes-you-can',
+    name: 'Yes, You Can',
+    thumbnail: '/images/graphics/yes-you-can.png?v=7',
+    fullImage: '/images/graphics/yes-you-can.png?v=7',
+    restrictToGarments: []
+  },
+  {
+    id: 'put-it-on-em',
+    name: 'Put It On Em',
+    thumbnail: '/images/graphics/put-it-on-em.png?v=7',
+    fullImage: '/images/graphics/put-it-on-em.png?v=7',
+    restrictToGarments: []
+  },
+  {
+    id: 'obama-tap',
+    name: 'Obama Tap',
+    thumbnail: '/images/graphics/obama-tap.png?v=7',
+    fullImage: '/images/graphics/obama-tap.png?v=7',
+    restrictToGarments: []
+  },
+  {
+    id: 'good-for-community',
+    name: 'Good for Community',
+    thumbnail: '/images/graphics/good-for-community.png?v=7',
+    fullImage: '/images/graphics/good-for-community.png?v=7',
+    restrictToGarments: []
+  },
+  {
+    id: 'hard-hittin',
+    name: 'Hard Hittin\'',
+    thumbnail: '/images/graphics/hard-hittin.png?v=7',
+    fullImage: '/images/graphics/hard-hittin.png?v=7',
+    restrictToGarments: []
+  },
+  {
+    id: 'staunch-chm',
+    name: 'Staunch Properties (CHM)',
+    thumbnail: '/images/graphics/staunch-chm.png?v=7',
+    fullImage: '/images/graphics/staunch-chm.png?v=7',
+    restrictToGarments: []
+  },
+  // SPECIAL: Thumpin' Is Lovin' - Women's Only (Tanks and T-Shirts)
+  {
+    id: 'thumpin-is-lovin-pink',
+    name: 'Thumpin\' Is Lovin\' (Pink)',
+    thumbnail: '/images/graphics/thumpin-is-lovin-pink.png?v=7',
+    fullImage: '/images/graphics/thumpin-is-lovin-pink.png?v=7',
+    restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
+  },
+  {
+    id: 'thumpin-is-lovin-purple',
+    name: 'Thumpin\' Is Lovin\' (Purple)',
+    thumbnail: '/images/graphics/thumpin-is-lovin-purple.png?v=7',
+    fullImage: '/images/graphics/thumpin-is-lovin-purple.png?v=7',
+    restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
   }
 ]
 
@@ -1405,6 +1503,25 @@ app.get('/build', (c) => {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    
+    /* Custom scrollbar for graphics grid */
+    .graphics-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+    .graphics-grid::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+    .graphics-grid::-webkit-scrollbar-thumb {
+      background: #8B0000;
+      border-radius: 3px;
+    }
+    .graphics-grid::-webkit-scrollbar-thumb:hover {
+      background: #6B0000;
     }
     
     .graphic-option {
@@ -1891,12 +2008,36 @@ app.get('/build', (c) => {
     
     function renderGraphics() {
       const grid = document.getElementById('graphicsGrid');
-      grid.innerHTML = graphics.map(function(g) {
+      // Filter graphics based on current garment selection
+      const availableGraphics = graphics.filter(function(g) {
+        // If no restrictions, available for all garments
+        if (!g.restrictToGarments || g.restrictToGarments.length === 0) {
+          return true;
+        }
+        // If garment is selected, check if it's in the allowed list
+        if (state.garment) {
+          return g.restrictToGarments.includes(state.garment);
+        }
+        // If no garment selected yet, show all
+        return true;
+      });
+      
+      grid.innerHTML = availableGraphics.map(function(g) {
         return '<div class="graphic-option" data-id="' + g.id + '" onclick="selectGraphic(\\'' + g.id + '\\')">' +
           '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
           '<div class="name">' + g.name + '</div>' +
         '</div>';
       }).join('');
+      
+      // If current selected graphic is no longer available, deselect it
+      if (state.graphic) {
+        var stillAvailable = availableGraphics.find(function(g) { return g.id === state.graphic; });
+        if (!stillAvailable) {
+          state.graphic = null;
+          updatePreview();
+          updateSummary();
+        }
+      }
     }
     
     function renderPlacements() {
@@ -1969,6 +2110,16 @@ app.get('/build', (c) => {
       var isHeadwear = id === 'trucker-hat' || id === 'beanie';
       state.placement = isHeadwear ? 'hat-front' : 'full-front';
       renderPlacements();
+      
+      // Re-render graphics to filter based on garment restrictions
+      renderGraphics();
+      
+      // Re-apply selected state to graphic if still available
+      if (state.graphic) {
+        document.querySelectorAll('.graphic-option').forEach(function(el) {
+          el.classList.toggle('selected', el.dataset.id === state.graphic);
+        });
+      }
       
       updatePreview();
       updateSummary();
