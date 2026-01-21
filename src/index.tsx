@@ -253,6 +253,7 @@ app.get('/', (c) => {
       height: 100vh;
       min-height: 600px;
       overflow: hidden;
+      background: #0a0a0a;
     }
     
     .slide {
@@ -263,11 +264,20 @@ app.get('/', (c) => {
       height: 100%;
       opacity: 0;
       transition: opacity 1s ease-in-out;
-      background-size: cover;
+      background-size: contain;
       background-position: center center;
+      background-repeat: no-repeat;
+      background-color: #0a0a0a;
     }
     
     .slide.active { opacity: 1; }
+    
+    /* For wider screens, use cover to fill but keep images visible */
+    @media (min-aspect-ratio: 16/9) {
+      .slide {
+        background-size: cover;
+      }
+    }
     
     /* Dark overlay on carousel for text readability */
     .hero-carousel::after {
