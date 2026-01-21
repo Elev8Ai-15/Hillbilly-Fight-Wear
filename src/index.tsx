@@ -152,157 +152,157 @@ const graphics = [
   {
     id: 'hfw-black-3d',
     name: 'HFW 3D Black',
-    thumbnail: '/images/graphics/hfw-logo-black-3d.png?v=8',
-    fullImage: '/images/graphics/hfw-logo-black-3d.png?v=8',
+    thumbnail: '/images/graphics/hfw-logo-black-3d.png?v=9',
+    fullImage: '/images/graphics/hfw-logo-black-3d.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'hfw-black-shadow',
     name: 'HFW Black Shadow',
-    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=8',
-    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=8',
+    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=9',
+    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'hfw-metal-gloves',
     name: 'HFW Metal Gloves',
-    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png?v=8',
-    fullImage: '/images/graphics/hfw-logo-metal-gloves.png?v=8',
+    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png?v=9',
+    fullImage: '/images/graphics/hfw-logo-metal-gloves.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'hfw-white-outline',
     name: 'HFW White Outline',
-    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=8',
-    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=8',
+    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=9',
+    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'hfw-logo',
     name: 'HFW Logo',
-    thumbnail: '/images/graphics/hfw-logo-original.png?v=8',
-    fullImage: '/images/graphics/hfw-logo-original.png?v=8',
+    thumbnail: '/images/graphics/hfw-logo-original.png?v=9',
+    fullImage: '/images/graphics/hfw-logo-original.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'human-cockfighter',
     name: 'Human Cockfighter',
-    thumbnail: '/images/graphics/human-cockfighter.png?v=8',
-    fullImage: '/images/graphics/human-cockfighter.png?v=8',
+    thumbnail: '/images/graphics/human-cockfighter.png?v=9',
+    fullImage: '/images/graphics/human-cockfighter.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'thump-a-stranger',
     name: 'Thump A Stranger',
-    thumbnail: '/images/graphics/thump-a-stranger.png?v=8',
-    fullImage: '/images/graphics/thump-a-stranger.png?v=8',
+    thumbnail: '/images/graphics/thump-a-stranger.png?v=9',
+    fullImage: '/images/graphics/thump-a-stranger.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'gpg-design',
     name: 'GPG Design',
-    thumbnail: '/images/graphics/gpg-design.png?v=8',
-    fullImage: '/images/graphics/gpg-design.png?v=8',
+    thumbnail: '/images/graphics/gpg-design.png?v=9',
+    fullImage: '/images/graphics/gpg-design.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'yycf-logo',
     name: 'YYCF Logo',
-    thumbnail: '/images/graphics/yycf-logo.png?v=8',
-    fullImage: '/images/graphics/yycf-logo.png?v=8',
+    thumbnail: '/images/graphics/yycf-logo.png?v=9',
+    fullImage: '/images/graphics/yycf-logo.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'fun-logo',
     name: 'FUN Logo',
-    thumbnail: '/images/graphics/fun-logo.png?v=8',
-    fullImage: '/images/graphics/fun-logo.png?v=8',
+    thumbnail: '/images/graphics/fun-logo.png?v=9',
+    fullImage: '/images/graphics/fun-logo.png?v=9',
     restrictToGarments: []
   },
   // NEW GRAPHICS - Added from Shop Now products
   {
     id: 'myob',
     name: 'MYOB (Mind Y\'own Business)',
-    thumbnail: '/images/graphics/myob.png?v=8',
-    fullImage: '/images/graphics/myob.png?v=8',
+    thumbnail: '/images/graphics/myob.png?v=9',
+    fullImage: '/images/graphics/myob.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'gnf',
     name: 'GNF',
-    thumbnail: '/images/graphics/gnf.png?v=8',
-    fullImage: '/images/graphics/gnf.png?v=8',
+    thumbnail: '/images/graphics/gnf.png?v=9',
+    fullImage: '/images/graphics/gnf.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'wimb',
     name: 'WIMB (What\'s It Mean To You?)',
-    thumbnail: '/images/graphics/wimb.png?v=8',
-    fullImage: '/images/graphics/wimb.png?v=8',
+    thumbnail: '/images/graphics/wimb.png?v=9',
+    fullImage: '/images/graphics/wimb.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'cling-to-guns',
     name: 'Cling to Guns',
-    thumbnail: '/images/graphics/cling-to-guns.png?v=8',
-    fullImage: '/images/graphics/cling-to-guns.png?v=8',
+    thumbnail: '/images/graphics/cling-to-guns.png?v=9',
+    fullImage: '/images/graphics/cling-to-guns.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'yes-you-can',
     name: 'Yes, You Can',
-    thumbnail: '/images/graphics/yes-you-can.png?v=8',
-    fullImage: '/images/graphics/yes-you-can.png?v=8',
+    thumbnail: '/images/graphics/yes-you-can.png?v=9',
+    fullImage: '/images/graphics/yes-you-can.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'put-it-on-em',
     name: 'Put It On Em',
-    thumbnail: '/images/graphics/put-it-on-em.png?v=8',
-    fullImage: '/images/graphics/put-it-on-em.png?v=8',
+    thumbnail: '/images/graphics/put-it-on-em.png?v=9',
+    fullImage: '/images/graphics/put-it-on-em.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'obama-tap',
     name: 'Obama Tap',
-    thumbnail: '/images/graphics/obama-tap.png?v=8',
-    fullImage: '/images/graphics/obama-tap.png?v=8',
+    thumbnail: '/images/graphics/obama-tap.png?v=9',
+    fullImage: '/images/graphics/obama-tap.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'good-for-community',
     name: 'Good for Community',
-    thumbnail: '/images/graphics/good-for-community.png?v=8',
-    fullImage: '/images/graphics/good-for-community.png?v=8',
+    thumbnail: '/images/graphics/good-for-community.png?v=9',
+    fullImage: '/images/graphics/good-for-community.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'hard-hittin',
     name: 'Hard Hittin\'',
-    thumbnail: '/images/graphics/hard-hittin.png?v=8',
-    fullImage: '/images/graphics/hard-hittin.png?v=8',
+    thumbnail: '/images/graphics/hard-hittin.png?v=9',
+    fullImage: '/images/graphics/hard-hittin.png?v=9',
     restrictToGarments: []
   },
   {
     id: 'staunch-chm',
     name: 'Staunch Properties (CHM)',
-    thumbnail: '/images/graphics/staunch-chm.png?v=8',
-    fullImage: '/images/graphics/staunch-chm.png?v=8',
+    thumbnail: '/images/graphics/staunch-chm.png?v=9',
+    fullImage: '/images/graphics/staunch-chm.png?v=9',
     restrictToGarments: []
   },
   // SPECIAL: Thumpin' Is Lovin' - Women's Only (Tanks and T-Shirts)
   {
     id: 'thumpin-is-lovin-pink',
     name: 'Thumpin\' Is Lovin\' (Pink)',
-    thumbnail: '/images/graphics/thumpin-is-lovin-pink.png?v=8',
-    fullImage: '/images/graphics/thumpin-is-lovin-pink.png?v=8',
+    thumbnail: '/images/graphics/thumpin-is-lovin-pink.png?v=9',
+    fullImage: '/images/graphics/thumpin-is-lovin-pink.png?v=9',
     restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
   },
   {
     id: 'thumpin-is-lovin-purple',
     name: 'Thumpin\' Is Lovin\' (Purple)',
-    thumbnail: '/images/graphics/thumpin-is-lovin-purple.png?v=8',
-    fullImage: '/images/graphics/thumpin-is-lovin-purple.png?v=8',
+    thumbnail: '/images/graphics/thumpin-is-lovin-purple.png?v=9',
+    fullImage: '/images/graphics/thumpin-is-lovin-purple.png?v=9',
     restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
   }
 ]
