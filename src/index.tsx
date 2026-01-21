@@ -582,7 +582,7 @@ app.get('/', (c) => {
   <section class="main-hero">
     <div class="main-hero-content">
       <div class="main-hero-logo">
-        <img src="/images/graphics/hillbilly-fightwear-logo.png" alt="Hillbilly Fightwear">
+        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=2" alt="Hillbilly Fightwear">
       </div>
       <p class="main-hero-tagline">Official Fight Gear</p>
       <div class="main-hero-cta">
