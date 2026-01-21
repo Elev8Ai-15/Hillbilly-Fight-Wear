@@ -97,40 +97,10 @@ const garments = [
 
 const graphics = [
   {
-    id: 'hfw-main',
-    name: 'HFW Original',
-    thumbnail: '/images/graphics/hillbilly-fightwear-logo.png?v=4',
-    fullImage: '/images/graphics/hillbilly-fightwear-logo.png?v=4'
-  },
-  {
-    id: 'hfw-black-3d',
-    name: 'HFW 3D Black',
-    thumbnail: '/images/graphics/hfw-logo-black-3d.png?v=4',
-    fullImage: '/images/graphics/hfw-logo-black-3d.png?v=4'
-  },
-  {
-    id: 'hfw-metal-gloves',
-    name: 'HFW Metal Gloves',
-    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png?v=4',
-    fullImage: '/images/graphics/hfw-logo-metal-gloves.png?v=4'
-  },
-  {
-    id: 'hfw-black-shadow',
-    name: 'HFW Black Shadow',
-    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=4',
-    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=4'
-  },
-  {
     id: 'hfw-white-outline',
     name: 'HFW White Outline',
-    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=4',
-    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=4'
-  },
-  {
-    id: 'hfw-dark-embossed',
-    name: 'HFW Dark Embossed',
-    thumbnail: '/images/graphics/hfw-logo-dark-embossed.png?v=4',
-    fullImage: '/images/graphics/hfw-logo-dark-embossed.png?v=4'
+    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=5',
+    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=5'
   },
   {
     id: 'hfw-logo',
