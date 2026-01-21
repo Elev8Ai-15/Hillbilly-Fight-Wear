@@ -61,18 +61,37 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 | Hoodie | $55.00 |
 | Additional Graphic | +$10.00 |
 
-### Graphics Library (11 Total)
-- **HFW Original** - Main Hillbilly Fightwear logo
+### Graphics Library (22 Total)
+
+**Core HFW Logos:**
 - **HFW 3D Black** - 3D effect black logo
-- **HFW Metal Gloves** - Metal gloves variant
 - **HFW Black Shadow** - Black with shadow
+- **HFW Metal Gloves** - Metal gloves variant
 - **HFW White Outline** - White outline variant
 - **HFW Logo** - Original HFW logo
-- **Human Cockfighter** - Fighter artwork
+
+**Slogan Graphics:**
 - **Thump A Stranger** - Brand slogan design
+- **Human Cockfighter** - Fighter artwork
+- **MYOB** - "Mind Y'own Business" (Red/White/Blue)
+- **GNF** - "G-N-F" patriotic letters
+- **WIMB** - "What's It Mean To You?"
+- **Cling to Guns** - Patriotic slogan
+- **Yes, You Can** - Motivational text
+- **Put It On Em** - Fighting slogan
+- **Obama Tap** - Political humor
+- **Good for Community** - Community message
+- **Hard Hittin'** - Fighting slogan
+- **Staunch Properties (CHM)** - Partner graphic
+
+**Partner Logos:**
 - **GPG Design** - Partner graphic
 - **YYCF Logo** - Partner logo
 - **FUN Logo** - Brand variant
+
+**Women's Exclusive (Tank Tops & T-Shirts Only):**
+- **Thumpin' Is Lovin' (Pink)** 💗 - Women's exclusive
+- **Thumpin' Is Lovin' (Purple)** 💜 - Women's exclusive
 
 ## API Endpoints
 
