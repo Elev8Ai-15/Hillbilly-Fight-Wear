@@ -127,6 +127,12 @@ const graphics = [
     fullImage: '/images/graphics/hfw-logo-white-outline.png'
   },
   {
+    id: 'hfw-dark-embossed',
+    name: 'HFW Dark Embossed',
+    thumbnail: '/images/graphics/hfw-logo-dark-embossed.png',
+    fullImage: '/images/graphics/hfw-logo-dark-embossed.png'
+  },
+  {
     id: 'hfw-logo',
     name: 'HFW Logo',
     thumbnail: '/images/graphics/hfw-logo-original.png',
