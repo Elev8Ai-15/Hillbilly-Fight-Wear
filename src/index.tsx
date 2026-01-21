@@ -2355,6 +2355,11 @@ app.get('/build', (c) => {
         }
       });
       
+      if (graphicsToShow.length === 0) {
+        canvas.renderAll();
+        return;
+      }
+      
       // Check if current garment is headwear (hat/beanie)
       var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
       
@@ -2368,6 +2373,12 @@ app.get('/build', (c) => {
           if (updateId !== previewUpdateId) {
             return; // Stale update, ignore
           }
+          
+          if (!img) {
+            console.error('Failed to load graphic image');
+            return;
+          }
+          
           var pos = getPlacementPosition(item.placementId, canvas.width, canvas.height);
           
           // Calculate max print area based on garment type
@@ -2427,6 +2438,7 @@ app.get('/build', (c) => {
           });
           
           canvas.add(img);
+          canvas.bringToFront(img);  // Ensure graphic is on top of garment
           canvas.renderAll();
         }, { crossOrigin: 'anonymous' });
       });
