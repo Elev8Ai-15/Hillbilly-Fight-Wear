@@ -1906,6 +1906,7 @@ app.get('/build', (c) => {
     let canvas;
     let modalSelectedGraphic = null;
     let modalSelectedPlacement = null;
+    let previewUpdateId = 0; // Used to cancel stale async updates
     
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
@@ -2183,10 +2184,17 @@ app.get('/build', (c) => {
         el.classList.toggle('selected', el.dataset.id === id);
       });
       
+      // Auto-switch view based on placement (skip updatePreview since we'll call it below)
       if (id === 'full-back') {
-        setView('back');
+        state.view = 'back';
+        document.querySelectorAll('.view-btn').forEach(function(el) {
+          el.classList.toggle('active', el.dataset.view === 'back');
+        });
       } else if (id === 'full-front' || id === 'left-chest' || id === 'right-chest') {
-        setView('front');
+        state.view = 'front';
+        document.querySelectorAll('.view-btn').forEach(function(el) {
+          el.classList.toggle('active', el.dataset.view === 'front');
+        });
       }
       
       updatePreview();
@@ -2274,6 +2282,9 @@ app.get('/build', (c) => {
     
     // Canvas preview
     function updatePreview() {
+      // Increment update ID to cancel any pending async operations
+      var currentUpdateId = ++previewUpdateId;
+      
       canvas.clear();
       canvas.backgroundColor = '#f8f8f8';
       
@@ -2300,6 +2311,11 @@ app.get('/build', (c) => {
       }
       
       fabric.Image.fromURL(imageUrl, function(img) {
+        // Check if this update is still current (not superseded by a newer update)
+        if (currentUpdateId !== previewUpdateId) {
+          return; // Stale update, ignore
+        }
+        
         if (!img) {
           console.error('Failed to load garment image:', imageUrl);
           canvas.renderAll();
@@ -2320,11 +2336,11 @@ app.get('/build', (c) => {
         canvas.add(img);
         canvas.sendToBack(img);
         
-        addGraphicsToCanvas(scale);
+        addGraphicsToCanvas(scale, currentUpdateId);
       }, { crossOrigin: 'anonymous' });
     }
     
-    function addGraphicsToCanvas(garmentScale) {
+    function addGraphicsToCanvas(garmentScale, updateId) {
       var graphicsToShow = [];
       
       if (state.graphic) {
@@ -2348,6 +2364,10 @@ app.get('/build', (c) => {
         if (!graphic || !placement) return;
         
         fabric.Image.fromURL(graphic.fullImage, function(img) {
+          // Check if this update is still current
+          if (updateId !== previewUpdateId) {
+            return; // Stale update, ignore
+          }
           var pos = getPlacementPosition(item.placementId, canvas.width, canvas.height);
           
           // Calculate max print area based on garment type
