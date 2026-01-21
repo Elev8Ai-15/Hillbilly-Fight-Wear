@@ -2286,9 +2286,26 @@ app.get('/build', (c) => {
       if (!garment) return;
       
       var colorImages = garment.images[state.color];
+      if (!colorImages) {
+        console.error('No images for color:', state.color);
+        canvas.renderAll();
+        return;
+      }
       var imageUrl = colorImages[state.view] || colorImages.front;
       
+      if (!imageUrl) {
+        console.error('No image URL for view:', state.view);
+        canvas.renderAll();
+        return;
+      }
+      
       fabric.Image.fromURL(imageUrl, function(img) {
+        if (!img) {
+          console.error('Failed to load garment image:', imageUrl);
+          canvas.renderAll();
+          return;
+        }
+        
         var scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.9;
         
         img.scale(scale);
