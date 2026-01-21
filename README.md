@@ -8,8 +8,9 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 - **Features**: Hero slideshow, product grid, custom garment designer with Fabric.js canvas, Stripe checkout
 
 ## URLs
-- **Development**: (sandbox URL - check GetServiceUrl)
-- **Builder**: /build
+- **Production**: https://hillbilly-fightwear.pages.dev
+- **Builder**: https://hillbilly-fightwear.pages.dev/build
+- **Custom Domain**: (Pending client approval - DNS configuration ready)
 
 ## Features
 
