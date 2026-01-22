@@ -272,8 +272,8 @@ const graphics = [
   {
     id: 'good-for-community',
     name: 'Good for Community',
-    thumbnail: '/images/graphics/good-for-community.png?v=9',
-    fullImage: '/images/graphics/good-for-community.png?v=9',
+    thumbnail: '/images/graphics/good-for-community.png?v=10',
+    fullImage: '/images/graphics/good-for-community.png?v=10',
     restrictToGarments: []
   },
   {
@@ -1765,6 +1765,94 @@ app.get('/build', (c) => {
       background: #8B0000;
       color: #fff;
     }
+    
+    /* Mobile Navigation Tabs */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1a1a1a;
+      z-index: 100;
+      padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+    }
+    
+    .mobile-nav-inner {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .mobile-nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: transparent;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.2s;
+      font-family: 'Oswald', sans-serif;
+    }
+    
+    .mobile-nav-btn:hover,
+    .mobile-nav-btn:active,
+    .mobile-nav-btn.active {
+      color: #fff;
+      background: rgba(139, 0, 0, 0.3);
+    }
+    
+    .mobile-nav-btn .step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #333;
+      color: #888;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    
+    .mobile-nav-btn:hover .step-circle,
+    .mobile-nav-btn:active .step-circle,
+    .mobile-nav-btn.active .step-circle {
+      background: #8B0000;
+      color: #fff;
+    }
+    
+    .mobile-nav-btn .step-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    @media (max-width: 768px) {
+      .mobile-nav {
+        display: block;
+      }
+      
+      body {
+        padding-bottom: 80px; /* Space for mobile nav */
+      }
+      
+      .builder-container {
+        padding-bottom: 100px;
+      }
+      
+      .option-group {
+        scroll-margin-top: 80px; /* Account for header when scrolling */
+      }
+    }
   </style>
 </head>
 <body>
@@ -1782,13 +1870,13 @@ app.get('/build', (c) => {
     <!-- Options Panel -->
     <div class="options-section">
       <!-- Step 1: Garment -->
-      <div class="option-group">
+      <div class="option-group" id="step1">
         <h3><span class="step-num">1</span> Choose Your Garment</h3>
         <div class="garment-grid" id="garmentGrid"></div>
       </div>
       
       <!-- Step 2: Size -->
-      <div class="option-group">
+      <div class="option-group" id="step2">
         <h3><span class="step-num">2</span> Select Size</h3>
         <div class="size-grid" id="sizeGrid">
           <div style="color: #999; font-size: 0.9rem;">Select a garment first</div>
@@ -1796,7 +1884,7 @@ app.get('/build', (c) => {
       </div>
       
       <!-- Step 3: Color -->
-      <div class="option-group">
+      <div class="option-group" id="step3">
         <h3><span class="step-num">3</span> Select Color</h3>
         <div class="color-grid" id="colorGrid">
           <div class="color-option white" data-color="white" onclick="selectColor('white')">
@@ -1812,7 +1900,7 @@ app.get('/build', (c) => {
       </div>
       
       <!-- Step 4: Graphics -->
-      <div class="option-group">
+      <div class="option-group" id="step4">
         <h3><span class="step-num">4</span> Choose Graphics</h3>
         <div class="graphics-grid" id="graphicsGrid"></div>
         
@@ -1826,7 +1914,7 @@ app.get('/build', (c) => {
       </div>
       
       <!-- Step 5: Placement -->
-      <div class="option-group" id="placementSection">
+      <div class="option-group" id="step5">
         <h3><span class="step-num">5</span> Graphic Placement</h3>
         <div class="placement-grid" id="placementGrid"></div>
       </div>
@@ -1886,6 +1974,32 @@ app.get('/build', (c) => {
     </div>
   </div>
   
+  <!-- Mobile Navigation -->
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-inner">
+      <button class="mobile-nav-btn active" onclick="scrollToStep(1)" data-step="1">
+        <span class="step-circle">1</span>
+        <span class="step-label">Garment</span>
+      </button>
+      <button class="mobile-nav-btn" onclick="scrollToStep(2)" data-step="2">
+        <span class="step-circle">2</span>
+        <span class="step-label">Size</span>
+      </button>
+      <button class="mobile-nav-btn" onclick="scrollToStep(3)" data-step="3">
+        <span class="step-circle">3</span>
+        <span class="step-label">Color</span>
+      </button>
+      <button class="mobile-nav-btn" onclick="scrollToStep(4)" data-step="4">
+        <span class="step-circle">4</span>
+        <span class="step-label">Graphics</span>
+      </button>
+      <button class="mobile-nav-btn" onclick="scrollToStep(5)" data-step="5">
+        <span class="step-circle">5</span>
+        <span class="step-label">Place</span>
+      </button>
+    </div>
+  </nav>
+  
   <script>
     // Data from server
     const garments = ${garmentsJson};
@@ -1908,12 +2022,47 @@ app.get('/build', (c) => {
     let modalSelectedPlacement = null;
     let previewUpdateId = 0; // Used to cancel stale async updates
     
+    // Mobile navigation - scroll to step
+    function scrollToStep(stepNum) {
+      var element = document.getElementById('step' + stepNum);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Update active nav button
+        document.querySelectorAll('.mobile-nav-btn').forEach(function(btn) {
+          btn.classList.toggle('active', btn.dataset.step === String(stepNum));
+        });
+      }
+    }
+    
+    // Update mobile nav active state on scroll
+    function updateMobileNavOnScroll() {
+      var steps = [1, 2, 3, 4, 5];
+      var currentStep = 1;
+      
+      steps.forEach(function(step) {
+        var element = document.getElementById('step' + step);
+        if (element) {
+          var rect = element.getBoundingClientRect();
+          if (rect.top <= 150) {
+            currentStep = step;
+          }
+        }
+      });
+      
+      document.querySelectorAll('.mobile-nav-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.step === String(currentStep));
+      });
+    }
+    
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
       initCanvas();
       renderGarments();
       renderGraphics();
       renderPlacements();
+      
+      // Add scroll listener for mobile nav
+      window.addEventListener('scroll', updateMobileNavOnScroll);
       
       // Check URL params
       const params = new URLSearchParams(window.location.search);
