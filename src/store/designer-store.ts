@@ -18,11 +18,9 @@ interface DesignerStore extends GarmentPreviewState {
   selectElement: (id: string | null) => void;
   duplicateElement: (id: string) => void;
   moveElement: (id: string, x: number, y: number) => void;
-  resizeElement: (id: string, width: number, height: number) => void;
   rotateElement: (id: string, rotation: number) => void;
   reorderElement: (id: string, direction: "up" | "down") => void;
   clearDesign: () => void;
-  loadDesign: (state: Partial<GarmentPreviewState>) => void;
   addTextElement: (text: string) => void;
   addImageElement: (src: string) => void;
   generateId: () => string;
@@ -94,14 +92,6 @@ export const useDesignerStore = create<DesignerStore>((set, get) => ({
       isDirty: true,
     })),
 
-  resizeElement: (id, width, height) =>
-    set((state) => ({
-      elements: state.elements.map((el) =>
-        el.id === id ? { ...el, width, height } : el
-      ),
-      isDirty: true,
-    })),
-
   rotateElement: (id, rotation) =>
     set((state) => ({
       elements: state.elements.map((el) =>
@@ -130,12 +120,6 @@ export const useDesignerStore = create<DesignerStore>((set, get) => ({
     set({
       elements: [],
       selectedElementId: null,
-      isDirty: false,
-    }),
-
-  loadDesign: (designState) =>
-    set({
-      ...designState,
       isDirty: false,
     }),
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -14,10 +14,10 @@ import {
   Shield,
   RotateCcw,
 } from "lucide-react";
-import { getProductBySlug, products } from "@/data/products";
+import { getProductBySlug } from "@/data/products";
 import { useCartStore } from "@/store/cart-store";
 import { formatPrice, getDiscountPercentage } from "@/lib/utils";
-import { Size } from "@/types";
+import { Size, Product } from "@/types";
 import ProductCard from "@/components/products/ProductCard";
 
 export default function ProductDetailPage() {
@@ -31,6 +31,35 @@ export default function ProductDetailPage() {
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [recommendations, setRecommendations] = useState<Product[]>([]);
+
+  // Fetch AI-powered recommendations from API
+  useEffect(() => {
+    if (!product) return;
+    const controller = new AbortController();
+
+    fetch("/api/recommendations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productId: product.id, limit: 4 }),
+      signal: controller.signal,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.recommendations) {
+          setRecommendations(
+            data.recommendations.map(
+              (r: { product: Product }) => r.product
+            )
+          );
+        }
+      })
+      .catch(() => {
+        // Silently fail — recommendations are non-critical
+      });
+
+    return () => controller.abort();
+  }, [product]);
 
   if (!product) {
     return (
@@ -51,11 +80,6 @@ export default function ProductDetailPage() {
   }
 
   const selectedColor = product.colors[selectedColorIndex];
-  const relatedProducts = products
-    .filter(
-      (p) => p.category === product.category && p.id !== product.id
-    )
-    .slice(0, 4);
 
   const handleAddToCart = () => {
     if (!selectedSize) return;
@@ -274,12 +298,12 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Related Products */}
-      {relatedProducts.length > 0 && (
+      {/* AI-Powered Recommendations */}
+      {recommendations.length > 0 && (
         <section className="mt-20">
-          <h2 className="text-2xl font-black mb-6">You May Also Like</h2>
+          <h2 className="text-2xl font-black mb-6">Recommended For You</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {relatedProducts.map((p) => (
+            {recommendations.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
