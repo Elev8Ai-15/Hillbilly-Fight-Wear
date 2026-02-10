@@ -141,27 +141,6 @@ const garments = [
 const graphics = [
   // HILLBILLY FIGHTWEAR LOGOS
   {
-    id: 'hillbilly-fightwear-logo',
-    name: 'Hillbilly Fightwear',
-    thumbnail: '/images/graphics/hillbilly-fightwear-logo.png?v=11',
-    fullImage: '/images/graphics/hillbilly-fightwear-logo.png?v=11',
-    restrictToGarments: []
-  },
-  {
-    id: 'hfw-black-3d',
-    name: 'HFW 3D Black',
-    thumbnail: '/images/graphics/hfw-logo-black-3d.png?v=11',
-    fullImage: '/images/graphics/hfw-logo-black-3d.png?v=11',
-    restrictToGarments: []
-  },
-  {
-    id: 'hfw-black-shadow',
-    name: 'HFW Black Shadow',
-    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=11',
-    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=11',
-    restrictToGarments: []
-  },
-  {
     id: 'hfw-metal-gloves',
     name: 'HFW Metal Gloves',
     thumbnail: '/images/graphics/hfw-logo-metal-gloves.png?v=11',
