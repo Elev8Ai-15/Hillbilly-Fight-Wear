@@ -293,71 +293,72 @@ const placements = [
   { id: 'hat-front', name: 'Hat Front', isSmall: true, forHats: true }
 ]
 
-// Shop products organized by category from hillbillyfightwear.com (external links)
+// Shop products organized by category
+// type: 'garment' = clothing/hats (shows size→color flow), 'decal' = stickers/decals (shows expanded view)
 // MENS CLOTHING - T-Shirts and Hoodies
 const mensClothing = [
-  { id: 1, title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM_6c519925-dfd5-4982-b8c8-c01f4c572668.png?v=1764960913', url: 'https://hillbillyfightwear.com/products/myob-hoodie' },
-  { id: 2, title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.39.09PM.png?v=1764959976', url: 'https://hillbillyfightwear.com/products/thump-a-stranger-hoodie' },
-  { id: 3, title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hfwf.png?v=1541520222', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-1' },
-  { id: 4, title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/yycf.png?v=1541520348', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-2' },
-  { id: 5, title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/funf.png?v=1541520465', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-3' },
-  { id: 6, title: 'T-Shirt - GNF', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/gnff.png?v=1541520600', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-4' },
-  { id: 7, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hcff.png?v=1541521169', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-5' },
-  { id: 8, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/thumpf.png?v=1541521247', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-6' },
-  { id: 9, title: 'T-Shirt - WIMB', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/wimb.png?v=1541521448', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-7' },
-  { id: 10, title: 'T-Shirt - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/FullSizeRender.jpg?v=1593877737', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-9' },
-  { id: 11, title: 'T-Shirt - MYOB', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/myobf_1a40e805-dc40-4499-a8f7-b35cb8876393.png?v=1544660076', url: 'https://hillbillyfightwear.com/products/short-sleeve-t-shirt-10' },
-  { id: 12, title: 'Staunch Properties - CHM Edition', vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/ch1.png?v=1608731816', url: 'https://hillbillyfightwear.com/products/staunch-properties-chm-edition' }
+  { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM_6c519925-dfd5-4982-b8c8-c01f4c572668.png?v=1764960913', type: 'garment', sizes: ['S','M','L','XL','XXL'], colors: ['Black','Grey'] },
+  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.39.09PM.png?v=1764959976', type: 'garment', sizes: ['S','M','L','XL','XXL'], colors: ['Black','Grey'] },
+  { id: 'm3', title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hfwf.png?v=1541520222', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/yycf.png?v=1541520348', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm5', title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/funf.png?v=1541520465', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm6', title: 'T-Shirt - GNF', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/gnff.png?v=1541520600', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm7', title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hcff.png?v=1541521169', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm8', title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/thumpf.png?v=1541521247', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm9', title: 'T-Shirt - WIMB', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/wimb.png?v=1541521448', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm10', title: 'T-Shirt - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/FullSizeRender.jpg?v=1593877737', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm11', title: 'T-Shirt - MYOB', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/myobf_1a40e805-dc40-4499-a8f7-b35cb8876393.png?v=1544660076', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm12', title: 'Staunch Properties - CHM Edition', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/ch1.png?v=1608731816', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] }
 ]
 
 // WOMENS CLOTHING - Tank Tops
 const womensClothing = [
-  { id: 1, title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', url: 'https://hillbillyfightwear.com/products/womens-tank-top' },
-  { id: 2, title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', url: 'https://hillbillyfightwear.com/products/womens-tank-top-1' },
-  { id: 3, title: "Women's Tank - Thump a Stranger", vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.19_PM.png?v=1556681368', url: 'https://hillbillyfightwear.com/products/womens-tank-top-2' },
-  { id: 4, title: "Women's Tank - Thumpin Is Lovin", vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.41_PM.png?v=1556681516', url: 'https://hillbillyfightwear.com/products/womens-tank-top-3' },
-  { id: 5, title: "Women's Tank - Yes You Can", vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.06_PM.png?v=1556681691', url: 'https://hillbillyfightwear.com/products/womens-tank-top-4' },
-  { id: 6, title: "Women's Tank - GNF", vendor: 'Hillbilly Fightwear', price: '$28.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_-_tank_-_10_15.jpg?v=1556681770', url: 'https://hillbillyfightwear.com/products/womens-tank-top-5' }
+  { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w3', title: "Women's Tank - Thump a Stranger", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.19_PM.png?v=1556681368', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w4', title: "Women's Tank - Thumpin Is Lovin", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.41_PM.png?v=1556681516', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w5', title: "Women's Tank - Yes You Can", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.06_PM.png?v=1556681691', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w6', title: "Women's Tank - GNF", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_-_tank_-_10_15.jpg?v=1556681770', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] }
 ]
 
 // KIDS CLOTHING - Youth Hoodie
 const kidsClothing = [
-  { id: 1, title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM.png?v=1764960668', url: 'https://hillbillyfightwear.com/products/youth-hoodie' }
+  { id: 'k1', title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM.png?v=1764960668', type: 'garment', sizes: ['YS','YM','YL','YXL'], colors: ['Black','Grey'] }
 ]
 
 // HATS - Trucker Hats and Beanies
 const hats = [
-  { id: 1, title: 'Beanie', vendor: 'Hillbilly Fightwear', price: '$30.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.59.43PM.png?v=1764961239', url: 'https://hillbillyfightwear.com/products/beanie' },
-  { id: 2, title: 'Fitted Hat - GNF White', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_-white.jpg?v=1544660186', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat' },
-  { id: 3, title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_site_pic.jpg?v=1544660239', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat-1' },
-  { id: 4, title: 'Fitted Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfighter_fitted.jpg?v=1556679360', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat-2' },
-  { id: 5, title: 'Fitted Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_fitted.jpg?v=1556679540', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat-3' },
-  { id: 6, title: 'Fitted Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$45.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_9227.JPG?v=1559137116', url: 'https://hillbillyfightwear.com/products/fitted-trucker-hat-4' },
-  { id: 7, title: 'Adjustable Hat - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/It_s_A_Fun_Ride_adjustable_trucker.jpg?v=1556678568', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat' },
-  { id: 8, title: 'Adjustable Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_adjusted.jpg?v=1556679508', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-1' },
-  { id: 9, title: 'Adjustable Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfigher_adjustable.jpg?v=1556679321', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-2' },
-  { id: 10, title: 'Adjustable Hat - GNF', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_adjustable_trucker.jpg?v=1556678861', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-3' },
-  { id: 11, title: 'Adjustable Hat - Cockfighter Grey', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_4304.JPG?v=1559137530', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-4' },
-  { id: 12, title: 'Adjustable Hat - Cockfighter Black', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_1265.JPG?v=1559137825', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-5' },
-  { id: 13, title: 'Adjustable Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$35.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_6519.JPG?v=1559137929', url: 'https://hillbillyfightwear.com/products/adjustable-trucker-hat-6' }
+  { id: 'h1', title: 'Beanie', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.59.43PM.png?v=1764961239', type: 'garment', sizes: ['One Size'], colors: ['Black','Grey','White'] },
+  { id: 'h2', title: 'Fitted Hat - GNF White', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_-white.jpg?v=1544660186', type: 'garment', sizes: ['S/M','L/XL'], colors: ['White'] },
+  { id: 'h3', title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_site_pic.jpg?v=1544660239', type: 'garment', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h4', title: 'Fitted Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfighter_fitted.jpg?v=1556679360', type: 'garment', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h5', title: 'Fitted Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_fitted.jpg?v=1556679540', type: 'garment', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h6', title: 'Fitted Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_9227.JPG?v=1559137116', type: 'garment', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h7', title: 'Adjustable Hat - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/It_s_A_Fun_Ride_adjustable_trucker.jpg?v=1556678568', type: 'garment', sizes: ['One Size'], colors: ['Black','White'] },
+  { id: 'h8', title: 'Adjustable Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_adjusted.jpg?v=1556679508', type: 'garment', sizes: ['One Size'], colors: ['Black'] },
+  { id: 'h9', title: 'Adjustable Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfigher_adjustable.jpg?v=1556679321', type: 'garment', sizes: ['One Size'], colors: ['Black'] },
+  { id: 'h10', title: 'Adjustable Hat - GNF', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_adjustable_trucker.jpg?v=1556678861', type: 'garment', sizes: ['One Size'], colors: ['Black','White'] },
+  { id: 'h11', title: 'Adjustable Hat - Cockfighter Grey', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_4304.JPG?v=1559137530', type: 'garment', sizes: ['One Size'], colors: ['Grey'] },
+  { id: 'h12', title: 'Adjustable Hat - Cockfighter Black', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_1265.JPG?v=1559137825', type: 'garment', sizes: ['One Size'], colors: ['Black'] },
+  { id: 'h13', title: 'Adjustable Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_6519.JPG?v=1559137929', type: 'garment', sizes: ['One Size'], colors: ['Black'] }
 ]
 
 // DECALS / STICKERS
 const decals = [
-  { id: 1, title: 'Decal - GNF', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-gnf.png?v=13', url: 'https://hillbillyfightwear.com/products/decal' },
-  { id: 2, title: 'Decal - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-your-neck.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-1' },
-  { id: 3, title: 'Decal - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-hcf.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-2' },
-  { id: 4, title: 'Decal - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-fun-ride.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-3' },
-  { id: 5, title: 'Decal - Put It On Em', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-put-it-on-em.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-4' },
-  { id: 6, title: 'Decal - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-thump.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-5' },
-  { id: 7, title: 'Decal - Yes You Can', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-yes-you-can.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-6' },
-  { id: 8, title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-obama-tap.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-7' },
-  { id: 9, title: 'Decal - CHM', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-cunt.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-8' },
-  { id: 10, title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-hfw.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-9' },
-  { id: 11, title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-gnf.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-10' },
-  { id: 12, title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-thumpin-is-lovin.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-11' },
-  { id: 13, title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-community.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-12' },
-  { id: 14, title: 'Decals - Mind Yown Business', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-myob.png?v=13', url: 'https://hillbillyfightwear.com/products/decals' }
+  { id: 'd1', title: 'Decal - GNF', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-gnf.png?v=13', type: 'decal' },
+  { id: 'd2', title: 'Decal - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-your-neck.png?v=13', type: 'decal' },
+  { id: 'd3', title: 'Decal - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hcf.png?v=13', type: 'decal' },
+  { id: 'd4', title: 'Decal - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-fun-ride.png?v=13', type: 'decal' },
+  { id: 'd5', title: 'Decal - Put It On Em', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-put-it-on-em.png?v=13', type: 'decal' },
+  { id: 'd6', title: 'Decal - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-thump.png?v=13', type: 'decal' },
+  { id: 'd7', title: 'Decal - Yes You Can', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-yes-you-can.png?v=13', type: 'decal' },
+  { id: 'd8', title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-obama-tap.png?v=13', type: 'decal' },
+  { id: 'd9', title: 'Decal - CHM', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-cunt.png?v=13', type: 'decal' },
+  { id: 'd10', title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hfw.png?v=13', type: 'decal' },
+  { id: 'd11', title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-gnf.png?v=13', type: 'decal' },
+  { id: 'd12', title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-thumpin-is-lovin.png?v=13', type: 'decal' },
+  { id: 'd13', title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-community.png?v=13', type: 'decal' },
+  { id: 'd14', title: 'Decals - Mind Yown Business', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-myob.png?v=13', type: 'decal' }
 ]
 
 // Combined shopProducts for API endpoint
@@ -413,17 +414,16 @@ app.get('/', (c) => {
     </a>
   `).join('')
 
-  // Helper function to generate product cards with accessibility
+  // Helper function to generate product cards - opens detail modal on click
   const generateProductCards = (products: any[]) => products.map(product => `
-    <a href="${product.url}" target="_blank" rel="noopener noreferrer" class="product-card" role="listitem" aria-label="${product.title} - ${product.price} (opens in new window)">
+    <div class="product-card" role="listitem" aria-label="${product.title} - ${product.price}" onclick="openProductModal('${product.id}')" tabindex="0" onkeydown="if(event.key==='Enter')openProductModal('${product.id}')">
       <div class="product-image-wrapper">
         <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy" width="280" height="280">
       </div>
       <h4 class="product-title">${product.title}</h4>
       <div class="product-vendor">${product.vendor}</div>
       <div class="product-price" aria-label="Price: ${product.price}">${product.price}</div>
-      <span class="external-link" aria-hidden="true"><i class="fas fa-external-link-alt"></i></span>
-    </a>
+    </div>
   `).join('')
 
   // Generate HTML for each category
@@ -820,9 +820,10 @@ app.get('/', (c) => {
       text-decoration: none;
       color: inherit;
       display: block;
-      transition: transform 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s;
       border-radius: 8px;
       padding: 10px;
+      cursor: pointer;
     }
     
     .product-card:hover { transform: translateY(-5px); }
@@ -1187,9 +1188,13 @@ app.get('/', (c) => {
         <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear - Official MMA and Combat Sports Apparel" style="max-width: 280px; width: 100%; height: auto; filter: drop-shadow(0 4px 20px rgba(139, 0, 0, 0.5));">
       </a>
       <p style="color: #fff; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 6px; margin: 12px 0 0; font-weight: 500; opacity: 0.85;">Official Fight Gear</p>
-      <nav style="margin-top: 15px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" aria-label="Primary navigation">
+      <nav style="margin-top: 15px; display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;" aria-label="Primary navigation">
         <a href="#shop" class="btn-secondary" style="display: inline-block; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-radius: 4px; background: #8B0000; color: #fff; transition: all 0.3s;" aria-label="Shop now - browse products"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
         <a href="/build" style="display: inline-block; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-radius: 4px; background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.8); transition: all 0.3s;" aria-label="Build your own custom apparel"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Your Own</a>
+        <button onclick="toggleCart()" style="position: relative; background: none; border: 2px solid rgba(255,255,255,0.8); color: #fff; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s;" aria-label="Shopping cart" title="View Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="cartBadge" style="position: absolute; top: -8px; right: -8px; background: #8B0000; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: none; align-items: center; justify-content: center; font-weight: 700;">0</span>
+        </button>
       </nav>
     </div>
   </header>
@@ -1357,6 +1362,41 @@ app.get('/', (c) => {
       <button class="ada-reset" onclick="resetA11y()"><i class="fas fa-undo"></i> Reset All Settings</button>
     </div>
   </div>
+  
+  <!-- Product Detail Modal -->
+  <div id="productModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:10000; overflow-y:auto;" onclick="if(event.target===this)closeProductModal()">
+    <div style="background:#fff; max-width:600px; margin:40px auto; border-radius:12px; overflow:hidden; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+      <button onclick="closeProductModal()" style="position:absolute; top:12px; right:16px; background:rgba(0,0,0,0.5); color:#fff; border:none; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:1.2rem; z-index:2; display:flex; align-items:center; justify-content:center;" aria-label="Close">&times;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+  
+  <!-- Cart Drawer -->
+  <div id="cartOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10001;" onclick="toggleCart()"></div>
+  <div id="cartDrawer" style="position:fixed; top:0; right:-420px; width:400px; max-width:90vw; height:100%; background:#fff; z-index:10002; box-shadow:-4px 0 30px rgba(0,0,0,0.3); transition:right 0.3s ease; display:flex; flex-direction:column;">
+    <div style="background:#1a1a1a; color:#fff; padding:20px; display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="margin:0; font-size:1.2rem; font-weight:600;"><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+      <button onclick="toggleCart()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;" aria-label="Close cart">&times;</button>
+    </div>
+    <div id="cartItems" style="flex:1; overflow-y:auto; padding:15px;"></div>
+    <div id="cartFooter" style="border-top:2px solid #eee; padding:20px; display:none;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:1.1rem; font-weight:600;">
+        <span>Total:</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button onclick="cartCheckout()" style="width:100%; padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; cursor:pointer; transition:background 0.3s;">
+        <i class="fas fa-lock"></i> Proceed to Checkout
+      </button>
+      <button onclick="toggleCart()" style="width:100%; padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; font-weight:500; cursor:pointer; margin-top:8px; transition:all 0.3s;">
+        <i class="fas fa-arrow-left"></i> Continue Shopping
+      </button>
+    </div>
+  </div>
+  
+  <!-- Shop Products Data for JavaScript -->
+  <script>
+    var allShopProducts = ${JSON.stringify(shopProducts)};
+  </script>
   
   <!-- GDPR Cookie Consent Banner -->
   <div id="cookieConsent" class="cookie-consent" style="display: none;">
@@ -1712,6 +1752,272 @@ app.get('/', (c) => {
         }
       });
     }
+    
+    // ========================================
+    // SHOPPING CART SYSTEM
+    // ========================================
+    var cart = JSON.parse(localStorage.getItem('hfw_cart') || '[]');
+    
+    function saveCart() {
+      localStorage.setItem('hfw_cart', JSON.stringify(cart));
+      updateCartBadge();
+    }
+    
+    function updateCartBadge() {
+      var badge = document.getElementById('cartBadge');
+      var count = cart.reduce(function(sum, item) { return sum + item.qty; }, 0);
+      if (count > 0) {
+        badge.style.display = 'flex';
+        badge.textContent = count;
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+    
+    function toggleCart() {
+      var drawer = document.getElementById('cartDrawer');
+      var overlay = document.getElementById('cartOverlay');
+      var isOpen = drawer.style.right === '0px';
+      if (isOpen) {
+        drawer.style.right = '-420px';
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+      } else {
+        renderCart();
+        drawer.style.right = '0px';
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    
+    function renderCart() {
+      var container = document.getElementById('cartItems');
+      var footer = document.getElementById('cartFooter');
+      if (cart.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:60px 20px; color:#999;"><i class="fas fa-shopping-cart" style="font-size:3rem; margin-bottom:15px; display:block;"></i><p style="font-size:1.1rem; margin:0;">Your cart is empty</p><p style="font-size:0.85rem; margin-top:8px;">Browse products and add items to get started.</p></div>';
+        footer.style.display = 'none';
+        return;
+      }
+      var html = '';
+      var total = 0;
+      cart.forEach(function(item, index) {
+        var subtotal = item.price * item.qty;
+        total += subtotal;
+        var details = '';
+        if (item.size) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Size: ' + item.size + '</span> ';
+        if (item.color) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Color: ' + item.color + '</span>';
+        html += '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; align-items:flex-start;">' +
+          '<img src="' + item.image + '" alt="' + item.title + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#f7f7f7; flex-shrink:0;">' +
+          '<div style="flex:1; min-width:0;">' +
+            '<div style="font-weight:600; font-size:0.9rem; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + item.title + '</div>' +
+            '<div style="margin-bottom:6px;">' + details + '</div>' +
+            '<div style="display:flex; align-items:center; gap:8px;">' +
+              '<button onclick="changeQty(' + index + ',-1)" style="width:28px; height:28px; border:1px solid #ddd; background:#fff; border-radius:4px; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">-</button>' +
+              '<span style="font-size:0.9rem; min-width:20px; text-align:center;">' + item.qty + '</span>' +
+              '<button onclick="changeQty(' + index + ',1)" style="width:28px; height:28px; border:1px solid #ddd; background:#fff; border-radius:4px; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">+</button>' +
+              '<span style="margin-left:auto; font-weight:600;">$' + subtotal.toFixed(2) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<button onclick="removeFromCart(' + index + ')" style="background:none; border:none; color:#999; cursor:pointer; font-size:0.9rem; padding:4px;" aria-label="Remove item"><i class="fas fa-trash"></i></button>' +
+        '</div>';
+      });
+      container.innerHTML = html;
+      footer.style.display = 'block';
+      document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+    }
+    
+    function addToCart(productId, size, color) {
+      var product = allShopProducts.find(function(p) { return p.id === productId; });
+      if (!product) return;
+      // Check for duplicate (same product, size, color)
+      var existing = cart.findIndex(function(item) {
+        return item.productId === productId && item.size === (size||'') && item.color === (color||'');
+      });
+      if (existing >= 0) {
+        cart[existing].qty += 1;
+      } else {
+        cart.push({
+          productId: productId,
+          title: product.title,
+          price: product.priceNum,
+          image: product.image,
+          size: size || '',
+          color: color || '',
+          qty: 1
+        });
+      }
+      saveCart();
+      closeProductModal();
+      toggleCart();
+    }
+    
+    function changeQty(index, delta) {
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      saveCart();
+      renderCart();
+    }
+    
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      saveCart();
+      renderCart();
+    }
+    
+    function cartCheckout() {
+      if (cart.length === 0) return;
+      var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
+      var items = cart.map(function(item) {
+        var desc = item.title;
+        if (item.size) desc += ' (Size: ' + item.size + ')';
+        if (item.color) desc += ' - ' + item.color;
+        return desc + ' x' + item.qty + ' = $' + (item.price * item.qty).toFixed(2);
+      });
+      
+      // Call checkout API
+      fetch('/api/shop-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cart: cart })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.url) {
+          window.location.href = data.url;
+        } else if (data.demo) {
+          alert('Demo Mode - Order Total: $' + total.toFixed(2) + '\\n\\nItems:\\n' + items.join('\\n') + '\\n\\nStripe checkout will activate when API key is configured.');
+          cart = [];
+          saveCart();
+          renderCart();
+        } else if (data.error) {
+          alert('Error: ' + data.error);
+        }
+      })
+      .catch(function(err) {
+        alert('Checkout error. Please try again.');
+        console.error(err);
+      });
+    }
+    
+    // ========================================
+    // PRODUCT DETAIL MODAL
+    // ========================================
+    var modalState = { step: 'view', selectedSize: '', selectedColor: '' };
+    
+    function openProductModal(productId) {
+      var product = allShopProducts.find(function(p) { return p.id === productId; });
+      if (!product) return;
+      modalState = { step: 'view', selectedSize: '', selectedColor: '', productId: productId };
+      
+      if (product.type === 'garment') {
+        renderGarmentModal(product, 'size');
+      } else {
+        renderDecalModal(product);
+      }
+      
+      document.getElementById('productModal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeProductModal() {
+      document.getElementById('productModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    function renderGarmentModal(product, step) {
+      modalState.step = step;
+      var mc = document.getElementById('modalContent');
+      
+      var imageHtml = '<div style="background:#f7f7f7; padding:20px; text-align:center;">' +
+        '<img src="' + product.image + '" alt="' + product.title + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
+      '</div>';
+      
+      var headerHtml = '<div style="padding:20px 20px 10px;">' +
+        '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title + '</h3>' +
+        '<div style="color:#8B0000; font-size:1.2rem; font-weight:600;">' + product.price + '</div>' +
+      '</div>';
+      
+      if (step === 'size') {
+        // SIZE SELECTION STEP
+        var sizesHtml = product.sizes.map(function(s) {
+          var sel = modalState.selectedSize === s ? 'background:#8B0000; color:#fff; border-color:#8B0000;' : '';
+          return '<button onclick="selectModalSize(\\'' + product.id + '\\',\\'' + s + '\\')" style="padding:12px 20px; border:2px solid #ddd; background:#fff; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; min-width:60px; transition:all 0.2s; ' + sel + '">' + s + '</button>';
+        }).join('');
+        
+        mc.innerHTML = imageHtml + headerHtml +
+          '<div style="padding:0 20px 20px;">' +
+            '<h4 style="margin:0 0 12px; font-size:1rem; color:#666; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-ruler"></i> Select Size</h4>' +
+            '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + sizesHtml + '</div>' +
+          '</div>';
+          
+      } else if (step === 'color') {
+        // COLOR SELECTION STEP
+        var colorsHtml = product.colors.map(function(c) {
+          var bg = c.toLowerCase() === 'black' ? '#1a1a1a' : c.toLowerCase() === 'white' ? '#fff' : c.toLowerCase() === 'grey' ? '#808080' : c.toLowerCase() === 'pink' ? '#FF69B4' : '#ddd';
+          var textColor = (c.toLowerCase() === 'white' || c.toLowerCase() === 'pink') ? '#333' : '#fff';
+          var sel = modalState.selectedColor === c ? 'box-shadow:0 0 0 3px #8B0000; transform:scale(1.05);' : '';
+          return '<button onclick="selectModalColor(\\'' + product.id + '\\',\\'' + c + '\\')" style="padding:14px 24px; border:2px solid #ddd; background:' + bg + '; color:' + textColor + '; border-radius:8px; cursor:pointer; font-size:0.95rem; font-weight:600; min-width:80px; transition:all 0.2s; ' + sel + '">' + c + '</button>';
+        }).join('');
+        
+        mc.innerHTML = imageHtml + headerHtml +
+          '<div style="padding:0 20px 5px;">' +
+            '<div style="background:#f0f7ff; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:0.85rem; color:#555;"><i class="fas fa-check-circle" style="color:#4CAF50;"></i> Size: <strong>' + modalState.selectedSize + '</strong></div>' +
+            '<h4 style="margin:0 0 12px; font-size:1rem; color:#666; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-palette"></i> Select Color</h4>' +
+            '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + colorsHtml + '</div>' +
+          '</div>' +
+          '<div style="padding:15px 20px 20px; display:flex; gap:10px;">' +
+            '<button onclick="renderGarmentModal(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\';}),\\'size\\')" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
+          '</div>';
+          
+      } else if (step === 'confirm') {
+        // CONFIRM + ADD TO CART
+        mc.innerHTML = imageHtml + headerHtml +
+          '<div style="padding:0 20px 10px;">' +
+            '<div style="background:#f0f7ff; padding:10px 14px; border-radius:6px; font-size:0.9rem; color:#555; display:flex; gap:15px;">' +
+              '<span><i class="fas fa-ruler" style="color:#4CAF50;"></i> Size: <strong>' + modalState.selectedSize + '</strong></span>' +
+              '<span><i class="fas fa-palette" style="color:#4CAF50;"></i> Color: <strong>' + modalState.selectedColor + '</strong></span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="padding:10px 20px 20px; display:flex; flex-direction:column; gap:10px;">' +
+            '<button onclick="addToCart(\\'' + product.id + '\\',\\'' + modalState.selectedSize + '\\',\\'' + modalState.selectedColor + '\\')" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
+            '<button onclick="closeProductModal()" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
+            '<button onclick="renderGarmentModal(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\';}),\\'color\\')" style="padding:10px; background:transparent; color:#666; border:none; cursor:pointer; font-size:0.85rem; text-decoration:underline;">Change Options</button>' +
+          '</div>';
+      }
+    }
+    
+    function selectModalSize(productId, size) {
+      modalState.selectedSize = size;
+      var product = allShopProducts.find(function(p) { return p.id === productId; });
+      // Auto-advance to color step
+      renderGarmentModal(product, 'color');
+    }
+    
+    function selectModalColor(productId, color) {
+      modalState.selectedColor = color;
+      var product = allShopProducts.find(function(p) { return p.id === productId; });
+      // Auto-advance to confirm step
+      renderGarmentModal(product, 'confirm');
+    }
+    
+    function renderDecalModal(product) {
+      var mc = document.getElementById('modalContent');
+      mc.innerHTML = '<div style="background:#f7f7f7; padding:30px; text-align:center;">' +
+          '<img src="' + product.image + '" alt="' + product.title + '" style="max-width:100%; max-height:400px; object-fit:contain;">' +
+        '</div>' +
+        '<div style="padding:20px;">' +
+          '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title + '</h3>' +
+          '<div style="color:#666; font-size:0.9rem; margin-bottom:8px;">' + product.vendor + '</div>' +
+          '<div style="color:#8B0000; font-size:1.3rem; font-weight:600; margin-bottom:20px;">' + product.price + '</div>' +
+          '<div style="display:flex; flex-direction:column; gap:10px;">' +
+            '<button onclick="addToCart(\\'' + product.id + '\\',\\'\\',\\'\\')" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
+            '<button onclick="closeProductModal()" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
+          '</div>' +
+        '</div>';
+    }
+    
+    // Init cart badge on page load
+    updateCartBadge();
   </script>
 </body>
 </html>`)
@@ -3208,6 +3514,67 @@ app.get('/api/placements', (c) => c.json(placements))
 app.get('/api/products', (c) => c.json(products))
 app.get('/api/shop-products', (c) => c.json(shopProducts))
 app.get('/api/slides', (c) => c.json(slides))
+
+// Shop cart checkout endpoint
+app.post('/api/shop-checkout', async (c) => {
+  const body = await c.req.json()
+  const { cart: cartItems } = body
+  
+  if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
+    return c.json({ error: 'Cart is empty' }, 400)
+  }
+  
+  const total = cartItems.reduce((sum: number, item: { price: number; qty: number }) => sum + (item.price * item.qty), 0)
+  
+  const stripeKey = c.env?.STRIPE_SECRET_KEY
+  
+  if (!stripeKey) {
+    return c.json({
+      demo: true,
+      total: total.toFixed(2),
+      items: cartItems.map((item: { title: string; size?: string; color?: string; qty: number; price: number }) => ({
+        title: item.title,
+        size: item.size,
+        color: item.color,
+        qty: item.qty,
+        subtotal: (item.price * item.qty).toFixed(2)
+      }))
+    })
+  }
+  
+  try {
+    // Build Stripe line items
+    const params = new URLSearchParams()
+    params.append('mode', 'payment')
+    params.append('success_url', `${new URL(c.req.url).origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`)
+    params.append('cancel_url', `${new URL(c.req.url).origin}/#shop`)
+    
+    cartItems.forEach((item: { title: string; size?: string; color?: string; qty: number; price: number }, i: number) => {
+      const desc = [item.size, item.color].filter(Boolean).join(', ')
+      params.append(`line_items[${i}][price_data][currency]`, 'usd')
+      params.append(`line_items[${i}][price_data][product_data][name]`, item.title)
+      if (desc) params.append(`line_items[${i}][price_data][product_data][description]`, desc)
+      params.append(`line_items[${i}][price_data][unit_amount]`, String(Math.round(item.price * 100)))
+      params.append(`line_items[${i}][quantity]`, String(item.qty))
+    })
+    
+    const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${stripeKey}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: params
+    })
+    
+    const session = await stripeResponse.json() as { error?: { message: string }; url?: string }
+    if (session.error) return c.json({ error: session.error.message }, 400)
+    return c.json({ url: session.url })
+  } catch (error) {
+    console.error('Stripe shop checkout error:', error)
+    return c.json({ error: 'Failed to create checkout session' }, 500)
+  }
+})
 
 app.post('/api/calculate-price', async (c) => {
   const body = await c.req.json()
