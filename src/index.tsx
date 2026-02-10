@@ -922,7 +922,7 @@ app.get('/', (c) => {
       opacity: 1;
     }
     
-    .section-header { text-align: center; padding: 50px 20px 20px; }
+    .section-header { text-align: center; padding: 15px 20px 10px; }
     .section-header h2 { font-size: 1.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: #333; margin: 0; }
     
     /* Category sections within Shop Now */
@@ -938,8 +938,8 @@ app.get('/', (c) => {
       color: #8B0000;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin: 30px 0 20px;
-      padding-bottom: 10px;
+      margin: 15px 0 10px;
+      padding-bottom: 8px;
       border-bottom: 2px solid #8B0000;
       display: flex;
       align-items: center;
@@ -1028,6 +1028,149 @@ app.get('/', (c) => {
     .feature-text p { font-size: 1rem; line-height: 1.8; color: #666; margin: 0; }
     
     .divider { border: none; border-top: 1px solid #e0e0e0; margin: 0 20px; max-width: 1160px; margin-left: auto; margin-right: auto; }
+    
+    /* ADA Compliance Accessibility Widget */
+    .ada-widget-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 56px;
+      height: 56px;
+      background: #1565C0;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 15px rgba(21, 101, 192, 0.4);
+      transition: all 0.3s;
+    }
+    .ada-widget-btn:hover { background: #0D47A1; transform: scale(1.1); box-shadow: 0 6px 20px rgba(21, 101, 192, 0.6); }
+    .ada-widget-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+    
+    .ada-panel {
+      position: fixed;
+      bottom: 90px;
+      left: 20px;
+      width: 320px;
+      max-height: 70vh;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+      z-index: 9998;
+      display: none;
+      padding: 0;
+    }
+    .ada-panel.open { display: block; }
+    .ada-panel-header {
+      background: #1565C0;
+      color: #fff;
+      padding: 15px 20px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ada-panel-header h3 { margin: 0; font-size: 1rem; font-weight: 600; }
+    .ada-panel-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0 5px;
+    }
+    .ada-panel-body { padding: 15px 20px; }
+    .ada-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .ada-option:last-child { border-bottom: none; }
+    .ada-option-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #333;
+    }
+    .ada-option-label i { color: #1565C0; width: 20px; text-align: center; }
+    .ada-toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: #ccc;
+      border-radius: 12px;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      transition: background 0.3s;
+    }
+    .ada-toggle.active { background: #1565C0; }
+    .ada-toggle::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    .ada-toggle.active::after { transform: translateX(20px); }
+    .ada-slider-row { padding: 12px 0; border-bottom: 1px solid #eee; }
+    .ada-slider-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    .ada-slider-label i { color: #1565C0; width: 20px; text-align: center; }
+    .ada-slider {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #ddd;
+      border-radius: 3px;
+      outline: none;
+    }
+    .ada-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #1565C0;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .ada-reset {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #666;
+      transition: all 0.3s;
+    }
+    .ada-reset:hover { background: #eee; color: #333; }
+    
+    @media (max-width: 480px) {
+      .ada-panel { width: calc(100vw - 40px); left: 20px; }
+      .ada-widget-btn { width: 48px; height: 48px; font-size: 1.3rem; bottom: 15px; left: 15px; }
+    }
   </style>
 </head>
 <body>
@@ -1055,11 +1198,8 @@ app.get('/', (c) => {
   <main id="main-content" role="main">
   
   <!-- Shop Now Section - All Products from Official Store (Organized by Category) -->
-  <section id="shop" style="background: #f5f5f5; padding: 40px 0;" aria-labelledby="shop-heading">
-    <div class="section-header">
-      <h2 id="shop-heading"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</h2>
-      <p style="color: #666; margin-top: 10px; font-size: 0.95rem;">Official Hillbilly Fightwear merchandise - 46 products available</p>
-    </div>
+  <section id="shop" style="background: #f5f5f5; padding: 10px 0 40px;" aria-labelledby="shop-heading">
+    <h2 id="shop-heading" class="sr-only">Shop Now</h2>
     
     <!-- MENS CLOTHING -->
     <div class="category-section" role="region" aria-labelledby="mens-heading">
@@ -1178,6 +1318,45 @@ app.get('/', (c) => {
       </nav>
     </div>
   </footer>
+  
+  <!-- ADA Compliance Accessibility Widget -->
+  <button class="ada-widget-btn" id="adaWidgetBtn" onclick="toggleAdaPanel()" aria-label="Accessibility Options" title="Accessibility Options">
+    <i class="fas fa-universal-access" aria-hidden="true"></i>
+  </button>
+  
+  <div class="ada-panel" id="adaPanel" role="dialog" aria-label="Accessibility Settings">
+    <div class="ada-panel-header">
+      <h3><i class="fas fa-universal-access"></i> Accessibility</h3>
+      <button class="ada-panel-close" onclick="toggleAdaPanel()" aria-label="Close accessibility panel">&times;</button>
+    </div>
+    <div class="ada-panel-body">
+      <div class="ada-slider-row">
+        <div class="ada-slider-label"><i class="fas fa-text-height"></i> Text Size</div>
+        <input type="range" class="ada-slider" id="adaFontSize" min="80" max="150" value="100" oninput="setFontSize(this.value)" aria-label="Adjust text size">
+      </div>
+      <div class="ada-option">
+        <div class="ada-option-label"><i class="fas fa-adjust"></i> High Contrast</div>
+        <button class="ada-toggle" id="adaContrast" onclick="toggleA11y('contrast')" aria-label="Toggle high contrast" role="switch" aria-checked="false"></button>
+      </div>
+      <div class="ada-option">
+        <div class="ada-option-label"><i class="fas fa-underline"></i> Highlight Links</div>
+        <button class="ada-toggle" id="adaLinks" onclick="toggleA11y('links')" aria-label="Toggle link highlighting" role="switch" aria-checked="false"></button>
+      </div>
+      <div class="ada-option">
+        <div class="ada-option-label"><i class="fas fa-font"></i> Readable Font</div>
+        <button class="ada-toggle" id="adaFont" onclick="toggleA11y('font')" aria-label="Toggle readable font" role="switch" aria-checked="false"></button>
+      </div>
+      <div class="ada-option">
+        <div class="ada-option-label"><i class="fas fa-pause-circle"></i> Stop Animations</div>
+        <button class="ada-toggle" id="adaAnimations" onclick="toggleA11y('animations')" aria-label="Toggle stop animations" role="switch" aria-checked="false"></button>
+      </div>
+      <div class="ada-option">
+        <div class="ada-option-label"><i class="fas fa-mouse-pointer"></i> Large Cursor</div>
+        <button class="ada-toggle" id="adaCursor" onclick="toggleA11y('cursor')" aria-label="Toggle large cursor" role="switch" aria-checked="false"></button>
+      </div>
+      <button class="ada-reset" onclick="resetA11y()"><i class="fas fa-undo"></i> Reset All Settings</button>
+    </div>
+  </div>
   
   <!-- GDPR Cookie Consent Banner -->
   <div id="cookieConsent" class="cookie-consent" style="display: none;">
@@ -1425,7 +1604,114 @@ app.get('/', (c) => {
       } else {
         applyConsent(consent);
       }
+      
+      // Restore ADA settings
+      restoreA11ySettings();
     });
+    
+    // ========================================
+    // ADA Compliance Accessibility Widget
+    // ========================================
+    function toggleAdaPanel() {
+      var panel = document.getElementById('adaPanel');
+      panel.classList.toggle('open');
+    }
+    
+    function setFontSize(val) {
+      document.documentElement.style.fontSize = val + '%';
+      localStorage.setItem('ada_fontSize', val);
+    }
+    
+    var a11yState = { contrast: false, links: false, font: false, animations: false, cursor: false };
+    
+    function toggleA11y(feature) {
+      a11yState[feature] = !a11yState[feature];
+      var btn = document.getElementById('ada' + feature.charAt(0).toUpperCase() + feature.slice(1));
+      btn.classList.toggle('active', a11yState[feature]);
+      btn.setAttribute('aria-checked', a11yState[feature].toString());
+      applyA11y(feature, a11yState[feature]);
+      localStorage.setItem('ada_' + feature, a11yState[feature]);
+    }
+    
+    function applyA11y(feature, enabled) {
+      var body = document.body;
+      switch(feature) {
+        case 'contrast':
+          if (enabled) {
+            body.style.filter = 'contrast(1.4)';
+          } else {
+            body.style.filter = '';
+          }
+          break;
+        case 'links':
+          document.querySelectorAll('a').forEach(function(a) {
+            if (enabled) {
+              a.style.textDecoration = 'underline';
+              a.style.textDecorationThickness = '2px';
+              a.style.textUnderlineOffset = '3px';
+            } else {
+              a.style.textDecoration = '';
+              a.style.textDecorationThickness = '';
+              a.style.textUnderlineOffset = '';
+            }
+          });
+          break;
+        case 'font':
+          body.style.fontFamily = enabled ? 'Arial, Helvetica, sans-serif' : '';
+          break;
+        case 'animations':
+          if (enabled) {
+            var style = document.createElement('style');
+            style.id = 'ada-no-animations';
+            style.textContent = '*, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }';
+            document.head.appendChild(style);
+            // Also pause slideshow
+            if (typeof clearInterval !== 'undefined' && typeof slideInterval !== 'undefined') {
+              clearInterval(slideInterval);
+            }
+          } else {
+            var el = document.getElementById('ada-no-animations');
+            if (el) el.remove();
+            if (typeof startInterval === 'function') startInterval();
+          }
+          break;
+        case 'cursor':
+          body.style.cursor = enabled ? 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 24 24\'%3E%3Cpath d=\'M7 2l12 11.2-5.8.5 3.3 7.3-2.2 1-3.2-7.4L7 18.5V2\' fill=\'%23000\' stroke=\'%23fff\' stroke-width=\'1\'/%3E%3C/svg%3E"), auto' : '';
+          break;
+      }
+    }
+    
+    function resetA11y() {
+      document.documentElement.style.fontSize = '';
+      document.getElementById('adaFontSize').value = 100;
+      ['contrast', 'links', 'font', 'animations', 'cursor'].forEach(function(f) {
+        a11yState[f] = false;
+        var btn = document.getElementById('ada' + f.charAt(0).toUpperCase() + f.slice(1));
+        btn.classList.remove('active');
+        btn.setAttribute('aria-checked', 'false');
+        applyA11y(f, false);
+        localStorage.removeItem('ada_' + f);
+      });
+      localStorage.removeItem('ada_fontSize');
+    }
+    
+    function restoreA11ySettings() {
+      var fontSize = localStorage.getItem('ada_fontSize');
+      if (fontSize) {
+        document.documentElement.style.fontSize = fontSize + '%';
+        document.getElementById('adaFontSize').value = fontSize;
+      }
+      ['contrast', 'links', 'font', 'animations', 'cursor'].forEach(function(f) {
+        var saved = localStorage.getItem('ada_' + f);
+        if (saved === 'true') {
+          a11yState[f] = true;
+          var btn = document.getElementById('ada' + f.charAt(0).toUpperCase() + f.slice(1));
+          btn.classList.add('active');
+          btn.setAttribute('aria-checked', 'true');
+          applyA11y(f, true);
+        }
+      });
+    }
   </script>
 </body>
 </html>`)
