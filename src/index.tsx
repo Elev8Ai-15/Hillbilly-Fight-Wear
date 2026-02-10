@@ -1,6 +1,5 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import { secureHeaders } from 'hono/secure-headers'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
@@ -11,32 +10,23 @@ const app = new Hono<{ Bindings: Bindings }>()
 
 // ============================================
 // SECURITY: Comprehensive Security Headers
+// (X-Frame-Options removed to allow iframe embedding for previews;
+//  Cross-Origin policies relaxed for sandbox/preview compatibility)
 // ============================================
-app.use('*', secureHeaders({
-  contentSecurityPolicy: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
-    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
-    imgSrc: ["'self'", "data:", "https:", "blob:"],
-    fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
-    connectSrc: ["'self'", "https://api.stripe.com", "https://cdn.shopify.com"],
-    frameSrc: ["'self'", "https://js.stripe.com"],
-    objectSrc: ["'none'"],
-    baseUri: ["'self'"],
-    formAction: ["'self'"],
-    upgradeInsecureRequests: []
-  },
-  xContentTypeOptions: 'nosniff',
-  xFrameOptions: 'DENY',
-  xXssProtection: '1; mode=block',
-  referrerPolicy: 'strict-origin-when-cross-origin',
-  permissionsPolicy: {
-    camera: [],
-    microphone: [],
-    geolocation: [],
-    payment: ['self']
-  }
-}))
+app.use('*', async (c, next) => {
+  await next()
+  // Set security headers manually for full control
+  c.res.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://api.stripe.com https://cdn.shopify.com; frame-src 'self' https://js.stripe.com; frame-ancestors *; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests")
+  c.res.headers.set('X-Content-Type-Options', 'nosniff')
+  c.res.headers.set('X-XSS-Protection', '1; mode=block')
+  c.res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  c.res.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(self)')
+  // Explicitly remove headers that block iframe embedding
+  c.res.headers.delete('X-Frame-Options')
+  c.res.headers.delete('Cross-Origin-Opener-Policy')
+  c.res.headers.delete('Cross-Origin-Resource-Policy')
+  c.res.headers.delete('Cross-Origin-Embedder-Policy')
+})
 
 // CORS for API endpoints
 app.use('/api/*', cors({
