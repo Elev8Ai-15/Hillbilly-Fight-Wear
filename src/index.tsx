@@ -2848,7 +2848,7 @@ app.get('/build', (c) => {
   </nav>
   
   <script>
-    // Data from server (escaped to prevent XSS via </script> injection)
+    // Data from server (escaped to prevent XSS injection)
     const garments = ${garmentsJson.replace(/<\//g, '<\\/')};
     const graphics = ${graphicsJson.replace(/<\//g, '<\\/')};
     const placements = ${placementsJson.replace(/<\//g, '<\\/')};
