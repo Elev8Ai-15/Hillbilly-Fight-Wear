@@ -30,6 +30,16 @@ function copyPublicAssets() {
         )
         console.log('\x1b[32m✓ Copied public/_routes.json to dist/\x1b[0m')
       }
+      
+      // Copy manifest.json
+      if (existsSync(resolve(publicDir, 'manifest.json'))) {
+        cpSync(
+          resolve(publicDir, 'manifest.json'),
+          resolve(distDir, 'manifest.json'),
+          { force: true }
+        )
+        console.log('\x1b[32m✓ Copied public/manifest.json to dist/\x1b[0m')
+      }
     }
   }
 }

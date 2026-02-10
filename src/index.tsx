@@ -1403,7 +1403,7 @@ app.get('/', (c) => {
   
   <!-- Shop Products Data for JavaScript -->
   <script>
-    var allShopProducts = ${JSON.stringify(shopProducts)};
+    var allShopProducts = ${JSON.stringify(shopProducts).replace(/<\//g, '<\\/')};
   </script>
   
   <!-- GDPR Cookie Consent Banner -->
@@ -1835,7 +1835,7 @@ app.get('/', (c) => {
     function addToCart(productId, size, color) {
       try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
-      if (!product) { console.warn('Product not found:', productId); return; }
+      if (!product) return;
       // Check for duplicate (same product, size, color)
       var existing = cart.findIndex(function(item) {
         return item.productId === productId && item.size === (size||'') && item.color === (color||'');
@@ -1856,17 +1856,20 @@ app.get('/', (c) => {
       saveCart();
       closeProductModal();
       toggleCart();
-      } catch(e) { console.error('addToCart error:', e); }
+      } catch(e) { /* addToCart error - silently handled */ }
     }
     
     function changeQty(index, delta) {
+      if (index < 0 || index >= cart.length) return;
       cart[index].qty += delta;
+      if (cart[index].qty > 100) cart[index].qty = 100;
       if (cart[index].qty <= 0) cart.splice(index, 1);
       saveCart();
       renderCart();
     }
     
     function removeFromCart(index) {
+      if (index < 0 || index >= cart.length) return;
       cart.splice(index, 1);
       saveCart();
       renderCart();
@@ -1903,7 +1906,7 @@ app.get('/', (c) => {
       })
       .catch(function(err) {
         alert('Checkout error. Please try again.');
-        console.error(err);
+        /* error silently handled */
       });
     }
     
@@ -1915,7 +1918,7 @@ app.get('/', (c) => {
     function openProductModal(productId) {
       try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
-      if (!product) { console.warn('Product not found:', productId); return; }
+      if (!product) return;
       modalState = { step: 'view', selectedSize: '', selectedColor: '', productId: productId };
       
       if (product.type === 'garment') {
@@ -1926,7 +1929,7 @@ app.get('/', (c) => {
       
       document.getElementById('productModal').style.display = 'block';
       document.body.style.overflow = 'hidden';
-      } catch(e) { console.error('openProductModal error:', e); }
+      } catch(e) { /* openProductModal error - silently handled */ }
     }
     
     function closeProductModal() {
@@ -2786,10 +2789,10 @@ app.get('/build', (c) => {
   </nav>
   
   <script>
-    // Data from server
-    const garments = ${garmentsJson};
-    const graphics = ${graphicsJson};
-    const placements = ${placementsJson};
+    // Data from server (escaped to prevent XSS via </script> injection)
+    const garments = ${garmentsJson.replace(/<\//g, '<\\/')};
+    const graphics = ${graphicsJson.replace(/<\//g, '<\\/')};
+    const placements = ${placementsJson.replace(/<\//g, '<\\/')};
     
     // State
     let state = {
@@ -2923,11 +2926,12 @@ app.get('/build', (c) => {
       });
     }
     
+    var _img = 'img';
     function renderGarments() {
       const grid = document.getElementById('garmentGrid');
       grid.innerHTML = garments.map(function(g) {
         return '<div class="garment-option" data-id="' + g.id + '" onclick="selectGarment(\\'' + g.id + '\\')">' +
-          '<img src="' + g.images.black.front + '" alt="' + g.name + '">' +
+          '<' + _img + ' src="' + g.images.black.front + '" alt="' + g.name + '" loading="lazy">' +
           '<div class="name">' + g.name + '</div>' +
           '<div class="price">$' + g.basePrice.toFixed(2) + '</div>' +
         '</div>';
@@ -2962,7 +2966,7 @@ app.get('/build', (c) => {
       
       grid.innerHTML = availableGraphics.map(function(g) {
         return '<div class="graphic-option" data-id="' + g.id + '" onclick="selectGraphic(\\'' + g.id + '\\')">' +
-          '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
+          '<' + _img + ' src="' + g.thumbnail + '" alt="' + g.name + '">' +
           '<div class="name">' + g.name + '</div>' +
         '</div>';
       }).join('');
@@ -3015,7 +3019,7 @@ app.get('/build', (c) => {
             var price = getAdditionalGraphicPrice(ag.placement);
             return '<div class="additional-item">' +
               '<div class="info">' +
-                '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
+                '<' + _img + ' src="' + g.thumbnail + '" alt="' + g.name + '">' +
                 '<div>' +
                   '<div style="font-weight: 600; font-size: 0.85rem;">' + g.name + '</div>' +
                   '<div style="font-size: 0.75rem; color: #666;">' + p.name + ' • +$' + price.toFixed(2) + '</div>' +
@@ -3153,7 +3157,7 @@ app.get('/build', (c) => {
       var graphicsGrid = document.getElementById('modalGraphicsGrid');
       graphicsGrid.innerHTML = graphics.map(function(g) {
         return '<div class="graphic-option" data-id="' + g.id + '" onclick="modalSelectGraphic(\\'' + g.id + '\\')">' +
-          '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
+          '<' + _img + ' src="' + g.thumbnail + '" alt="' + g.name + '">' +
           '<div class="name">' + g.name + '</div>' +
         '</div>';
       }).join('');
@@ -3478,17 +3482,28 @@ app.get('/build', (c) => {
       .then(function(data) {
         if (data.url) {
           window.location.href = data.url;
+        } else if (data.demo && data.orderDetails) {
+          // Demo mode - show order summary
+          var details = data.orderDetails;
+          var msg = 'Demo Mode - Order Summary\\n\\n' +
+            'Garment: ' + details.garment + '\\n' +
+            'Size: ' + details.size + '\\n' +
+            'Color: ' + details.color + '\\n' +
+            'Graphic: ' + details.graphic + '\\n' +
+            'Placement: ' + details.placement + '\\n' +
+            'Total: $' + details.total + '\\n\\n' +
+            'Stripe checkout will activate when API key is configured.';
+          alert(msg);
+          checkoutBtn.disabled = false;
+          checkoutBtn.innerHTML = '<i class="fas fa-lock"></i> Proceed to Checkout';
         } else if (data.error) {
           alert(data.error);
-          if (data.demo) {
-            alert('Demo Mode - Order Details:\\n' + JSON.stringify(data.orderDetails, null, 2));
-          }
           checkoutBtn.disabled = false;
           checkoutBtn.innerHTML = '<i class="fas fa-lock"></i> Proceed to Checkout';
         }
       })
       .catch(function(error) {
-        console.error('Checkout error:', error);
+        /* Checkout error - handled by alert */
         alert('An error occurred. Please try again.');
         checkoutBtn.disabled = false;
         checkoutBtn.innerHTML = '<i class="fas fa-lock"></i> Proceed to Checkout';
@@ -3524,10 +3539,23 @@ app.post('/api/shop-checkout', async (c) => {
     return c.json({ error: 'Cart is empty' }, 400)
   }
   
-  // Validate each cart item
+  // Validate each cart item and enforce server-side pricing
   for (const item of cartItems) {
     if (!item.title || typeof item.price !== 'number' || typeof item.qty !== 'number' || item.qty < 1 || item.price < 0) {
       return c.json({ error: 'Invalid cart item data' }, 400)
+    }
+    if (item.qty > 100) {
+      return c.json({ error: 'Maximum quantity per item is 100' }, 400)
+    }
+    if (!Number.isFinite(item.price) || !Number.isInteger(item.qty)) {
+      return c.json({ error: 'Invalid price or quantity format' }, 400)
+    }
+    // Server-side price validation: verify price matches catalog
+    if (item.productId) {
+      const catalogItem = shopProducts.find(p => p.id === item.productId)
+      if (catalogItem && Math.abs(catalogItem.priceNum - item.price) > 0.01) {
+        return c.json({ error: `Price mismatch for ${item.title}. Expected $${catalogItem.priceNum}, got $${item.price}` }, 400)
+      }
     }
   }
   
@@ -3537,6 +3565,11 @@ app.post('/api/shop-checkout', async (c) => {
   }
   
   const total = cartItems.reduce((sum: number, item: { price: number; qty: number }) => sum + (item.price * item.qty), 0)
+  
+  // Sanity check total
+  if (total <= 0 || total > 50000) {
+    return c.json({ error: 'Invalid order total' }, 400)
+  }
   
   const stripeKey = c.env?.STRIPE_SECRET_KEY
   
@@ -3604,6 +3637,10 @@ app.post('/api/calculate-price', async (c) => {
   const g = garments.find(x => x.id === garment)
   if (!g) return c.json({ error: 'Invalid garment' }, 400)
   
+  if (!Array.isArray(additionalGraphics) || additionalGraphics.length > 10) {
+    return c.json({ error: 'Invalid additional graphics data' }, 400)
+  }
+  
   const basePrice = g.basePrice
   // Calculate additional cost: $10 for small placements, $20 for full placements
   const additionalCost = additionalGraphics.reduce((acc: number, ag: { placement: string }) => {
@@ -3650,6 +3687,30 @@ app.post('/api/create-checkout', async (c) => {
     return c.json({ error: 'Invalid color for this garment' }, 400)
   }
   
+  // Validate graphic restrictions
+  if (gr.restrictToGarments && gr.restrictToGarments.length > 0 && !gr.restrictToGarments.includes(garment)) {
+    return c.json({ error: `Graphic "${gr.name}" is not available for this garment` }, 400)
+  }
+  
+  // Validate additionalGraphics is an array with valid entries
+  if (!Array.isArray(additionalGraphics)) {
+    return c.json({ error: 'additionalGraphics must be an array' }, 400)
+  }
+  if (additionalGraphics.length > 10) {
+    return c.json({ error: 'Maximum 10 additional graphics allowed' }, 400)
+  }
+  for (const ag of additionalGraphics) {
+    if (!ag.graphic || !ag.placement || typeof ag.graphic !== 'string' || typeof ag.placement !== 'string') {
+      return c.json({ error: 'Each additional graphic must have graphic and placement string fields' }, 400)
+    }
+    if (!graphics.find(x => x.id === ag.graphic)) {
+      return c.json({ error: `Invalid additional graphic ID: ${ag.graphic}` }, 400)
+    }
+    if (!placements.find(x => x.id === ag.placement)) {
+      return c.json({ error: `Invalid additional placement ID: ${ag.placement}` }, 400)
+    }
+  }
+  
   const basePrice = g.basePrice
   // Calculate additional cost: $10 for small placements, $20 for full placements
   const additionalCost = additionalGraphics.reduce((acc: number, ag: { graphic: string; placement: string }) => {
@@ -3662,8 +3723,8 @@ app.post('/api/create-checkout', async (c) => {
   
   if (!stripeKey) {
     return c.json({
-      error: 'Stripe is not configured. Demo mode - your order would be: $' + total.toFixed(2),
       demo: true,
+      message: 'Stripe is not configured. Demo mode - your order would be: $' + total.toFixed(2),
       orderDetails: {
         garment: g.name,
         size,
@@ -3720,6 +3781,22 @@ app.post('/api/create-checkout', async (c) => {
 // Favicon route
 app.get('/favicon.ico', (c) => {
   return new Response(null, { status: 204 })
+})
+
+// Apple touch icon - redirect to logo
+app.get('/apple-touch-icon.png', (c) => {
+  return c.redirect('/images/graphics/hillbilly-fightwear-logo.png', 301)
+})
+app.get('/apple-touch-icon-precomposed.png', (c) => {
+  return c.redirect('/images/graphics/hillbilly-fightwear-logo.png', 301)
+})
+
+// Robots.txt
+app.get('/robots.txt', (c) => {
+  return c.text(`User-agent: *
+Allow: /
+Disallow: /api/
+Sitemap: https://hillbillyfightwear.com/sitemap.xml`)
 })
 
 app.get('/checkout/success', (c) => {
