@@ -305,50 +305,50 @@ const placements = [
 // type: 'garment' = clothing/hats (shows size→color flow), 'decal' = stickers/decals (shows expanded view)
 // MENS CLOTHING - T-Shirts and Hoodies
 const mensClothing = [
-  { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM_6c519925-dfd5-4982-b8c8-c01f4c572668.png?v=1764960913', type: 'garment', sizes: ['S','M','L','XL','XXL'], colors: ['Black','Grey'] },
-  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.39.09PM.png?v=1764959976', type: 'garment', sizes: ['S','M','L','XL','XXL'], colors: ['Black','Grey'] },
-  { id: 'm3', title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hfwf.png?v=1541520222', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/yycf.png?v=1541520348', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm5', title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/funf.png?v=1541520465', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm6', title: 'T-Shirt - GNF', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/gnff.png?v=1541520600', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm7', title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hcff.png?v=1541521169', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm8', title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/thumpf.png?v=1541521247', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm9', title: 'T-Shirt - WIMB', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/wimb.png?v=1541521448', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm10', title: 'T-Shirt - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/FullSizeRender.jpg?v=1593877737', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm11', title: 'T-Shirt - MYOB', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/myobf_1a40e805-dc40-4499-a8f7-b35cb8876393.png?v=1544660076', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm12', title: 'Staunch Properties - CHM Edition', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/ch1.png?v=1608731816', type: 'garment', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] }
+  { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM_6c519925-dfd5-4982-b8c8-c01f4c572668.png?v=1764960913', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','Grey'] },
+  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.39.09PM.png?v=1764959976', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','Grey'] },
+  { id: 'm3', title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hfwf.png?v=1541520222', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/yycf.png?v=1541520348', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm5', title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/funf.png?v=1541520465', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm6', title: 'T-Shirt - GNF', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/gnff.png?v=1541520600', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm7', title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hcff.png?v=1541521169', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm8', title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/thumpf.png?v=1541521247', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm9', title: 'T-Shirt - WIMB', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/wimb.png?v=1541521448', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm10', title: 'T-Shirt - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/FullSizeRender.jpg?v=1593877737', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm11', title: 'T-Shirt - MYOB', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/myobf_1a40e805-dc40-4499-a8f7-b35cb8876393.png?v=1544660076', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm12', title: 'Staunch Properties - CHM Edition', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/ch1.png?v=1608731816', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] }
 ]
 
 // WOMENS CLOTHING - Tank Tops
 const womensClothing = [
-  { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w3', title: "Women's Tank - Thump a Stranger", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.19_PM.png?v=1556681368', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w4', title: "Women's Tank - Thumpin Is Lovin", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.41_PM.png?v=1556681516', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w5', title: "Women's Tank - Yes You Can", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.06_PM.png?v=1556681691', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w6', title: "Women's Tank - GNF", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_-_tank_-_10_15.jpg?v=1556681770', type: 'garment', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] }
+  { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w3', title: "Women's Tank - Thump a Stranger", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.19_PM.png?v=1556681368', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w4', title: "Women's Tank - Thumpin Is Lovin", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.41_PM.png?v=1556681516', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w5', title: "Women's Tank - Yes You Can", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.06_PM.png?v=1556681691', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w6', title: "Women's Tank - GNF", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_-_tank_-_10_15.jpg?v=1556681770', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] }
 ]
 
 // KIDS CLOTHING - Youth Hoodie
 const kidsClothing = [
-  { id: 'k1', title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM.png?v=1764960668', type: 'garment', sizes: ['YS','YM','YL','YXL'], colors: ['Black','Grey'] }
+  { id: 'k1', title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM.png?v=1764960668', type: 'garment', garmentType: 'hoodie', sizes: ['YS','YM','YL','YXL'], colors: ['Black','Grey'] }
 ]
 
 // HATS - Trucker Hats and Beanies
 const hats = [
-  { id: 'h1', title: 'Beanie', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.59.43PM.png?v=1764961239', type: 'garment', sizes: ['One Size'], colors: ['Black','Grey','White'] },
-  { id: 'h2', title: 'Fitted Hat - GNF White', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_-white.jpg?v=1544660186', type: 'garment', sizes: ['S/M','L/XL'], colors: ['White'] },
-  { id: 'h3', title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_site_pic.jpg?v=1544660239', type: 'garment', sizes: ['S/M','L/XL'], colors: ['Black'] },
-  { id: 'h4', title: 'Fitted Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfighter_fitted.jpg?v=1556679360', type: 'garment', sizes: ['S/M','L/XL'], colors: ['Black'] },
-  { id: 'h5', title: 'Fitted Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_fitted.jpg?v=1556679540', type: 'garment', sizes: ['S/M','L/XL'], colors: ['Black'] },
-  { id: 'h6', title: 'Fitted Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_9227.JPG?v=1559137116', type: 'garment', sizes: ['S/M','L/XL'], colors: ['Black'] },
-  { id: 'h7', title: 'Adjustable Hat - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/It_s_A_Fun_Ride_adjustable_trucker.jpg?v=1556678568', type: 'garment', sizes: ['One Size'], colors: ['Black','White'] },
-  { id: 'h8', title: 'Adjustable Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_adjusted.jpg?v=1556679508', type: 'garment', sizes: ['One Size'], colors: ['Black'] },
-  { id: 'h9', title: 'Adjustable Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfigher_adjustable.jpg?v=1556679321', type: 'garment', sizes: ['One Size'], colors: ['Black'] },
-  { id: 'h10', title: 'Adjustable Hat - GNF', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_adjustable_trucker.jpg?v=1556678861', type: 'garment', sizes: ['One Size'], colors: ['Black','White'] },
-  { id: 'h11', title: 'Adjustable Hat - Cockfighter Grey', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_4304.JPG?v=1559137530', type: 'garment', sizes: ['One Size'], colors: ['Grey'] },
-  { id: 'h12', title: 'Adjustable Hat - Cockfighter Black', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_1265.JPG?v=1559137825', type: 'garment', sizes: ['One Size'], colors: ['Black'] },
-  { id: 'h13', title: 'Adjustable Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_6519.JPG?v=1559137929', type: 'garment', sizes: ['One Size'], colors: ['Black'] }
+  { id: 'h1', title: 'Beanie', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.59.43PM.png?v=1764961239', type: 'garment', garmentType: 'beanie', sizes: ['One Size'], colors: ['Black','Grey','White'] },
+  { id: 'h2', title: 'Fitted Hat - GNF White', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_-white.jpg?v=1544660186', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['White'] },
+  { id: 'h3', title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_site_pic.jpg?v=1544660239', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h4', title: 'Fitted Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfighter_fitted.jpg?v=1556679360', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h5', title: 'Fitted Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_fitted.jpg?v=1556679540', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h6', title: 'Fitted Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_9227.JPG?v=1559137116', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h7', title: 'Adjustable Hat - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/It_s_A_Fun_Ride_adjustable_trucker.jpg?v=1556678568', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black','White'] },
+  { id: 'h8', title: 'Adjustable Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_adjusted.jpg?v=1556679508', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
+  { id: 'h9', title: 'Adjustable Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfigher_adjustable.jpg?v=1556679321', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
+  { id: 'h10', title: 'Adjustable Hat - GNF', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_adjustable_trucker.jpg?v=1556678861', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black','White'] },
+  { id: 'h11', title: 'Adjustable Hat - Cockfighter Grey', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_4304.JPG?v=1559137530', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Grey'] },
+  { id: 'h12', title: 'Adjustable Hat - Cockfighter Black', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_1265.JPG?v=1559137825', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
+  { id: 'h13', title: 'Adjustable Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_6519.JPG?v=1559137929', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] }
 ]
 
 // DECALS / STICKERS
@@ -1401,9 +1401,24 @@ app.get('/', (c) => {
     </div>
   </div>
   
-  <!-- Shop Products Data for JavaScript -->
+  <!-- Shop Products Data + Garment Color Image Map for JavaScript -->
   <script>
     var allShopProducts = ${JSON.stringify(shopProducts).replace(/<\//g, '<\\/')};
+    var garmentColorImages = ${JSON.stringify(
+      garments.reduce((acc: Record<string, Record<string, { front: string; back?: string }>>, g) => {
+        acc[g.id] = g.images as Record<string, { front: string; back?: string }>
+        return acc
+      }, {} as Record<string, Record<string, { front: string; back?: string }>>)
+    ).replace(/<\//g, '<\\/')};
+    function getColorPreviewImage(product, color) {
+      if (!product.garmentType || !color) return product.image;
+      var colorKey = color.toLowerCase();
+      var gImages = garmentColorImages[product.garmentType];
+      if (gImages && gImages[colorKey] && gImages[colorKey].front) {
+        return gImages[colorKey].front;
+      }
+      return product.image;
+    }
   </script>
   
   <!-- GDPR Cookie Consent Banner -->
@@ -1534,6 +1549,7 @@ app.get('/', (c) => {
   </style>
   
   <script>
+    var _img = 'img';
     let currentSlide = 0;
     let isPaused = false;
     let slideInterval;
@@ -1941,8 +1957,25 @@ app.get('/', (c) => {
       modalState.step = step;
       var mc = document.getElementById('modalContent');
       
-      var imageHtml = '<div style="background:#f7f7f7; padding:20px; text-align:center;">' +
-        '<img src="' + product.image + '" alt="' + product.title + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
+      // Determine the preview image based on step and selected color
+      var previewImg = product.image;
+      if ((step === 'color' || step === 'confirm') && modalState.selectedColor) {
+        previewImg = getColorPreviewImage(product, modalState.selectedColor);
+      }
+      
+      // Build color-aware background
+      var imgBgColor = '#f7f7f7';
+      if (modalState.selectedColor) {
+        var cl = modalState.selectedColor.toLowerCase();
+        if (cl === 'black') imgBgColor = '#e8e8e8';
+        else if (cl === 'white') imgBgColor = '#d0d0d0';
+        else if (cl === 'grey') imgBgColor = '#dcdcdc';
+        else if (cl === 'pink') imgBgColor = '#fce4ec';
+      }
+      
+      var imageHtml = '<div style="background:' + ((step === 'color' || step === 'confirm') ? imgBgColor : '#f7f7f7') + '; padding:20px; text-align:center; transition:background 0.3s; position:relative;">' +
+        '<' + _img + ' id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title + '" style="max-width:100%; max-height:300px; object-fit:contain; transition:opacity 0.3s;">' +
+        ((step === 'color' || step === 'confirm') && modalState.selectedColor ? '<div style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.6); color:#fff; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">' + modalState.selectedColor + '</div>' : '') +
       '</div>';
       
       var headerHtml = '<div style="padding:20px 20px 10px;">' +
@@ -1964,12 +1997,14 @@ app.get('/', (c) => {
           '</div>';
           
       } else if (step === 'color') {
-        // COLOR SELECTION STEP
+        // COLOR SELECTION STEP - shows garment preview in each color on hover/click
         var colorsHtml = product.colors.map(function(c) {
           var bg = c.toLowerCase() === 'black' ? '#1a1a1a' : c.toLowerCase() === 'white' ? '#fff' : c.toLowerCase() === 'grey' ? '#808080' : c.toLowerCase() === 'pink' ? '#FF69B4' : '#ddd';
           var textColor = (c.toLowerCase() === 'white' || c.toLowerCase() === 'pink') ? '#333' : '#fff';
           var sel = modalState.selectedColor === c ? 'box-shadow:0 0 0 3px #8B0000; transform:scale(1.05);' : '';
-          return '<button onclick="selectModalColor(\\'' + product.id + '\\',\\'' + c + '\\')" style="padding:14px 24px; border:2px solid #ddd; background:' + bg + '; color:' + textColor + '; border-radius:8px; cursor:pointer; font-size:0.95rem; font-weight:600; min-width:80px; transition:all 0.2s; ' + sel + '">' + c + '</button>';
+          // On hover, preview the color image without committing
+          var hoverPreview = 'onmouseenter="var img=document.getElementById(\\'modalPreviewImg\\');if(img)img.src=getColorPreviewImage(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\'}),\\'' + c + '\\')" onmouseleave="var img=document.getElementById(\\'modalPreviewImg\\');if(img)img.src=' + (modalState.selectedColor ? 'getColorPreviewImage(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\'}),\\'' + modalState.selectedColor + '\\')' : '\\'' + product.image.replace(/'/g, "\\\\'") + '\\'') + '"';
+          return '<button onclick="selectModalColor(\\'' + product.id + '\\',\\'' + c + '\\')" ' + hoverPreview + ' style="padding:14px 24px; border:2px solid #ddd; background:' + bg + '; color:' + textColor + '; border-radius:8px; cursor:pointer; font-size:0.95rem; font-weight:600; min-width:80px; transition:all 0.2s; ' + sel + '">' + c + '</button>';
         }).join('');
         
         mc.innerHTML = imageHtml + headerHtml +
@@ -1983,7 +2018,7 @@ app.get('/', (c) => {
           '</div>';
           
       } else if (step === 'confirm') {
-        // CONFIRM + ADD TO CART
+        // CONFIRM + ADD TO CART - shows the selected color preview
         mc.innerHTML = imageHtml + headerHtml +
           '<div style="padding:0 20px 10px;">' +
             '<div style="background:#f0f7ff; padding:10px 14px; border-radius:6px; font-size:0.9rem; color:#555; display:flex; gap:15px;">' +
