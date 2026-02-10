@@ -164,15 +164,15 @@ const graphics = [
   {
     id: 'human-cockfighter',
     name: 'Human Cockfighter',
-    thumbnail: '/images/stickers/sticker-hcf.png?v=12',
-    fullImage: '/images/stickers/sticker-hcf.png?v=12',
+    thumbnail: '/images/stickers/sticker-hcf.png?v=13',
+    fullImage: '/images/stickers/sticker-hcf.png?v=13',
     restrictToGarments: []
   },
   {
     id: 'thump-a-stranger',
     name: 'Thump A Stranger',
-    thumbnail: '/images/stickers/sticker-thump.png?v=12',
-    fullImage: '/images/stickers/sticker-thump.png?v=12',
+    thumbnail: '/images/stickers/sticker-thump.png?v=13',
+    fullImage: '/images/stickers/sticker-thump.png?v=13',
     restrictToGarments: []
   },
   {
@@ -192,65 +192,65 @@ const graphics = [
   {
     id: 'fun-logo',
     name: 'FUN Logo',
-    thumbnail: '/images/stickers/sticker-fun-ride.png?v=12',
-    fullImage: '/images/stickers/sticker-fun-ride.png?v=12',
+    thumbnail: '/images/stickers/sticker-fun-ride.png?v=13',
+    fullImage: '/images/stickers/sticker-fun-ride.png?v=13',
     restrictToGarments: []
   },
   // NEW GRAPHICS - Added from Shop Now products
   {
     id: 'myob',
     name: 'MYOB (Mind Y\'own Business)',
-    thumbnail: '/images/stickers/sticker-myob.png?v=12',
-    fullImage: '/images/stickers/sticker-myob.png?v=12',
+    thumbnail: '/images/stickers/sticker-myob.png?v=13',
+    fullImage: '/images/stickers/sticker-myob.png?v=13',
     restrictToGarments: []
   },
   {
     id: 'gnf',
     name: 'GNF',
-    thumbnail: '/images/stickers/sticker-gnf.png?v=12',
-    fullImage: '/images/stickers/sticker-gnf.png?v=12',
+    thumbnail: '/images/stickers/sticker-gnf.png?v=13',
+    fullImage: '/images/stickers/sticker-gnf.png?v=13',
     restrictToGarments: []
   },
   {
     id: 'wimb',
     name: 'WIMB (What\'s It Mean To You?)',
-    thumbnail: '/images/stickers/sticker-hfw.png?v=12',
-    fullImage: '/images/stickers/sticker-hfw.png?v=12',
+    thumbnail: '/images/stickers/sticker-hfw.png?v=13',
+    fullImage: '/images/stickers/sticker-hfw.png?v=13',
     restrictToGarments: []
   },
   {
     id: 'cling-to-guns',
     name: 'Cling to Guns',
-    thumbnail: '/images/stickers/sticker-your-neck.png?v=12',
-    fullImage: '/images/stickers/sticker-your-neck.png?v=12',
+    thumbnail: '/images/stickers/sticker-your-neck.png?v=13',
+    fullImage: '/images/stickers/sticker-your-neck.png?v=13',
     restrictToGarments: []
   },
   {
     id: 'yes-you-can',
     name: 'Yes, You Can',
-    thumbnail: '/images/stickers/sticker-yes-you-can.png?v=12',
-    fullImage: '/images/stickers/sticker-yes-you-can.png?v=12',
+    thumbnail: '/images/stickers/sticker-yes-you-can.png?v=13',
+    fullImage: '/images/stickers/sticker-yes-you-can.png?v=13',
     restrictToGarments: []
   },
   {
     id: 'put-it-on-em',
     name: 'Put It On Em',
-    thumbnail: '/images/stickers/sticker-put-it-on-em.png?v=12',
-    fullImage: '/images/stickers/sticker-put-it-on-em.png?v=12',
+    thumbnail: '/images/stickers/sticker-put-it-on-em.png?v=13',
+    fullImage: '/images/stickers/sticker-put-it-on-em.png?v=13',
     restrictToGarments: []
   },
   {
     id: 'obama-tap',
     name: 'Obama Tap',
-    thumbnail: '/images/stickers/sticker-obama-tap.png?v=12',
-    fullImage: '/images/stickers/sticker-obama-tap.png?v=12',
+    thumbnail: '/images/stickers/sticker-obama-tap.png?v=13',
+    fullImage: '/images/stickers/sticker-obama-tap.png?v=13',
     restrictToGarments: []
   },
   {
     id: 'good-for-community',
     name: 'Good for Community',
-    thumbnail: '/images/stickers/sticker-community.png?v=12',
-    fullImage: '/images/stickers/sticker-community.png?v=12',
+    thumbnail: '/images/stickers/sticker-community.png?v=13',
+    fullImage: '/images/stickers/sticker-community.png?v=13',
     restrictToGarments: []
   },
   {
@@ -263,16 +263,24 @@ const graphics = [
   {
     id: 'staunch-chm',
     name: 'Staunch Properties (CHM)',
-    thumbnail: '/images/stickers/sticker-cunt.png?v=12',
-    fullImage: '/images/stickers/sticker-cunt.png?v=12',
+    thumbnail: '/images/stickers/sticker-cunt.png?v=13',
+    fullImage: '/images/stickers/sticker-cunt.png?v=13',
     restrictToGarments: []
   },
   // SPECIAL: Thumpin' Is Lovin' - Women's Only (Tanks and T-Shirts)
+  // Two color variants pointing to their correct color images (not the black sticker)
   {
-    id: 'thumpin-is-lovin',
-    name: 'Thumpin\' Is Lovin\'',
-    thumbnail: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
-    fullImage: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
+    id: 'thumpin-is-lovin-pink',
+    name: 'Thumpin\' Is Lovin\' (Pink)',
+    thumbnail: '/images/graphics/thumpin-is-lovin-pink.png?v=12',
+    fullImage: '/images/graphics/thumpin-is-lovin-pink.png?v=12',
+    restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
+  },
+  {
+    id: 'thumpin-is-lovin-purple',
+    name: 'Thumpin\' Is Lovin\' (Purple)',
+    thumbnail: '/images/graphics/thumpin-is-lovin-purple.png?v=12',
+    fullImage: '/images/graphics/thumpin-is-lovin-purple.png?v=12',
     restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
   }
 ]
@@ -336,33 +344,31 @@ const hats = [
 
 // DECALS / STICKERS
 const decals = [
-  { id: 1, title: 'Decal - GNF', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-gnf.png?v=12', url: 'https://hillbillyfightwear.com/products/decal' },
-  { id: 2, title: 'Decal - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-your-neck.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-1' },
-  { id: 3, title: 'Decal - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-hcf.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-2' },
-  { id: 4, title: 'Decal - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-fun-ride.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-3' },
-  { id: 5, title: 'Decal - Put It On Em', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-put-it-on-em.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-4' },
-  { id: 6, title: 'Decal - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-thump.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-5' },
-  { id: 7, title: 'Decal - Yes You Can', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-yes-you-can.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-6' },
-  { id: 8, title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-obama-tap.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-7' },
-  { id: 9, title: 'Decal - CHM', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-cunt.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-8' },
-  { id: 10, title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-hfw.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-9' },
-  { id: 11, title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-gnf.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-10' },
-  { id: 12, title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-thumpin-is-lovin.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-11' },
-  { id: 13, title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-community.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-12' },
-  { id: 14, title: 'Decals - Mind Yown Business', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-myob.png?v=12', url: 'https://hillbillyfightwear.com/products/decals' }
+  { id: 1, title: 'Decal - GNF', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-gnf.png?v=13', url: 'https://hillbillyfightwear.com/products/decal' },
+  { id: 2, title: 'Decal - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-your-neck.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-1' },
+  { id: 3, title: 'Decal - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-hcf.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-2' },
+  { id: 4, title: 'Decal - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-fun-ride.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-3' },
+  { id: 5, title: 'Decal - Put It On Em', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-put-it-on-em.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-4' },
+  { id: 6, title: 'Decal - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-thump.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-5' },
+  { id: 7, title: 'Decal - Yes You Can', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-yes-you-can.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-6' },
+  { id: 8, title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-obama-tap.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-7' },
+  { id: 9, title: 'Decal - CHM', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-cunt.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-8' },
+  { id: 10, title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-hfw.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-9' },
+  { id: 11, title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-gnf.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-10' },
+  { id: 12, title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-thumpin-is-lovin.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-11' },
+  { id: 13, title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-community.png?v=13', url: 'https://hillbillyfightwear.com/products/decal-12' },
+  { id: 14, title: 'Decals - Mind Yown Business', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-myob.png?v=13', url: 'https://hillbillyfightwear.com/products/decals' }
 ]
 
 // Combined shopProducts for API endpoint
 const shopProducts = [...mensClothing, ...womensClothing, ...kidsClothing, ...hats, ...decals]
 
 // Featured products for Build Your Own section (internal links)
+// Only 3 featured: GPG Design, Human Cockfighter, Thump a Stranger
 const products = [
-  { id: 1, title: 'T-Shirt - HFW Logo', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/hfw-logo-original.png', url: '/build?garment=tshirt&graphic=hfw-logo' },
-  { id: 2, title: 'T-Shirt - YYCF Logo', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/yycf-logo.png', url: '/build?garment=tshirt&graphic=yycf-logo' },
-  { id: 3, title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-fun-ride.png', url: '/build?garment=tshirt&graphic=fun-logo' },
-  { id: 4, title: 'T-Shirt - GPG Design', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/gpg-design.png', url: '/build?garment=tshirt&graphic=gpg-design' },
-  { id: 5, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-hcf.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
-  { id: 6, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-thump.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
+  { id: 1, title: 'T-Shirt - GPG Design', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/gpg-design.png', url: '/build?garment=tshirt&graphic=gpg-design' },
+  { id: 2, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-hcf.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
+  { id: 3, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-thump.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
 ]
 
 const slides = [
