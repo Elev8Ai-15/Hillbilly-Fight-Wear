@@ -185,15 +185,15 @@ const graphics = [
   {
     id: 'human-cockfighter',
     name: 'Human Cockfighter',
-    thumbnail: '/images/graphics/human-cockfighter.png?v=11',
-    fullImage: '/images/graphics/human-cockfighter.png?v=11',
+    thumbnail: '/images/stickers/sticker-hcf.png?v=12',
+    fullImage: '/images/stickers/sticker-hcf.png?v=12',
     restrictToGarments: []
   },
   {
     id: 'thump-a-stranger',
     name: 'Thump A Stranger',
-    thumbnail: '/images/graphics/thump-a-stranger.png?v=11',
-    fullImage: '/images/graphics/thump-a-stranger.png?v=11',
+    thumbnail: '/images/stickers/sticker-thump.png?v=12',
+    fullImage: '/images/stickers/sticker-thump.png?v=12',
     restrictToGarments: []
   },
   {
@@ -213,65 +213,65 @@ const graphics = [
   {
     id: 'fun-logo',
     name: 'FUN Logo',
-    thumbnail: '/images/graphics/fun-logo.png?v=11',
-    fullImage: '/images/graphics/fun-logo.png?v=11',
+    thumbnail: '/images/stickers/sticker-fun-ride.png?v=12',
+    fullImage: '/images/stickers/sticker-fun-ride.png?v=12',
     restrictToGarments: []
   },
   // NEW GRAPHICS - Added from Shop Now products
   {
     id: 'myob',
     name: 'MYOB (Mind Y\'own Business)',
-    thumbnail: '/images/graphics/myob.png?v=11',
-    fullImage: '/images/graphics/myob.png?v=11',
+    thumbnail: '/images/stickers/sticker-myob.png?v=12',
+    fullImage: '/images/stickers/sticker-myob.png?v=12',
     restrictToGarments: []
   },
   {
     id: 'gnf',
     name: 'GNF',
-    thumbnail: '/images/graphics/gnf.png?v=11',
-    fullImage: '/images/graphics/gnf.png?v=11',
+    thumbnail: '/images/stickers/sticker-gnf.png?v=12',
+    fullImage: '/images/stickers/sticker-gnf.png?v=12',
     restrictToGarments: []
   },
   {
     id: 'wimb',
     name: 'WIMB (What\'s It Mean To You?)',
-    thumbnail: '/images/graphics/wimb.png?v=11',
-    fullImage: '/images/graphics/wimb.png?v=11',
+    thumbnail: '/images/stickers/sticker-hfw.png?v=12',
+    fullImage: '/images/stickers/sticker-hfw.png?v=12',
     restrictToGarments: []
   },
   {
     id: 'cling-to-guns',
     name: 'Cling to Guns',
-    thumbnail: '/images/graphics/cling-to-guns.png?v=11',
-    fullImage: '/images/graphics/cling-to-guns.png?v=11',
+    thumbnail: '/images/stickers/sticker-your-neck.png?v=12',
+    fullImage: '/images/stickers/sticker-your-neck.png?v=12',
     restrictToGarments: []
   },
   {
     id: 'yes-you-can',
     name: 'Yes, You Can',
-    thumbnail: '/images/graphics/yes-you-can.png?v=11',
-    fullImage: '/images/graphics/yes-you-can.png?v=11',
+    thumbnail: '/images/stickers/sticker-yes-you-can.png?v=12',
+    fullImage: '/images/stickers/sticker-yes-you-can.png?v=12',
     restrictToGarments: []
   },
   {
     id: 'put-it-on-em',
     name: 'Put It On Em',
-    thumbnail: '/images/graphics/put-it-on-em.png?v=11',
-    fullImage: '/images/graphics/put-it-on-em.png?v=11',
+    thumbnail: '/images/stickers/sticker-put-it-on-em.png?v=12',
+    fullImage: '/images/stickers/sticker-put-it-on-em.png?v=12',
     restrictToGarments: []
   },
   {
     id: 'obama-tap',
     name: 'Obama Tap',
-    thumbnail: '/images/graphics/obama-tap.png?v=11',
-    fullImage: '/images/graphics/obama-tap.png?v=11',
+    thumbnail: '/images/stickers/sticker-obama-tap.png?v=12',
+    fullImage: '/images/stickers/sticker-obama-tap.png?v=12',
     restrictToGarments: []
   },
   {
     id: 'good-for-community',
     name: 'Good for Community',
-    thumbnail: '/images/graphics/good-for-community.png?v=11',
-    fullImage: '/images/graphics/good-for-community.png?v=11',
+    thumbnail: '/images/stickers/sticker-community.png?v=12',
+    fullImage: '/images/stickers/sticker-community.png?v=12',
     restrictToGarments: []
   },
   {
@@ -284,23 +284,23 @@ const graphics = [
   {
     id: 'staunch-chm',
     name: 'Staunch Properties (CHM)',
-    thumbnail: '/images/graphics/staunch-chm.png?v=11',
-    fullImage: '/images/graphics/staunch-chm.png?v=11',
+    thumbnail: '/images/stickers/sticker-cunt.png?v=12',
+    fullImage: '/images/stickers/sticker-cunt.png?v=12',
     restrictToGarments: []
   },
   // SPECIAL: Thumpin' Is Lovin' - Women's Only (Tanks and T-Shirts)
   {
     id: 'thumpin-is-lovin-pink',
     name: 'Thumpin\' Is Lovin\' (Pink)',
-    thumbnail: '/images/graphics/thumpin-is-lovin-pink.png?v=11',
-    fullImage: '/images/graphics/thumpin-is-lovin-pink.png?v=11',
+    thumbnail: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
+    fullImage: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
     restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
   },
   {
     id: 'thumpin-is-lovin-purple',
     name: 'Thumpin\' Is Lovin\' (Purple)',
-    thumbnail: '/images/graphics/thumpin-is-lovin-purple.png?v=11',
-    fullImage: '/images/graphics/thumpin-is-lovin-purple.png?v=11',
+    thumbnail: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
+    fullImage: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
     restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
   }
 ]
@@ -364,20 +364,20 @@ const hats = [
 
 // DECALS / STICKERS
 const decals = [
-  { id: 1, title: 'Decal - GNF', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_2906.jpg?v=1590966250', url: 'https://hillbillyfightwear.com/products/decal' },
-  { id: 2, title: 'Decal - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s1.png?v=1761930946', url: 'https://hillbillyfightwear.com/products/decal-1' },
-  { id: 3, title: 'Decal - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s2.png?v=1761931036', url: 'https://hillbillyfightwear.com/products/decal-2' },
-  { id: 4, title: 'Decal - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s3.png?v=1761931065', url: 'https://hillbillyfightwear.com/products/decal-3' },
-  { id: 5, title: 'Decal - Put It On Em', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s4.png?v=1761931096', url: 'https://hillbillyfightwear.com/products/decal-4' },
-  { id: 6, title: 'Decal - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s5.png?v=1761931143', url: 'https://hillbillyfightwear.com/products/decal-5' },
-  { id: 7, title: 'Decal - Yes You Can', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s6.png?v=1761931168', url: 'https://hillbillyfightwear.com/products/decal-6' },
-  { id: 8, title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s7.png?v=1761931192', url: 'https://hillbillyfightwear.com/products/decal-7' },
-  { id: 9, title: 'Decal - CHM', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s8_d2e4786c-9d02-4bc7-bd2a-dab7d55b7007.png?v=1761931285', url: 'https://hillbillyfightwear.com/products/decal-8' },
-  { id: 10, title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s9.png?v=1761931297', url: 'https://hillbillyfightwear.com/products/decal-9' },
-  { id: 11, title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s10.png?v=1761931324', url: 'https://hillbillyfightwear.com/products/decal-10' },
-  { id: 12, title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/s11.png?v=1761931349', url: 'https://hillbillyfightwear.com/products/decal-11' },
-  { id: 13, title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/g1.png?v=1762085215', url: 'https://hillbillyfightwear.com/products/decal-12' },
-  { id: 14, title: 'Decals - Mind Yown Business', vendor: 'Hillbilly Fightwear', price: '$7.00', image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/8a141392-0eeb-45c2-823b-0a40a220777e.jpg?v=1593784509', url: 'https://hillbillyfightwear.com/products/decals' }
+  { id: 1, title: 'Decal - GNF', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-gnf.png?v=12', url: 'https://hillbillyfightwear.com/products/decal' },
+  { id: 2, title: 'Decal - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-your-neck.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-1' },
+  { id: 3, title: 'Decal - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-hcf.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-2' },
+  { id: 4, title: 'Decal - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-fun-ride.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-3' },
+  { id: 5, title: 'Decal - Put It On Em', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-put-it-on-em.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-4' },
+  { id: 6, title: 'Decal - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-thump.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-5' },
+  { id: 7, title: 'Decal - Yes You Can', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-yes-you-can.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-6' },
+  { id: 8, title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-obama-tap.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-7' },
+  { id: 9, title: 'Decal - CHM', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-cunt.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-8' },
+  { id: 10, title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-hfw.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-9' },
+  { id: 11, title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-gnf.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-10' },
+  { id: 12, title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-thumpin-is-lovin.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-11' },
+  { id: 13, title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-community.png?v=12', url: 'https://hillbillyfightwear.com/products/decal-12' },
+  { id: 14, title: 'Decals - Mind Yown Business', vendor: 'Hillbilly Fightwear', price: '$7.00', image: '/images/stickers/sticker-myob.png?v=12', url: 'https://hillbillyfightwear.com/products/decals' }
 ]
 
 // Combined shopProducts for API endpoint
@@ -387,10 +387,10 @@ const shopProducts = [...mensClothing, ...womensClothing, ...kidsClothing, ...ha
 const products = [
   { id: 1, title: 'T-Shirt - HFW Logo', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/hfw-logo-original.png', url: '/build?garment=tshirt&graphic=hfw-logo' },
   { id: 2, title: 'T-Shirt - YYCF Logo', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/yycf-logo.png', url: '/build?garment=tshirt&graphic=yycf-logo' },
-  { id: 3, title: 'T-Shirt - Fun Logo', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/fun-logo.png', url: '/build?garment=tshirt&graphic=fun-logo' },
+  { id: 3, title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-fun-ride.png', url: '/build?garment=tshirt&graphic=fun-logo' },
   { id: 4, title: 'T-Shirt - GPG Design', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/gpg-design.png', url: '/build?garment=tshirt&graphic=gpg-design' },
-  { id: 5, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/human-cockfighter.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
-  { id: 6, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/thump-a-stranger.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
+  { id: 5, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-hcf.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
+  { id: 6, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-thump.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
 ]
 
 const slides = [
@@ -1056,45 +1056,22 @@ app.get('/', (c) => {
   <!-- Accessibility: Skip to main content link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   
-  <!-- Announcement Bar -->
+  <!-- Announcement Bar + Logo Header -->
   <header role="banner">
     <div class="announcement-bar" aria-label="Announcement">
       <p style="margin: 0;">🔥 NEW: Build Your Own Custom Apparel! 🔥</p>
     </div>
-  </header>
-  
-  <!-- HERO CAROUSEL - Full screen background carousel with content overlay -->
-  <section class="hero-carousel" aria-label="Featured images slideshow" role="region">
-    <!-- Carousel Slides -->
-    ${slidesHtml}
-    
-    <!-- Hero Content Overlay -->
-    <div class="hero-content">
-      <div class="hero-logo">
-        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear - Official MMA and Combat Sports Apparel" width="300" height="auto">
-      </div>
-      <p class="hero-tagline">Official Fight Gear</p>
-      <nav class="hero-cta" aria-label="Primary navigation">
-        <a href="/build" class="btn-primary" aria-label="Build your own custom apparel"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Your Own</a>
-        <a href="#shop" class="btn-secondary" aria-label="Shop now - browse products"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
+    <div style="background: #0a0a0a; padding: 20px; text-align: center;">
+      <a href="/" style="display: inline-block;">
+        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear - Official MMA and Combat Sports Apparel" style="max-width: 280px; width: 100%; height: auto; filter: drop-shadow(0 4px 20px rgba(139, 0, 0, 0.5));">
+      </a>
+      <p style="color: #fff; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 6px; margin: 12px 0 0; font-weight: 500; opacity: 0.85;">Official Fight Gear</p>
+      <nav style="margin-top: 15px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" aria-label="Primary navigation">
+        <a href="#shop" class="btn-secondary" style="display: inline-block; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-radius: 4px; background: #8B0000; color: #fff; transition: all 0.3s;" aria-label="Shop now - browse products"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
+        <a href="/build" style="display: inline-block; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-radius: 4px; background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.8); transition: all 0.3s;" aria-label="Build your own custom apparel"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Your Own</a>
       </nav>
     </div>
-    
-    <!-- Slideshow Controls -->
-    <button class="slideshow-pause" id="pauseBtn" onclick="togglePause()" aria-label="Pause slideshow" aria-pressed="false">
-      <i class="fas fa-pause" id="pauseIcon" aria-hidden="true"></i>
-    </button>
-    
-    <div class="slideshow-dots">
-      ${dotsHtml}
-    </div>
-    
-    <!-- Scroll Indicator -->
-    <div class="scroll-indicator">
-      Scroll Down
-      <i class="fas fa-chevron-down"></i>
-    </div>
-  </section>
+  </header>
   
   <!-- Main Content -->
   <main id="main-content" role="main">
@@ -1163,7 +1140,7 @@ app.get('/', (c) => {
   </section>
   
   <!-- Featured Collection - Build Your Own -->
-  <section id="products">
+  <section id="products" style="background: #fff;">
     <div class="section-header">
       <h2>Featured Custom Designs</h2>
       <p style="color: #666; margin-top: 10px; font-size: 0.95rem;">Click any design to customize it with our garment builder</p>
@@ -1179,13 +1156,28 @@ app.get('/', (c) => {
   </section>
   
   <!-- Feature Row -->
-  <section class="feature-row">
+  <section class="feature-row" style="background: #f5f5f5;">
     <div class="feature-image">
-      <img src="/images/slides/slide-cage-grapple.jpg" alt="Fighter image">
+      <img src="/images/slides/slide-cage-grapple.jpg" alt="Fighter grappling in cage - Hillbilly Fightwear MMA gear" loading="lazy">
     </div>
     <div class="feature-text">
       <h2>Custom Apparel Builder</h2>
       <p>Now you can create your own custom apparel with all of our artwork and logos. Choose your garment style, size, color, and graphics to create something unique. T-shirts, hoodies, sweatshirts, tank tops, and trucker hats available!</p>
+    </div>
+  </section>
+
+  <!-- IMAGE CAROUSEL - Moved to bottom of page -->
+  <section class="hero-carousel" style="height: 60vh; min-height: 400px;" aria-label="Featured images slideshow" role="region">
+    <!-- Carousel Slides -->
+    ${slidesHtml}
+    
+    <!-- Slideshow Controls -->
+    <button class="slideshow-pause" id="pauseBtn" onclick="togglePause()" aria-label="Pause slideshow" aria-pressed="false" style="top: 20px;">
+      <i class="fas fa-pause" id="pauseIcon" aria-hidden="true"></i>
+    </button>
+    
+    <div class="slideshow-dots">
+      ${dotsHtml}
     </div>
   </section>
   
