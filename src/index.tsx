@@ -29,8 +29,16 @@ app.use('*', async (c, next) => {
 })
 
 // CORS for API endpoints
+// In production, restrict to hillbillyfightwear.com; in dev/sandbox, allow all origins
 app.use('/api/*', cors({
-  origin: ['https://hillbillyfightwear.com', 'https://www.hillbillyfightwear.com'],
+  origin: (origin) => {
+    const allowed = ['https://hillbillyfightwear.com', 'https://www.hillbillyfightwear.com']
+    // Allow requests with no origin (same-origin, server-side) or from allowed domains
+    if (!origin || allowed.includes(origin)) return origin || '*'
+    // In sandbox/dev, allow all origins for testing
+    if (origin.includes('.sandbox.') || origin.includes('localhost') || origin.includes('127.0.0.1')) return origin
+    return allowed[0] // Default fallback
+  },
   allowMethods: ['GET', 'POST', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
   exposeHeaders: ['Content-Length'],
@@ -1622,10 +1630,8 @@ app.get('/', (c) => {
     }
     
     function applyConsent(prefs) {
-      // This function would enable/disable tracking scripts based on consent
-      // Currently, Hillbilly Fightwear doesn't use analytics/marketing cookies
-      // This is a placeholder for future integrations
-      console.log('Cookie consent applied:', prefs);
+      // Placeholder for future analytics/marketing cookie integrations
+      // When adding GA, FB Pixel etc., conditionally load scripts based on prefs
     }
     
     // Check consent on page load
@@ -1716,7 +1722,7 @@ app.get('/', (c) => {
           }
           break;
         case 'cursor':
-          body.style.cursor = enabled ? 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 24 24\'%3E%3Cpath d=\'M7 2l12 11.2-5.8.5 3.3 7.3-2.2 1-3.2-7.4L7 18.5V2\' fill=\'%23000\' stroke=\'%23fff\' stroke-width=\'1\'/%3E%3C/svg%3E"), auto' : '';
+          body.style.cursor = enabled ? 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M7 2l12 11.2-5.8.5 3.3 7.3-2.2 1-3.2-7.4L7 18.5V2%27 fill=%27%23000%27 stroke=%27%23fff%27 stroke-width=%271%27/%3E%3C/svg%3E"), auto' : '';
           break;
       }
     }
@@ -1827,8 +1833,9 @@ app.get('/', (c) => {
     }
     
     function addToCart(productId, size, color) {
+      try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
-      if (!product) return;
+      if (!product) { console.warn('Product not found:', productId); return; }
       // Check for duplicate (same product, size, color)
       var existing = cart.findIndex(function(item) {
         return item.productId === productId && item.size === (size||'') && item.color === (color||'');
@@ -1849,6 +1856,7 @@ app.get('/', (c) => {
       saveCart();
       closeProductModal();
       toggleCart();
+      } catch(e) { console.error('addToCart error:', e); }
     }
     
     function changeQty(index, delta) {
@@ -1865,7 +1873,7 @@ app.get('/', (c) => {
     }
     
     function cartCheckout() {
-      if (cart.length === 0) return;
+      if (cart.length === 0) { alert('Your cart is empty.'); return; }
       var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
       var items = cart.map(function(item) {
         var desc = item.title;
@@ -1905,8 +1913,9 @@ app.get('/', (c) => {
     var modalState = { step: 'view', selectedSize: '', selectedColor: '' };
     
     function openProductModal(productId) {
+      try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
-      if (!product) return;
+      if (!product) { console.warn('Product not found:', productId); return; }
       modalState = { step: 'view', selectedSize: '', selectedColor: '', productId: productId };
       
       if (product.type === 'garment') {
@@ -1917,6 +1926,7 @@ app.get('/', (c) => {
       
       document.getElementById('productModal').style.display = 'block';
       document.body.style.overflow = 'hidden';
+      } catch(e) { console.error('openProductModal error:', e); }
     }
     
     function closeProductModal() {
@@ -3381,21 +3391,6 @@ app.get('/build', (c) => {
       });
     }
     
-    // Keep old function name for compatibility but it's no longer used
-    function addGraphicsToCanvas(garmentScale, updateId) {
-      loadGraphicsOnTop(updateId, garmentScale);
-    }
-    
-    function shouldShowPlacement(placementId, view) {
-      // Full Back only shows on back view
-      if (placementId === 'full-back') return view === 'back';
-      // Front placements only show on front view
-      if (placementId === 'full-front' || placementId === 'left-chest' || placementId === 'right-chest') return view === 'front';
-      // Hat placements always show
-      if (placementId === 'hat-front') return true;
-      return true;
-    }
-    
     function getPlacementPosition(placementId, w, h) {
       // For headwear, position graphic in upper-center area (front panel)
       var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
@@ -3517,11 +3512,28 @@ app.get('/api/slides', (c) => c.json(slides))
 
 // Shop cart checkout endpoint
 app.post('/api/shop-checkout', async (c) => {
-  const body = await c.req.json()
+  let body: any
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
   const { cart: cartItems } = body
   
   if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
     return c.json({ error: 'Cart is empty' }, 400)
+  }
+  
+  // Validate each cart item
+  for (const item of cartItems) {
+    if (!item.title || typeof item.price !== 'number' || typeof item.qty !== 'number' || item.qty < 1 || item.price < 0) {
+      return c.json({ error: 'Invalid cart item data' }, 400)
+    }
+  }
+  
+  // Cap cart at 50 items to prevent abuse
+  if (cartItems.length > 50) {
+    return c.json({ error: 'Too many items in cart' }, 400)
   }
   
   const total = cartItems.reduce((sum: number, item: { price: number; qty: number }) => sum + (item.price * item.qty), 0)
@@ -3577,8 +3589,17 @@ app.post('/api/shop-checkout', async (c) => {
 })
 
 app.post('/api/calculate-price', async (c) => {
-  const body = await c.req.json()
+  let body: any
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
   const { garment, additionalGraphics = [] } = body
+  
+  if (!garment || typeof garment !== 'string') {
+    return c.json({ error: 'Garment ID is required' }, 400)
+  }
   
   const g = garments.find(x => x.id === garment)
   if (!g) return c.json({ error: 'Invalid garment' }, 400)
@@ -3595,14 +3616,38 @@ app.post('/api/calculate-price', async (c) => {
 })
 
 app.post('/api/create-checkout', async (c) => {
-  const body = await c.req.json()
+  let body: any
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
   const { garment, size, color, graphic, placement, additionalGraphics = [] } = body
+  
+  // Validate all required fields are strings
+  if (!garment || !size || !color || !graphic || !placement) {
+    return c.json({ error: 'All fields required: garment, size, color, graphic, placement' }, 400)
+  }
+  if ([garment, size, color, graphic, placement].some(f => typeof f !== 'string')) {
+    return c.json({ error: 'Invalid field types' }, 400)
+  }
   
   const g = garments.find(x => x.id === garment)
   const gr = graphics.find(x => x.id === graphic)
+  const pl = placements.find(x => x.id === placement)
   
-  if (!g || !gr || !size || !color) {
-    return c.json({ error: 'Invalid configuration' }, 400)
+  if (!g || !gr || !pl) {
+    return c.json({ error: 'Invalid garment, graphic, or placement ID' }, 400)
+  }
+  
+  // Validate size is available for this garment
+  if (!g.sizes.includes(size)) {
+    return c.json({ error: 'Invalid size for this garment' }, 400)
+  }
+  
+  // Validate color is available for this garment
+  if (!g.images[color]) {
+    return c.json({ error: 'Invalid color for this garment' }, 400)
   }
   
   const basePrice = g.basePrice
@@ -3955,6 +4000,19 @@ app.get('/cookie-policy', (c) => {
   </script>
 </body>
 </html>`)
+})
+
+// ============================================
+// Catch-All Route - 404 handler for unmatched paths
+// ============================================
+app.all('*', (c) => {
+  return c.html(`<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found - Hillbilly Fightwear</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<style>body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;}.c{max-width:600px;margin:100px auto;padding:40px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);}.icon{width:80px;height:80px;background:#8B0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 30px;font-size:2.5rem;color:#fff;}h1{font-size:2rem;margin:0 0 15px;}p{color:#666;margin:0 0 30px;line-height:1.6;}.btn{display:inline-block;padding:15px 40px;background:#8B0000;color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-weight:600;border-radius:4px;transition:all 0.3s;margin:5px;}.btn:hover{background:#a00000;}.btn-o{background:transparent;color:#333;border:2px solid #333;}.btn-o:hover{background:#333;color:#fff;}</style>
+</head><body><div class="c"><div class="icon"><i class="fas fa-map-signs"></i></div><h1>Page Not Found</h1><p>Sorry, the page you are looking for does not exist or has been moved.</p><a href="/" class="btn">Go Home</a><a href="/build" class="btn btn-o">Build Your Own</a></div></body></html>`, 404)
 })
 
 export default app
