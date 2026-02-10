@@ -54,7 +54,7 @@ const garments = [
   {
     id: 'tshirt',
     name: 'T-Shirt (Unisex)',
-    basePrice: 23.00,
+    basePrice: 30.00,
     category: 'tops',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
@@ -80,7 +80,7 @@ const garments = [
   {
     id: 'hoodie',
     name: 'Hoodie',
-    basePrice: 55.00,
+    basePrice: 50.00,
     category: 'tops',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
@@ -93,7 +93,7 @@ const garments = [
   {
     id: 'tank-mens',
     name: "Tank Top (Men's)",
-    basePrice: 20.00,
+    basePrice: 35.00,
     category: 'tops',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
@@ -106,7 +106,7 @@ const garments = [
   {
     id: 'tank-womens',
     name: "Tank Top (Women's)",
-    basePrice: 20.00,
+    basePrice: 35.00,
     category: 'tops',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
@@ -119,7 +119,7 @@ const garments = [
   {
     id: 'trucker-hat',
     name: 'Trucker Hat',
-    basePrice: 25.00,
+    basePrice: 35.00,
     category: 'headwear',
     sizes: ['One Size', 'S/M', 'L/XL'],
     supportsPlacement: true,
@@ -132,7 +132,7 @@ const garments = [
   {
     id: 'beanie',
     name: 'Beanie',
-    basePrice: 22.00,
+    basePrice: 25.00,
     category: 'headwear',
     sizes: ['One Size'],
     supportsPlacement: true,
@@ -305,38 +305,38 @@ const placements = [
 // type: 'garment' = clothing/hats (shows size→color flow), 'decal' = stickers/decals (shows expanded view)
 // MENS CLOTHING - T-Shirts and Hoodies
 const mensClothing = [
-  { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM_6c519925-dfd5-4982-b8c8-c01f4c572668.png?v=1764960913', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','Grey'] },
-  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.39.09PM.png?v=1764959976', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','Grey'] },
-  { id: 'm3', title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hfwf.png?v=1541520222', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/yycf.png?v=1541520348', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm5', title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/funf.png?v=1541520465', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm6', title: 'T-Shirt - GNF', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/gnff.png?v=1541520600', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm7', title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hcff.png?v=1541521169', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm8', title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/thumpf.png?v=1541521247', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm9', title: 'T-Shirt - WIMB', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/wimb.png?v=1541521448', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm10', title: 'T-Shirt - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/FullSizeRender.jpg?v=1593877737', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm11', title: 'T-Shirt - MYOB', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/myobf_1a40e805-dc40-4499-a8f7-b35cb8876393.png?v=1544660076', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
-  { id: 'm12', title: 'Staunch Properties - CHM Edition', vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/ch1.png?v=1608731816', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] }
+  { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM_6c519925-dfd5-4982-b8c8-c01f4c572668.png?v=1764960913', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'] },
+  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.39.09PM.png?v=1764959976', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'] },
+  { id: 'm3', title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hfwf.png?v=1541520222', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/yycf.png?v=1541520348', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm5', title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/funf.png?v=1541520465', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm6', title: 'T-Shirt - GNF', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/gnff.png?v=1541520600', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm7', title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hcff.png?v=1541521169', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm8', title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/thumpf.png?v=1541521247', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm9', title: 'T-Shirt - WIMB', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/wimb.png?v=1541521448', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm10', title: 'T-Shirt - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/FullSizeRender.jpg?v=1593877737', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm11', title: 'T-Shirt - MYOB', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/myobf_1a40e805-dc40-4499-a8f7-b35cb8876393.png?v=1544660076', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
+  { id: 'm12', title: 'Staunch Properties - CHM Edition', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/ch1.png?v=1608731816', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] }
 ]
 
 // WOMENS CLOTHING - Tank Tops
 const womensClothing = [
-  { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w3', title: "Women's Tank - Thump a Stranger", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.19_PM.png?v=1556681368', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w4', title: "Women's Tank - Thumpin Is Lovin", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.41_PM.png?v=1556681516', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w5', title: "Women's Tank - Yes You Can", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.06_PM.png?v=1556681691', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
-  { id: 'w6', title: "Women's Tank - GNF", vendor: 'Hillbilly Fightwear', price: '$28.00', priceNum: 28, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_-_tank_-_10_15.jpg?v=1556681770', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] }
+  { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w3', title: "Women's Tank - Thump a Stranger", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.19_PM.png?v=1556681368', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w4', title: "Women's Tank - Thumpin Is Lovin", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.41_PM.png?v=1556681516', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w5', title: "Women's Tank - Yes You Can", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.06_PM.png?v=1556681691', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
+  { id: 'w6', title: "Women's Tank - GNF", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_-_tank_-_10_15.jpg?v=1556681770', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] }
 ]
 
 // KIDS CLOTHING - Youth Hoodie
 const kidsClothing = [
-  { id: 'k1', title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM.png?v=1764960668', type: 'garment', garmentType: 'hoodie', sizes: ['YS','YM','YL','YXL'], colors: ['Black','Grey'] }
+  { id: 'k1', title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM.png?v=1764960668', type: 'garment', garmentType: 'hoodie', sizes: ['YS','YM','YL','YXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'] }
 ]
 
 // HATS - Trucker Hats and Beanies
 const hats = [
-  { id: 'h1', title: 'Beanie', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.59.43PM.png?v=1764961239', type: 'garment', garmentType: 'beanie', sizes: ['One Size'], colors: ['Black','Grey','White'] },
+  { id: 'h1', title: 'Beanie', vendor: 'Hillbilly Fightwear', price: '$25.00', priceNum: 25, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.59.43PM.png?v=1764961239', type: 'garment', garmentType: 'beanie', sizes: ['One Size'], colors: ['Black','Grey','White'] },
   { id: 'h2', title: 'Fitted Hat - GNF White', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_-white.jpg?v=1544660186', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['White'] },
   { id: 'h3', title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_site_pic.jpg?v=1544660239', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
   { id: 'h4', title: 'Fitted Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfighter_fitted.jpg?v=1556679360', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
@@ -1388,10 +1388,11 @@ app.get('/', (c) => {
     </div>
     <div id="cartItems" style="flex:1; overflow-y:auto; padding:15px;"></div>
     <div id="cartFooter" style="border-top:2px solid #eee; padding:20px; display:none;">
-      <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:1.1rem; font-weight:600;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:1.1rem; font-weight:600;">
         <span>Total:</span>
         <span id="cartTotal">$0.00</span>
       </div>
+      <div style="text-align:center; margin-bottom:12px; color:#4CAF50; font-size:0.8rem; font-weight:500;"><i class="fas fa-truck"></i> All prices include free shipping</div>
       <button onclick="cartCheckout()" style="width:100%; padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; cursor:pointer; transition:background 0.3s;">
         <i class="fas fa-lock"></i> Proceed to Checkout
       </button>
@@ -1827,6 +1828,7 @@ app.get('/', (c) => {
         total += subtotal;
         var details = '';
         if (item.size) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Size: ' + item.size + '</span> ';
+        if (item.style) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Style: ' + item.style + '</span> ';
         if (item.color) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Color: ' + item.color + '</span>';
         html += '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; align-items:flex-start;">' +
           '<img src="' + item.image + '" alt="' + item.title + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#f7f7f7; flex-shrink:0;">' +
@@ -1848,13 +1850,13 @@ app.get('/', (c) => {
       document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
     }
     
-    function addToCart(productId, size, color) {
+    function addToCart(productId, size, color, style) {
       try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
       if (!product) return;
-      // Check for duplicate (same product, size, color)
+      // Check for duplicate (same product, size, color, style)
       var existing = cart.findIndex(function(item) {
-        return item.productId === productId && item.size === (size||'') && item.color === (color||'');
+        return item.productId === productId && item.size === (size||'') && item.color === (color||'') && item.style === (style||'');
       });
       if (existing >= 0) {
         cart[existing].qty += 1;
@@ -1866,6 +1868,7 @@ app.get('/', (c) => {
           image: product.image,
           size: size || '',
           color: color || '',
+          style: style || '',
           qty: 1
         });
       }
@@ -1897,6 +1900,7 @@ app.get('/', (c) => {
       var items = cart.map(function(item) {
         var desc = item.title;
         if (item.size) desc += ' (Size: ' + item.size + ')';
+        if (item.style) desc += ' [' + item.style + ']';
         if (item.color) desc += ' - ' + item.color;
         return desc + ' x' + item.qty + ' = $' + (item.price * item.qty).toFixed(2);
       });
@@ -1929,13 +1933,13 @@ app.get('/', (c) => {
     // ========================================
     // PRODUCT DETAIL MODAL
     // ========================================
-    var modalState = { step: 'view', selectedSize: '', selectedColor: '' };
+    var modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '' };
     
     function openProductModal(productId) {
       try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
       if (!product) return;
-      modalState = { step: 'view', selectedSize: '', selectedColor: '', productId: productId };
+      modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '', productId: productId };
       
       if (product.type === 'garment') {
         renderGarmentModal(product, 'size');
@@ -1957,31 +1961,27 @@ app.get('/', (c) => {
       modalState.step = step;
       var mc = document.getElementById('modalContent');
       
-      // Determine the preview image based on step and selected color
+      // Shop Now: product image stays unchanged regardless of color selection
       var previewImg = product.image;
-      if ((step === 'color' || step === 'confirm') && modalState.selectedColor) {
-        previewImg = getColorPreviewImage(product, modalState.selectedColor);
-      }
       
-      // Build color-aware background
-      var imgBgColor = '#f7f7f7';
-      if (modalState.selectedColor) {
-        var cl = modalState.selectedColor.toLowerCase();
-        if (cl === 'black') imgBgColor = '#e8e8e8';
-        else if (cl === 'white') imgBgColor = '#d0d0d0';
-        else if (cl === 'grey') imgBgColor = '#dcdcdc';
-        else if (cl === 'pink') imgBgColor = '#fce4ec';
-      }
-      
-      var imageHtml = '<div style="background:' + ((step === 'color' || step === 'confirm') ? imgBgColor : '#f7f7f7') + '; padding:20px; text-align:center; transition:background 0.3s; position:relative;">' +
-        '<' + _img + ' id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title + '" style="max-width:100%; max-height:300px; object-fit:contain; transition:opacity 0.3s;">' +
-        ((step === 'color' || step === 'confirm') && modalState.selectedColor ? '<div style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.6); color:#fff; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">' + modalState.selectedColor + '</div>' : '') +
+      var imageHtml = '<div style="background:#f7f7f7; padding:20px; text-align:center; position:relative;">' +
+        '<' + _img + ' src="' + previewImg + '" alt="' + product.title + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
       '</div>';
       
       var headerHtml = '<div style="padding:20px 20px 10px;">' +
         '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title + '</h3>' +
         '<div style="color:#8B0000; font-size:1.2rem; font-weight:600;">' + product.price + '</div>' +
+        '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-top:4px;"><i class="fas fa-truck"></i> Free shipping included</div>' +
       '</div>';
+      
+      // Helper to build selection summary pills
+      var summaryPills = function() {
+        var pills = '';
+        if (modalState.selectedSize) pills += '<span style="background:#f0f7ff; padding:4px 10px; border-radius:4px;"><i class="fas fa-ruler" style="color:#4CAF50;"></i> ' + modalState.selectedSize + '</span> ';
+        if (modalState.selectedStyle) pills += '<span style="background:#f0f7ff; padding:4px 10px; border-radius:4px;"><i class="fas fa-tshirt" style="color:#4CAF50;"></i> ' + modalState.selectedStyle + '</span> ';
+        if (modalState.selectedColor) pills += '<span style="background:#f0f7ff; padding:4px 10px; border-radius:4px;"><i class="fas fa-palette" style="color:#4CAF50;"></i> ' + modalState.selectedColor + '</span> ';
+        return pills ? '<div style="padding:0 20px 8px; font-size:0.85rem; color:#555; display:flex; flex-wrap:wrap; gap:6px;">' + pills + '</div>' : '';
+      };
       
       if (step === 'size') {
         // SIZE SELECTION STEP
@@ -1996,46 +1996,68 @@ app.get('/', (c) => {
             '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + sizesHtml + '</div>' +
           '</div>';
           
-      } else if (step === 'color') {
-        // COLOR SELECTION STEP - shows garment preview in each color on hover/click
-        var colorsHtml = product.colors.map(function(c) {
-          var bg = c.toLowerCase() === 'black' ? '#1a1a1a' : c.toLowerCase() === 'white' ? '#fff' : c.toLowerCase() === 'grey' ? '#808080' : c.toLowerCase() === 'pink' ? '#FF69B4' : '#ddd';
-          var textColor = (c.toLowerCase() === 'white' || c.toLowerCase() === 'pink') ? '#333' : '#fff';
-          var sel = modalState.selectedColor === c ? 'box-shadow:0 0 0 3px #8B0000; transform:scale(1.05);' : '';
-          // On hover, preview the color image without committing
-          var hoverPreview = 'onmouseenter="var img=document.getElementById(\\'modalPreviewImg\\');if(img)img.src=getColorPreviewImage(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\'}),\\'' + c + '\\')" onmouseleave="var img=document.getElementById(\\'modalPreviewImg\\');if(img)img.src=' + (modalState.selectedColor ? 'getColorPreviewImage(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\'}),\\'' + modalState.selectedColor + '\\')' : '\\'' + product.image.replace(/'/g, "\\\\'") + '\\'') + '"';
-          return '<button onclick="selectModalColor(\\'' + product.id + '\\',\\'' + c + '\\')" ' + hoverPreview + ' style="padding:14px 24px; border:2px solid #ddd; background:' + bg + '; color:' + textColor + '; border-radius:8px; cursor:pointer; font-size:0.95rem; font-weight:600; min-width:80px; transition:all 0.2s; ' + sel + '">' + c + '</button>';
+      } else if (step === 'style') {
+        // STYLE SELECTION STEP (hoodies only: Pullover / Zip-Up)
+        var stylesHtml = (product.styles || []).map(function(st) {
+          var sel = modalState.selectedStyle === st ? 'background:#8B0000; color:#fff; border-color:#8B0000;' : '';
+          var icon = st === 'Zip-Up' ? 'fa-vest' : 'fa-tshirt';
+          return '<button onclick="selectModalStyle(\\'' + product.id + '\\',\\'' + st + '\\')" style="padding:14px 24px; border:2px solid #ddd; background:#fff; border-radius:8px; cursor:pointer; font-size:1rem; font-weight:600; min-width:120px; transition:all 0.2s; ' + sel + '"><i class="fas ' + icon + '" style="margin-right:6px;"></i>' + st + '</button>';
         }).join('');
         
-        mc.innerHTML = imageHtml + headerHtml +
+        mc.innerHTML = imageHtml + headerHtml + summaryPills() +
           '<div style="padding:0 20px 5px;">' +
-            '<div style="background:#f0f7ff; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:0.85rem; color:#555;"><i class="fas fa-check-circle" style="color:#4CAF50;"></i> Size: <strong>' + modalState.selectedSize + '</strong></div>' +
-            '<h4 style="margin:0 0 12px; font-size:1rem; color:#666; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-palette"></i> Select Color</h4>' +
-            '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + colorsHtml + '</div>' +
+            '<h4 style="margin:0 0 12px; font-size:1rem; color:#666; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-tshirt"></i> Select Style</h4>' +
+            '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + stylesHtml + '</div>' +
           '</div>' +
           '<div style="padding:15px 20px 20px; display:flex; gap:10px;">' +
             '<button onclick="renderGarmentModal(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\';}),\\'size\\')" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
           '</div>';
           
-      } else if (step === 'confirm') {
-        // CONFIRM + ADD TO CART - shows the selected color preview
-        mc.innerHTML = imageHtml + headerHtml +
-          '<div style="padding:0 20px 10px;">' +
-            '<div style="background:#f0f7ff; padding:10px 14px; border-radius:6px; font-size:0.9rem; color:#555; display:flex; gap:15px;">' +
-              '<span><i class="fas fa-ruler" style="color:#4CAF50;"></i> Size: <strong>' + modalState.selectedSize + '</strong></span>' +
-              '<span><i class="fas fa-palette" style="color:#4CAF50;"></i> Color: <strong>' + modalState.selectedColor + '</strong></span>' +
-            '</div>' +
+      } else if (step === 'color') {
+        // COLOR SELECTION STEP
+        var colorsHtml = product.colors.map(function(c) {
+          var bg = c.toLowerCase() === 'black' ? '#1a1a1a' : c.toLowerCase() === 'white' ? '#fff' : c.toLowerCase() === 'grey' ? '#808080' : c.toLowerCase() === 'pink' ? '#FF69B4' : '#ddd';
+          var textColor = (c.toLowerCase() === 'white' || c.toLowerCase() === 'pink') ? '#333' : '#fff';
+          var sel = modalState.selectedColor === c ? 'box-shadow:0 0 0 3px #8B0000; transform:scale(1.05);' : '';
+          return '<button onclick="selectModalColor(\\'' + product.id + '\\',\\'' + c + '\\')" style="padding:14px 24px; border:2px solid #ddd; background:' + bg + '; color:' + textColor + '; border-radius:8px; cursor:pointer; font-size:0.95rem; font-weight:600; min-width:80px; transition:all 0.2s; ' + sel + '">' + c + '</button>';
+        }).join('');
+        
+        // Back goes to style step if product has styles, otherwise to size
+        var backStep = (product.styles && product.styles.length > 0) ? 'style' : 'size';
+        
+        mc.innerHTML = imageHtml + headerHtml + summaryPills() +
+          '<div style="padding:0 20px 5px;">' +
+            '<h4 style="margin:0 0 12px; font-size:1rem; color:#666; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-palette"></i> Select Color</h4>' +
+            '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + colorsHtml + '</div>' +
           '</div>' +
+          '<div style="padding:15px 20px 20px; display:flex; gap:10px;">' +
+            '<button onclick="renderGarmentModal(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\';}),\\'' + backStep + '\\')" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
+          '</div>';
+          
+      } else if (step === 'confirm') {
+        // CONFIRM + ADD TO CART
+        mc.innerHTML = imageHtml + headerHtml + summaryPills() +
           '<div style="padding:10px 20px 20px; display:flex; flex-direction:column; gap:10px;">' +
-            '<button onclick="addToCart(\\'' + product.id + '\\',\\'' + modalState.selectedSize + '\\',\\'' + modalState.selectedColor + '\\')" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
+            '<button onclick="addToCart(\\'' + product.id + '\\',\\'' + modalState.selectedSize + '\\',\\'' + modalState.selectedColor + '\\',\\'' + (modalState.selectedStyle || '') + '\\')" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
             '<button onclick="closeProductModal()" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
-            '<button onclick="renderGarmentModal(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\';}),\\'color\\')" style="padding:10px; background:transparent; color:#666; border:none; cursor:pointer; font-size:0.85rem; text-decoration:underline;">Change Options</button>' +
+            '<button onclick="renderGarmentModal(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\';}),\\'size\\')" style="padding:10px; background:transparent; color:#666; border:none; cursor:pointer; font-size:0.85rem; text-decoration:underline;">Change Options</button>' +
           '</div>';
       }
     }
     
     function selectModalSize(productId, size) {
       modalState.selectedSize = size;
+      var product = allShopProducts.find(function(p) { return p.id === productId; });
+      // Auto-advance: if product has styles (hoodies), go to style step; otherwise go to color
+      if (product.styles && product.styles.length > 0) {
+        renderGarmentModal(product, 'style');
+      } else {
+        renderGarmentModal(product, 'color');
+      }
+    }
+    
+    function selectModalStyle(productId, style) {
+      modalState.selectedStyle = style;
       var product = allShopProducts.find(function(p) { return p.id === productId; });
       // Auto-advance to color step
       renderGarmentModal(product, 'color');
@@ -2056,7 +2078,8 @@ app.get('/', (c) => {
         '<div style="padding:20px;">' +
           '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title + '</h3>' +
           '<div style="color:#666; font-size:0.9rem; margin-bottom:8px;">' + product.vendor + '</div>' +
-          '<div style="color:#8B0000; font-size:1.3rem; font-weight:600; margin-bottom:20px;">' + product.price + '</div>' +
+          '<div style="color:#8B0000; font-size:1.3rem; font-weight:600; margin-bottom:4px;">' + product.price + '</div>' +
+          '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-bottom:16px;"><i class="fas fa-truck"></i> Free shipping included</div>' +
           '<div style="display:flex; flex-direction:column; gap:10px;">' +
             '<button onclick="addToCart(\\'' + product.id + '\\',\\'\\',\\'\\')" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
             '<button onclick="closeProductModal()" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
@@ -2773,6 +2796,7 @@ app.get('/build', (c) => {
           <span>Total</span>
           <span id="totalPrice">$0.00</span>
         </div>
+        <div style="text-align:center; color:#4CAF50; font-size:0.8rem; font-weight:500; margin-bottom:8px;"><i class="fas fa-truck"></i> Free shipping included</div>
         <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>
           <i class="fas fa-lock"></i> Proceed to Checkout
         </button>
@@ -3612,10 +3636,11 @@ app.post('/api/shop-checkout', async (c) => {
     return c.json({
       demo: true,
       total: total.toFixed(2),
-      items: cartItems.map((item: { title: string; size?: string; color?: string; qty: number; price: number }) => ({
+      items: cartItems.map((item: { title: string; size?: string; color?: string; style?: string; qty: number; price: number }) => ({
         title: item.title,
         size: item.size,
         color: item.color,
+        style: item.style,
         qty: item.qty,
         subtotal: (item.price * item.qty).toFixed(2)
       }))
@@ -3629,8 +3654,8 @@ app.post('/api/shop-checkout', async (c) => {
     params.append('success_url', `${new URL(c.req.url).origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`)
     params.append('cancel_url', `${new URL(c.req.url).origin}/#shop`)
     
-    cartItems.forEach((item: { title: string; size?: string; color?: string; qty: number; price: number }, i: number) => {
-      const desc = [item.size, item.color].filter(Boolean).join(', ')
+    cartItems.forEach((item: { title: string; size?: string; color?: string; style?: string; qty: number; price: number }, i: number) => {
+      const desc = [item.size, item.style, item.color].filter(Boolean).join(', ')
       params.append(`line_items[${i}][price_data][currency]`, 'usd')
       params.append(`line_items[${i}][price_data][product_data][name]`, item.title)
       if (desc) params.append(`line_items[${i}][price_data][product_data][description]`, desc)
