@@ -141,10 +141,10 @@ const garments = [
 const graphics = [
   // HILLBILLY FIGHTWEAR LOGOS
   {
-    id: 'hfw-metal-gloves',
-    name: 'HFW Metal Gloves',
-    thumbnail: '/images/graphics/hfw-logo-metal-gloves.png?v=11',
-    fullImage: '/images/graphics/hfw-logo-metal-gloves.png?v=11',
+    id: 'hfw-black-shadow',
+    name: 'HFW Black Shadow',
+    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=11',
+    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=11',
     restrictToGarments: []
   },
   {
@@ -269,15 +269,8 @@ const graphics = [
   },
   // SPECIAL: Thumpin' Is Lovin' - Women's Only (Tanks and T-Shirts)
   {
-    id: 'thumpin-is-lovin-pink',
-    name: 'Thumpin\' Is Lovin\' (Pink)',
-    thumbnail: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
-    fullImage: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
-    restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
-  },
-  {
-    id: 'thumpin-is-lovin-purple',
-    name: 'Thumpin\' Is Lovin\' (Purple)',
+    id: 'thumpin-is-lovin',
+    name: 'Thumpin\' Is Lovin\'',
     thumbnail: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
     fullImage: '/images/stickers/sticker-thumpin-is-lovin.png?v=12',
     restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
