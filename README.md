@@ -53,12 +53,13 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 ### Pricing
 | Garment | Base Price |
 |---------|------------|
-| T-Shirt (Unisex) | $23.00 |
-| Tank Top (Men's) | $20.00 |
-| Tank Top (Women's) | $20.00 |
-| Trucker Hat | $25.00 |
+| T-Shirt (Unisex) | $30.00 |
+| Tank Top (Men's) | $35.00 |
+| Tank Top (Women's) | $35.00 |
+| Trucker Hat | $35.00 |
+| Beanie | $25.00 |
 | Sweatshirt | $45.00 |
-| Hoodie | $55.00 |
+| Hoodie | $50.00 |
 | Additional Graphic | +$10.00 |
 
 ### Graphics Library (22 Total)
@@ -104,7 +105,9 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 | `/api/placements` | GET | Available placement options |
 | `/api/products` | GET | Featured products |
 | `/api/slides` | GET | Homepage slideshow data |
+| `/api/shop-products` | GET | All 46 shop products |
 | `/api/calculate-price` | POST | Calculate order price |
+| `/api/shop-checkout` | POST | Cart checkout via Stripe |
 | `/api/create-checkout` | POST | Create Stripe checkout session |
 | `/checkout/success` | GET | Order confirmation page |
 | `/favicon.ico` | GET | Favicon (returns 204) |
@@ -112,7 +115,7 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 ## Tech Stack
 - **Framework**: Hono
 - **Canvas**: Fabric.js 5.x
-- **Styling**: Tailwind CSS (CDN) + Custom CSS
+- **Styling**: Tailwind CSS (local pre-built, 7KB minified) + Custom CSS
 - **Icons**: FontAwesome 6.4.0 (CDN)
 - **Fonts**: Oswald (Google Fonts)
 - **Payments**: Stripe Checkout
@@ -205,14 +208,24 @@ npx wrangler pages deploy dist
 ```
 webapp/
 ├── src/
-│   └── index.tsx          # Main Hono app (routes, data, APIs)
+│   ├── index.tsx          # Main Hono app (homepage, build routes)
+│   ├── data/
+│   │   └── catalog.ts     # Product catalog data (garments, graphics, shop products)
+│   ├── routes/
+│   │   ├── api.ts         # API endpoints (data, checkout, pricing)
+│   │   └── pages.ts       # Static pages (success, privacy, cookie, 404)
+│   └── tailwind-input.css # Tailwind CSS entry point
 ├── public/
 │   ├── images/
-│   │   ├── garments/      # 33 garment mockup images (front/back)
+│   │   ├── garments/      # 38 garment mockup images (front/back, incl. pink)
 │   │   ├── graphics/      # 10 logo/artwork images + hero logo
+│   │   ├── stickers/      # 14 sticker images (incl. GNF red/blue variant)
 │   │   └── slides/        # 6 slideshow images (4K)
+│   ├── static/
+│   │   └── tailwind.css   # Pre-built minified Tailwind CSS
 │   └── _routes.json       # Static file routing config
 ├── dist/                  # Build output
+├── tailwind.config.js     # Tailwind CSS configuration
 ├── package.json
 ├── vite.config.ts
 ├── tsconfig.json
@@ -221,7 +234,19 @@ webapp/
 └── README.md
 ```
 
-## Recent Updates (v3.0.0)
+## Recent Updates (v4.0.0 - Production Hardening)
+- **CSP Nonces**: Per-request cryptographic nonces for inline script protection
+- **Local Tailwind CSS**: Replaced CDN with pre-built 7KB minified CSS
+- **Modular Routes**: Extracted API (279 lines), pages (331 lines), catalog (346 lines)
+- **XSS Hardening**: HTML-escaped product titles/values in modal and cart rendering
+- **Color Preview Fix**: Modal updates garment preview when color selection changes
+- **Pink Tank Variants**: Added pink color option with generated preview images
+- **D11 Sticker Fix**: Distinct red/blue GNF variant image (was duplicate of d1)
+- **Price Calibration**: Corrected featured item pricing to match catalog
+- **Error Handling**: Improved addToCart/openProductModal error logging
+- **46 Shop Products**: 32 garments + 14 decals across 5 categories verified
+
+## Previous Updates (v3.0.0)
 - **Full-screen hero carousel** with 6 new MMA/rodeo action images
 - **4K upscaled images** for crisp display on all devices
 - **New 3D embossed logo** with transparent background
@@ -240,5 +265,5 @@ Enhanced from: https://hillbilly-fightwear.myshopify.com/
 
 ---
 **Status**: Active  
-**Last Updated**: 2026-01-21  
-**Version**: 3.0.0 (Full-Screen Hero Carousel + System Cleanup)
+**Last Updated**: 2026-02-11  
+**Version**: 4.0.0 (Production Hardening - CSP Nonces, Modular Routes, Asset Fixes)
