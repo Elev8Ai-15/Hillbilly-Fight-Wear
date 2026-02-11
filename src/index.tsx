@@ -1,11 +1,17 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import apiRoutes from './routes/api'
+import pageRoutes from './routes/pages'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
 }
 
-const app = new Hono<{ Bindings: Bindings }>()
+type Variables = {
+  nonce: string
+}
+
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 // ============================================
 // SECURITY: Comprehensive Security Headers
@@ -13,9 +19,20 @@ const app = new Hono<{ Bindings: Bindings }>()
 //  Cross-Origin policies relaxed for sandbox/preview compatibility)
 // ============================================
 app.use('*', async (c, next) => {
+  // Generate a cryptographic nonce for CSP (per-request, 128-bit random base64)
+  const nonceBytes = new Uint8Array(16)
+  crypto.getRandomValues(nonceBytes)
+  const nonce = btoa(String.fromCharCode(...nonceBytes))
+  c.set('nonce', nonce)
+
   await next()
   // Set security headers manually for full control
-  c.res.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://api.stripe.com https://cdn.shopify.com; frame-src 'self' https://js.stripe.com; frame-ancestors *; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests")
+  // Use per-request nonce to allow inline scripts/styles without 'unsafe-inline'
+  // CSP: nonce-based script-src prevents XSS script injection.
+  // style-src uses 'unsafe-inline' WITHOUT a nonce - per CSP3 spec, 'unsafe-inline' is ignored
+  // when a nonce/hash is present, so we deliberately omit the nonce from style-src.
+  // Inline style injection is not a meaningful XSS vector; nonces protect scripts.
+  c.res.headers.set('Content-Security-Policy', `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://api.stripe.com https://cdn.shopify.com; frame-src 'self' https://js.stripe.com; frame-ancestors *; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests`)
   c.res.headers.set('X-Content-Type-Options', 'nosniff')
   c.res.headers.set('X-XSS-Protection', '1; mode=block')
   c.res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
@@ -44,10 +61,6 @@ app.use('/api/*', cors({
   maxAge: 86400,
   credentials: true
 }))
-
-// ============================================
-// DATA: Garments, Graphics, Placements
-// ============================================
 
 const garments = [
   {
@@ -112,7 +125,8 @@ const garments = [
     images: {
       white: { front: '/images/garments/tank-womens-white-front.png', back: '/images/garments/tank-womens-white-back.png' },
       black: { front: '/images/garments/tank-womens-black-front.png', back: '/images/garments/tank-womens-black-back.png' },
-      grey: { front: '/images/garments/tank-womens-grey-front.png', back: '/images/garments/tank-womens-grey-back.png' }
+      grey: { front: '/images/garments/tank-womens-grey-front.png', back: '/images/garments/tank-womens-grey-back.png' },
+      pink: { front: '/images/garments/tank-womens-pink-front.png', back: '/images/garments/tank-womens-pink-back.png' }
     }
   },
   {
@@ -319,8 +333,7 @@ const mensClothing = [
 ]
 
 // WOMENS CLOTHING - Tank Tops
-// Note: Pink color option is offered but no garment preview images exist for pink yet;
-// getColorPreviewImage will gracefully fall back to the default product image
+// Pink color option is available with garment preview images (pink-tinted variants)
 const womensClothing = [
   { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
   { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
@@ -364,8 +377,7 @@ const decals = [
   { id: 'd8', title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-obama-tap.png?v=13', type: 'decal' },
   { id: 'd9', title: 'Decal - CHM', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-cunt.png?v=13', type: 'decal' },
   { id: 'd10', title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hfw.png?v=13', type: 'decal' },
-  // TODO: d11 needs its own distinct image (sticker-gnf-redblue.png); currently sharing sticker-gnf.png with d1
-  { id: 'd11', title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-gnf.png?v=13', type: 'decal' },
+  { id: 'd11', title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-gnf-redblue.png?v=14', type: 'decal' },
   { id: 'd12', title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-thumpin-is-lovin.png?v=13', type: 'decal' },
   { id: 'd13', title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-community.png?v=13', type: 'decal' },
   { id: 'd14', title: 'Decals - Mind Yown Business', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-myob.png?v=13', type: 'decal' }
@@ -396,6 +408,7 @@ const slides = [
 // ============================================
 
 app.get('/', (c) => {
+  const nonce = c.get('nonce')
   const slidesHtml = slides.map((slide, index) => `
     <div class="slide ${index === 0 ? 'active' : ''}" 
          style="background-image: url('${slide.image}')"
@@ -500,7 +513,7 @@ app.get('/', (c) => {
   <link rel="apple-touch-icon" href="/images/graphics/hillbilly-fightwear-logo.png">
   
   <!-- Structured Data (JSON-LD) -->
-  <script type="application/ld+json">
+  <script type="application/ld+json" nonce="${nonce}">
   {
     "@context": "https://schema.org",
     "@type": "Store",
@@ -520,9 +533,9 @@ app.get('/', (c) => {
   }
   </script>
   
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
+  <style nonce="${nonce}">
     @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
     
     * { box-sizing: border-box; }
@@ -1408,7 +1421,7 @@ app.get('/', (c) => {
   </div>
   
   <!-- Shop Products Data + Garment Color Image Map for JavaScript -->
-  <script>
+  <script nonce="${nonce}">
     var allShopProducts = ${JSON.stringify(shopProducts).replace(/<\//g, '<\\/')};
     var garmentColorImages = ${JSON.stringify(
       garments.reduce((acc: Record<string, Record<string, { front: string; back?: string }>>, g) => {
@@ -1456,7 +1469,7 @@ app.get('/', (c) => {
     </div>
   </div>
   
-  <style>
+  <style nonce="${nonce}">
     .cookie-consent {
       position: fixed;
       bottom: 0;
@@ -1554,7 +1567,7 @@ app.get('/', (c) => {
     }
   </style>
   
-  <script>
+  <script nonce="${nonce}">
     var _img = 'img';
     let currentSlide = 0;
     let isPaused = false;
@@ -2111,6 +2124,7 @@ app.get('/', (c) => {
 // ============================================
 
 app.get('/build', (c) => {
+  const nonce = c.get('nonce')
   // Pass data as JSON for client-side JavaScript
   const garmentsJson = JSON.stringify(garments)
   const graphicsJson = JSON.stringify(graphics)
@@ -2122,10 +2136,10 @@ app.get('/build', (c) => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Build Your Own - Hillbilly Fightwear</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
-  <style>
+  <style nonce="${nonce}">
     @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
     
     * { box-sizing: border-box; }
@@ -2859,7 +2873,7 @@ app.get('/build', (c) => {
     </div>
   </nav>
   
-  <script>
+  <script nonce="${nonce}">
     // Data from server (escaped to prevent XSS injection)
     const garments = ${garmentsJson.replace(/<\//g, '<\\/')};
     const graphics = ${graphicsJson.replace(/<\//g, '<\\/')};
@@ -3581,582 +3595,14 @@ app.get('/build', (c) => {
 })
 
 // ============================================
-// API ROUTES
+// API ROUTES (extracted to src/routes/api.ts)
 // ============================================
-
-app.get('/api/garments', (c) => c.json(garments))
-app.get('/api/graphics', (c) => c.json(graphics))
-app.get('/api/placements', (c) => c.json(placements))
-app.get('/api/products', (c) => c.json(products))
-app.get('/api/shop-products', (c) => c.json(shopProducts))
-app.get('/api/slides', (c) => c.json(slides))
-
-// Shop cart checkout endpoint
-app.post('/api/shop-checkout', async (c) => {
-  let body: any
-  try {
-    body = await c.req.json()
-  } catch {
-    return c.json({ error: 'Invalid JSON body' }, 400)
-  }
-  const { cart: cartItems } = body
-  
-  if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
-    return c.json({ error: 'Cart is empty' }, 400)
-  }
-  
-  // Validate each cart item and enforce server-side pricing
-  for (const item of cartItems) {
-    if (!item.title || typeof item.price !== 'number' || typeof item.qty !== 'number' || item.qty < 1 || item.price < 0) {
-      return c.json({ error: 'Invalid cart item data' }, 400)
-    }
-    if (item.qty > 100) {
-      return c.json({ error: 'Maximum quantity per item is 100' }, 400)
-    }
-    if (!Number.isFinite(item.price) || !Number.isInteger(item.qty)) {
-      return c.json({ error: 'Invalid price or quantity format' }, 400)
-    }
-    // Server-side price validation: verify price matches catalog
-    if (item.productId) {
-      const catalogItem = shopProducts.find(p => p.id === item.productId)
-      if (catalogItem && Math.abs(catalogItem.priceNum - item.price) > 0.01) {
-        return c.json({ error: `Price mismatch for ${item.title}. Expected $${catalogItem.priceNum}, got $${item.price}` }, 400)
-      }
-    }
-  }
-  
-  // Cap cart at 50 items to prevent abuse
-  if (cartItems.length > 50) {
-    return c.json({ error: 'Too many items in cart' }, 400)
-  }
-  
-  const total = cartItems.reduce((sum: number, item: { price: number; qty: number }) => sum + (item.price * item.qty), 0)
-  
-  // Sanity check total
-  if (total <= 0 || total > 50000) {
-    return c.json({ error: 'Invalid order total' }, 400)
-  }
-  
-  const stripeKey = c.env?.STRIPE_SECRET_KEY
-  
-  if (!stripeKey) {
-    return c.json({
-      demo: true,
-      total: total.toFixed(2),
-      items: cartItems.map((item: { title: string; size?: string; color?: string; style?: string; qty: number; price: number }) => ({
-        title: item.title,
-        size: item.size,
-        color: item.color,
-        style: item.style,
-        qty: item.qty,
-        subtotal: (item.price * item.qty).toFixed(2)
-      }))
-    })
-  }
-  
-  try {
-    // Build Stripe line items
-    const params = new URLSearchParams()
-    params.append('mode', 'payment')
-    params.append('success_url', `${new URL(c.req.url).origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`)
-    params.append('cancel_url', `${new URL(c.req.url).origin}/#shop`)
-    
-    cartItems.forEach((item: { title: string; size?: string; color?: string; style?: string; qty: number; price: number }, i: number) => {
-      const desc = [item.size, item.style, item.color].filter(Boolean).join(', ')
-      params.append(`line_items[${i}][price_data][currency]`, 'usd')
-      params.append(`line_items[${i}][price_data][product_data][name]`, item.title)
-      if (desc) params.append(`line_items[${i}][price_data][product_data][description]`, desc)
-      params.append(`line_items[${i}][price_data][unit_amount]`, String(Math.round(item.price * 100)))
-      params.append(`line_items[${i}][quantity]`, String(item.qty))
-    })
-    
-    const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${stripeKey}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: params
-    })
-    
-    const session = await stripeResponse.json() as { error?: { message: string }; url?: string }
-    if (session.error) return c.json({ error: session.error.message }, 400)
-    return c.json({ url: session.url })
-  } catch (error) {
-    console.error('Stripe shop checkout error:', error)
-    return c.json({ error: 'Failed to create checkout session' }, 500)
-  }
-})
-
-app.post('/api/calculate-price', async (c) => {
-  let body: any
-  try {
-    body = await c.req.json()
-  } catch {
-    return c.json({ error: 'Invalid JSON body' }, 400)
-  }
-  const { garment, additionalGraphics = [] } = body
-  
-  if (!garment || typeof garment !== 'string') {
-    return c.json({ error: 'Garment ID is required' }, 400)
-  }
-  
-  const g = garments.find(x => x.id === garment)
-  if (!g) return c.json({ error: 'Invalid garment' }, 400)
-  
-  if (!Array.isArray(additionalGraphics) || additionalGraphics.length > 10) {
-    return c.json({ error: 'Invalid additional graphics data' }, 400)
-  }
-  
-  const basePrice = g.basePrice
-  // Calculate additional cost: $10 for small placements, $20 for full placements
-  const additionalCost = additionalGraphics.reduce((acc: number, ag: { placement: string }) => {
-    const p = placements.find(x => x.id === ag.placement)
-    return acc + (p && p.isSmall ? 10 : 20)
-  }, 0)
-  const total = basePrice + additionalCost
-  
-  return c.json({ basePrice, additionalCost, total })
-})
-
-app.post('/api/create-checkout', async (c) => {
-  let body: any
-  try {
-    body = await c.req.json()
-  } catch {
-    return c.json({ error: 'Invalid JSON body' }, 400)
-  }
-  const { garment, size, color, graphic, placement, additionalGraphics = [] } = body
-  
-  // Validate all required fields are strings
-  if (!garment || !size || !color || !graphic || !placement) {
-    return c.json({ error: 'All fields required: garment, size, color, graphic, placement' }, 400)
-  }
-  if ([garment, size, color, graphic, placement].some(f => typeof f !== 'string')) {
-    return c.json({ error: 'Invalid field types' }, 400)
-  }
-  
-  const g = garments.find(x => x.id === garment)
-  const gr = graphics.find(x => x.id === graphic)
-  const pl = placements.find(x => x.id === placement)
-  
-  if (!g || !gr || !pl) {
-    return c.json({ error: 'Invalid garment, graphic, or placement ID' }, 400)
-  }
-  
-  // Validate size is available for this garment
-  if (!g.sizes.includes(size)) {
-    return c.json({ error: 'Invalid size for this garment' }, 400)
-  }
-  
-  // Validate color is available for this garment
-  if (!g.images[color]) {
-    return c.json({ error: 'Invalid color for this garment' }, 400)
-  }
-  
-  // Validate graphic restrictions
-  if (gr.restrictToGarments && gr.restrictToGarments.length > 0 && !gr.restrictToGarments.includes(garment)) {
-    return c.json({ error: `Graphic "${gr.name}" is not available for this garment` }, 400)
-  }
-  
-  // Validate additionalGraphics is an array with valid entries
-  if (!Array.isArray(additionalGraphics)) {
-    return c.json({ error: 'additionalGraphics must be an array' }, 400)
-  }
-  if (additionalGraphics.length > 10) {
-    return c.json({ error: 'Maximum 10 additional graphics allowed' }, 400)
-  }
-  for (const ag of additionalGraphics) {
-    if (!ag.graphic || !ag.placement || typeof ag.graphic !== 'string' || typeof ag.placement !== 'string') {
-      return c.json({ error: 'Each additional graphic must have graphic and placement string fields' }, 400)
-    }
-    if (!graphics.find(x => x.id === ag.graphic)) {
-      return c.json({ error: `Invalid additional graphic ID: ${ag.graphic}` }, 400)
-    }
-    if (!placements.find(x => x.id === ag.placement)) {
-      return c.json({ error: `Invalid additional placement ID: ${ag.placement}` }, 400)
-    }
-  }
-  
-  const basePrice = g.basePrice
-  // Calculate additional cost: $10 for small placements, $20 for full placements
-  const additionalCost = additionalGraphics.reduce((acc: number, ag: { graphic: string; placement: string }) => {
-    const p = placements.find(x => x.id === ag.placement)
-    return acc + (p && p.isSmall ? 10 : 20)
-  }, 0)
-  const total = basePrice + additionalCost
-  
-  const stripeKey = c.env?.STRIPE_SECRET_KEY
-  
-  if (!stripeKey) {
-    return c.json({
-      demo: true,
-      message: 'Stripe is not configured. Demo mode - your order would be: $' + total.toFixed(2),
-      orderDetails: {
-        garment: g.name,
-        size,
-        color,
-        graphic: gr.name,
-        placement,
-        additionalGraphics: additionalGraphics.map((ag: { graphic: string; placement: string }) => ({
-          graphic: graphics.find(x => x.id === ag.graphic)?.name,
-          placement: ag.placement
-        })),
-        total: total.toFixed(2)
-      }
-    })
-  }
-  
-  try {
-    const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${stripeKey}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams({
-        'mode': 'payment',
-        'success_url': `${new URL(c.req.url).origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        'cancel_url': `${new URL(c.req.url).origin}/build`,
-        'line_items[0][price_data][currency]': 'usd',
-        'line_items[0][price_data][product_data][name]': `${g.name} - ${gr.name}`,
-        'line_items[0][price_data][product_data][description]': `Size: ${size}, Color: ${color}, Placement: ${placement}`,
-        'line_items[0][price_data][unit_amount]': String(Math.round(total * 100)),
-        'line_items[0][quantity]': '1',
-        'metadata[garment]': garment,
-        'metadata[size]': size,
-        'metadata[color]': color,
-        'metadata[graphic]': graphic,
-        'metadata[placement]': placement,
-        'metadata[additionalGraphics]': JSON.stringify(additionalGraphics)
-      })
-    })
-    
-    const session = await stripeResponse.json() as { error?: { message: string }; url?: string }
-    
-    if (session.error) {
-      return c.json({ error: session.error.message }, 400)
-    }
-    
-    return c.json({ url: session.url })
-  } catch (error) {
-    console.error('Stripe error:', error)
-    return c.json({ error: 'Failed to create checkout session' }, 500)
-  }
-})
-
-// Favicon route
-app.get('/favicon.ico', (c) => {
-  return new Response(null, { status: 204 })
-})
-
-// Apple touch icon - redirect to logo
-app.get('/apple-touch-icon.png', (c) => {
-  return c.redirect('/images/graphics/hillbilly-fightwear-logo.png', 301)
-})
-app.get('/apple-touch-icon-precomposed.png', (c) => {
-  return c.redirect('/images/graphics/hillbilly-fightwear-logo.png', 301)
-})
-
-// Robots.txt
-app.get('/robots.txt', (c) => {
-  return c.text(`User-agent: *
-Allow: /
-Disallow: /api/
-Sitemap: https://hillbillyfightwear.com/sitemap.xml`)
-})
-
-app.get('/checkout/success', (c) => {
-  return c.html(`<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order Confirmed - Hillbilly Fightwear</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
-    body { font-family: 'Oswald', sans-serif; background: #f5f5f5; }
-    .success-container { max-width: 600px; margin: 100px auto; padding: 40px; text-align: center; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-    .success-icon { width: 80px; height: 80px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; font-size: 2.5rem; color: #fff; }
-    h1 { font-size: 2rem; margin: 0 0 15px; }
-    p { color: #666; margin: 0 0 30px; line-height: 1.6; }
-    .btn { display: inline-block; padding: 15px 40px; background: #8B0000; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; border-radius: 4px; transition: all 0.3s; }
-    .btn:hover { background: #a00000; }
-  </style>
-</head>
-<body>
-  <div class="success-container">
-    <div class="success-icon"><i class="fas fa-check"></i></div>
-    <h1>Order Confirmed!</h1>
-    <p>Thank you for your order! You'll receive an email confirmation shortly with your order details and tracking information.</p>
-    <a href="/" class="btn">Continue Shopping</a>
-  </div>
-</body>
-</html>`)
-})
-
-// Note: Static files from /images/* are served by Cloudflare Pages automatically
+app.route('/api', apiRoutes)
 
 // ============================================
-// GDPR COMPLIANCE: Privacy Policy Page
+// STATIC PAGE ROUTES (extracted to src/routes/pages.ts)
+// Includes: favicon, robots.txt, checkout success, privacy policy, cookie policy, 404
 // ============================================
-app.get('/privacy-policy', (c) => {
-  return c.html(`<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy - Hillbilly Fightwear</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
-    body { font-family: 'Oswald', sans-serif; background: #f5f5f5; }
-    .policy-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-    .policy-header { background: #1a1a1a; color: #fff; padding: 40px 20px; text-align: center; }
-    .policy-header h1 { font-size: 2.5rem; margin: 0; }
-    .policy-header p { color: #888; margin: 10px 0 0; }
-    .policy-content { background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: -20px; }
-    .policy-content h2 { font-size: 1.4rem; color: #8B0000; margin: 30px 0 15px; border-bottom: 2px solid #8B0000; padding-bottom: 10px; }
-    .policy-content h2:first-child { margin-top: 0; }
-    .policy-content p, .policy-content li { color: #555; line-height: 1.8; font-size: 1rem; }
-    .policy-content ul { padding-left: 20px; margin: 15px 0; }
-    .policy-content li { margin: 8px 0; }
-    .policy-content a { color: #8B0000; }
-    .back-link { display: inline-block; margin: 30px 0; color: #8B0000; text-decoration: none; font-weight: 600; }
-    .back-link:hover { text-decoration: underline; }
-    .last-updated { color: #888; font-size: 0.9rem; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-  </style>
-</head>
-<body>
-  <div class="policy-header">
-    <h1><i class="fas fa-shield-alt"></i> Privacy Policy</h1>
-    <p>Your privacy is important to us</p>
-  </div>
-  
-  <div class="policy-container">
-    <div class="policy-content">
-      <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-      
-      <h2>1. Introduction</h2>
-      <p>Hillbilly Fightwear ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website hillbilly-fightwear.pages.dev and hillbillyfightwear.com (the "Site").</p>
-      <p>Please read this Privacy Policy carefully. If you do not agree with the terms of this Privacy Policy, please do not access the Site.</p>
-      
-      <h2>2. Information We Collect</h2>
-      <p>We may collect information about you in various ways:</p>
-      <ul>
-        <li><strong>Personal Data:</strong> When you make a purchase, we collect your name, email address, shipping address, and payment information.</li>
-        <li><strong>Usage Data:</strong> We automatically collect certain information when you visit the Site, including your IP address, browser type, operating system, access times, and pages viewed.</li>
-        <li><strong>Cookies:</strong> We use cookies and similar tracking technologies. See our <a href="/cookie-policy">Cookie Policy</a> for more details.</li>
-      </ul>
-      
-      <h2>3. How We Use Your Information</h2>
-      <p>We use the information we collect to:</p>
-      <ul>
-        <li>Process and fulfill your orders</li>
-        <li>Send you order confirmations and updates</li>
-        <li>Respond to your inquiries and provide customer support</li>
-        <li>Improve our website and services</li>
-        <li>Comply with legal obligations</li>
-      </ul>
-      
-      <h2>4. Legal Basis for Processing (GDPR)</h2>
-      <p>If you are from the European Economic Area (EEA), our legal basis for collecting and using your personal information depends on the data concerned and the context in which we collect it:</p>
-      <ul>
-        <li><strong>Contract:</strong> Processing is necessary for the performance of a contract with you (e.g., fulfilling orders)</li>
-        <li><strong>Consent:</strong> You have given consent for specific purposes (e.g., marketing communications)</li>
-        <li><strong>Legitimate Interests:</strong> Processing is necessary for our legitimate business interests</li>
-        <li><strong>Legal Obligation:</strong> Processing is necessary to comply with the law</li>
-      </ul>
-      
-      <h2>5. Your Data Protection Rights (GDPR)</h2>
-      <p>If you are a resident of the EEA, you have the following data protection rights:</p>
-      <ul>
-        <li><strong>Right to Access:</strong> You can request copies of your personal data</li>
-        <li><strong>Right to Rectification:</strong> You can request correction of inaccurate data</li>
-        <li><strong>Right to Erasure:</strong> You can request deletion of your personal data</li>
-        <li><strong>Right to Restrict Processing:</strong> You can request we limit how we use your data</li>
-        <li><strong>Right to Data Portability:</strong> You can request a copy of your data in a machine-readable format</li>
-        <li><strong>Right to Object:</strong> You can object to our processing of your personal data</li>
-        <li><strong>Right to Withdraw Consent:</strong> You can withdraw consent at any time</li>
-      </ul>
-      <p>To exercise any of these rights, please contact us at privacy@hillbillyfightwear.com</p>
-      
-      <h2>6. Data Retention</h2>
-      <p>We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, including to satisfy legal, accounting, or reporting requirements. Order data is typically retained for 5 years for tax and legal purposes.</p>
-      
-      <h2>7. Data Security</h2>
-      <p>We implement appropriate technical and organizational security measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet is 100% secure.</p>
-      
-      <h2>8. Third-Party Services</h2>
-      <p>We may share your information with third parties that help us operate our business:</p>
-      <ul>
-        <li><strong>Payment Processors:</strong> Stripe processes payments securely</li>
-        <li><strong>Shipping Partners:</strong> To deliver your orders</li>
-        <li><strong>Hosting:</strong> Cloudflare hosts our website</li>
-      </ul>
-      <p>These third parties have their own privacy policies and are required to protect your data.</p>
-      
-      <h2>9. International Data Transfers</h2>
-      <p>Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place to protect your data in compliance with applicable data protection laws.</p>
-      
-      <h2>10. Children's Privacy</h2>
-      <p>Our Site is not intended for children under 16 years of age. We do not knowingly collect personal information from children under 16.</p>
-      
-      <h2>11. Changes to This Policy</h2>
-      <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
-      
-      <h2>12. Contact Us</h2>
-      <p>If you have questions about this Privacy Policy or wish to exercise your rights, please contact us:</p>
-      <ul>
-        <li>Email: privacy@hillbillyfightwear.com</li>
-        <li>Website: <a href="https://hillbillyfightwear.com">hillbillyfightwear.com</a></li>
-      </ul>
-      
-      <p class="last-updated"><strong>Last Updated:</strong> January 26, 2026</p>
-    </div>
-  </div>
-</body>
-</html>`)
-})
-
-// ============================================
-// GDPR COMPLIANCE: Cookie Policy Page
-// ============================================
-app.get('/cookie-policy', (c) => {
-  return c.html(`<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cookie Policy - Hillbilly Fightwear</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
-    body { font-family: 'Oswald', sans-serif; background: #f5f5f5; }
-    .policy-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-    .policy-header { background: #1a1a1a; color: #fff; padding: 40px 20px; text-align: center; }
-    .policy-header h1 { font-size: 2.5rem; margin: 0; }
-    .policy-header p { color: #888; margin: 10px 0 0; }
-    .policy-content { background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: -20px; }
-    .policy-content h2 { font-size: 1.4rem; color: #8B0000; margin: 30px 0 15px; border-bottom: 2px solid #8B0000; padding-bottom: 10px; }
-    .policy-content h2:first-child { margin-top: 0; }
-    .policy-content p, .policy-content li { color: #555; line-height: 1.8; font-size: 1rem; }
-    .policy-content ul { padding-left: 20px; margin: 15px 0; }
-    .policy-content li { margin: 8px 0; }
-    .policy-content a { color: #8B0000; }
-    .back-link { display: inline-block; margin: 30px 0; color: #8B0000; text-decoration: none; font-weight: 600; }
-    .back-link:hover { text-decoration: underline; }
-    .last-updated { color: #888; font-size: 0.9rem; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-    .cookie-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    .cookie-table th, .cookie-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-    .cookie-table th { background: #8B0000; color: #fff; }
-    .cookie-table tr:nth-child(even) { background: #f9f9f9; }
-    .manage-btn { display: inline-block; margin: 20px 0; padding: 12px 24px; background: #8B0000; color: #fff; text-decoration: none; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-    .manage-btn:hover { background: #a00000; }
-  </style>
-</head>
-<body>
-  <div class="policy-header">
-    <h1><i class="fas fa-cookie-bite"></i> Cookie Policy</h1>
-    <p>How we use cookies on our website</p>
-  </div>
-  
-  <div class="policy-container">
-    <div class="policy-content">
-      <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-      
-      <h2>1. What Are Cookies?</h2>
-      <p>Cookies are small text files that are placed on your device when you visit a website. They are widely used to make websites work more efficiently and to provide information to website owners.</p>
-      
-      <h2>2. How We Use Cookies</h2>
-      <p>We use cookies and similar technologies to:</p>
-      <ul>
-        <li>Remember your preferences and settings</li>
-        <li>Understand how you use our website</li>
-        <li>Improve your browsing experience</li>
-        <li>Enable certain functions of the website</li>
-      </ul>
-      
-      <h2>3. Types of Cookies We Use</h2>
-      
-      <h3 style="font-size: 1.1rem; margin: 20px 0 10px; color: #333;">Necessary Cookies (Always Active)</h3>
-      <p>These cookies are essential for the website to function properly. They cannot be disabled.</p>
-      <table class="cookie-table">
-        <tr><th>Cookie</th><th>Purpose</th><th>Duration</th></tr>
-        <tr><td>cookieConsent</td><td>Stores your cookie preferences</td><td>1 year</td></tr>
-        <tr><td>__cf_bm</td><td>Cloudflare bot protection</td><td>30 minutes</td></tr>
-      </table>
-      
-      <h3 style="font-size: 1.1rem; margin: 20px 0 10px; color: #333;">Analytics Cookies (Optional)</h3>
-      <p>These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously.</p>
-      <table class="cookie-table">
-        <tr><th>Cookie</th><th>Purpose</th><th>Duration</th></tr>
-        <tr><td colspan="3" style="text-align: center; color: #888;">Currently, we do not use analytics cookies</td></tr>
-      </table>
-      
-      <h3 style="font-size: 1.1rem; margin: 20px 0 10px; color: #333;">Marketing Cookies (Optional)</h3>
-      <p>These cookies are used to deliver advertisements more relevant to you and your interests.</p>
-      <table class="cookie-table">
-        <tr><th>Cookie</th><th>Purpose</th><th>Duration</th></tr>
-        <tr><td colspan="3" style="text-align: center; color: #888;">Currently, we do not use marketing cookies</td></tr>
-      </table>
-      
-      <h2>4. Managing Your Cookie Preferences</h2>
-      <p>You can manage your cookie preferences at any time by clicking the button below or visiting the "Cookie Settings" link in our website footer.</p>
-      <a href="javascript:void(0)" onclick="showCookieSettings()" class="manage-btn"><i class="fas fa-cog"></i> Manage Cookie Settings</a>
-      
-      <h2>5. Browser Cookie Controls</h2>
-      <p>Most web browsers allow you to control cookies through their settings. You can:</p>
-      <ul>
-        <li>Delete all cookies from your browser</li>
-        <li>Block all cookies by default</li>
-        <li>Allow cookies from specific websites</li>
-        <li>Delete cookies when you close your browser</li>
-      </ul>
-      <p>Note: Blocking all cookies may affect the functionality of this and other websites.</p>
-      
-      <h2>6. Third-Party Cookies</h2>
-      <p>Some cookies may be set by third-party services that appear on our pages:</p>
-      <ul>
-        <li><strong>Cloudflare:</strong> Security and performance services</li>
-        <li><strong>Stripe:</strong> Secure payment processing (only during checkout)</li>
-      </ul>
-      <p>These third parties have their own cookie policies.</p>
-      
-      <h2>7. Changes to This Policy</h2>
-      <p>We may update this Cookie Policy from time to time. Any changes will be posted on this page with an updated revision date.</p>
-      
-      <h2>8. Contact Us</h2>
-      <p>If you have questions about our use of cookies, please contact us at privacy@hillbillyfightwear.com</p>
-      
-      <p class="last-updated"><strong>Last Updated:</strong> January 26, 2026</p>
-    </div>
-  </div>
-  
-  <script>
-    function showCookieSettings() {
-      window.location.href = '/?showCookieSettings=true';
-    }
-  </script>
-</body>
-</html>`)
-})
-
-// ============================================
-// Catch-All Route - 404 handler for unmatched paths
-// ============================================
-app.all('*', (c) => {
-  return c.html(`<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page Not Found - Hillbilly Fightwear</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-<style>body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;}.c{max-width:600px;margin:100px auto;padding:40px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);}.icon{width:80px;height:80px;background:#8B0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 30px;font-size:2.5rem;color:#fff;}h1{font-size:2rem;margin:0 0 15px;}p{color:#666;margin:0 0 30px;line-height:1.6;}.btn{display:inline-block;padding:15px 40px;background:#8B0000;color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-weight:600;border-radius:4px;transition:all 0.3s;margin:5px;}.btn:hover{background:#a00000;}.btn-o{background:transparent;color:#333;border:2px solid #333;}.btn-o:hover{background:#333;color:#fff;}</style>
-</head><body><div class="c"><div class="icon"><i class="fas fa-map-signs"></i></div><h1>Page Not Found</h1><p>Sorry, the page you are looking for does not exist or has been moved.</p><a href="/" class="btn">Go Home</a><a href="/build" class="btn btn-o">Build Your Own</a></div></body></html>`, 404)
-})
+app.route('/', pageRoutes)
 
 export default app

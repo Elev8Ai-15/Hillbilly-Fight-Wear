@@ -1,5 +1,5 @@
 {
   "version": 1,
   "include": ["/*"],
-  "exclude": ["/images/*", "/manifest.json"]
+  "exclude": ["/images/*", "/static/*", "/manifest.json"]
 }

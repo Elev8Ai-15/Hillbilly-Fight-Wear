@@ -40,6 +40,16 @@ function copyPublicAssets() {
         )
         console.log('\x1b[32m✓ Copied public/manifest.json to dist/\x1b[0m')
       }
+      
+      // Copy static folder (contains pre-built tailwind.css)
+      if (existsSync(resolve(publicDir, 'static'))) {
+        cpSync(
+          resolve(publicDir, 'static'),
+          resolve(distDir, 'static'),
+          { recursive: true, force: true }
+        )
+        console.log('\x1b[32m✓ Copied public/static to dist/static\x1b[0m')
+      }
     }
   }
 }
