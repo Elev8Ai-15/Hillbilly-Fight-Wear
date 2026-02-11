@@ -1206,22 +1206,22 @@ app.get('/', (c) => {
       position: relative;
       width: 100%;
       min-height: 85vh;
-      background: #0a0a0a;
+      background: #f5f5f0;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    /* Subtle paper/grunge texture via radial noise */
+    /* Subtle worn-paper texture */
     .scrapbook-hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 20% 50%, rgba(139,0,0,0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 30%, rgba(139,0,0,0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 80%, rgba(255,255,255,0.02) 0%, transparent 40%);
+        radial-gradient(ellipse at 20% 50%, rgba(139,0,0,0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 30%, rgba(139,0,0,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(0,0,0,0.02) 0%, transparent 40%);
       z-index: 0;
     }
 
@@ -1238,18 +1238,18 @@ app.get('/', (c) => {
       width: 100%;
       max-width: 420px;
       height: auto;
-      filter: drop-shadow(0 10px 50px rgba(0,0,0,0.9))
-              drop-shadow(0 0 60px rgba(139,0,0,0.5));
+      filter: drop-shadow(0 8px 30px rgba(0,0,0,0.3))
+              drop-shadow(0 0 40px rgba(139,0,0,0.2));
     }
 
     .scrapbook-tagline {
-      color: #fff;
+      color: #1a1a1a;
       font-size: 1.4rem;
       text-transform: uppercase;
       letter-spacing: 6px;
       margin-top: 25px;
-      text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
-      font-weight: 500;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      font-weight: 600;
       opacity: 0.9;
     }
 
@@ -1276,21 +1276,21 @@ app.get('/', (c) => {
     .scrapbook-cta .btn-primary {
       background: #8B0000;
       color: #fff;
-      box-shadow: 0 6px 25px rgba(139,0,0,0.5);
+      box-shadow: 0 4px 15px rgba(139,0,0,0.4);
     }
     .scrapbook-cta .btn-primary:hover {
       background: #a50000;
       transform: translateY(-2px);
-      box-shadow: 0 10px 35px rgba(139,0,0,0.7);
+      box-shadow: 0 8px 25px rgba(139,0,0,0.5);
     }
     .scrapbook-cta .btn-secondary {
       background: transparent;
-      color: #fff;
-      border: 2px solid rgba(255,255,255,0.7);
+      color: #1a1a1a;
+      border: 2px solid #333;
     }
     .scrapbook-cta .btn-secondary:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: #fff;
+      background: rgba(0,0,0,0.05);
+      border-color: #1a1a1a;
       transform: translateY(-2px);
     }
 
@@ -1302,19 +1302,18 @@ app.get('/', (c) => {
       pointer-events: none;
     }
 
-    /* Individual sticker — bright, fully visible above dark background */
+    /* Individual sticker — fully visible on light background */
     .sticker-collage .sticker {
       position: absolute;
       pointer-events: auto;
       transition: transform 0.3s ease, filter 0.3s ease;
-      filter: drop-shadow(3px 5px 10px rgba(0,0,0,0.7)) brightness(1.05);
+      filter: drop-shadow(2px 3px 6px rgba(0,0,0,0.25));
       image-rendering: auto;
-      opacity: 0.95;
     }
 
     .sticker-collage .sticker:hover {
       transform: var(--hover-rotate, rotate(0deg)) scale(1.15);
-      filter: drop-shadow(4px 6px 12px rgba(0,0,0,0.8)) brightness(1.1);
+      filter: drop-shadow(3px 5px 10px rgba(0,0,0,0.35));
       z-index: 5;
     }
 
