@@ -1198,6 +1198,186 @@ app.get('/', (c) => {
       .ada-panel { width: calc(100vw - 40px); left: 20px; }
       .ada-widget-btn { width: 48px; height: 48px; font-size: 1.3rem; bottom: 15px; left: 15px; }
     }
+
+    /* =============================================
+       SCRAPBOOK STICKER COLLAGE - Hero Landing
+       ============================================= */
+    .scrapbook-hero {
+      position: relative;
+      width: 100%;
+      min-height: 85vh;
+      background: #0a0a0a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Subtle paper/grunge texture via radial noise */
+    .scrapbook-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(139,0,0,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 30%, rgba(139,0,0,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(255,255,255,0.02) 0%, transparent 40%);
+      z-index: 0;
+    }
+
+    /* Centered logo area */
+    .scrapbook-center {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 500px;
+    }
+
+    .scrapbook-center img {
+      width: 100%;
+      max-width: 420px;
+      height: auto;
+      filter: drop-shadow(0 10px 50px rgba(0,0,0,0.9))
+              drop-shadow(0 0 60px rgba(139,0,0,0.5));
+    }
+
+    .scrapbook-tagline {
+      color: #fff;
+      font-size: 1.4rem;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      margin-top: 25px;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .scrapbook-cta {
+      margin-top: 30px;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .scrapbook-cta a {
+      display: inline-block;
+      padding: 14px 40px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .scrapbook-cta .btn-primary {
+      background: #8B0000;
+      color: #fff;
+      box-shadow: 0 6px 25px rgba(139,0,0,0.5);
+    }
+    .scrapbook-cta .btn-primary:hover {
+      background: #a50000;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 35px rgba(139,0,0,0.7);
+    }
+    .scrapbook-cta .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.7);
+    }
+    .scrapbook-cta .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Sticker collage container */
+    .sticker-collage {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Individual sticker */
+    .sticker-collage .sticker {
+      position: absolute;
+      pointer-events: auto;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      filter: drop-shadow(3px 4px 8px rgba(0,0,0,0.6));
+      image-rendering: auto;
+    }
+
+    .sticker-collage .sticker:hover {
+      transform: var(--hover-rotate, rotate(0deg)) scale(1.15);
+      filter: drop-shadow(4px 6px 12px rgba(0,0,0,0.8)) brightness(1.1);
+      z-index: 5;
+    }
+
+    /* Per-sticker positions — desktop (scattered around center, non-overlapping) */
+    /* TOP ROW — above the logo */
+    .sticker-collage .sticker-1  { top: 3%;  left: 2%;   width: 110px; transform: rotate(-12deg); --hover-rotate: rotate(-6deg); }
+    .sticker-collage .sticker-2  { top: 2%;  left: 22%;  width: 95px;  transform: rotate(8deg);   --hover-rotate: rotate(4deg); }
+    .sticker-collage .sticker-3  { top: 5%;  left: 45%;  width: 80px;  transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }
+    .sticker-collage .sticker-4  { top: 2%;  left: 68%;  width: 100px; transform: rotate(14deg);  --hover-rotate: rotate(7deg); }
+    .sticker-collage .sticker-5  { top: 4%;  right: 2%;  width: 90px;  transform: rotate(-10deg); --hover-rotate: rotate(-5deg); }
+
+    /* MIDDLE ROW — left and right sides flanking the logo */
+    .sticker-collage .sticker-6  { top: 30%; left: 1%;   width: 105px; transform: rotate(6deg);   --hover-rotate: rotate(3deg); }
+    .sticker-collage .sticker-7  { top: 50%; left: 3%;   width: 85px;  transform: rotate(-15deg); --hover-rotate: rotate(-8deg); }
+    .sticker-collage .sticker-8  { top: 32%; right: 1%;  width: 100px; transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }
+    .sticker-collage .sticker-9  { top: 52%; right: 2%;  width: 90px;  transform: rotate(12deg);  --hover-rotate: rotate(6deg); }
+
+    /* BOTTOM ROW — below the logo */
+    .sticker-collage .sticker-10 { bottom: 8%;  left: 3%;  width: 95px;  transform: rotate(10deg);  --hover-rotate: rotate(5deg); }
+    .sticker-collage .sticker-11 { bottom: 5%;  left: 22%; width: 85px;  transform: rotate(-7deg);  --hover-rotate: rotate(-3deg); }
+    .sticker-collage .sticker-12 { bottom: 3%;  left: 46%; width: 80px;  transform: rotate(4deg);   --hover-rotate: rotate(2deg); }
+    .sticker-collage .sticker-13 { bottom: 5%;  left: 68%; width: 100px; transform: rotate(-11deg); --hover-rotate: rotate(-5deg); }
+    .sticker-collage .sticker-14 { bottom: 7%;  right: 2%; width: 90px;  transform: rotate(9deg);   --hover-rotate: rotate(4deg); }
+
+    /* Tablet: slightly smaller stickers */
+    @media (max-width: 1024px) {
+      .sticker-collage .sticker { width: 70px !important; }
+      .scrapbook-hero { min-height: 75vh; }
+    }
+
+    /* Mobile: smaller stickers, tighter layout */
+    @media (max-width: 768px) {
+      .scrapbook-hero { min-height: 100vh; }
+      .scrapbook-center { max-width: 280px; padding: 30px 15px; }
+      .scrapbook-center img { max-width: 240px; }
+      .scrapbook-tagline { font-size: 1rem; letter-spacing: 3px; margin-top: 15px; }
+      .scrapbook-cta a { padding: 12px 28px; font-size: 0.9rem; }
+      .scrapbook-cta { flex-direction: column; align-items: center; }
+
+      .sticker-collage .sticker { width: 52px !important; }
+
+      /* Reposition for mobile — tighter ring around center */
+      .sticker-collage .sticker-1  { top: 2%;  left: 5%;  }
+      .sticker-collage .sticker-2  { top: 1%;  left: 35%; }
+      .sticker-collage .sticker-3  { top: 3%;  right: 5%; left: auto; }
+      .sticker-collage .sticker-4  { top: 15%; left: 1%;  }
+      .sticker-collage .sticker-5  { top: 15%; right: 1%; left: auto; }
+      .sticker-collage .sticker-6  { top: 30%; left: 0%;  }
+      .sticker-collage .sticker-7  { top: 45%; left: 0%;  }
+      .sticker-collage .sticker-8  { top: 30%; right: 0%; left: auto; }
+      .sticker-collage .sticker-9  { top: 45%; right: 0%; left: auto; }
+      .sticker-collage .sticker-10 { bottom: 15%; left: 0%;  }
+      .sticker-collage .sticker-11 { bottom: 6%;  left: 5%;  }
+      .sticker-collage .sticker-12 { bottom: 2%;  left: 35%; }
+      .sticker-collage .sticker-13 { bottom: 6%;  right: 5%; left: auto; }
+      .sticker-collage .sticker-14 { bottom: 15%; right: 0%; left: auto; }
+    }
+
+    /* Small phones */
+    @media (max-width: 400px) {
+      .sticker-collage .sticker { width: 42px !important; }
+      .scrapbook-center img { max-width: 200px; }
+      .scrapbook-tagline { font-size: 0.85rem; letter-spacing: 2px; }
+    }
   </style>
 </head>
 <body>
@@ -1227,7 +1407,43 @@ app.get('/', (c) => {
   
   <!-- Main Content -->
   <main id="main-content" role="main">
-  
+
+  <!-- SCRAPBOOK STICKER COLLAGE HERO -->
+  <section class="scrapbook-hero" aria-label="Hillbilly Fightwear Sticker Collage">
+
+    <!-- Sticker Collage Layer (z-index 1) — above background, below logo -->
+    <div class="sticker-collage" aria-hidden="true">
+      <!-- TOP ROW -->
+      <img class="sticker sticker-1"  src="/images/stickers/sticker-hcf.png?v=13"           alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-2"  src="/images/stickers/sticker-gnf-redblue.png?v=14"    alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-3"  src="/images/stickers/sticker-obama-tap.png?v=13"      alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-4"  src="/images/stickers/sticker-thump.png?v=13"          alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-5"  src="/images/stickers/sticker-fun-ride.png?v=13"       alt="" loading="eager" draggable="false">
+      <!-- MIDDLE ROW (flanking logo) -->
+      <img class="sticker sticker-6"  src="/images/stickers/sticker-put-it-on-em.png?v=13"   alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-7"  src="/images/stickers/sticker-your-neck.png?v=13"      alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-8"  src="/images/stickers/sticker-yes-you-can.png?v=13"    alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-9"  src="/images/stickers/sticker-thumpin-is-lovin.png?v=13" alt="" loading="eager" draggable="false">
+      <!-- BOTTOM ROW -->
+      <img class="sticker sticker-10" src="/images/stickers/sticker-community.png?v=13"      alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-11" src="/images/stickers/sticker-hfw.png?v=13"            alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-12" src="/images/stickers/sticker-gnf.png?v=13"            alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-13" src="/images/stickers/sticker-myob.png?v=13"           alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-14" src="/images/stickers/sticker-cunt.png?v=13"           alt="" loading="eager" draggable="false">
+    </div>
+
+    <!-- Centered Logo + CTA (z-index 3) -->
+    <div class="scrapbook-center">
+      <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear Logo">
+      <p class="scrapbook-tagline">Official Fight Gear</p>
+      <div class="scrapbook-cta">
+        <a href="#shop" class="btn-primary"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
+        <a href="/build" class="btn-secondary"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Your Own</a>
+      </div>
+    </div>
+
+  </section>
+
   <!-- Shop Now Section - All Products from Official Store (Organized by Category) -->
   <section id="shop" style="background: #f5f5f5; padding: 10px 0 40px;" aria-labelledby="shop-heading">
     <h2 id="shop-heading" class="sr-only">Shop Now</h2>
