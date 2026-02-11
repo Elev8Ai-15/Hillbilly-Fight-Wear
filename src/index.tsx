@@ -2922,6 +2922,7 @@ app.get('/build', (c) => {
       if (params.get('graphic')) {
         selectGraphic(params.get('graphic'));
       }
+
     });
     
     function initCanvas() {
@@ -3310,10 +3311,10 @@ app.get('/build', (c) => {
       }
       
       // Load garment image first
-      fabric.Image.fromURL(imageUrl, function(garmentImg) {
+      fabric.Image.fromURL(imageUrl, function(garmentImg, isError) {
         // Check if this update is still current
         if (currentUpdateId !== previewUpdateId) return;
-        if (!garmentImg) {
+        if (!garmentImg || isError || !garmentImg.width || !garmentImg.height) {
           canvas.renderAll();
           return;
         }
