@@ -1294,21 +1294,22 @@ app.get('/', (c) => {
       transform: translateY(-2px);
     }
 
-    /* Sticker collage container */
+    /* Sticker collage container — z-index 2 puts stickers ABOVE the ::before background */
     .sticker-collage {
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
     }
 
-    /* Individual sticker */
+    /* Individual sticker — bright, fully visible above dark background */
     .sticker-collage .sticker {
       position: absolute;
       pointer-events: auto;
       transition: transform 0.3s ease, filter 0.3s ease;
-      filter: drop-shadow(3px 4px 8px rgba(0,0,0,0.6));
+      filter: drop-shadow(3px 5px 10px rgba(0,0,0,0.7)) brightness(1.05);
       image-rendering: auto;
+      opacity: 0.95;
     }
 
     .sticker-collage .sticker:hover {
@@ -1389,15 +1390,14 @@ app.get('/', (c) => {
     <div class="announcement-bar" aria-label="Announcement">
       <p style="margin: 0;">🔥 NEW: Build Your Own Custom Apparel! 🔥</p>
     </div>
-    <div style="background: #0a0a0a; padding: 20px; text-align: center;">
-      <a href="/" style="display: inline-block;">
-        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear - Official MMA and Combat Sports Apparel" style="max-width: 280px; width: 100%; height: auto; filter: drop-shadow(0 4px 20px rgba(139, 0, 0, 0.5));">
+    <div style="background: #0a0a0a; padding: 10px 20px; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap;">
+      <a href="/" style="display: inline-flex; align-items: center; text-decoration: none;">
+        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear" style="max-width: 140px; width: 100%; height: auto; filter: drop-shadow(0 2px 10px rgba(139, 0, 0, 0.4));">
       </a>
-      <p style="color: #fff; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 6px; margin: 12px 0 0; font-weight: 500; opacity: 0.85;">Official Fight Gear</p>
-      <nav style="margin-top: 15px; display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;" aria-label="Primary navigation">
-        <a href="#shop" class="btn-secondary" style="display: inline-block; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-radius: 4px; background: #8B0000; color: #fff; transition: all 0.3s;" aria-label="Shop now - browse products"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
-        <a href="/build" style="display: inline-block; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-radius: 4px; background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.8); transition: all 0.3s;" aria-label="Build your own custom apparel"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Your Own</a>
-        <button data-action="toggleCart" style="position: relative; background: none; border: 2px solid rgba(255,255,255,0.8); color: #fff; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s;" aria-label="Shopping cart" title="View Cart">
+      <nav style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;" aria-label="Primary navigation">
+        <a href="#shop" style="display: inline-block; padding: 8px 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; border-radius: 4px; background: #8B0000; color: #fff; transition: all 0.3s;" aria-label="Shop now - browse products"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop</a>
+        <a href="/build" style="display: inline-block; padding: 8px 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; border-radius: 4px; background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.7); transition: all 0.3s;" aria-label="Build your own custom apparel"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build</a>
+        <button data-action="toggleCart" style="position: relative; background: none; border: 2px solid rgba(255,255,255,0.7); color: #fff; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: all 0.3s;" aria-label="Shopping cart" title="View Cart">
           <i class="fas fa-shopping-cart"></i>
           <span id="cartBadge" style="position: absolute; top: -8px; right: -8px; background: #8B0000; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: none; align-items: center; justify-content: center; font-weight: 700;">0</span>
         </button>
@@ -3099,7 +3099,7 @@ app.get('/build', (c) => {
         <div class="graphics-grid" id="graphicsGrid"></div>
         
         <div class="additional-graphics" id="additionalGraphics" style="display: none;">
-          <h4 style="margin: 0 0 12px; font-size: 0.85rem; color: #666;">Additional Graphics (+$10 small / +$20 full)</h4>
+          <h4 style="margin: 0 0 12px; font-size: 0.85rem; color: #666;">Additional Graphics (+$10 small / +$15 full placement)</h4>
           <div id="additionalList"></div>
           <button class="add-graphic-btn" id="addGraphicBtn">
             <i class="fas fa-plus"></i> Add Another Graphic
@@ -3156,7 +3156,7 @@ app.get('/build', (c) => {
   <div class="modal-overlay" id="addGraphicModal">
     <div class="modal-content">
       <h3>Add Another Graphic</h3>
-      <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Select a graphic and placement. Small placements (chest/hat): +$10 | Full placements (front/back): +$20</p>
+      <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Select a graphic and choose where to place it. Each graphic adds to the total.</p>
       <div class="graphics-grid" id="modalGraphicsGrid"></div>
       <div style="margin-top: 20px;">
         <h4 style="margin: 0 0 10px; font-size: 0.9rem;">Placement</h4>
@@ -3509,11 +3509,11 @@ app.get('/build', (c) => {
       }, 4000);
     }
     
-    // Helper function to get price for additional graphic based on placement
-    function getAdditionalGraphicPrice(placementId) {
+    // Helper function to get price for a graphic based on placement
+    // Every graphic is charged individually: small placements (chest, hat): $10, Full placements (front/back): $15
+    function getGraphicPrice(placementId) {
       var p = placements.find(function(x) { return x.id === placementId; });
-      // Small placements (chest, hat): $10, Full placements (front/back): $20
-      return (p && p.isSmall) ? 10 : 20;
+      return (p && p.isSmall) ? 10 : 15;
     }
     
     function renderAdditionalGraphics() {
@@ -3527,7 +3527,7 @@ app.get('/build', (c) => {
           list.innerHTML = state.additionalGraphics.map(function(ag, i) {
             var g = graphics.find(function(x) { return x.id === ag.graphic; });
             var p = placements.find(function(x) { return x.id === ag.placement; });
-            var price = getAdditionalGraphicPrice(ag.placement);
+            var price = getGraphicPrice(ag.placement);
             return '<div class="additional-item">' +
               '<div class="info">' +
                 '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
@@ -3688,12 +3688,18 @@ app.get('/build', (c) => {
       var usedPlacements = [state.placement].concat(state.additionalGraphics.map(function(ag) { return ag.placement; }));
       var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
       var available = placements.filter(function(p) {
-        return (isHeadwear ? p.forHats : !p.forHats) && usedPlacements.indexOf(p.id) === -1;
+        return isHeadwear ? p.forHats : !p.forHats;
       });
       
       var placementGrid = document.getElementById('modalPlacementGrid');
       placementGrid.innerHTML = available.map(function(p) {
-        return '<div class="placement-option" data-id="' + p.id + '">' + p.name + '</div>';
+        var isUsed = usedPlacements.indexOf(p.id) !== -1;
+        var price = getGraphicPrice(p.id);
+        return '<div class="placement-option" data-id="' + p.id + '">' +
+          p.name +
+          (isUsed ? '<span style="font-size:0.7rem; display:block; color:#999;">+ additional graphic</span>' : '') +
+          '<span style="font-size:0.7rem; display:block; color:#8B0000;">+$' + price.toFixed(2) + '</span>' +
+        '</div>';
       }).join('');
       
       document.getElementById('addGraphicModal').classList.add('active');
@@ -3978,7 +3984,9 @@ app.get('/build', (c) => {
         var gr = graphics.find(function(x) { return x.id === state.graphic; });
         var pl = placements.find(function(x) { return x.id === state.placement; });
         if (gr && pl) {
-          lines.push({ label: gr.name + ' (' + pl.name + ')', price: 0, note: 'Included' });
+          var graphicPrice = getGraphicPrice(state.placement);
+          lines.push({ label: gr.name + ' (' + pl.name + ')', price: graphicPrice });
+          total += graphicPrice;
         }
       }
       
@@ -3986,7 +3994,7 @@ app.get('/build', (c) => {
         var gr = graphics.find(function(x) { return x.id === ag.graphic; });
         var pl = placements.find(function(x) { return x.id === ag.placement; });
         if (gr && pl) {
-          var price = getAdditionalGraphicPrice(ag.placement);
+          var price = getGraphicPrice(ag.placement);
           lines.push({ label: '+ ' + gr.name + ' (' + pl.name + ')', price: price });
           total += price;
         }
