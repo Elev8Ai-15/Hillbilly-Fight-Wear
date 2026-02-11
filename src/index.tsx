@@ -1568,7 +1568,6 @@ app.get('/', (c) => {
   </style>
   
   <script nonce="${nonce}">
-    var _img = 'img';
     let currentSlide = 0;
     let isPaused = false;
     let slideInterval;
@@ -2755,19 +2754,11 @@ app.get('/build', (c) => {
         </div>
       </div>
       
-      <!-- Step 3: Color -->
+      <!-- Step 3: Color (dynamically rendered based on garment) -->
       <div class="option-group" id="step3">
         <h3><span class="step-num">3</span> Select Color</h3>
         <div class="color-grid" id="colorGrid">
-          <div class="color-option white" data-color="white" onclick="selectColor('white')">
-            <span class="color-name">White</span>
-          </div>
-          <div class="color-option black selected" data-color="black" onclick="selectColor('black')">
-            <span class="color-name">Black</span>
-          </div>
-          <div class="color-option grey" data-color="grey" onclick="selectColor('grey')">
-            <span class="color-name">Grey</span>
-          </div>
+          <div style="color: #999; font-size: 0.9rem;">Select a garment first</div>
         </div>
       </div>
       
@@ -2779,7 +2770,7 @@ app.get('/build', (c) => {
         <div class="additional-graphics" id="additionalGraphics" style="display: none;">
           <h4 style="margin: 0 0 12px; font-size: 0.85rem; color: #666;">Additional Graphics (+$10 small / +$20 full)</h4>
           <div id="additionalList"></div>
-          <button class="add-graphic-btn" onclick="showAddGraphicModal()">
+          <button class="add-graphic-btn" id="addGraphicBtn">
             <i class="fas fa-plus"></i> Add Another Graphic
           </button>
         </div>
@@ -2805,8 +2796,8 @@ app.get('/build', (c) => {
       </div>
       
       <div class="view-toggle" id="viewToggle">
-        <button class="view-btn active" data-view="front" onclick="setView('front')">Front</button>
-        <button class="view-btn" data-view="back" onclick="setView('back')">Back</button>
+        <button class="view-btn active" data-view="front">Front</button>
+        <button class="view-btn" data-view="back">Back</button>
       </div>
       
       <!-- Order Summary -->
@@ -2823,7 +2814,7 @@ app.get('/build', (c) => {
           <span id="totalPrice">$0.00</span>
         </div>
         <div style="text-align:center; color:#4CAF50; font-size:0.8rem; font-weight:500; margin-bottom:8px;"><i class="fas fa-truck"></i> Free shipping included</div>
-        <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>
+        <button class="checkout-btn" id="checkoutBtn" disabled>
           <i class="fas fa-lock"></i> Proceed to Checkout
         </button>
       </div>
@@ -2841,8 +2832,8 @@ app.get('/build', (c) => {
         <div class="placement-grid" id="modalPlacementGrid"></div>
       </div>
       <div class="modal-buttons">
-        <button class="modal-cancel" onclick="closeAddGraphicModal()">Cancel</button>
-        <button class="modal-confirm" onclick="confirmAddGraphic()">Add Graphic</button>
+        <button class="modal-cancel" id="modalCancelBtn">Cancel</button>
+        <button class="modal-confirm" id="modalConfirmBtn">Add Graphic</button>
       </div>
     </div>
   </div>
@@ -2850,23 +2841,23 @@ app.get('/build', (c) => {
   <!-- Mobile Navigation -->
   <nav class="mobile-nav" id="mobileNav">
     <div class="mobile-nav-inner">
-      <button class="mobile-nav-btn active" onclick="scrollToStep(1)" data-step="1">
+      <button class="mobile-nav-btn active" data-step="1">
         <span class="step-circle">1</span>
         <span class="step-label">Garment</span>
       </button>
-      <button class="mobile-nav-btn" onclick="scrollToStep(2)" data-step="2">
+      <button class="mobile-nav-btn" data-step="2">
         <span class="step-circle">2</span>
         <span class="step-label">Size</span>
       </button>
-      <button class="mobile-nav-btn" onclick="scrollToStep(3)" data-step="3">
+      <button class="mobile-nav-btn" data-step="3">
         <span class="step-circle">3</span>
         <span class="step-label">Color</span>
       </button>
-      <button class="mobile-nav-btn" onclick="scrollToStep(4)" data-step="4">
+      <button class="mobile-nav-btn" data-step="4">
         <span class="step-circle">4</span>
         <span class="step-label">Graphics</span>
       </button>
-      <button class="mobile-nav-btn" onclick="scrollToStep(5)" data-step="5">
+      <button class="mobile-nav-btn" data-step="5">
         <span class="step-circle">5</span>
         <span class="step-label">Place</span>
       </button>
@@ -2934,11 +2925,82 @@ app.get('/build', (c) => {
       renderGraphics();
       renderPlacements();
       
+      // ---- Event delegation: all click handlers via container listeners ----
+      // Garment grid
+      document.getElementById('garmentGrid').addEventListener('click', function(e) {
+        var option = e.target.closest('.garment-option');
+        if (option && option.dataset.id) selectGarment(option.dataset.id);
+      });
+      
+      // Size grid
+      document.getElementById('sizeGrid').addEventListener('click', function(e) {
+        var option = e.target.closest('.size-option');
+        if (option && option.dataset.size) selectSize(option.dataset.size);
+      });
+      
+      // Color grid (dynamic content)
+      document.getElementById('colorGrid').addEventListener('click', function(e) {
+        var option = e.target.closest('.color-option');
+        if (option && option.dataset.color) selectColor(option.dataset.color);
+      });
+      
+      // Graphics grid
+      document.getElementById('graphicsGrid').addEventListener('click', function(e) {
+        var option = e.target.closest('.graphic-option');
+        if (option && option.dataset.id) selectGraphic(option.dataset.id);
+      });
+      
+      // Placement grid
+      document.getElementById('placementGrid').addEventListener('click', function(e) {
+        var option = e.target.closest('.placement-option');
+        if (option && option.dataset.id) selectPlacement(option.dataset.id);
+      });
+      
+      // View toggle buttons (Front/Back)
+      document.getElementById('viewToggle').addEventListener('click', function(e) {
+        var btn = e.target.closest('.view-btn');
+        if (btn && btn.dataset.view) setView(btn.dataset.view);
+      });
+      
+      // Add Graphic button
+      document.getElementById('addGraphicBtn').addEventListener('click', showAddGraphicModal);
+      
+      // Checkout button
+      document.getElementById('checkoutBtn').addEventListener('click', checkout);
+      
+      // Modal: graphic selection (delegated since content is dynamic)
+      document.getElementById('modalGraphicsGrid').addEventListener('click', function(e) {
+        var option = e.target.closest('.graphic-option');
+        if (option && option.dataset.id) modalSelectGraphic(option.dataset.id);
+      });
+      
+      // Modal: placement selection (delegated since content is dynamic)
+      document.getElementById('modalPlacementGrid').addEventListener('click', function(e) {
+        var option = e.target.closest('.placement-option');
+        if (option && option.dataset.id) modalSelectPlacement(option.dataset.id);
+      });
+      
+      // Modal: Cancel / Confirm buttons
+      document.getElementById('modalCancelBtn').addEventListener('click', closeAddGraphicModal);
+      document.getElementById('modalConfirmBtn').addEventListener('click', confirmAddGraphic);
+      
+      // Additional graphics: remove buttons (delegated since content is dynamic)
+      document.getElementById('additionalList').addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-remove-index]');
+        if (btn) removeAdditionalGraphic(parseInt(btn.dataset.removeIndex, 10));
+      });
+      
+      // Mobile nav buttons
+      document.getElementById('mobileNav').addEventListener('click', function(e) {
+        var btn = e.target.closest('.mobile-nav-btn');
+        if (btn && btn.dataset.step) scrollToStep(parseInt(btn.dataset.step, 10));
+      });
+      
       // Add scroll listener for mobile nav
       window.addEventListener('scroll', updateMobileNavOnScroll);
       
       // Check URL params
-      const params = new URLSearchParams(window.location.search);
+      var params = new URLSearchParams(window.location.search);
       if (params.get('garment')) {
         selectGarment(params.get('garment'));
       } else {
@@ -3006,12 +3068,14 @@ app.get('/build', (c) => {
       });
     }
     
-    var _img = 'img';
+    // ---- Render functions (no inline onclick — uses event delegation) ----
     function renderGarments() {
-      const grid = document.getElementById('garmentGrid');
+      var grid = document.getElementById('garmentGrid');
+      var colorKey = state.color || 'black';
       grid.innerHTML = garments.map(function(g) {
-        return '<div class="garment-option" data-id="' + g.id + '" onclick="selectGarment(\\'' + g.id + '\\')">' +
-          '<' + _img + ' src="' + g.images.black.front + '" alt="' + g.name + '" loading="lazy">' +
+        var imgSrc = (g.images[colorKey] || g.images.black || {}).front || '';
+        return '<div class="garment-option" data-id="' + g.id + '">' +
+          '<img src="' + imgSrc + '" alt="' + g.name + '" loading="lazy">' +
           '<div class="name">' + g.name + '</div>' +
           '<div class="price">$' + g.basePrice.toFixed(2) + '</div>' +
         '</div>';
@@ -3019,63 +3083,99 @@ app.get('/build', (c) => {
     }
     
     function renderSizes(garmentId) {
-      const grid = document.getElementById('sizeGrid');
-      const g = garments.find(function(x) { return x.id === garmentId; });
+      var grid = document.getElementById('sizeGrid');
+      var g = garments.find(function(x) { return x.id === garmentId; });
       if (!g) return;
-      
       grid.innerHTML = g.sizes.map(function(s) {
-        return '<div class="size-option" data-size="' + s + '" onclick="selectSize(\\'' + s + '\\')">' + s + '</div>';
+        return '<div class="size-option" data-size="' + s + '">' + s + '</div>';
+      }).join('');
+    }
+    
+    // Dynamic color rendering based on garment's available images
+    function renderColors(garmentId) {
+      var grid = document.getElementById('colorGrid');
+      var g = garments.find(function(x) { return x.id === garmentId; });
+      if (!g) {
+        grid.innerHTML = '<div style="color: #999; font-size: 0.9rem;">Select a garment first</div>';
+        return;
+      }
+      var colors = Object.keys(g.images);
+      grid.innerHTML = colors.map(function(c) {
+        var sel = (state.color === c) ? ' selected' : '';
+        // Map color names to CSS background values
+        var bgMap = { white: '#fff', black: '#1a1a1a', grey: '#808080', pink: '#FF69B4', red: '#c0392b', navy: '#2c3e50', blue: '#3498db' };
+        var bg = bgMap[c] || c;
+        return '<div class="color-option' + sel + '" data-color="' + c + '" style="background:' + bg + ';">' +
+          '<span class="color-name">' + c.charAt(0).toUpperCase() + c.slice(1) + '</span>' +
+        '</div>';
       }).join('');
     }
     
     function renderGraphics() {
-      const grid = document.getElementById('graphicsGrid');
+      var grid = document.getElementById('graphicsGrid');
       // Filter graphics based on current garment selection
-      const availableGraphics = graphics.filter(function(g) {
-        // If no restrictions, available for all garments
-        if (!g.restrictToGarments || g.restrictToGarments.length === 0) {
-          return true;
-        }
-        // If garment is selected, check if it's in the allowed list
-        if (state.garment) {
-          return g.restrictToGarments.includes(state.garment);
-        }
-        // If no garment selected yet, show all
+      var availableGraphics = graphics.filter(function(g) {
+        if (!g.restrictToGarments || g.restrictToGarments.length === 0) return true;
+        if (state.garment) return g.restrictToGarments.includes(state.garment);
         return true;
       });
       
       grid.innerHTML = availableGraphics.map(function(g) {
-        return '<div class="graphic-option" data-id="' + g.id + '" onclick="selectGraphic(\\'' + g.id + '\\')">' +
-          '<' + _img + ' src="' + g.thumbnail + '" alt="' + g.name + '">' +
+        return '<div class="graphic-option" data-id="' + g.id + '">' +
+          '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
           '<div class="name">' + g.name + '</div>' +
         '</div>';
       }).join('');
       
-      // If current selected graphic is no longer available, deselect it
+      // If current selected graphic is no longer available, deselect it and notify user
       if (state.graphic) {
         var stillAvailable = availableGraphics.find(function(g) { return g.id === state.graphic; });
         if (!stillAvailable) {
+          var oldGraphic = graphics.find(function(g) { return g.id === state.graphic; });
           state.graphic = null;
           updatePreview();
           updateSummary();
+          updateDragHint();
+          // Toast notification (P3 fix)
+          if (oldGraphic) {
+            showToast('"' + oldGraphic.name + '" is not available for this garment and was removed.');
+          }
         }
       }
     }
     
     function renderPlacements() {
-      const grid = document.getElementById('placementGrid');
-      const isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
+      var grid = document.getElementById('placementGrid');
+      var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
       
-      const available = placements.filter(function(p) {
+      var available = placements.filter(function(p) {
         return isHeadwear ? p.forHats : !p.forHats;
       });
       
       grid.innerHTML = available.map(function(p) {
         var selected = state.placement === p.id ? ' selected' : '';
-        return '<div class="placement-option' + selected + '" data-id="' + p.id + '" onclick="selectPlacement(\\'' + p.id + '\\')">' + p.name + '</div>';
+        return '<div class="placement-option' + selected + '" data-id="' + p.id + '">' + p.name + '</div>';
       }).join('');
       
       document.getElementById('viewToggle').style.display = isHeadwear ? 'none' : 'flex';
+    }
+    
+    // ---- Toast notification system ----
+    function showToast(message) {
+      var existing = document.getElementById('builderToast');
+      if (existing) existing.remove();
+      var toast = document.createElement('div');
+      toast.id = 'builderToast';
+      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:8px;font-size:0.9rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);max-width:90vw;text-align:center;opacity:0;transition:opacity 0.3s;';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      // Fade in
+      requestAnimationFrame(function() { toast.style.opacity = '1'; });
+      // Fade out and remove after 4 seconds
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 4000);
     }
     
     // Helper function to get price for additional graphic based on placement
@@ -3086,8 +3186,8 @@ app.get('/build', (c) => {
     }
     
     function renderAdditionalGraphics() {
-      const container = document.getElementById('additionalGraphics');
-      const list = document.getElementById('additionalList');
+      var container = document.getElementById('additionalGraphics');
+      var list = document.getElementById('additionalList');
       
       if (state.graphic) {
         container.style.display = 'block';
@@ -3099,13 +3199,13 @@ app.get('/build', (c) => {
             var price = getAdditionalGraphicPrice(ag.placement);
             return '<div class="additional-item">' +
               '<div class="info">' +
-                '<' + _img + ' src="' + g.thumbnail + '" alt="' + g.name + '">' +
+                '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
                 '<div>' +
                   '<div style="font-weight: 600; font-size: 0.85rem;">' + g.name + '</div>' +
-                  '<div style="font-size: 0.75rem; color: #666;">' + p.name + ' • +$' + price.toFixed(2) + '</div>' +
+                  '<div style="font-size: 0.75rem; color: #666;">' + p.name + ' &bull; +$' + price.toFixed(2) + '</div>' +
                 '</div>' +
               '</div>' +
-              '<button class="remove-btn" onclick="removeAdditionalGraphic(' + i + ')">' +
+              '<button class="remove-btn" data-remove-index="' + i + '">' +
                 '<i class="fas fa-times"></i>' +
               '</button>' +
             '</div>';
@@ -3118,7 +3218,7 @@ app.get('/build', (c) => {
       }
     }
     
-    // Selection handlers
+    // ---- Selection handlers ----
     function selectGarment(id) {
       state.garment = id;
       state.size = null;
@@ -3128,6 +3228,17 @@ app.get('/build', (c) => {
       });
       
       renderSizes(id);
+      
+      // Render dynamic color options for this garment
+      var g = garments.find(function(x) { return x.id === id; });
+      if (g) {
+        // If current color is not available for this garment, reset to first available
+        var availableColors = Object.keys(g.images);
+        if (availableColors.indexOf(state.color) === -1) {
+          state.color = availableColors[0] || 'black';
+        }
+      }
+      renderColors(id);
       
       var isHeadwear = id === 'trucker-hat' || id === 'beanie';
       state.placement = isHeadwear ? 'hat-front' : 'full-front';
@@ -3164,11 +3275,12 @@ app.get('/build', (c) => {
         el.classList.toggle('selected', el.dataset.color === color);
       });
       
-      // Update garment thumbnails
+      // Update garment thumbnails to reflect new color
       document.querySelectorAll('.garment-option').forEach(function(el) {
         var g = garments.find(function(x) { return x.id === el.dataset.id; });
         if (g && g.images[color]) {
-          el.querySelector('img').src = g.images[color].front;
+          var imgEl = el.querySelector('img');
+          if (imgEl) imgEl.src = g.images[color].front;
         }
       });
       
@@ -3202,7 +3314,7 @@ app.get('/build', (c) => {
         el.classList.toggle('selected', el.dataset.id === id);
       });
       
-      // Auto-switch view based on placement (skip updatePreview since we'll call it below)
+      // Auto-switch view based on placement
       if (id === 'full-back') {
         state.view = 'back';
         document.querySelectorAll('.view-btn').forEach(function(el) {
@@ -3236,8 +3348,8 @@ app.get('/build', (c) => {
       
       var graphicsGrid = document.getElementById('modalGraphicsGrid');
       graphicsGrid.innerHTML = graphics.map(function(g) {
-        return '<div class="graphic-option" data-id="' + g.id + '" onclick="modalSelectGraphic(\\'' + g.id + '\\')">' +
-          '<' + _img + ' src="' + g.thumbnail + '" alt="' + g.name + '">' +
+        return '<div class="graphic-option" data-id="' + g.id + '">' +
+          '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
           '<div class="name">' + g.name + '</div>' +
         '</div>';
       }).join('');
@@ -3250,7 +3362,7 @@ app.get('/build', (c) => {
       
       var placementGrid = document.getElementById('modalPlacementGrid');
       placementGrid.innerHTML = available.map(function(p) {
-        return '<div class="placement-option" data-id="' + p.id + '" onclick="modalSelectPlacement(\\'' + p.id + '\\')">' + p.name + '</div>';
+        return '<div class="placement-option" data-id="' + p.id + '">' + p.name + '</div>';
       }).join('');
       
       document.getElementById('addGraphicModal').classList.add('active');
@@ -3335,6 +3447,29 @@ app.get('/build', (c) => {
         // Check if this update is still current
         if (currentUpdateId !== previewUpdateId) return;
         if (!garmentImg || isError || !garmentImg.width || !garmentImg.height) {
+          // P2 fix: Show user-visible feedback when image fails to load
+          canvas.add(new fabric.Text('Preview unavailable', {
+            left: canvas.width / 2,
+            top: canvas.height / 2 - 15,
+            originX: 'center',
+            originY: 'center',
+            fontSize: 16,
+            fill: '#999',
+            fontFamily: 'Arial, sans-serif',
+            selectable: false,
+            evented: false
+          }));
+          canvas.add(new fabric.Text('Image could not be loaded', {
+            left: canvas.width / 2,
+            top: canvas.height / 2 + 10,
+            originX: 'center',
+            originY: 'center',
+            fontSize: 12,
+            fill: '#bbb',
+            fontFamily: 'Arial, sans-serif',
+            selectable: false,
+            evented: false
+          }));
           canvas.renderAll();
           return;
         }
