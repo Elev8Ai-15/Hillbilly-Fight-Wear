@@ -423,7 +423,7 @@ app.get('/', (c) => {
   `).join('')
 
   const dotsHtml = slides.map((_, index) => `
-    <button class="dot ${index === 0 ? 'active' : ''}" data-dot="${index}" onclick="goToSlide(${index})"></button>
+    <button class="dot ${index === 0 ? 'active' : ''}" data-dot="${index}" data-action="goToSlide" data-index="${index}"></button>
   `).join('')
 
   // HTML-escape helper for product titles in attributes (XSS prevention)
@@ -443,7 +443,7 @@ app.get('/', (c) => {
   // Helper function to generate product cards - opens detail modal on click
   // Product titles and vendors are HTML-escaped to prevent XSS
   const generateProductCards = (items: any[]) => items.map(product => `
-    <div class="product-card" role="listitem" aria-label="${escHtml(product.title)} - ${product.price}" onclick="openProductModal('${product.id}')" tabindex="0" onkeydown="if(event.key==='Enter')openProductModal('${product.id}')">
+    <div class="product-card" role="listitem" aria-label="${escHtml(product.title)} - ${product.price}" data-action="openProductModal" data-product-id="${product.id}" tabindex="0">
       <div class="product-image-wrapper">
         <img src="${product.image}" alt="${escHtml(product.title)}" class="product-image" loading="lazy" width="280" height="280">
       </div>
@@ -1217,7 +1217,7 @@ app.get('/', (c) => {
       <nav style="margin-top: 15px; display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;" aria-label="Primary navigation">
         <a href="#shop" class="btn-secondary" style="display: inline-block; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-radius: 4px; background: #8B0000; color: #fff; transition: all 0.3s;" aria-label="Shop now - browse products"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
         <a href="/build" style="display: inline-block; padding: 12px 30px; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-radius: 4px; background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.8); transition: all 0.3s;" aria-label="Build your own custom apparel"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Your Own</a>
-        <button onclick="toggleCart()" style="position: relative; background: none; border: 2px solid rgba(255,255,255,0.8); color: #fff; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s;" aria-label="Shopping cart" title="View Cart">
+        <button data-action="toggleCart" style="position: relative; background: none; border: 2px solid rgba(255,255,255,0.8); color: #fff; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s;" aria-label="Shopping cart" title="View Cart">
           <i class="fas fa-shopping-cart"></i>
           <span id="cartBadge" style="position: absolute; top: -8px; right: -8px; background: #8B0000; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: none; align-items: center; justify-content: center; font-weight: 700;">0</span>
         </button>
@@ -1321,7 +1321,7 @@ app.get('/', (c) => {
     ${slidesHtml}
     
     <!-- Slideshow Controls -->
-    <button class="slideshow-pause" id="pauseBtn" onclick="togglePause()" aria-label="Pause slideshow" aria-pressed="false" style="top: 20px;">
+    <button class="slideshow-pause" id="pauseBtn" data-action="togglePause" aria-label="Pause slideshow" aria-pressed="false" style="top: 20px;">
       <i class="fas fa-pause" id="pauseIcon" aria-hidden="true"></i>
     </button>
     
@@ -1345,64 +1345,64 @@ app.get('/', (c) => {
       <nav aria-label="Legal navigation" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
         <a href="/privacy-policy" style="color: #888; margin: 0 15px; text-decoration: none; font-size: 0.85rem;">Privacy Policy</a>
         <a href="/cookie-policy" style="color: #888; margin: 0 15px; text-decoration: none; font-size: 0.85rem;">Cookie Policy</a>
-        <a href="javascript:void(0)" onclick="showCookieSettings()" style="color: #888; margin: 0 15px; text-decoration: none; font-size: 0.85rem;">Cookie Settings</a>
+        <a href="javascript:void(0)" data-action="showCookieSettings" style="color: #888; margin: 0 15px; text-decoration: none; font-size: 0.85rem;">Cookie Settings</a>
       </nav>
     </div>
   </footer>
   
   <!-- ADA Compliance Accessibility Widget -->
-  <button class="ada-widget-btn" id="adaWidgetBtn" onclick="toggleAdaPanel()" aria-label="Accessibility Options" title="Accessibility Options">
+  <button class="ada-widget-btn" id="adaWidgetBtn" data-action="toggleAdaPanel" aria-label="Accessibility Options" title="Accessibility Options">
     <i class="fas fa-universal-access" aria-hidden="true"></i>
   </button>
   
   <div class="ada-panel" id="adaPanel" role="dialog" aria-label="Accessibility Settings">
     <div class="ada-panel-header">
       <h3><i class="fas fa-universal-access"></i> Accessibility</h3>
-      <button class="ada-panel-close" onclick="toggleAdaPanel()" aria-label="Close accessibility panel">&times;</button>
+      <button class="ada-panel-close" data-action="toggleAdaPanel" aria-label="Close accessibility panel">&times;</button>
     </div>
     <div class="ada-panel-body">
       <div class="ada-slider-row">
         <div class="ada-slider-label"><i class="fas fa-text-height"></i> Text Size</div>
-        <input type="range" class="ada-slider" id="adaFontSize" min="80" max="150" value="100" oninput="setFontSize(this.value)" aria-label="Adjust text size">
+        <input type="range" class="ada-slider" id="adaFontSize" min="80" max="150" value="100" aria-label="Adjust text size">
       </div>
       <div class="ada-option">
         <div class="ada-option-label"><i class="fas fa-adjust"></i> High Contrast</div>
-        <button class="ada-toggle" id="adaContrast" onclick="toggleA11y('contrast')" aria-label="Toggle high contrast" role="switch" aria-checked="false"></button>
+        <button class="ada-toggle" id="adaContrast" data-action="toggleA11y" data-feature="contrast" aria-label="Toggle high contrast" role="switch" aria-checked="false"></button>
       </div>
       <div class="ada-option">
         <div class="ada-option-label"><i class="fas fa-underline"></i> Highlight Links</div>
-        <button class="ada-toggle" id="adaLinks" onclick="toggleA11y('links')" aria-label="Toggle link highlighting" role="switch" aria-checked="false"></button>
+        <button class="ada-toggle" id="adaLinks" data-action="toggleA11y" data-feature="links" aria-label="Toggle link highlighting" role="switch" aria-checked="false"></button>
       </div>
       <div class="ada-option">
         <div class="ada-option-label"><i class="fas fa-font"></i> Readable Font</div>
-        <button class="ada-toggle" id="adaFont" onclick="toggleA11y('font')" aria-label="Toggle readable font" role="switch" aria-checked="false"></button>
+        <button class="ada-toggle" id="adaFont" data-action="toggleA11y" data-feature="font" aria-label="Toggle readable font" role="switch" aria-checked="false"></button>
       </div>
       <div class="ada-option">
         <div class="ada-option-label"><i class="fas fa-pause-circle"></i> Stop Animations</div>
-        <button class="ada-toggle" id="adaAnimations" onclick="toggleA11y('animations')" aria-label="Toggle stop animations" role="switch" aria-checked="false"></button>
+        <button class="ada-toggle" id="adaAnimations" data-action="toggleA11y" data-feature="animations" aria-label="Toggle stop animations" role="switch" aria-checked="false"></button>
       </div>
       <div class="ada-option">
         <div class="ada-option-label"><i class="fas fa-mouse-pointer"></i> Large Cursor</div>
-        <button class="ada-toggle" id="adaCursor" onclick="toggleA11y('cursor')" aria-label="Toggle large cursor" role="switch" aria-checked="false"></button>
+        <button class="ada-toggle" id="adaCursor" data-action="toggleA11y" data-feature="cursor" aria-label="Toggle large cursor" role="switch" aria-checked="false"></button>
       </div>
-      <button class="ada-reset" onclick="resetA11y()"><i class="fas fa-undo"></i> Reset All Settings</button>
+      <button class="ada-reset" data-action="resetA11y"><i class="fas fa-undo"></i> Reset All Settings</button>
     </div>
   </div>
   
   <!-- Product Detail Modal -->
-  <div id="productModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:10000; overflow-y:auto;" onclick="if(event.target===this)closeProductModal()">
+  <div id="productModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:10000; overflow-y:auto;" data-action="closeProductModalBg">
     <div style="background:#fff; max-width:600px; margin:40px auto; border-radius:12px; overflow:hidden; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.4);">
-      <button onclick="closeProductModal()" style="position:absolute; top:12px; right:16px; background:rgba(0,0,0,0.5); color:#fff; border:none; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:1.2rem; z-index:2; display:flex; align-items:center; justify-content:center;" aria-label="Close">&times;</button>
+      <button data-action="closeProductModal" style="position:absolute; top:12px; right:16px; background:rgba(0,0,0,0.5); color:#fff; border:none; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:1.2rem; z-index:2; display:flex; align-items:center; justify-content:center;" aria-label="Close">&times;</button>
       <div id="modalContent"></div>
     </div>
   </div>
   
   <!-- Cart Drawer -->
-  <div id="cartOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10001;" onclick="toggleCart()"></div>
+  <div id="cartOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10001;" data-action="toggleCart"></div>
   <div id="cartDrawer" style="position:fixed; top:0; right:-420px; width:400px; max-width:90vw; height:100%; background:#fff; z-index:10002; box-shadow:-4px 0 30px rgba(0,0,0,0.3); transition:right 0.3s ease; display:flex; flex-direction:column;">
     <div style="background:#1a1a1a; color:#fff; padding:20px; display:flex; justify-content:space-between; align-items:center;">
       <h3 style="margin:0; font-size:1.2rem; font-weight:600;"><i class="fas fa-shopping-cart"></i> Your Cart</h3>
-      <button onclick="toggleCart()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;" aria-label="Close cart">&times;</button>
+      <button data-action="toggleCart" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;" aria-label="Close cart">&times;</button>
     </div>
     <div id="cartItems" style="flex:1; overflow-y:auto; padding:15px;"></div>
     <div id="cartFooter" style="border-top:2px solid #eee; padding:20px; display:none;">
@@ -1411,10 +1411,10 @@ app.get('/', (c) => {
         <span id="cartTotal">$0.00</span>
       </div>
       <div style="text-align:center; margin-bottom:12px; color:#4CAF50; font-size:0.8rem; font-weight:500;"><i class="fas fa-truck"></i> All prices include free shipping</div>
-      <button onclick="cartCheckout()" style="width:100%; padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; cursor:pointer; transition:background 0.3s;">
+      <button data-action="cartCheckout" style="width:100%; padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; cursor:pointer; transition:background 0.3s;">
         <i class="fas fa-lock"></i> Proceed to Checkout
       </button>
-      <button onclick="toggleCart()" style="width:100%; padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; font-weight:500; cursor:pointer; margin-top:8px; transition:all 0.3s;">
+      <button data-action="toggleCart" style="width:100%; padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; font-weight:500; cursor:pointer; margin-top:8px; transition:all 0.3s;">
         <i class="fas fa-arrow-left"></i> Continue Shopping
       </button>
     </div>
@@ -1449,9 +1449,9 @@ app.get('/', (c) => {
           <span class="cookie-desc">We use cookies to enhance your experience. <a href="/cookie-policy">Learn more</a></span>
         </div>
         <div class="cookie-compact-btns">
-          <button onclick="acceptAllCookies()" class="cookie-btn accept-all">Accept All</button>
-          <button onclick="rejectNonEssential()" class="cookie-btn reject">Reject</button>
-          <button onclick="toggleCookieDetails()" class="cookie-btn settings-btn" id="cookieSettingsBtn"><i class="fas fa-cog"></i> <span class="settings-label">Settings</span></button>
+          <button data-action="acceptAllCookies" class="cookie-btn accept-all">Accept All</button>
+          <button data-action="rejectNonEssential" class="cookie-btn reject">Reject</button>
+          <button data-action="toggleCookieDetails" class="cookie-btn settings-btn" id="cookieSettingsBtn"><i class="fas fa-cog"></i> <span class="settings-label">Settings</span></button>
         </div>
       </div>
       <div class="cookie-details" id="cookieDetails" style="display: none;">
@@ -1470,7 +1470,7 @@ app.get('/', (c) => {
           </div>
         </div>
         <div class="cookie-detail-btns">
-          <button onclick="savePreferences()" class="cookie-btn save-prefs">Save Preferences</button>
+          <button data-action="savePreferences" class="cookie-btn save-prefs">Save Preferences</button>
         </div>
       </div>
     </div>
@@ -1717,6 +1717,91 @@ app.get('/', (c) => {
       
       // Restore ADA settings
       restoreA11ySettings();
+      
+      // ==========================================
+      // GLOBAL EVENT DELEGATION
+      // All interactive elements use data-action attributes
+      // instead of inline onclick (which is blocked by CSP nonce).
+      // ==========================================
+      document.addEventListener('click', function(e) {
+        var el = e.target.closest('[data-action]');
+        if (!el) return;
+        var action = el.getAttribute('data-action');
+        
+        switch(action) {
+          // Cookie consent
+          case 'acceptAllCookies': acceptAllCookies(); break;
+          case 'rejectNonEssential': rejectNonEssential(); break;
+          case 'toggleCookieDetails': toggleCookieDetails(); break;
+          case 'savePreferences': savePreferences(); break;
+          case 'showCookieSettings': e.preventDefault(); showCookieSettings(); break;
+          
+          // ADA accessibility
+          case 'toggleAdaPanel': toggleAdaPanel(); break;
+          case 'toggleA11y': toggleA11y(el.getAttribute('data-feature')); break;
+          case 'resetA11y': resetA11y(); break;
+          
+          // Slideshow
+          case 'togglePause': togglePause(); break;
+          case 'goToSlide': goToSlide(parseInt(el.getAttribute('data-index'), 10)); break;
+          
+          // Product cards & modal
+          case 'openProductModal': openProductModal(el.getAttribute('data-product-id')); break;
+          case 'closeProductModal': closeProductModal(); break;
+          case 'closeProductModalBg':
+            if (e.target === el) closeProductModal();
+            break;
+          
+          // Modal option steps
+          case 'selectModalSize':
+            selectModalSize(el.getAttribute('data-product-id'), el.getAttribute('data-size'));
+            break;
+          case 'selectModalStyle':
+            selectModalStyle(el.getAttribute('data-product-id'), el.getAttribute('data-style'));
+            break;
+          case 'selectModalColor':
+            selectModalColor(el.getAttribute('data-product-id'), el.getAttribute('data-color'));
+            break;
+          case 'renderGarmentModalBack':
+            var pid = el.getAttribute('data-product-id');
+            var step = el.getAttribute('data-step');
+            var prod = allShopProducts.find(function(p) { return p.id === pid; });
+            if (prod) renderGarmentModal(prod, step);
+            break;
+          
+          // Cart
+          case 'toggleCart': toggleCart(); break;
+          case 'cartCheckout': cartCheckout(); break;
+          case 'addToCart':
+            addToCart(
+              el.getAttribute('data-product-id'),
+              el.getAttribute('data-size'),
+              el.getAttribute('data-color'),
+              el.getAttribute('data-style')
+            );
+            break;
+          case 'changeQty':
+            changeQty(parseInt(el.getAttribute('data-index'), 10), parseInt(el.getAttribute('data-delta'), 10));
+            break;
+          case 'removeFromCart':
+            removeFromCart(parseInt(el.getAttribute('data-index'), 10));
+            break;
+        }
+      });
+      
+      // Handle keyboard Enter on product cards (accessibility)
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          var el = e.target.closest('[data-action="openProductModal"]');
+          if (el) openProductModal(el.getAttribute('data-product-id'));
+        }
+      });
+      
+      // Handle ADA font size slider (input event, not click)
+      var fontSlider = document.getElementById('adaFontSize');
+      if (fontSlider) {
+        fontSlider.addEventListener('input', function() { setFontSize(this.value); });
+      }
     });
     
     // ========================================
@@ -1885,13 +1970,13 @@ app.get('/', (c) => {
             '<div style="font-weight:600; font-size:0.9rem; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(item.title) + '</div>' +
             '<div style="margin-bottom:6px;">' + details + '</div>' +
             '<div style="display:flex; align-items:center; gap:8px;">' +
-              '<button onclick="changeQty(' + index + ',-1)" style="width:28px; height:28px; border:1px solid #ddd; background:#fff; border-radius:4px; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">-</button>' +
+              '<button data-action="changeQty" data-index="' + index + '" data-delta="-1" style="width:28px; height:28px; border:1px solid #ddd; background:#fff; border-radius:4px; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">-</button>' +
               '<span style="font-size:0.9rem; min-width:20px; text-align:center;">' + item.qty + '</span>' +
-              '<button onclick="changeQty(' + index + ',1)" style="width:28px; height:28px; border:1px solid #ddd; background:#fff; border-radius:4px; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">+</button>' +
+              '<button data-action="changeQty" data-index="' + index + '" data-delta="1" style="width:28px; height:28px; border:1px solid #ddd; background:#fff; border-radius:4px; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">+</button>' +
               '<span style="margin-left:auto; font-weight:600;">$' + subtotal.toFixed(2) + '</span>' +
             '</div>' +
           '</div>' +
-          '<button onclick="removeFromCart(' + index + ')" style="background:none; border:none; color:#999; cursor:pointer; font-size:0.9rem; padding:4px;" aria-label="Remove item"><i class="fas fa-trash"></i></button>' +
+          '<button data-action="removeFromCart" data-index="' + index + '" style="background:none; border:none; color:#999; cursor:pointer; font-size:0.9rem; padding:4px;" aria-label="Remove item"><i class="fas fa-trash"></i></button>' +
         '</div>';
       });
       container.innerHTML = html;
@@ -2040,7 +2125,7 @@ app.get('/', (c) => {
         // SIZE SELECTION STEP
         var sizesHtml = product.sizes.map(function(s) {
           var sel = modalState.selectedSize === s ? 'background:#8B0000; color:#fff; border-color:#8B0000;' : '';
-          return '<button onclick="selectModalSize(\\'' + product.id + '\\',\\'' + s + '\\')" style="padding:12px 20px; border:2px solid #ddd; background:#fff; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; min-width:60px; transition:all 0.2s; ' + sel + '">' + s + '</button>';
+          return '<button data-action="selectModalSize" data-product-id="' + product.id + '" data-size="' + s + '" style="padding:12px 20px; border:2px solid #ddd; background:#fff; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; min-width:60px; transition:all 0.2s; ' + sel + '">' + s + '</button>';
         }).join('');
         
         mc.innerHTML = imageHtml + headerHtml +
@@ -2054,7 +2139,7 @@ app.get('/', (c) => {
         var stylesHtml = (product.styles || []).map(function(st) {
           var sel = modalState.selectedStyle === st ? 'background:#8B0000; color:#fff; border-color:#8B0000;' : '';
           var icon = st === 'Zip-Up' ? 'fa-vest' : 'fa-tshirt';
-          return '<button onclick="selectModalStyle(\\'' + product.id + '\\',\\'' + st + '\\')" style="padding:14px 24px; border:2px solid #ddd; background:#fff; border-radius:8px; cursor:pointer; font-size:1rem; font-weight:600; min-width:120px; transition:all 0.2s; ' + sel + '"><i class="fas ' + icon + '" style="margin-right:6px;"></i>' + st + '</button>';
+          return '<button data-action="selectModalStyle" data-product-id="' + product.id + '" data-style="' + st + '" style="padding:14px 24px; border:2px solid #ddd; background:#fff; border-radius:8px; cursor:pointer; font-size:1rem; font-weight:600; min-width:120px; transition:all 0.2s; ' + sel + '"><i class="fas ' + icon + '" style="margin-right:6px;"></i>' + st + '</button>';
         }).join('');
         
         mc.innerHTML = imageHtml + headerHtml + summaryPills() +
@@ -2063,7 +2148,7 @@ app.get('/', (c) => {
             '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + stylesHtml + '</div>' +
           '</div>' +
           '<div style="padding:15px 20px 20px; display:flex; gap:10px;">' +
-            '<button onclick="renderGarmentModal(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\';}),\\'size\\')" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
+            '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="size" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
           '</div>';
           
       } else if (step === 'color') {
@@ -2072,7 +2157,7 @@ app.get('/', (c) => {
           var bg = c.toLowerCase() === 'black' ? '#1a1a1a' : c.toLowerCase() === 'white' ? '#fff' : c.toLowerCase() === 'grey' ? '#808080' : c.toLowerCase() === 'pink' ? '#FF69B4' : '#ddd';
           var textColor = (c.toLowerCase() === 'white' || c.toLowerCase() === 'pink') ? '#333' : '#fff';
           var sel = modalState.selectedColor === c ? 'box-shadow:0 0 0 3px #8B0000; transform:scale(1.05);' : '';
-          return '<button onclick="selectModalColor(\\'' + product.id + '\\',\\'' + c + '\\')" style="padding:14px 24px; border:2px solid #ddd; background:' + bg + '; color:' + textColor + '; border-radius:8px; cursor:pointer; font-size:0.95rem; font-weight:600; min-width:80px; transition:all 0.2s; ' + sel + '">' + c + '</button>';
+          return '<button data-action="selectModalColor" data-product-id="' + product.id + '" data-color="' + c + '" style="padding:14px 24px; border:2px solid #ddd; background:' + bg + '; color:' + textColor + '; border-radius:8px; cursor:pointer; font-size:0.95rem; font-weight:600; min-width:80px; transition:all 0.2s; ' + sel + '">' + c + '</button>';
         }).join('');
         
         // Back goes to style step if product has styles, otherwise to size
@@ -2084,16 +2169,16 @@ app.get('/', (c) => {
             '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + colorsHtml + '</div>' +
           '</div>' +
           '<div style="padding:15px 20px 20px; display:flex; gap:10px;">' +
-            '<button onclick="renderGarmentModal(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\';}),\\'' + backStep + '\\')" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
+            '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="' + backStep + '" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
           '</div>';
           
       } else if (step === 'confirm') {
         // CONFIRM + ADD TO CART
         mc.innerHTML = imageHtml + headerHtml + summaryPills() +
           '<div style="padding:10px 20px 20px; display:flex; flex-direction:column; gap:10px;">' +
-            '<button onclick="addToCart(\\'' + product.id + '\\',\\'' + modalState.selectedSize + '\\',\\'' + modalState.selectedColor + '\\',\\'' + (modalState.selectedStyle || '') + '\\')" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
-            '<button onclick="closeProductModal()" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
-            '<button onclick="renderGarmentModal(allShopProducts.find(function(p){return p.id===\\'' + product.id + '\\';}),\\'size\\')" style="padding:10px; background:transparent; color:#666; border:none; cursor:pointer; font-size:0.85rem; text-decoration:underline;">Change Options</button>' +
+            '<button data-action="addToCart" data-product-id="' + product.id + '" data-size="' + modalState.selectedSize + '" data-color="' + modalState.selectedColor + '" data-style="' + (modalState.selectedStyle || '') + '" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
+            '<button data-action="closeProductModal" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
+            '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="size" style="padding:10px; background:transparent; color:#666; border:none; cursor:pointer; font-size:0.85rem; text-decoration:underline;">Change Options</button>' +
           '</div>';
       }
     }
@@ -2135,8 +2220,8 @@ app.get('/', (c) => {
           '<div style="color:#8B0000; font-size:1.3rem; font-weight:600; margin-bottom:4px;">' + product.price + '</div>' +
           '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-bottom:16px;"><i class="fas fa-truck"></i> Free shipping included</div>' +
           '<div style="display:flex; flex-direction:column; gap:10px;">' +
-            '<button onclick="addToCart(\\'' + product.id + '\\',\\'\\',\\'\\')" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
-            '<button onclick="closeProductModal()" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
+            '<button data-action="addToCart" data-product-id="' + product.id + '" data-size="" data-color="" data-style="" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
+            '<button data-action="closeProductModal" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
           '</div>' +
         '</div>';
     }
