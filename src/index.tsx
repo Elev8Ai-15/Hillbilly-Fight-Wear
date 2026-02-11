@@ -3,7 +3,6 @@ import { cors } from 'hono/cors'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
-  STRIPE_PUBLISHABLE_KEY?: string
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
@@ -320,6 +319,8 @@ const mensClothing = [
 ]
 
 // WOMENS CLOTHING - Tank Tops
+// Note: Pink color option is offered but no garment preview images exist for pink yet;
+// getColorPreviewImage will gracefully fall back to the default product image
 const womensClothing = [
   { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
   { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White','Pink'] },
@@ -363,6 +364,7 @@ const decals = [
   { id: 'd8', title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-obama-tap.png?v=13', type: 'decal' },
   { id: 'd9', title: 'Decal - CHM', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-cunt.png?v=13', type: 'decal' },
   { id: 'd10', title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hfw.png?v=13', type: 'decal' },
+  // TODO: d11 needs its own distinct image (sticker-gnf-redblue.png); currently sharing sticker-gnf.png with d1
   { id: 'd11', title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-gnf.png?v=13', type: 'decal' },
   { id: 'd12', title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-thumpin-is-lovin.png?v=13', type: 'decal' },
   { id: 'd13', title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-community.png?v=13', type: 'decal' },
@@ -372,12 +374,12 @@ const decals = [
 // Combined shopProducts for API endpoint
 const shopProducts = [...mensClothing, ...womensClothing, ...kidsClothing, ...hats, ...decals]
 
-// Featured products for Build Your Own section (internal links)
+// Featured products for Build Your Own section (internal links, prices reflect base T-shirt cost)
 // Only 3 featured: GPG Design, Human Cockfighter, Thump a Stranger
 const products = [
-  { id: 1, title: 'T-Shirt - GPG Design', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/graphics/gpg-design.png', url: '/build?garment=tshirt&graphic=gpg-design' },
-  { id: 2, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-hcf.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
-  { id: 3, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$23.00', image: '/images/stickers/sticker-thump.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
+  { id: 1, title: 'T-Shirt - GPG Design', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/graphics/gpg-design.png', url: '/build?garment=tshirt&graphic=gpg-design' },
+  { id: 2, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-hcf.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
+  { id: 3, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-thump.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
 ]
 
 const slides = [
@@ -411,25 +413,29 @@ app.get('/', (c) => {
     <button class="dot ${index === 0 ? 'active' : ''}" data-dot="${index}" onclick="goToSlide(${index})"></button>
   `).join('')
 
+  // HTML-escape helper for product titles in attributes (XSS prevention)
+  const escHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+
   const productsHtml = products.map(product => `
     <a href="${product.url}" class="product-card">
       <div class="product-image-wrapper">
-        <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
+        <img src="${product.image}" alt="${escHtml(product.title)}" class="product-image" loading="lazy">
       </div>
-      <h4 class="product-title">${product.title}</h4>
-      <div class="product-vendor">${product.vendor}</div>
+      <h4 class="product-title">${escHtml(product.title)}</h4>
+      <div class="product-vendor">${escHtml(product.vendor)}</div>
       <div class="product-price">${product.price}</div>
     </a>
   `).join('')
 
   // Helper function to generate product cards - opens detail modal on click
-  const generateProductCards = (products: any[]) => products.map(product => `
-    <div class="product-card" role="listitem" aria-label="${product.title} - ${product.price}" onclick="openProductModal('${product.id}')" tabindex="0" onkeydown="if(event.key==='Enter')openProductModal('${product.id}')">
+  // Product titles and vendors are HTML-escaped to prevent XSS
+  const generateProductCards = (items: any[]) => items.map(product => `
+    <div class="product-card" role="listitem" aria-label="${escHtml(product.title)} - ${product.price}" onclick="openProductModal('${product.id}')" tabindex="0" onkeydown="if(event.key==='Enter')openProductModal('${product.id}')">
       <div class="product-image-wrapper">
-        <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy" width="280" height="280">
+        <img src="${product.image}" alt="${escHtml(product.title)}" class="product-image" loading="lazy" width="280" height="280">
       </div>
-      <h4 class="product-title">${product.title}</h4>
-      <div class="product-vendor">${product.vendor}</div>
+      <h4 class="product-title">${escHtml(product.title)}</h4>
+      <div class="product-vendor">${escHtml(product.vendor)}</div>
       <div class="product-price" aria-label="Price: ${product.price}">${product.price}</div>
     </div>
   `).join('')
@@ -508,9 +514,8 @@ app.get('/', (c) => {
       "https://www.instagram.com/hillbillyfightwear"
     ],
     "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://hillbillyfightwear.com/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
+      "@type": "ViewAction",
+      "target": "https://hillbillyfightwear.com"
     }
   }
   </script>
@@ -1821,19 +1826,21 @@ app.get('/', (c) => {
         footer.style.display = 'none';
         return;
       }
+      // HTML-escape helper for user-facing text in innerHTML
+      function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
       var html = '';
       var total = 0;
       cart.forEach(function(item, index) {
         var subtotal = item.price * item.qty;
         total += subtotal;
         var details = '';
-        if (item.size) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Size: ' + item.size + '</span> ';
-        if (item.style) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Style: ' + item.style + '</span> ';
-        if (item.color) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Color: ' + item.color + '</span>';
+        if (item.size) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Size: ' + esc(item.size) + '</span> ';
+        if (item.style) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Style: ' + esc(item.style) + '</span> ';
+        if (item.color) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Color: ' + esc(item.color) + '</span>';
         html += '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; align-items:flex-start;">' +
-          '<img src="' + item.image + '" alt="' + item.title + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#f7f7f7; flex-shrink:0;">' +
+          '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#f7f7f7; flex-shrink:0;">' +
           '<div style="flex:1; min-width:0;">' +
-            '<div style="font-weight:600; font-size:0.9rem; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + item.title + '</div>' +
+            '<div style="font-weight:600; font-size:0.9rem; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(item.title) + '</div>' +
             '<div style="margin-bottom:6px;">' + details + '</div>' +
             '<div style="display:flex; align-items:center; gap:8px;">' +
               '<button onclick="changeQty(' + index + ',-1)" style="width:28px; height:28px; border:1px solid #ddd; background:#fff; border-radius:4px; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">-</button>' +
@@ -1852,30 +1859,34 @@ app.get('/', (c) => {
     
     function addToCart(productId, size, color, style) {
       try {
-      var product = allShopProducts.find(function(p) { return p.id === productId; });
-      if (!product) return;
-      // Check for duplicate (same product, size, color, style)
-      var existing = cart.findIndex(function(item) {
-        return item.productId === productId && item.size === (size||'') && item.color === (color||'') && item.style === (style||'');
-      });
-      if (existing >= 0) {
-        cart[existing].qty += 1;
-      } else {
-        cart.push({
-          productId: productId,
-          title: product.title,
-          price: product.priceNum,
-          image: product.image,
-          size: size || '',
-          color: color || '',
-          style: style || '',
-          qty: 1
+        var product = allShopProducts.find(function(p) { return p.id === productId; });
+        if (!product) return;
+        // Use color-specific preview image if available, otherwise default product image
+        var cartImage = (color && typeof getColorPreviewImage === 'function')
+          ? getColorPreviewImage(product, color)
+          : product.image;
+        // Check for duplicate (same product, size, color, style)
+        var existing = cart.findIndex(function(item) {
+          return item.productId === productId && item.size === (size||'') && item.color === (color||'') && item.style === (style||'');
         });
-      }
-      saveCart();
-      closeProductModal();
-      toggleCart();
-      } catch(e) { /* addToCart error - silently handled */ }
+        if (existing >= 0) {
+          cart[existing].qty += 1;
+        } else {
+          cart.push({
+            productId: productId,
+            title: product.title,
+            price: product.priceNum,
+            image: cartImage,
+            size: size || '',
+            color: color || '',
+            style: style || '',
+            qty: 1
+          });
+        }
+        saveCart();
+        closeProductModal();
+        toggleCart();
+      } catch(e) { console.error('addToCart error:', e); }
     }
     
     function changeQty(index, delta) {
@@ -1949,7 +1960,7 @@ app.get('/', (c) => {
       
       document.getElementById('productModal').style.display = 'block';
       document.body.style.overflow = 'hidden';
-      } catch(e) { /* openProductModal error - silently handled */ }
+      } catch(e) { console.error('openProductModal error:', e); }
     }
     
     function closeProductModal() {
@@ -1961,15 +1972,15 @@ app.get('/', (c) => {
       modalState.step = step;
       var mc = document.getElementById('modalContent');
       
-      // Shop Now: product image stays unchanged regardless of color selection
-      var previewImg = product.image;
+      // Shop Now: update preview image based on selected color (via garmentColorImages)
+      var previewImg = modalState.selectedColor ? getColorPreviewImage(product, modalState.selectedColor) : product.image;
       
       var imageHtml = '<div style="background:#f7f7f7; padding:20px; text-align:center; position:relative;">' +
-        '<' + _img + ' src="' + previewImg + '" alt="' + product.title + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
+        '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
       '</div>';
       
       var headerHtml = '<div style="padding:20px 20px 10px;">' +
-        '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title + '</h3>' +
+        '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</h3>' +
         '<div style="color:#8B0000; font-size:1.2rem; font-weight:600;">' + product.price + '</div>' +
         '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-top:4px;"><i class="fas fa-truck"></i> Free shipping included</div>' +
       '</div>';
@@ -2072,11 +2083,12 @@ app.get('/', (c) => {
     
     function renderDecalModal(product) {
       var mc = document.getElementById('modalContent');
+      var safeTitle = product.title.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
       mc.innerHTML = '<div style="background:#f7f7f7; padding:30px; text-align:center;">' +
-          '<img src="' + product.image + '" alt="' + product.title + '" style="max-width:100%; max-height:400px; object-fit:contain;">' +
+          '<img src="' + product.image + '" alt="' + safeTitle + '" style="max-width:100%; max-height:400px; object-fit:contain;">' +
         '</div>' +
         '<div style="padding:20px;">' +
-          '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title + '</h3>' +
+          '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + safeTitle + '</h3>' +
           '<div style="color:#666; font-size:0.9rem; margin-bottom:8px;">' + product.vendor + '</div>' +
           '<div style="color:#8B0000; font-size:1.3rem; font-weight:600; margin-bottom:4px;">' + product.price + '</div>' +
           '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-bottom:16px;"><i class="fas fa-truck"></i> Free shipping included</div>' +
@@ -2947,13 +2959,7 @@ app.get('/build', (c) => {
         }
       });
       
-      // Update graphic positions after moving
-      canvas.on('object:modified', function(e) {
-        var obj = e.target;
-        if (obj && obj.isGraphic) {
-          // Graphic position updated
-        }
-      });
+      // Graphic position updated after drag/resize (no-op; kept for future logging)
       
       // Enforce max/min scale limits during scaling
       canvas.on('object:scaling', function(e) {
@@ -3386,13 +3392,13 @@ app.get('/build', (c) => {
           return;
         }
         
-        fabric.Image.fromURL(graphic.fullImage, function(graphicImg) {
+        fabric.Image.fromURL(graphic.fullImage, function(graphicImg, isError) {
           // Check if still current update
           if (updateId !== previewUpdateId) return;
           
           loadedCount++;
           
-          if (!graphicImg) {
+          if (!graphicImg || isError || !graphicImg.width || !graphicImg.height) {
             if (loadedCount === graphicsToShow.length) canvas.renderAll();
             return;
           }
