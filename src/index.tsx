@@ -355,14 +355,13 @@ const hats = [
   { id: 'h3', title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_site_pic.jpg?v=1544660239', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
   { id: 'h4', title: 'Fitted Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfighter_fitted.jpg?v=1556679360', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
   { id: 'h5', title: 'Fitted Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_fitted.jpg?v=1556679540', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
-  { id: 'h6', title: 'Fitted Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_9227.JPG?v=1559137116', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+
   { id: 'h7', title: 'Adjustable Hat - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/It_s_A_Fun_Ride_adjustable_trucker.jpg?v=1556678568', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black','White'] },
   { id: 'h8', title: 'Adjustable Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_adjusted.jpg?v=1556679508', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
   { id: 'h9', title: 'Adjustable Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfigher_adjustable.jpg?v=1556679321', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
   { id: 'h10', title: 'Adjustable Hat - GNF', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_adjustable_trucker.jpg?v=1556678861', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black','White'] },
   { id: 'h11', title: 'Adjustable Hat - Cockfighter Grey', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_4304.JPG?v=1559137530', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Grey'] },
-  { id: 'h12', title: 'Adjustable Hat - Cockfighter Black', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_1265.JPG?v=1559137825', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
-  { id: 'h13', title: 'Adjustable Hat - Hard Hittin', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_6519.JPG?v=1559137929', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] }
+  { id: 'h12', title: 'Adjustable Hat - Cockfighter Black', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/IMG_1265.JPG?v=1559137825', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] }
 ]
 
 // DECALS / STICKERS
@@ -595,13 +594,192 @@ app.get('/', (c) => {
       text-rendering: optimizeLegibility;
     }
     
-    .announcement-bar {
-      background-color: #1a1a1a;
+    /* =============================================
+       COMPACT NAVIGATION BAR
+       ============================================= */
+    .site-nav {
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 44px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand {
       color: #fff;
-      text-align: center;
-      padding: 10px 20px;
-      font-size: 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-brand:hover { color: #ccc; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
       letter-spacing: 1px;
+      text-decoration: none;
+      border-radius: 3px;
+      color: #fff;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      transition: all 0.25s;
+      white-space: nowrap;
+    }
+    .nav-tab:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.6);
+    }
+    .nav-tab-deals {
+      background: #8B0000;
+      border-color: #8B0000;
+      animation: pulse-deals 2s ease-in-out infinite;
+    }
+    .nav-tab-deals:hover {
+      background: #a50000;
+      border-color: #a50000;
+    }
+    @keyframes pulse-deals {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(139,0,0,0.4); }
+      50% { box-shadow: 0 0 8px 2px rgba(139,0,0,0.6); }
+    }
+    .nav-cart {
+      position: relative;
+      background: none;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.25s;
+    }
+    .nav-cart:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.6);
+    }
+    .cart-badge {
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      background: #8B0000;
+      color: #fff;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.65rem;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    @media (max-width: 480px) {
+      .site-nav { padding: 0 10px; height: 40px; }
+      .nav-brand { font-size: 0.75rem; letter-spacing: 1px; }
+      .nav-tab { padding: 5px 8px; font-size: 0.68rem; gap: 3px; }
+      .nav-tab i { display: none; }
+    }
+
+    /* =============================================
+       PROMOTIONS BANNER (below hero)
+       ============================================= */
+    .promo-section {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);
+      padding: 40px 20px;
+      text-align: center;
+      color: #fff;
+    }
+    .promo-section h2 {
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+    .promo-cards {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto 24px;
+    }
+    .promo-card {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(139,0,0,0.5);
+      border-radius: 10px;
+      padding: 28px 24px;
+      flex: 1 1 260px;
+      max-width: 380px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .promo-card:hover {
+      transform: translateY(-4px);
+      border-color: #8B0000;
+    }
+    .promo-card .promo-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #ff4444;
+    }
+    .promo-card h3 {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .promo-card p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .promo-card .promo-highlight {
+      color: #ff6666;
+      font-weight: 700;
+      font-size: 1.4rem;
+      display: block;
+      margin-top: 6px;
+    }
+    .promo-permanent {
+      margin-top: 8px;
+      padding: 14px 28px;
+      background: rgba(139,0,0,0.3);
+      border: 1px solid rgba(139,0,0,0.5);
+      border-radius: 6px;
+      display: inline-block;
+    }
+    .promo-permanent p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 1px;
+    }
+    .promo-permanent i {
+      color: #ff6666;
+      margin-right: 6px;
+    }
+    @media (max-width: 600px) {
+      .promo-section { padding: 28px 14px; }
+      .promo-section h2 { font-size: 1.2rem; letter-spacing: 2px; }
+      .promo-card { padding: 20px 16px; }
+      .promo-card h3 { font-size: 1rem; }
+      .promo-card .promo-highlight { font-size: 1.15rem; }
     }
     
     /* HERO CAROUSEL - Full screen background carousel */
@@ -1436,24 +1614,20 @@ app.get('/', (c) => {
   <!-- Accessibility: Skip to main content link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   
-  <!-- Announcement Bar + Logo Header -->
+  <!-- Compact Navigation Bar -->
   <header role="banner">
-    <div class="announcement-bar" aria-label="Announcement">
-      <p style="margin: 0;">🔥 NEW: Build Your Own Custom Apparel! 🔥</p>
-    </div>
-    <div style="background: #0a0a0a; padding: 10px 20px; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap;">
-      <a href="/" style="display: inline-flex; align-items: center; text-decoration: none;">
-        <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear" style="max-width: 140px; width: 100%; height: auto; filter: drop-shadow(0 2px 10px rgba(139, 0, 0, 0.4));">
-      </a>
-      <nav style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;" aria-label="Primary navigation">
-        <a href="#shop" style="display: inline-block; padding: 8px 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; border-radius: 4px; background: #8B0000; color: #fff; transition: all 0.3s;" aria-label="Shop now - browse products"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop</a>
-        <a href="/build" style="display: inline-block; padding: 8px 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; border-radius: 4px; background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.7); transition: all 0.3s;" aria-label="Build your own custom apparel"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build</a>
-        <button data-action="toggleCart" style="position: relative; background: none; border: 2px solid rgba(255,255,255,0.7); color: #fff; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: all 0.3s;" aria-label="Shopping cart" title="View Cart">
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="/" class="nav-brand">Hillbilly Fightwear</a>
+      <div class="nav-links">
+        <a href="#shop" class="nav-tab"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop</a>
+        <a href="#deals" class="nav-tab nav-tab-deals"><i class="fas fa-tags" aria-hidden="true"></i> Deals</a>
+        <a href="/build" class="nav-tab"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build</a>
+        <button data-action="toggleCart" class="nav-cart" aria-label="Shopping cart" title="View Cart">
           <i class="fas fa-shopping-cart"></i>
-          <span id="cartBadge" style="position: absolute; top: -8px; right: -8px; background: #8B0000; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: none; align-items: center; justify-content: center; font-weight: 700;">0</span>
+          <span id="cartBadge" class="cart-badge">0</span>
         </button>
-      </nav>
-    </div>
+      </div>
+    </nav>
   </header>
   
   <!-- Main Content -->
@@ -1493,6 +1667,28 @@ app.get('/', (c) => {
       </div>
     </div>
 
+  </section>
+
+  <!-- PROMOTIONS SECTION -->
+  <section id="deals" class="promo-section" aria-labelledby="deals-heading">
+    <h2 id="deals-heading"><i class="fas fa-fire" aria-hidden="true"></i> Current Deals</h2>
+    <div class="promo-cards">
+      <div class="promo-card">
+        <div class="promo-icon"><i class="fas fa-tshirt"></i></div>
+        <h3>T-Shirts & Tanks</h3>
+        <p>Stock up on your favorite designs</p>
+        <span class="promo-highlight">Buy 2, Get 1 FREE</span>
+      </div>
+      <div class="promo-card">
+        <div class="promo-icon"><i class="fas fa-sticky-note"></i></div>
+        <h3>Sticker Bundle</h3>
+        <p>Grab a handful of stickers</p>
+        <span class="promo-highlight">5 for $29</span>
+      </div>
+    </div>
+    <div class="promo-permanent">
+      <p><i class="fas fa-gift" aria-hidden="true"></i> All hat & hoodie purchases come with a free sticker</p>
+    </div>
   </section>
 
   <!-- Shop Now Section - All Products from Official Store (Organized by Category) -->
