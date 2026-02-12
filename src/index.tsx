@@ -1169,67 +1169,63 @@ app.get('/', (c) => {
        All positions verified with pixel-accurate overlap detection
        at viewports: 1200x800, 1400x900, 1024x768, 1000x700, 900x700.
        
-       Layout: 4 top, 3 left, 2 right + 1 fill, 4 bottom = 14 total
-       Every sticker bounding box checked with 8px safety margin.
+       Layout: 3 top, 3 left, 3 right, 4 bottom = 13 total (GNF-RB #2 deleted)
+       All stickers +25% size. Specific moves applied per user request.
        
-       Sticker map (aspect ratios):
-         1=HCF(600x341,wide) 2=GNF-RB(600x446,sq) 3=ObamaTap(457x600,tall)
-         4=Thump(600x481,wide) 5=FunRide(345x600,tall) 6=PutItOnEm(593x600,sq)
-         7=YourNeck(600x344,wide) 8=YesYouCan(462x600,tall) 9=ThumpinLovin(512x600,tall)
-         10=Community(600x178,banner) 11=HFW(600x304,wide) 12=GNF(600x446,sq)
-         13=MYOB(600x158,banner) 14=Cunt(600x241,wide)
+       Sticker map (aspect ratios) — all widths +25%:
+         1=HCF(181px) 3=ObamaTap(98px) 4=Thump(144px)
+         5=FunRide(90px) 6=PutItOnEm(131px,moved↓1\"→right1.25\")
+         7=YourNeck(162px,moved←1\") 8=YesYouCan(98px,moved←1\")
+         9=ThumpinLovin(94px,moved↑0.5\") 10=Community(156px)
+         11=HFW(150px,moved↓0.5\"→right1\") 12=GNF(125px,moved→0.5\")
+         13=MYOB(156px) 14=Cunt(144px)
        ======================================================= */
 
-    /* --- TOP ROW: 4 wide stickers, L:1% + L:17% ... R:17% + R:1% ---
-         Horizontally non-overlapping: pairs separated by >15% viewport width.
-         Vertically confined to top 0-12%. */
-    .sticker-collage .sticker-1  { top: 1%;  left: 1%;    width: 145px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* HCF 145x82 */
-    .sticker-collage .sticker-4  { top: 2%;  left: 17%;   width: 115px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* Thump 115x92 */
-    .sticker-collage .sticker-2  { top: 1%;  right: 17%;  width: 105px; transform: rotate(-4deg);  --hover-rotate: rotate(-2deg); }  /* GNF-RB 105x78 */
-    .sticker-collage .sticker-7  { top: 2%;  right: 1%;   width: 130px; transform: rotate(7deg);   --hover-rotate: rotate(3deg); }   /* YourNeck 130x74 */
+    /* --- TOP ROW: 3 stickers (GNF-RB #2 deleted) ---
+         L:1% + L:17% ... R:8% (moved left 1"). All +25% size. */
+    .sticker-collage .sticker-1  { top: 1%;  left: 1%;    width: 181px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* HCF 181x103 */
+    .sticker-collage .sticker-4  { top: 2%;  left: 17%;   width: 144px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* Thump 144x115 */
+    .sticker-collage .sticker-2  { display: none; }  /* GNF-RB DELETED per request */
+    .sticker-collage .sticker-7  { top: 2%;  right: 15%;  width: 162px; transform: rotate(7deg);   --hover-rotate: rotate(3deg); }   /* YourNeck — left 1" more (right:8→15%) */
 
-    /* --- LEFT COLUMN: 3 stickers at top:16%, 36%, 55% ---
-         At 800px: PutItOnEm(128-234), ObamaTap(288-390), HFW(440-500).
-         Min gaps: 54px, 50px. All at left:1-2%. */
-    .sticker-collage .sticker-6  { top: 16%; left: 1%;    width: 105px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm 105x106 */
-    .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 78px;  transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 78x102 */
-    .sticker-collage .sticker-11 { top: 55%; left: 1%;    width: 120px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW 120x60 */
+    /* --- LEFT COLUMN: 3 stickers — #6 moved down 1" + right 1.25", #11 moved down 0.5" + right 1" ---
+         All +25% size. */
+    .sticker-collage .sticker-6  { top: 23%; left: 17%;   width: 131px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — right 1" more (left:10→17%) */
+    .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 98px;  transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 98x129 */
+    .sticker-collage .sticker-11 { top: 58%; left: 8%;    width: 150px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW — moved down 0.5" + right 1" */
 
-    /* --- RIGHT COLUMN: 2 stickers + 1 fill (tall stickers = big vertical gaps) ---
-         At 800px: FunRide(128-253), YesYouCan(384-485), ThumpinLovin(544-631).
-         Min gaps: 131px, 59px. */
-    .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 72px;  transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 72x125 */
-    .sticker-collage .sticker-8  { top: 48%; right: 1%;   width: 78px;  transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* YesYouCan 78x101 */
-    .sticker-collage .sticker-9  { top: 68%; right: 2%;   width: 75px;  transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* ThumpinLovin 75x87 */
+    /* --- RIGHT COLUMN: #8 moved left 1", #9 moved up 0.5" ---
+         All +25% size. */
+    .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 90px;  transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 90x156 */
+    .sticker-collage .sticker-8  { top: 48%; right: 15%;  width: 98px;  transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* YesYouCan — left 1" more (right:8→15%) */
+    .sticker-collage .sticker-9  { top: 64%; right: 2%;   width: 94px;  transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* ThumpinLovin — moved up 0.5" (top:68→64%) */
 
-    /* --- BOTTOM ROW: 4 stickers, same horizontal pattern as top ---
-         All at bottom:1%. Heights: Community 37px, GNF 74px, MYOB 32px, Cunt 46px.
-         Horizontally separated by viewport % gaps. */
-    .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 125px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 125x37 */
-    .sticker-collage .sticker-12 { bottom: 1%; left: 16%;  width: 100px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF 100x74 */
-    .sticker-collage .sticker-13 { bottom: 1%; right: 16%; width: 125px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 125x32 */
-    .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 115px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 115x46 */
+    /* --- BOTTOM ROW: 4 stickers — #12 GNF moved right 0.5" ---
+         All +25% size. */
+    .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 156px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 156x46 */
+    .sticker-collage .sticker-12 { bottom: 1%; left: 27%;  width: 125px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — right 1" more (left:20→27%) */
+    .sticker-collage .sticker-13 { bottom: 1%; right: 23%; width: 156px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB — left 1" (right:16→23%) */
+    .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 144px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144x58 */
 
-    /* Tablet — reduced widths verified clean at 900x700 */
+    /* Tablet — proportionally scaled, positions preserved */
     @media (max-width: 1024px) {
       .scrapbook-hero { min-height: 80vh; }
-      .sticker-collage .sticker-1  { width: 115px; }
-      .sticker-collage .sticker-4  { width: 95px; }
-      .sticker-collage .sticker-2  { width: 85px; }
-      .sticker-collage .sticker-7  { width: 105px; }
-      .sticker-collage .sticker-5  { width: 60px; }
-      .sticker-collage .sticker-8  { width: 65px; }
-      .sticker-collage .sticker-6  { width: 85px; }
-      .sticker-collage .sticker-3  { width: 65px; }
-      .sticker-collage .sticker-11 { width: 100px; }
-      .sticker-collage .sticker-10 { width: 100px; }
-      .sticker-collage .sticker-12 { width: 80px; }
-      .sticker-collage .sticker-14 { width: 95px; }
-      .sticker-collage .sticker-13 { width: 100px; }
-      .sticker-collage .sticker-9  { width: 60px; }
+      .sticker-collage .sticker-1  { width: 145px; }
+      .sticker-collage .sticker-4  { width: 115px; }
+      .sticker-collage .sticker-7  { width: 130px; }
+      .sticker-collage .sticker-5  { width: 72px; }
+      .sticker-collage .sticker-8  { width: 78px; }
+      .sticker-collage .sticker-6  { width: 105px; }
+      .sticker-collage .sticker-3  { width: 78px; }
+      .sticker-collage .sticker-11 { width: 120px; }
+      .sticker-collage .sticker-10 { width: 125px; }
+      .sticker-collage .sticker-12 { width: 100px; }
+      .sticker-collage .sticker-14 { width: 115px; }
+      .sticker-collage .sticker-13 { width: 125px; }
+      .sticker-collage .sticker-9  { width: 75px; }
     }
 
-    /* Mobile — compact scattered layout */
+    /* Mobile — compact layout with same relative moves */
     @media (max-width: 768px) {
       .scrapbook-hero { min-height: 100vh; }
       .scrapbook-center { max-width: 200px; padding: 15px 10px; }
@@ -1238,44 +1234,42 @@ app.get('/', (c) => {
       .scrapbook-cta a { padding: 7px 18px; font-size: 0.75rem; }
       .scrapbook-cta { flex-direction: column; align-items: center; gap: 6px; }
 
-      /* Top row — small widths, spread across top */
-      .sticker-collage .sticker-1  { top: 1%;  left: 1%;   width: 72px !important; }
-      .sticker-collage .sticker-4  { top: 1%;  left: 22%;  width: 60px !important; }
-      .sticker-collage .sticker-2  { top: 1%;  right: 20%; left: auto; width: 52px !important; }
-      .sticker-collage .sticker-7  { top: 1%;  right: 1%;  left: auto; width: 65px !important; }
-      /* Left side */
-      .sticker-collage .sticker-6  { top: 13%; left: 1%;   right: auto; width: 55px !important; }
-      .sticker-collage .sticker-3  { top: 32%; left: 1%;   right: auto; width: 40px !important; }
-      .sticker-collage .sticker-11 { top: 50%; left: 1%;   right: auto; width: 60px !important; }
-      /* Right side */
-      .sticker-collage .sticker-5  { top: 13%; right: 1%;  left: auto; width: 38px !important; }
-      .sticker-collage .sticker-8  { top: 38%; right: 1%;  left: auto; width: 42px !important; }
-      .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 40px !important; }
-      /* Bottom row */
-      .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 62px !important; }
-      .sticker-collage .sticker-12 { bottom: 1%; left: 20%;  width: 52px !important; }
-      .sticker-collage .sticker-13 { bottom: 1%; right: 18%; left: auto; width: 62px !important; }
-      .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 58px !important; }
+      /* Top row */
+      .sticker-collage .sticker-1  { top: 1%;  left: 1%;   width: 90px !important; }
+      .sticker-collage .sticker-4  { top: 1%;  left: 22%;  width: 72px !important; }
+      .sticker-collage .sticker-7  { top: 1%;  right: 5%;  left: auto; width: 82px !important; }
+      /* Left side — #6 moved down+right, #11 moved down+right */
+      .sticker-collage .sticker-6  { top: 18%; left: 8%;   right: auto; width: 68px !important; }
+      .sticker-collage .sticker-3  { top: 32%; left: 1%;   right: auto; width: 50px !important; }
+      .sticker-collage .sticker-11 { top: 52%; left: 6%;   right: auto; width: 75px !important; }
+      /* Right side — #8 moved left, #9 moved up */
+      .sticker-collage .sticker-5  { top: 13%; right: 1%;  left: auto; width: 48px !important; }
+      .sticker-collage .sticker-8  { top: 38%; right: 6%;  left: auto; width: 50px !important; }
+      .sticker-collage .sticker-9  { top: 54%; right: 1%;  left: auto; width: 48px !important; }
+      /* Bottom row — #12 moved right */
+      .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 78px !important; }
+      .sticker-collage .sticker-12 { bottom: 1%; left: 22%;  width: 62px !important; }
+      .sticker-collage .sticker-13 { bottom: 1%; right: 16%; left: auto; width: 78px !important; }
+      .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 72px !important; }
     }
 
     /* Small phones */
     @media (max-width: 400px) {
       .scrapbook-center img { max-width: 140px; }
       .scrapbook-tagline { font-size: 0.7rem; letter-spacing: 2px; }
-      .sticker-collage .sticker-1  { width: 58px !important; }
-      .sticker-collage .sticker-4  { width: 48px !important; }
-      .sticker-collage .sticker-2  { width: 42px !important; }
-      .sticker-collage .sticker-7  { width: 52px !important; }
-      .sticker-collage .sticker-5  { width: 30px !important; }
-      .sticker-collage .sticker-8  { width: 34px !important; }
-      .sticker-collage .sticker-6  { width: 44px !important; }
-      .sticker-collage .sticker-3  { width: 32px !important; }
-      .sticker-collage .sticker-11 { width: 48px !important; }
-      .sticker-collage .sticker-10 { width: 50px !important; }
-      .sticker-collage .sticker-12 { width: 42px !important; }
-      .sticker-collage .sticker-14 { width: 46px !important; }
-      .sticker-collage .sticker-13 { width: 50px !important; }
-      .sticker-collage .sticker-9  { width: 32px !important; }
+      .sticker-collage .sticker-1  { width: 72px !important; }
+      .sticker-collage .sticker-4  { width: 58px !important; }
+      .sticker-collage .sticker-7  { width: 65px !important; }
+      .sticker-collage .sticker-5  { width: 38px !important; }
+      .sticker-collage .sticker-8  { width: 40px !important; }
+      .sticker-collage .sticker-6  { width: 54px !important; }
+      .sticker-collage .sticker-3  { width: 40px !important; }
+      .sticker-collage .sticker-11 { width: 60px !important; }
+      .sticker-collage .sticker-10 { width: 62px !important; }
+      .sticker-collage .sticker-12 { width: 50px !important; }
+      .sticker-collage .sticker-14 { width: 58px !important; }
+      .sticker-collage .sticker-13 { width: 62px !important; }
+      .sticker-collage .sticker-9  { width: 38px !important; }
     }
   </style>
 </head>
