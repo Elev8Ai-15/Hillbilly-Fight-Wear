@@ -1164,13 +1164,14 @@ app.get('/', (c) => {
     }
 
     /* =======================================================
-       SCRAPBOOK LAYOUT — Mathematically verified placement
+       SCRAPBOOK LAYOUT — Full-coverage scattered collage
        
-       All positions verified with pixel-accurate overlap detection
-       at viewports: 1200x800, 1400x900, 1024x768, 1000x700, 900x700.
+       Graphics are scattered THROUGHOUT the entire section,
+       filling all quadrants including the spaces between the
+       edges and the center logo. Larger sizes for visual impact.
        
-       Layout: 4 top, 3 left, 2 right + 1 fill, 4 bottom = 14 total
-       Every sticker bounding box checked with 8px safety margin.
+       Layout: scattered randomly across all areas with varied
+       sizes and rotations for an organic, hand-placed feel.
        
        Sticker map (aspect ratios):
          1=HCF(600x341,wide) 2=GNF-RB(600x446,sq) 3=ObamaTap(457x600,tall)
@@ -1180,56 +1181,54 @@ app.get('/', (c) => {
          13=MYOB(600x158,banner) 14=Cunt(600x241,wide)
        ======================================================= */
 
-    /* --- TOP ROW: 4 wide stickers, L:1% + L:17% ... R:17% + R:1% ---
-         Horizontally non-overlapping: pairs separated by >15% viewport width.
-         Vertically confined to top 0-12%. */
-    .sticker-collage .sticker-1  { top: 1%;  left: 1%;    width: 145px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* HCF 145x82 */
-    .sticker-collage .sticker-4  { top: 2%;  left: 17%;   width: 115px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* Thump 115x92 */
-    .sticker-collage .sticker-2  { top: 1%;  right: 17%;  width: 105px; transform: rotate(-4deg);  --hover-rotate: rotate(-2deg); }  /* GNF-RB 105x78 */
-    .sticker-collage .sticker-7  { top: 2%;  right: 1%;   width: 130px; transform: rotate(7deg);   --hover-rotate: rotate(3deg); }   /* YourNeck 130x74 */
+    /* --- UPPER-LEFT QUADRANT --- */
+    .sticker-collage .sticker-1  { top: 3%;  left: 2%;    width: 200px; transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* HCF — big, top-left corner */
+    .sticker-collage .sticker-6  { top: 18%; left: 8%;    width: 160px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — mid-upper-left */
 
-    /* --- LEFT COLUMN: 3 stickers at top:16%, 36%, 55% ---
-         At 800px: PutItOnEm(128-234), ObamaTap(288-390), HFW(440-500).
-         Min gaps: 54px, 50px. All at left:1-2%. */
-    .sticker-collage .sticker-6  { top: 16%; left: 1%;    width: 105px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm 105x106 */
-    .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 78px;  transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 78x102 */
-    .sticker-collage .sticker-11 { top: 55%; left: 1%;    width: 120px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW 120x60 */
+    /* --- UPPER-RIGHT QUADRANT --- */
+    .sticker-collage .sticker-4  { top: 2%;  right: 3%;   width: 180px; transform: rotate(7deg);   --hover-rotate: rotate(3deg); }   /* Thump — big, top-right corner */
+    .sticker-collage .sticker-5  { top: 16%; right: 10%;  width: 110px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* FunRide tall — upper-right */
 
-    /* --- RIGHT COLUMN: 2 stickers + 1 fill (tall stickers = big vertical gaps) ---
-         At 800px: FunRide(128-253), YesYouCan(384-485), ThumpinLovin(544-631).
-         Min gaps: 131px, 59px. */
-    .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 72px;  transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 72x125 */
-    .sticker-collage .sticker-8  { top: 48%; right: 1%;   width: 78px;  transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* YesYouCan 78x101 */
-    .sticker-collage .sticker-9  { top: 68%; right: 2%;   width: 75px;  transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* ThumpinLovin 75x87 */
+    /* --- MID-LEFT (flanking logo) --- */
+    .sticker-collage .sticker-3  { top: 35%; left: 3%;    width: 130px; transform: rotate(-10deg); --hover-rotate: rotate(-5deg); }  /* ObamaTap tall — mid-left */
+    .sticker-collage .sticker-11 { top: 55%; left: 5%;    width: 175px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* HFW wide — lower-mid-left */
 
-    /* --- BOTTOM ROW: 4 stickers, same horizontal pattern as top ---
-         All at bottom:1%. Heights: Community 37px, GNF 74px, MYOB 32px, Cunt 46px.
-         Horizontally separated by viewport % gaps. */
-    .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 125px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 125x37 */
-    .sticker-collage .sticker-12 { bottom: 1%; left: 16%;  width: 100px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF 100x74 */
-    .sticker-collage .sticker-13 { bottom: 1%; right: 16%; width: 125px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 125x32 */
-    .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 115px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 115x46 */
+    /* --- MID-RIGHT (flanking logo) --- */
+    .sticker-collage .sticker-8  { top: 33%; right: 4%;   width: 120px; transform: rotate(8deg);   --hover-rotate: rotate(4deg); }   /* YesYouCan tall — mid-right */
+    .sticker-collage .sticker-7  { top: 52%; right: 3%;   width: 180px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* YourNeck wide — lower-mid-right */
 
-    /* Tablet — reduced widths verified clean at 900x700 */
+    /* --- LOWER-LEFT QUADRANT --- */
+    .sticker-collage .sticker-10 { bottom: 18%; left: 6%;  width: 190px; transform: rotate(-4deg);  --hover-rotate: rotate(-2deg); }  /* Community banner — lower-left */
+    .sticker-collage .sticker-12 { bottom: 2%;  left: 2%;  width: 150px; transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* GNF — bottom-left corner */
+
+    /* --- LOWER-RIGHT QUADRANT --- */
+    .sticker-collage .sticker-9  { bottom: 20%; right: 5%; width: 130px; transform: rotate(-7deg);  --hover-rotate: rotate(-3deg); }  /* ThumpinLovin — lower-right */
+    .sticker-collage .sticker-14 { bottom: 2%;  right: 2%; width: 170px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* Cunt — bottom-right corner */
+
+    /* --- CENTER-ISH (scattered near but not on the logo) --- */
+    .sticker-collage .sticker-2  { top: 12%;    left: 30%;  width: 130px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* GNF-RB — upper-center-left */
+    .sticker-collage .sticker-13 { bottom: 10%; right: 28%; width: 180px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* MYOB banner — lower-center-right */
+
+    /* Tablet — slightly reduced sizes, tighter layout */
     @media (max-width: 1024px) {
       .scrapbook-hero { min-height: 80vh; }
-      .sticker-collage .sticker-1  { width: 115px; }
-      .sticker-collage .sticker-4  { width: 95px; }
-      .sticker-collage .sticker-2  { width: 85px; }
-      .sticker-collage .sticker-7  { width: 105px; }
-      .sticker-collage .sticker-5  { width: 60px; }
-      .sticker-collage .sticker-8  { width: 65px; }
-      .sticker-collage .sticker-6  { width: 85px; }
-      .sticker-collage .sticker-3  { width: 65px; }
-      .sticker-collage .sticker-11 { width: 100px; }
-      .sticker-collage .sticker-10 { width: 100px; }
-      .sticker-collage .sticker-12 { width: 80px; }
-      .sticker-collage .sticker-14 { width: 95px; }
-      .sticker-collage .sticker-13 { width: 100px; }
-      .sticker-collage .sticker-9  { width: 60px; }
+      .sticker-collage .sticker-1  { width: 160px; top: 2%; left: 1%; }
+      .sticker-collage .sticker-4  { width: 145px; top: 2%; right: 1%; }
+      .sticker-collage .sticker-6  { width: 125px; top: 17%; left: 4%; }
+      .sticker-collage .sticker-5  { width: 85px;  top: 15%; right: 5%; }
+      .sticker-collage .sticker-3  { width: 100px; top: 34%; left: 2%; }
+      .sticker-collage .sticker-8  { width: 95px;  top: 32%; right: 2%; }
+      .sticker-collage .sticker-11 { width: 140px; top: 54%; left: 2%; }
+      .sticker-collage .sticker-7  { width: 140px; top: 52%; right: 1%; }
+      .sticker-collage .sticker-2  { width: 100px; top: 10%; left: 26%; }
+      .sticker-collage .sticker-13 { width: 140px; bottom: 8%; right: 22%; }
+      .sticker-collage .sticker-10 { width: 150px; bottom: 16%; left: 3%; }
+      .sticker-collage .sticker-12 { width: 115px; bottom: 2%; left: 1%; }
+      .sticker-collage .sticker-9  { width: 100px; bottom: 18%; right: 2%; }
+      .sticker-collage .sticker-14 { width: 130px; bottom: 2%; right: 1%; }
     }
 
-    /* Mobile — compact scattered layout */
+    /* Mobile — smaller but still scattered throughout */
     @media (max-width: 768px) {
       .scrapbook-hero { min-height: 100vh; }
       .scrapbook-center { max-width: 200px; padding: 15px 10px; }
@@ -1238,44 +1237,43 @@ app.get('/', (c) => {
       .scrapbook-cta a { padding: 7px 18px; font-size: 0.75rem; }
       .scrapbook-cta { flex-direction: column; align-items: center; gap: 6px; }
 
-      /* Top row — small widths, spread across top */
-      .sticker-collage .sticker-1  { top: 1%;  left: 1%;   width: 72px !important; }
-      .sticker-collage .sticker-4  { top: 1%;  left: 22%;  width: 60px !important; }
-      .sticker-collage .sticker-2  { top: 1%;  right: 20%; left: auto; width: 52px !important; }
-      .sticker-collage .sticker-7  { top: 1%;  right: 1%;  left: auto; width: 65px !important; }
-      /* Left side */
-      .sticker-collage .sticker-6  { top: 13%; left: 1%;   right: auto; width: 55px !important; }
-      .sticker-collage .sticker-3  { top: 32%; left: 1%;   right: auto; width: 40px !important; }
-      .sticker-collage .sticker-11 { top: 50%; left: 1%;   right: auto; width: 60px !important; }
-      /* Right side */
-      .sticker-collage .sticker-5  { top: 13%; right: 1%;  left: auto; width: 38px !important; }
-      .sticker-collage .sticker-8  { top: 38%; right: 1%;  left: auto; width: 42px !important; }
-      .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 40px !important; }
-      /* Bottom row */
-      .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 62px !important; }
-      .sticker-collage .sticker-12 { bottom: 1%; left: 20%;  width: 52px !important; }
-      .sticker-collage .sticker-13 { bottom: 1%; right: 18%; left: auto; width: 62px !important; }
-      .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 58px !important; }
+      /* Upper area */
+      .sticker-collage .sticker-1  { top: 1%;  left: 1%;   width: 95px !important; }
+      .sticker-collage .sticker-4  { top: 1%;  right: 1%;  left: auto; width: 85px !important; }
+      .sticker-collage .sticker-2  { top: 10%; left: 18%;  right: auto; width: 68px !important; }
+      .sticker-collage .sticker-6  { top: 12%; left: 1%;   right: auto; width: 70px !important; }
+      .sticker-collage .sticker-5  { top: 10%; right: 2%;  left: auto; width: 50px !important; }
+      /* Mid area */
+      .sticker-collage .sticker-3  { top: 28%; left: 2%;   right: auto; width: 55px !important; }
+      .sticker-collage .sticker-8  { top: 27%; right: 2%;  left: auto; width: 55px !important; }
+      .sticker-collage .sticker-11 { top: 48%; left: 1%;   right: auto; width: 80px !important; }
+      .sticker-collage .sticker-7  { top: 50%; right: 1%;  left: auto; width: 80px !important; }
+      /* Lower area */
+      .sticker-collage .sticker-10 { bottom: 15%; left: 2%;   width: 85px !important; }
+      .sticker-collage .sticker-9  { bottom: 16%; right: 2%;  left: auto; width: 60px !important; }
+      .sticker-collage .sticker-13 { bottom: 8%;  right: 12%; left: auto; width: 80px !important; }
+      .sticker-collage .sticker-12 { bottom: 1%;  left: 1%;   width: 70px !important; }
+      .sticker-collage .sticker-14 { bottom: 1%;  right: 1%;  left: auto; width: 75px !important; }
     }
 
     /* Small phones */
     @media (max-width: 400px) {
       .scrapbook-center img { max-width: 140px; }
       .scrapbook-tagline { font-size: 0.7rem; letter-spacing: 2px; }
-      .sticker-collage .sticker-1  { width: 58px !important; }
-      .sticker-collage .sticker-4  { width: 48px !important; }
-      .sticker-collage .sticker-2  { width: 42px !important; }
-      .sticker-collage .sticker-7  { width: 52px !important; }
-      .sticker-collage .sticker-5  { width: 30px !important; }
-      .sticker-collage .sticker-8  { width: 34px !important; }
-      .sticker-collage .sticker-6  { width: 44px !important; }
-      .sticker-collage .sticker-3  { width: 32px !important; }
-      .sticker-collage .sticker-11 { width: 48px !important; }
-      .sticker-collage .sticker-10 { width: 50px !important; }
-      .sticker-collage .sticker-12 { width: 42px !important; }
-      .sticker-collage .sticker-14 { width: 46px !important; }
-      .sticker-collage .sticker-13 { width: 50px !important; }
-      .sticker-collage .sticker-9  { width: 32px !important; }
+      .sticker-collage .sticker-1  { width: 72px !important; }
+      .sticker-collage .sticker-4  { width: 65px !important; }
+      .sticker-collage .sticker-2  { width: 52px !important; }
+      .sticker-collage .sticker-6  { width: 52px !important; }
+      .sticker-collage .sticker-5  { width: 38px !important; }
+      .sticker-collage .sticker-3  { width: 42px !important; }
+      .sticker-collage .sticker-8  { width: 42px !important; }
+      .sticker-collage .sticker-11 { width: 60px !important; }
+      .sticker-collage .sticker-7  { width: 60px !important; }
+      .sticker-collage .sticker-10 { width: 65px !important; }
+      .sticker-collage .sticker-9  { width: 45px !important; }
+      .sticker-collage .sticker-13 { width: 60px !important; }
+      .sticker-collage .sticker-12 { width: 52px !important; }
+      .sticker-collage .sticker-14 { width: 55px !important; }
     }
   </style>
 </head>
@@ -1891,6 +1889,9 @@ app.get('/', (c) => {
           case 'selectModalColor':
             selectModalColor(el.getAttribute('data-product-id'), el.getAttribute('data-color'));
             break;
+          case 'selectModalStyle':
+            selectModalStyle(el.getAttribute('data-product-id'), el.getAttribute('data-style'));
+            break;
           case 'renderGarmentModalBack':
             var pid = el.getAttribute('data-product-id');
             var step = el.getAttribute('data-step');
@@ -1905,7 +1906,8 @@ app.get('/', (c) => {
             addToCart(
               el.getAttribute('data-product-id'),
               el.getAttribute('data-size'),
-              el.getAttribute('data-color')
+              el.getAttribute('data-color'),
+              el.getAttribute('data-style')
             );
             break;
           case 'changeQty':
@@ -2090,7 +2092,7 @@ app.get('/', (c) => {
         total += subtotal;
         var details = '';
         if (item.size) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Size: ' + esc(item.size) + '</span> ';
-        // Style field removed: Pullover/Zip-Up are now separate products
+        if (item.style) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Style: ' + esc(item.style) + '</span> ';
         if (item.color) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Color: ' + esc(item.color) + '</span>';
         html += '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; align-items:flex-start;">' +
           '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#f7f7f7; flex-shrink:0;">' +
@@ -2112,17 +2114,27 @@ app.get('/', (c) => {
       document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
     }
     
-    function addToCart(productId, size, color) {
+    function addToCart(productId, size, color, style) {
       try {
         var product = allShopProducts.find(function(p) { return p.id === productId; });
         if (!product) return;
-        // Use color-specific preview image if available, otherwise default product image
-        var cartImage = (color && typeof getColorPreviewImage === 'function')
-          ? getColorPreviewImage(product, color)
-          : product.image;
-        // Check for duplicate (same product, size, color)
+        // Use color-specific preview image; if Zip-Up style, use zip-up images
+        var cartImage = product.image;
+        if (color) {
+          if (style === 'Zip-Up' && product.garmentType === 'hoodie') {
+            var ck = color.toLowerCase();
+            if (zipupHoodieImages[ck] && zipupHoodieImages[ck].front) {
+              cartImage = zipupHoodieImages[ck].front;
+            } else {
+              cartImage = getColorPreviewImage(product, color);
+            }
+          } else if (typeof getColorPreviewImage === 'function') {
+            cartImage = getColorPreviewImage(product, color);
+          }
+        }
+        // Check for duplicate (same product, size, color, style)
         var existing = cart.findIndex(function(item) {
-          return item.productId === productId && item.size === (size||'') && item.color === (color||'');
+          return item.productId === productId && item.size === (size||'') && item.color === (color||'') && item.style === (style||'');
         });
         if (existing >= 0) {
           cart[existing].qty += 1;
@@ -2134,6 +2146,7 @@ app.get('/', (c) => {
             image: cartImage,
             size: size || '',
             color: color || '',
+            style: style || '',
             qty: 1
           });
         }
@@ -2165,6 +2178,7 @@ app.get('/', (c) => {
       var items = cart.map(function(item) {
         var desc = item.title;
         if (item.size) desc += ' (Size: ' + item.size + ')';
+        if (item.style) desc += ' [' + item.style + ']';
         if (item.color) desc += ' - ' + item.color;
         return desc + ' x' + item.qty + ' = $' + (item.price * item.qty).toFixed(2);
       });
@@ -2197,13 +2211,13 @@ app.get('/', (c) => {
     // ========================================
     // PRODUCT DETAIL MODAL
     // ========================================
-    var modalState = { step: 'view', selectedSize: '', selectedColor: '' };
+    var modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '' };
     
     function openProductModal(productId) {
       try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
       if (!product) return;
-      modalState = { step: 'view', selectedSize: '', selectedColor: '', productId: productId };
+      modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '', productId: productId };
       
       if (product.type === 'garment') {
         renderGarmentModal(product, 'size');
@@ -2221,12 +2235,30 @@ app.get('/', (c) => {
       document.body.style.overflow = '';
     }
     
+    // Map of zip-up hoodie images for style selection in Shop modal
+    var zipupHoodieImages = ${JSON.stringify(
+      garments.find(g => g.id === 'zipup-hoodie')?.images || {}
+    ).replace(/<\//g, '<\\/')};
+    
     function renderGarmentModal(product, step) {
       modalState.step = step;
       var mc = document.getElementById('modalContent');
       
-      // Shop Now: update preview image based on selected color (via garmentColorImages)
-      var previewImg = modalState.selectedColor ? getColorPreviewImage(product, modalState.selectedColor) : product.image;
+      // Shop Now: update preview image based on selected color and style
+      var previewImg = product.image;
+      if (modalState.selectedColor) {
+        // If Zip-Up style is selected and this is a hoodie, use zip-up images
+        if (modalState.selectedStyle === 'Zip-Up' && product.garmentType === 'hoodie') {
+          var colorKey = modalState.selectedColor.toLowerCase();
+          if (zipupHoodieImages[colorKey] && zipupHoodieImages[colorKey].front) {
+            previewImg = zipupHoodieImages[colorKey].front;
+          } else {
+            previewImg = getColorPreviewImage(product, modalState.selectedColor);
+          }
+        } else {
+          previewImg = getColorPreviewImage(product, modalState.selectedColor);
+        }
+      }
       
       var imageHtml = '<div style="background:#f7f7f7; padding:20px; text-align:center; position:relative;">' +
         '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
@@ -2243,6 +2275,7 @@ app.get('/', (c) => {
         var pills = '';
         if (modalState.selectedSize) pills += '<span style="background:#f0f7ff; padding:4px 10px; border-radius:4px;"><i class="fas fa-ruler" style="color:#4CAF50;"></i> ' + modalState.selectedSize + '</span> ';
         if (modalState.selectedColor) pills += '<span style="background:#f0f7ff; padding:4px 10px; border-radius:4px;"><i class="fas fa-palette" style="color:#4CAF50;"></i> ' + modalState.selectedColor + '</span> ';
+        if (modalState.selectedStyle) pills += '<span style="background:#f0f7ff; padding:4px 10px; border-radius:4px;"><i class="fas fa-hoodie" style="color:#4CAF50;"></i> ' + modalState.selectedStyle + '</span> ';
         return pills ? '<div style="padding:0 20px 8px; font-size:0.85rem; color:#555; display:flex; flex-wrap:wrap; gap:6px;">' + pills + '</div>' : '';
       };
       
@@ -2279,11 +2312,28 @@ app.get('/', (c) => {
             '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="' + backStep + '" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
           '</div>';
           
+      } else if (step === 'style') {
+        // STYLE SELECTION STEP (Pullover / Zip-Up for hoodies)
+        var stylesHtml = product.styles.map(function(s) {
+          var sel = modalState.selectedStyle === s ? 'background:#8B0000; color:#fff; border-color:#8B0000;' : '';
+          var icon = s === 'Zip-Up' ? 'fa-vest' : 'fa-hoodie';
+          return '<button data-action="selectModalStyle" data-product-id="' + product.id + '" data-style="' + s + '" style="padding:16px 28px; border:2px solid #ddd; background:#fff; border-radius:8px; cursor:pointer; font-size:1.05rem; font-weight:600; min-width:120px; transition:all 0.2s; ' + sel + '">' + s + '</button>';
+        }).join('');
+        
+        mc.innerHTML = imageHtml + headerHtml + summaryPills() +
+          '<div style="padding:0 20px 5px;">' +
+            '<h4 style="margin:0 0 12px; font-size:1rem; color:#666; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-vest"></i> Select Style</h4>' +
+            '<div style="display:flex; flex-wrap:wrap; gap:12px;">' + stylesHtml + '</div>' +
+          '</div>' +
+          '<div style="padding:15px 20px 20px; display:flex; gap:10px;">' +
+            '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="color" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
+          '</div>';
+          
       } else if (step === 'confirm') {
         // CONFIRM + ADD TO CART
         mc.innerHTML = imageHtml + headerHtml + summaryPills() +
           '<div style="padding:10px 20px 20px; display:flex; flex-direction:column; gap:10px;">' +
-            '<button data-action="addToCart" data-product-id="' + product.id + '" data-size="' + modalState.selectedSize + '" data-color="' + modalState.selectedColor + '" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
+            '<button data-action="addToCart" data-product-id="' + product.id + '" data-size="' + modalState.selectedSize + '" data-color="' + modalState.selectedColor + '" data-style="' + (modalState.selectedStyle || '') + '" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
             '<button data-action="closeProductModal" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
             '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="size" style="padding:10px; background:transparent; color:#666; border:none; cursor:pointer; font-size:0.85rem; text-decoration:underline;">Change Options</button>' +
           '</div>';
@@ -2299,6 +2349,17 @@ app.get('/', (c) => {
     
     function selectModalColor(productId, color) {
       modalState.selectedColor = color;
+      var product = allShopProducts.find(function(p) { return p.id === productId; });
+      // If product has styles (e.g. Pullover/Zip-Up), go to style step; otherwise confirm
+      if (product.styles && product.styles.length > 0) {
+        renderGarmentModal(product, 'style');
+      } else {
+        renderGarmentModal(product, 'confirm');
+      }
+    }
+    
+    function selectModalStyle(productId, style) {
+      modalState.selectedStyle = style;
       var product = allShopProducts.find(function(p) { return p.id === productId; });
       // Auto-advance to confirm step
       renderGarmentModal(product, 'confirm');
