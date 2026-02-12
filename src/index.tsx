@@ -706,7 +706,7 @@ app.get('/', (c) => {
     }
     
     .product-image-wrapper {
-      background: #f7f7f7;
+      background: #ffffff;
       padding: 20px;
       border-radius: 8px;
       margin-bottom: 15px;
@@ -1921,11 +1921,14 @@ app.get('/', (c) => {
         }
       });
       
-      // Handle keyboard Enter on product cards (accessibility)
+      // Handle keyboard Enter/Space on product cards (accessibility)
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' || e.key === ' ') {
           var el = e.target.closest('[data-action="openProductModal"]');
-          if (el) openProductModal(el.getAttribute('data-product-id'));
+          if (el) {
+            e.preventDefault();
+            openProductModal(el.getAttribute('data-product-id'));
+          }
         }
       });
       
@@ -2097,7 +2100,7 @@ app.get('/', (c) => {
         if (item.style) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Style: ' + esc(item.style) + '</span> ';
         if (item.color) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Color: ' + esc(item.color) + '</span>';
         html += '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; align-items:flex-start;">' +
-          '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#f7f7f7; flex-shrink:0;">' +
+          '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#ffffff; flex-shrink:0;">' +
           '<div style="flex:1; min-width:0;">' +
             '<div style="font-weight:600; font-size:0.9rem; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(item.title) + '</div>' +
             '<div style="margin-bottom:6px;">' + details + '</div>' +
@@ -2120,17 +2123,16 @@ app.get('/', (c) => {
       try {
         var product = allShopProducts.find(function(p) { return p.id === productId; });
         if (!product) return;
-        // Use color-specific preview image; if Zip-Up style, use zip-up images
+        // Resolve the best preview image for the cart thumbnail:
+        // 1. If Zip-Up hoodie → use zip-up images.
+        // 2. Otherwise → use color-specific garment image.
+        // 3. Fallback → product's default image.
         var cartImage = product.image;
         if (color) {
-          if (style === 'Zip-Up' && product.garmentType === 'hoodie') {
+          if (style === 'Zip-Up' && product.garmentType === 'hoodie' && typeof zipupHoodieImages !== 'undefined') {
             var ck = color.toLowerCase();
-            if (zipupHoodieImages[ck] && zipupHoodieImages[ck].front) {
-              cartImage = zipupHoodieImages[ck].front;
-            } else {
-              cartImage = getColorPreviewImage(product, color);
-            }
-          } else if (typeof getColorPreviewImage === 'function') {
+            cartImage = (zipupHoodieImages[ck] && zipupHoodieImages[ck].front) || getColorPreviewImage(product, color);
+          } else {
             cartImage = getColorPreviewImage(product, color);
           }
         }
@@ -2237,7 +2239,9 @@ app.get('/', (c) => {
       document.body.style.overflow = '';
     }
     
-    // Map of zip-up hoodie images for style selection in Shop modal
+    // Zip-up hoodie images for the Shop modal style selector.
+    // When a user selects "Zip-Up" style for a hoodie product, we swap the
+    // preview image from the pullover hoodie to the zip-up variant.
     var zipupHoodieImages = ${JSON.stringify(
       garments.find(g => g.id === 'zipup-hoodie')?.images || {}
     ).replace(/<\//g, '<\\/')};
@@ -2262,7 +2266,7 @@ app.get('/', (c) => {
         }
       }
       
-      var imageHtml = '<div style="background:#f7f7f7; padding:20px; text-align:center; position:relative;">' +
+      var imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center; position:relative;">' +
         '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
       '</div>';
       
@@ -2370,7 +2374,7 @@ app.get('/', (c) => {
     function renderDecalModal(product) {
       var mc = document.getElementById('modalContent');
       var safeTitle = product.title.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-      mc.innerHTML = '<div style="background:#f7f7f7; padding:30px; text-align:center;">' +
+      mc.innerHTML = '<div style="background:#ffffff; padding:30px; text-align:center;">' +
           '<img src="' + product.image + '" alt="' + safeTitle + '" style="max-width:100%; max-height:400px; object-fit:contain;">' +
         '</div>' +
         '<div style="padding:20px;">' +
@@ -2457,7 +2461,7 @@ app.get('/build', (c) => {
       position: relative;
       width: 100%;
       max-width: 350px;
-      background: #f8f8f8;
+      background: #ffffff;
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -3292,7 +3296,7 @@ app.get('/build', (c) => {
         width: 350,
         height: 467,
         selection: true,
-        backgroundColor: '#f8f8f8'
+        backgroundColor: '#ffffff'
       });
       
       // Add visual feedback for selected objects
@@ -3309,36 +3313,15 @@ app.get('/build', (c) => {
         }
       });
       
-      // Graphic position updated after drag/resize (no-op; kept for future logging)
-      
-      // Enforce max/min scale limits during scaling
+      // Enforce max/min scale and uniform aspect ratio during graphic scaling
       canvas.on('object:scaling', function(e) {
         var obj = e.target;
-        if (obj && obj.isGraphic && obj.maxScale) {
-          var currentScaleX = obj.scaleX;
-          var currentScaleY = obj.scaleY;
-          
-          // Enforce maximum scale (cannot enlarge beyond max print area)
-          if (currentScaleX > obj.maxScale) {
-            obj.scaleX = obj.maxScale;
-          }
-          if (currentScaleY > obj.maxScale) {
-            obj.scaleY = obj.maxScale;
-          }
-          
-          // Enforce minimum scale (15% of max)
-          if (currentScaleX < obj.minScale) {
-            obj.scaleX = obj.minScale;
-          }
-          if (currentScaleY < obj.minScale) {
-            obj.scaleY = obj.minScale;
-          }
-          
-          // Keep uniform scaling
-          var avgScale = (obj.scaleX + obj.scaleY) / 2;
-          obj.scaleX = avgScale;
-          obj.scaleY = avgScale;
-        }
+        if (!obj || !obj.isGraphic || !obj.maxScale) return;
+        
+        // Clamp to [minScale, maxScale] and enforce uniform scaling
+        var clamped = Math.max(obj.minScale, Math.min(obj.maxScale, (obj.scaleX + obj.scaleY) / 2));
+        obj.scaleX = clamped;
+        obj.scaleY = clamped;
       });
     }
     
@@ -3477,6 +3460,7 @@ app.get('/build', (c) => {
           list.innerHTML = state.additionalGraphics.map(function(ag, i) {
             var g = graphics.find(function(x) { return x.id === ag.graphic; });
             var p = placements.find(function(x) { return x.id === ag.placement; });
+            if (!g || !p) return ''; // Defensive: skip orphaned entries
             var price = getGraphicPrice(ag.placement);
             return '<div class="additional-item">' +
               '<div class="info">' +
@@ -3503,6 +3487,7 @@ app.get('/build', (c) => {
     function selectGarment(id) {
       state.garment = id;
       state.size = null;
+      preloadGarmentImages(id);
       
       document.querySelectorAll('.garment-option').forEach(function(el) {
         el.classList.toggle('selected', el.dataset.id === id);
@@ -3572,6 +3557,15 @@ app.get('/build', (c) => {
     function selectGraphic(id) {
       state.graphic = id;
       
+      // Preload graphic image for instant rendering
+      var g = graphics.find(function(x) { return x.id === id; });
+      if (g && g.fullImage && !imageCache[g.fullImage]) {
+        var img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = g.fullImage;
+        imageCache[g.fullImage] = img;
+      }
+      
       document.querySelectorAll('#graphicsGrid .graphic-option').forEach(function(el) {
         el.classList.toggle('selected', el.dataset.id === id);
       });
@@ -3627,8 +3621,14 @@ app.get('/build', (c) => {
       modalSelectedGraphic = null;
       modalSelectedPlacement = null;
       
+      // Filter modal graphics by garment restrictions (same logic as renderGraphics)
+      var availableGraphics = graphics.filter(function(g) {
+        if (!g.restrictToGarments || g.restrictToGarments.length === 0) return true;
+        return state.garment ? g.restrictToGarments.includes(state.garment) : true;
+      });
+      
       var graphicsGrid = document.getElementById('modalGraphicsGrid');
-      graphicsGrid.innerHTML = graphics.map(function(g) {
+      graphicsGrid.innerHTML = availableGraphics.map(function(g) {
         return '<div class="graphic-option" data-id="' + g.id + '">' +
           '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
           '<div class="name">' + g.name + '</div>' +
@@ -3697,218 +3697,213 @@ app.get('/build', (c) => {
       updateSummary();
     }
     
-    // Canvas preview - completely rewritten for stability
+    // Image preload cache for instant garment color/view switching
+    var imageCache = {};
+    
+    function preloadGarmentImages(garmentId) {
+      var g = garments.find(function(x) { return x.id === garmentId; });
+      if (!g) return;
+      Object.keys(g.images).forEach(function(color) {
+        var imgs = g.images[color];
+        Object.keys(imgs).forEach(function(view) {
+          var url = imgs[view];
+          if (!imageCache[url]) {
+            var img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = url;
+            imageCache[url] = img;
+          }
+        });
+      });
+    }
+    
+    // Canvas preview - rewritten for stability with debouncing to prevent
+    // race conditions when multiple rapid state changes fire updatePreview()
+    var _previewDebounceTimer = null;
+    
     function updatePreview() {
-      // Increment update ID to cancel any pending async operations
+      // Debounce rapid calls (e.g. selectGarment -> renderGraphics -> updatePreview cascade)
+      // This ensures only the LAST call within 30ms actually executes,
+      // eliminating the stale-update-ID race condition entirely.
+      if (_previewDebounceTimer) clearTimeout(_previewDebounceTimer);
+      _previewDebounceTimer = setTimeout(_doUpdatePreview, 30);
+    }
+    
+    function _doUpdatePreview() {
+      _previewDebounceTimer = null;
+      
+      // Increment update ID to cancel any in-flight async image loads
       var currentUpdateId = ++previewUpdateId;
       
-      // Clear canvas completely and force render
+      // Clear canvas and set white background
       canvas.clear();
-      canvas.backgroundColor = '#f8f8f8';
-      canvas.renderAll(); // Force render after clear
+      canvas.backgroundColor = '#ffffff';
+      canvas.renderAll();
       
-      if (!state.garment || !state.color) {
-        return;
-      }
+      if (!state.garment || !state.color) return;
       
       var garment = garments.find(function(g) { return g.id === state.garment; });
-      if (!garment) {
-        canvas.renderAll();
-        return;
-      }
+      if (!garment) return;
       
       var colorImages = garment.images[state.color];
-      if (!colorImages) {
-        canvas.renderAll();
-        return;
-      }
+      if (!colorImages) return;
       
-      // Get the correct image URL based on current view
-      var imageUrl = colorImages[state.view];
-      if (!imageUrl) {
-        imageUrl = colorImages.front; // Fallback to front
-      }
+      // Resolve image URL for current view (fallback to front)
+      var imageUrl = colorImages[state.view] || colorImages.front;
+      if (!imageUrl) return;
       
-      // Load garment image first
+      // Snapshot entire state at call time (async callbacks reference this, not live state)
+      var capturedState = {
+        graphic: state.graphic,
+        placement: state.placement,
+        view: state.view,
+        garment: state.garment,
+        additionalGraphics: state.additionalGraphics.slice()
+      };
+      
+      // Load garment image
       fabric.Image.fromURL(imageUrl, function(garmentImg, isError) {
-        // Check if this update is still current
+        // Stale check: if another updatePreview was called after us, bail out
         if (currentUpdateId !== previewUpdateId) return;
+        
         if (!garmentImg || isError || !garmentImg.width || !garmentImg.height) {
-          // P2 fix: Show user-visible feedback when image fails to load
+          // Show error state on canvas
           canvas.add(new fabric.Text('Preview unavailable', {
-            left: canvas.width / 2,
-            top: canvas.height / 2 - 15,
-            originX: 'center',
-            originY: 'center',
-            fontSize: 16,
-            fill: '#999',
-            fontFamily: 'Arial, sans-serif',
-            selectable: false,
-            evented: false
+            left: canvas.width / 2, top: canvas.height / 2 - 15,
+            originX: 'center', originY: 'center',
+            fontSize: 16, fill: '#999', fontFamily: 'Arial, sans-serif',
+            selectable: false, evented: false
           }));
           canvas.add(new fabric.Text('Image could not be loaded', {
-            left: canvas.width / 2,
-            top: canvas.height / 2 + 10,
-            originX: 'center',
-            originY: 'center',
-            fontSize: 12,
-            fill: '#bbb',
-            fontFamily: 'Arial, sans-serif',
-            selectable: false,
-            evented: false
+            left: canvas.width / 2, top: canvas.height / 2 + 10,
+            originX: 'center', originY: 'center',
+            fontSize: 12, fill: '#bbb', fontFamily: 'Arial, sans-serif',
+            selectable: false, evented: false
           }));
           canvas.renderAll();
           return;
         }
         
+        // Scale garment to 90% of canvas
         var garmentScale = Math.min(canvas.width / garmentImg.width, canvas.height / garmentImg.height) * 0.9;
-        
         garmentImg.scale(garmentScale);
         garmentImg.set({
-          left: canvas.width / 2,
-          top: canvas.height / 2,
-          originX: 'center',
-          originY: 'center',
-          selectable: false,
-          evented: false,
-          objectCaching: false // Disable caching to prevent render artifacts
+          left: canvas.width / 2, top: canvas.height / 2,
+          originX: 'center', originY: 'center',
+          selectable: false, evented: false,
+          objectCaching: false
         });
-        
-        // Add garment to canvas
         canvas.add(garmentImg);
         
-        // Now load and add graphics ON TOP of garment
-        loadGraphicsOnTop(currentUpdateId, garmentScale);
-        
+        // Load graphics on top of garment using snapshotted state
+        loadGraphicsOnTop(currentUpdateId, garmentScale, capturedState);
       }, { crossOrigin: 'anonymous' });
     }
     
-    function loadGraphicsOnTop(updateId, garmentScale) {
-      // Determine which graphics to show based on current view
+    // Determine if a placement should be visible for the given view
+    function isPlacementVisibleForView(placementId, view) {
+      if (placementId === 'hat-front') return true;
+      if (placementId === 'full-back') return view === 'back';
+      // full-front, left-chest, right-chest are all front placements
+      return view === 'front';
+    }
+    
+    // Graphic print area dimensions by placement type (as fraction of canvas)
+    // Headwear: compact print area on hat front panel
+    // Small placements (chest, hat): modest print area.
+    // Full placements (front/back): large print area for primary designs.
+    var PRINT_AREA = {
+      headwear:  { wFrac: 0.25, hFrac: 0.18 },
+      small:     { wFrac: 0.18, hFrac: 0.13 },
+      full:      { wFrac: 0.40, hFrac: 0.35 }
+    };
+    
+    function loadGraphicsOnTop(updateId, garmentScale, cs) {
+      // Build list of graphics visible in this view
       var graphicsToShow = [];
       
-      // Check main graphic
-      if (state.graphic && state.placement) {
-        // Only show if placement matches current view
-        var shouldShow = (state.placement === 'full-back' && state.view === 'back') ||
-            ((state.placement === 'full-front' || state.placement === 'left-chest' || state.placement === 'right-chest') && state.view === 'front') ||
-            (state.placement === 'hat-front');
-        if (shouldShow) {
-          graphicsToShow.push({ graphicId: state.graphic, placementId: state.placement });
-        }
+      if (cs.graphic && cs.placement && isPlacementVisibleForView(cs.placement, cs.view)) {
+        graphicsToShow.push({ graphicId: cs.graphic, placementId: cs.placement });
       }
-      
-      // Check additional graphics - use same logic as main graphic
-      state.additionalGraphics.forEach(function(ag) {
-        var agShouldShow = (ag.placement === 'full-back' && state.view === 'back') ||
-            ((ag.placement === 'full-front' || ag.placement === 'left-chest' || ag.placement === 'right-chest') && state.view === 'front') ||
-            (ag.placement === 'hat-front');
-        if (agShouldShow) {
+      cs.additionalGraphics.forEach(function(ag) {
+        if (isPlacementVisibleForView(ag.placement, cs.view)) {
           graphicsToShow.push({ graphicId: ag.graphic, placementId: ag.placement });
         }
       });
       
-      // If no graphics to show, just render canvas
       if (graphicsToShow.length === 0) {
         canvas.renderAll();
         return;
       }
       
-      // Load each graphic
-      var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
+      var isHeadwear = cs.garment === 'trucker-hat' || cs.garment === 'beanie';
       var loadedCount = 0;
+      var totalToLoad = graphicsToShow.length;
       
-      graphicsToShow.forEach(function(item, index) {
+      graphicsToShow.forEach(function(item) {
         var graphic = graphics.find(function(g) { return g.id === item.graphicId; });
         var placement = placements.find(function(p) { return p.id === item.placementId; });
         
         if (!graphic || !placement) {
           loadedCount++;
-          if (loadedCount === graphicsToShow.length) canvas.renderAll();
+          if (loadedCount === totalToLoad) canvas.renderAll();
           return;
         }
         
         fabric.Image.fromURL(graphic.fullImage, function(graphicImg, isError) {
-          // Check if still current update
-          if (updateId !== previewUpdateId) return;
-          
+          if (updateId !== previewUpdateId) return; // Stale check
           loadedCount++;
           
           if (!graphicImg || isError || !graphicImg.width || !graphicImg.height) {
-            if (loadedCount === graphicsToShow.length) canvas.renderAll();
+            if (loadedCount === totalToLoad) canvas.renderAll();
             return;
           }
           
-          // Calculate position
-          var pos = getPlacementPosition(item.placementId, canvas.width, canvas.height);
+          // Determine print area bounds based on placement type
+          var area = isHeadwear ? PRINT_AREA.headwear :
+                     placement.isSmall ? PRINT_AREA.small : PRINT_AREA.full;
+          var maxPrintW = canvas.width * area.wFrac;
+          var maxPrintH = canvas.height * area.hFrac;
           
-          // Calculate scale based on placement type
-          var maxPrintWidth, maxPrintHeight;
-          if (isHeadwear) {
-            maxPrintWidth = canvas.width * 0.25;
-            maxPrintHeight = canvas.height * 0.18;
-          } else if (placement.isSmall) {
-            maxPrintWidth = canvas.width * 0.18;
-            maxPrintHeight = canvas.height * 0.13;
-          } else {
-            maxPrintWidth = canvas.width * 0.40;
-            maxPrintHeight = canvas.height * 0.35;
-          }
-          
-          var scaleToFitWidth = maxPrintWidth / graphicImg.width;
-          var scaleToFitHeight = maxPrintHeight / graphicImg.height;
-          var maxScale = Math.min(scaleToFitWidth, scaleToFitHeight);
+          var maxScale = Math.min(maxPrintW / graphicImg.width, maxPrintH / graphicImg.height);
           var initialScale = maxScale * 0.9;
           
           graphicImg.scale(initialScale);
           graphicImg.maxScale = maxScale;
           graphicImg.minScale = maxScale * 0.15;
           
+          var pos = getPlacementPosition(item.placementId, canvas.width, canvas.height);
           graphicImg.set({
-            left: pos.x,
-            top: pos.y,
-            originX: 'center',
-            originY: 'center',
-            selectable: true,
-            hasControls: true,
-            hasBorders: true,
-            lockRotation: false,
-            lockScalingFlip: true,
-            borderColor: '#8B0000',
-            cornerColor: '#8B0000',
-            cornerSize: 10,
-            cornerStyle: 'circle',
-            transparentCorners: false,
-            padding: 5,
-            objectCaching: false, // Disable caching to prevent render artifacts
-            isGraphic: true,
-            graphicId: item.graphicId,
-            placementId: item.placementId
+            left: pos.x, top: pos.y,
+            originX: 'center', originY: 'center',
+            selectable: true, hasControls: true, hasBorders: true,
+            lockRotation: false, lockScalingFlip: true,
+            borderColor: '#8B0000', cornerColor: '#8B0000',
+            cornerSize: 10, cornerStyle: 'circle', transparentCorners: false,
+            padding: 5, objectCaching: false,
+            isGraphic: true, graphicId: item.graphicId, placementId: item.placementId
           });
           
-          // Add graphic to canvas - it will be on top since garment was added first
           canvas.add(graphicImg);
-          
-          // Final render when all graphics loaded
-          if (loadedCount === graphicsToShow.length) {
-            canvas.renderAll();
-          }
+          if (loadedCount === totalToLoad) canvas.renderAll();
         }, { crossOrigin: 'anonymous' });
       });
     }
     
+    // Placement position map (center coordinates as fraction of canvas dimensions)
+    // These are calibrated for 350x467 canvas with 90%-scaled garment images.
+    var PLACEMENT_POSITIONS = {
+      'full-front':  { xFrac: 0.50, yFrac: 0.45 },
+      'full-back':   { xFrac: 0.50, yFrac: 0.45 },
+      'left-chest':  { xFrac: 0.35, yFrac: 0.32 },
+      'right-chest': { xFrac: 0.65, yFrac: 0.32 },
+      'hat-front':   { xFrac: 0.50, yFrac: 0.42 }
+    };
+    
     function getPlacementPosition(placementId, w, h) {
-      // For headwear, position graphic in upper-center area (front panel)
-      var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
-      
-      var positions = {
-        'full-front': { x: w / 2, y: h * 0.45 },
-        'full-back': { x: w / 2, y: h * 0.45 },
-        'left-chest': { x: w * 0.35, y: h * 0.32 },
-        'right-chest': { x: w * 0.65, y: h * 0.32 },
-        'hat-front': { x: w / 2, y: isHeadwear ? h * 0.42 : h * 0.45 }
-      };
-      return positions[placementId] || { x: w / 2, y: h / 2 };
+      var pos = PLACEMENT_POSITIONS[placementId];
+      if (!pos) return { x: w / 2, y: h / 2 };
+      return { x: w * pos.xFrac, y: h * pos.yFrac };
     }
     
     // Order summary

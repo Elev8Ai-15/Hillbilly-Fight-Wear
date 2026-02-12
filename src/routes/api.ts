@@ -1,6 +1,7 @@
 // ============================================
 // API Routes
-// GET endpoints for data, POST endpoints for checkout and pricing
+// GET endpoints serve catalog data; POST endpoints handle checkout and pricing.
+// All POST endpoints validate inputs server-side and enforce catalog pricing.
 // ============================================
 import { Hono } from 'hono'
 import {
@@ -14,7 +15,7 @@ type Bindings = {
 
 const api = new Hono<{ Bindings: Bindings }>()
 
-// Data endpoints
+// --- Data endpoints (read-only, publicly cacheable) ---
 api.get('/garments', (c) => c.json(garments))
 api.get('/graphics', (c) => c.json(graphics))
 api.get('/placements', (c) => c.json(placements))
