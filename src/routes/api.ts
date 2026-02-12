@@ -140,10 +140,11 @@ api.post('/calculate-price', async (c) => {
   }
   
   const basePrice = g.basePrice
-  // Calculate additional cost: $10 for small placements, $20 for full placements
+  // Calculate additional cost: $10 for small placements, $15 for full placements
+  // Must match client-side getGraphicPrice() in the Build page
   const additionalCost = additionalGraphics.reduce((acc: number, ag: { placement: string }) => {
     const p = placements.find(x => x.id === ag.placement)
-    return acc + (p && p.isSmall ? 10 : 20)
+    return acc + (p && p.isSmall ? 10 : 15)
   }, 0)
   const total = basePrice + additionalCost
   
@@ -210,10 +211,11 @@ api.post('/create-checkout', async (c) => {
   }
   
   const basePrice = g.basePrice
-  // Calculate additional cost: $10 for small placements, $20 for full placements
+  // Calculate additional cost: $10 for small placements, $15 for full placements
+  // Must match client-side getGraphicPrice() in the Build page
   const additionalCost = additionalGraphics.reduce((acc: number, ag: { graphic: string; placement: string }) => {
     const p = placements.find(x => x.id === ag.placement)
-    return acc + (p && p.isSmall ? 10 : 20)
+    return acc + (p && p.isSmall ? 10 : 15)
   }, 0)
   const total = basePrice + additionalCost
   

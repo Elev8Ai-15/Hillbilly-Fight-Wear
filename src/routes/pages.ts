@@ -319,7 +319,7 @@ pages.get('/cookie-policy', (c) => {
       
       <h2>4. Managing Your Cookie Preferences</h2>
       <p>You can manage your cookie preferences at any time by clicking the button below or visiting the "Cookie Settings" link in our website footer.</p>
-      <a href="javascript:void(0)" onclick="showCookieSettings()" class="manage-btn"><i class="fas fa-cog"></i> Manage Cookie Settings</a>
+      <a href="/?showCookieSettings=true" class="manage-btn"><i class="fas fa-cog"></i> Manage Cookie Settings</a>
       
       <h2>5. Browser Cookie Controls</h2>
       <p>Most web browsers allow you to control cookies through their settings. You can:</p>
@@ -349,11 +349,6 @@ pages.get('/cookie-policy', (c) => {
     </div>
   </div>
   
-  <script nonce="${nonce}">
-    function showCookieSettings() {
-      window.location.href = '/?showCookieSettings=true';
-    }
-  </script>
 </body>
 </html>`)
 })
