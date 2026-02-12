@@ -32,7 +32,7 @@ export const garments = [
   },
   {
     id: 'hoodie',
-    name: 'Hoodie',
+    name: 'Pullover Hoodie',
     basePrice: 50.00,
     category: 'tops',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
@@ -41,6 +41,19 @@ export const garments = [
       white: { front: '/images/garments/hoodie-white-front.png', back: '/images/garments/hoodie-white-back.png' },
       black: { front: '/images/garments/hoodie-black-front.png', back: '/images/garments/hoodie-black-back.png' },
       grey: { front: '/images/garments/hoodie-grey-front.png', back: '/images/garments/hoodie-grey-back.png' }
+    }
+  },
+  {
+    id: 'zipup-hoodie',
+    name: 'Zip-Up Hoodie',
+    basePrice: 50.00,
+    category: 'tops',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+    supportsPlacement: true,
+    images: {
+      white: { front: '/images/garments/zipup-hoodie-white-front.png', back: '/images/garments/zipup-hoodie-white-back.png' },
+      black: { front: '/images/garments/zipup-hoodie-black-front.png', back: '/images/garments/zipup-hoodie-black-back.png' },
+      grey: { front: '/images/garments/zipup-hoodie-grey-front.png', back: '/images/garments/zipup-hoodie-grey-back.png' }
     }
   },
   {
@@ -259,8 +272,10 @@ export const placements = [
 // type: 'garment' = clothing/hats (shows size→color flow), 'decal' = stickers/decals (shows expanded view)
 // MENS CLOTHING - T-Shirts and Hoodies
 export const mensClothing = [
-  { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM_6c519925-dfd5-4982-b8c8-c01f4c572668.png?v=1764960913', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'] },
-  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.39.09PM.png?v=1764959976', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'] },
+  { id: 'm1', title: 'MYOB Pullover Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM_6c519925-dfd5-4982-b8c8-c01f4c572668.png?v=1764960913', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'] },
+  { id: 'm1z', title: 'MYOB Zip-Up Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/garments/zipup-hoodie-black-front.png', type: 'garment', garmentType: 'zipup-hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'] },
+  { id: 'm2', title: 'Thump a Stranger Pullover Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.39.09PM.png?v=1764959976', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'] },
+  { id: 'm2z', title: 'Thump a Stranger Zip-Up Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/garments/zipup-hoodie-black-front.png', type: 'garment', garmentType: 'zipup-hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'] },
   { id: 'm3', title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/hfwf.png?v=1541520222', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
   { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/yycf.png?v=1541520348', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
   { id: 'm5', title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/funf.png?v=1541520465', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] },
@@ -286,7 +301,8 @@ export const womensClothing = [
 
 // KIDS CLOTHING - Youth Hoodie
 export const kidsClothing = [
-  { id: 'k1', title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM.png?v=1764960668', type: 'garment', garmentType: 'hoodie', sizes: ['YS','YM','YL','YXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'] }
+  { id: 'k1', title: 'Youth Pullover Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: 'https://cdn.shopify.com/s/files/1/2978/1770/files/Screenshot2025-12-05at1.50.03PM.png?v=1764960668', type: 'garment', garmentType: 'hoodie', sizes: ['YS','YM','YL','YXL'], colors: ['Black','White','Grey'] },
+  { id: 'k1z', title: 'Youth Zip-Up Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/garments/zipup-hoodie-black-front.png', type: 'garment', garmentType: 'zipup-hoodie', sizes: ['YS','YM','YL','YXL'], colors: ['Black','White','Grey'] }
 ]
 
 // HATS - Trucker Hats and Beanies

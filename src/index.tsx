@@ -1888,9 +1888,6 @@ app.get('/', (c) => {
           case 'selectModalSize':
             selectModalSize(el.getAttribute('data-product-id'), el.getAttribute('data-size'));
             break;
-          case 'selectModalStyle':
-            selectModalStyle(el.getAttribute('data-product-id'), el.getAttribute('data-style'));
-            break;
           case 'selectModalColor':
             selectModalColor(el.getAttribute('data-product-id'), el.getAttribute('data-color'));
             break;
@@ -1908,8 +1905,7 @@ app.get('/', (c) => {
             addToCart(
               el.getAttribute('data-product-id'),
               el.getAttribute('data-size'),
-              el.getAttribute('data-color'),
-              el.getAttribute('data-style')
+              el.getAttribute('data-color')
             );
             break;
           case 'changeQty':
@@ -2094,7 +2090,7 @@ app.get('/', (c) => {
         total += subtotal;
         var details = '';
         if (item.size) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Size: ' + esc(item.size) + '</span> ';
-        if (item.style) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Style: ' + esc(item.style) + '</span> ';
+        // Style field removed: Pullover/Zip-Up are now separate products
         if (item.color) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Color: ' + esc(item.color) + '</span>';
         html += '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; align-items:flex-start;">' +
           '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#f7f7f7; flex-shrink:0;">' +
@@ -2116,7 +2112,7 @@ app.get('/', (c) => {
       document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
     }
     
-    function addToCart(productId, size, color, style) {
+    function addToCart(productId, size, color) {
       try {
         var product = allShopProducts.find(function(p) { return p.id === productId; });
         if (!product) return;
@@ -2124,9 +2120,9 @@ app.get('/', (c) => {
         var cartImage = (color && typeof getColorPreviewImage === 'function')
           ? getColorPreviewImage(product, color)
           : product.image;
-        // Check for duplicate (same product, size, color, style)
+        // Check for duplicate (same product, size, color)
         var existing = cart.findIndex(function(item) {
-          return item.productId === productId && item.size === (size||'') && item.color === (color||'') && item.style === (style||'');
+          return item.productId === productId && item.size === (size||'') && item.color === (color||'');
         });
         if (existing >= 0) {
           cart[existing].qty += 1;
@@ -2138,7 +2134,6 @@ app.get('/', (c) => {
             image: cartImage,
             size: size || '',
             color: color || '',
-            style: style || '',
             qty: 1
           });
         }
@@ -2170,7 +2165,6 @@ app.get('/', (c) => {
       var items = cart.map(function(item) {
         var desc = item.title;
         if (item.size) desc += ' (Size: ' + item.size + ')';
-        if (item.style) desc += ' [' + item.style + ']';
         if (item.color) desc += ' - ' + item.color;
         return desc + ' x' + item.qty + ' = $' + (item.price * item.qty).toFixed(2);
       });
@@ -2203,13 +2197,13 @@ app.get('/', (c) => {
     // ========================================
     // PRODUCT DETAIL MODAL
     // ========================================
-    var modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '' };
+    var modalState = { step: 'view', selectedSize: '', selectedColor: '' };
     
     function openProductModal(productId) {
       try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
       if (!product) return;
-      modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '', productId: productId };
+      modalState = { step: 'view', selectedSize: '', selectedColor: '', productId: productId };
       
       if (product.type === 'garment') {
         renderGarmentModal(product, 'size');
@@ -2248,7 +2242,6 @@ app.get('/', (c) => {
       var summaryPills = function() {
         var pills = '';
         if (modalState.selectedSize) pills += '<span style="background:#f0f7ff; padding:4px 10px; border-radius:4px;"><i class="fas fa-ruler" style="color:#4CAF50;"></i> ' + modalState.selectedSize + '</span> ';
-        if (modalState.selectedStyle) pills += '<span style="background:#f0f7ff; padding:4px 10px; border-radius:4px;"><i class="fas fa-tshirt" style="color:#4CAF50;"></i> ' + modalState.selectedStyle + '</span> ';
         if (modalState.selectedColor) pills += '<span style="background:#f0f7ff; padding:4px 10px; border-radius:4px;"><i class="fas fa-palette" style="color:#4CAF50;"></i> ' + modalState.selectedColor + '</span> ';
         return pills ? '<div style="padding:0 20px 8px; font-size:0.85rem; color:#555; display:flex; flex-wrap:wrap; gap:6px;">' + pills + '</div>' : '';
       };
@@ -2266,23 +2259,6 @@ app.get('/', (c) => {
             '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + sizesHtml + '</div>' +
           '</div>';
           
-      } else if (step === 'style') {
-        // STYLE SELECTION STEP (hoodies only: Pullover / Zip-Up)
-        var stylesHtml = (product.styles || []).map(function(st) {
-          var sel = modalState.selectedStyle === st ? 'background:#8B0000; color:#fff; border-color:#8B0000;' : '';
-          var icon = st === 'Zip-Up' ? 'fa-vest' : 'fa-tshirt';
-          return '<button data-action="selectModalStyle" data-product-id="' + product.id + '" data-style="' + st + '" style="padding:14px 24px; border:2px solid #ddd; background:#fff; border-radius:8px; cursor:pointer; font-size:1rem; font-weight:600; min-width:120px; transition:all 0.2s; ' + sel + '"><i class="fas ' + icon + '" style="margin-right:6px;"></i>' + st + '</button>';
-        }).join('');
-        
-        mc.innerHTML = imageHtml + headerHtml + summaryPills() +
-          '<div style="padding:0 20px 5px;">' +
-            '<h4 style="margin:0 0 12px; font-size:1rem; color:#666; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-tshirt"></i> Select Style</h4>' +
-            '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + stylesHtml + '</div>' +
-          '</div>' +
-          '<div style="padding:15px 20px 20px; display:flex; gap:10px;">' +
-            '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="size" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
-          '</div>';
-          
       } else if (step === 'color') {
         // COLOR SELECTION STEP
         var colorsHtml = product.colors.map(function(c) {
@@ -2292,8 +2268,7 @@ app.get('/', (c) => {
           return '<button data-action="selectModalColor" data-product-id="' + product.id + '" data-color="' + c + '" style="padding:14px 24px; border:2px solid #ddd; background:' + bg + '; color:' + textColor + '; border-radius:8px; cursor:pointer; font-size:0.95rem; font-weight:600; min-width:80px; transition:all 0.2s; ' + sel + '">' + c + '</button>';
         }).join('');
         
-        // Back goes to style step if product has styles, otherwise to size
-        var backStep = (product.styles && product.styles.length > 0) ? 'style' : 'size';
+        var backStep = 'size';
         
         mc.innerHTML = imageHtml + headerHtml + summaryPills() +
           '<div style="padding:0 20px 5px;">' +
@@ -2308,7 +2283,7 @@ app.get('/', (c) => {
         // CONFIRM + ADD TO CART
         mc.innerHTML = imageHtml + headerHtml + summaryPills() +
           '<div style="padding:10px 20px 20px; display:flex; flex-direction:column; gap:10px;">' +
-            '<button data-action="addToCart" data-product-id="' + product.id + '" data-size="' + modalState.selectedSize + '" data-color="' + modalState.selectedColor + '" data-style="' + (modalState.selectedStyle || '') + '" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
+            '<button data-action="addToCart" data-product-id="' + product.id + '" data-size="' + modalState.selectedSize + '" data-color="' + modalState.selectedColor + '" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
             '<button data-action="closeProductModal" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
             '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="size" style="padding:10px; background:transparent; color:#666; border:none; cursor:pointer; font-size:0.85rem; text-decoration:underline;">Change Options</button>' +
           '</div>';
@@ -2317,17 +2292,6 @@ app.get('/', (c) => {
     
     function selectModalSize(productId, size) {
       modalState.selectedSize = size;
-      var product = allShopProducts.find(function(p) { return p.id === productId; });
-      // Auto-advance: if product has styles (hoodies), go to style step; otherwise go to color
-      if (product.styles && product.styles.length > 0) {
-        renderGarmentModal(product, 'style');
-      } else {
-        renderGarmentModal(product, 'color');
-      }
-    }
-    
-    function selectModalStyle(productId, style) {
-      modalState.selectedStyle = style;
       var product = allShopProducts.find(function(p) { return p.id === productId; });
       // Auto-advance to color step
       renderGarmentModal(product, 'color');
@@ -2352,7 +2316,7 @@ app.get('/', (c) => {
           '<div style="color:#8B0000; font-size:1.3rem; font-weight:600; margin-bottom:4px;">' + product.price + '</div>' +
           '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-bottom:16px;"><i class="fas fa-truck"></i> Free shipping included</div>' +
           '<div style="display:flex; flex-direction:column; gap:10px;">' +
-            '<button data-action="addToCart" data-product-id="' + product.id + '" data-size="" data-color="" data-style="" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
+            '<button data-action="addToCart" data-product-id="' + product.id + '" data-size="" data-color="" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
             '<button data-action="closeProductModal" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
           '</div>' +
         '</div>';
