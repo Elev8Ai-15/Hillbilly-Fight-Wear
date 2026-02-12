@@ -15,7 +15,14 @@ type Bindings = {
 
 const api = new Hono<{ Bindings: Bindings }>()
 
-// --- Data endpoints (read-only, publicly cacheable) ---
+// --- Data endpoints (read-only, publicly cacheable for 5 minutes) ---
+api.use('/garments', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
+api.use('/graphics', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
+api.use('/placements', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
+api.use('/products', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
+api.use('/shop-products', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
+api.use('/slides', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
+
 api.get('/garments', (c) => c.json(garments))
 api.get('/graphics', (c) => c.json(graphics))
 api.get('/placements', (c) => c.json(placements))
@@ -64,8 +71,11 @@ api.post('/shop-checkout', async (c) => {
   
   const total = cartItems.reduce((sum: number, item: { price: number; qty: number }) => sum + (item.price * item.qty), 0)
   
+  // Guard against floating-point precision issues
+  const roundedTotal = Math.round(total * 100) / 100
+  
   // Sanity check total
-  if (total <= 0 || total > 50000) {
+  if (roundedTotal <= 0 || roundedTotal > 50000) {
     return c.json({ error: 'Invalid order total' }, 400)
   }
   
@@ -74,7 +84,7 @@ api.post('/shop-checkout', async (c) => {
   if (!stripeKey) {
     return c.json({
       demo: true,
-      total: total.toFixed(2),
+      total: roundedTotal.toFixed(2),
       items: cartItems.map((item: { title: string; size?: string; color?: string; style?: string; qty: number; price: number }) => ({
         title: item.title,
         size: item.size,
@@ -90,8 +100,9 @@ api.post('/shop-checkout', async (c) => {
     // Build Stripe line items
     const params = new URLSearchParams()
     params.append('mode', 'payment')
-    params.append('success_url', `${new URL(c.req.url).origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`)
-    params.append('cancel_url', `${new URL(c.req.url).origin}/#shop`)
+    const origin = new URL(c.req.url).origin
+    params.append('success_url', `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`)
+    params.append('cancel_url', `${origin}/#shop`)
     
     cartItems.forEach((item: { title: string; size?: string; color?: string; style?: string; qty: number; price: number }, i: number) => {
       const desc = [item.size, item.style, item.color].filter(Boolean).join(', ')

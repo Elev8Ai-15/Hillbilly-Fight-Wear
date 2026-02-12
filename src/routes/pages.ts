@@ -1,6 +1,8 @@
 // ============================================
 // Static Page Routes
-// Favicon, robots, checkout success, privacy policy, cookie policy, 404
+// Handles: favicon, apple-touch-icon, robots.txt,
+// checkout success, privacy policy, cookie policy, 404.
+// All pages share the CSP nonce from the security middleware.
 // ============================================
 import { Hono } from 'hono'
 
@@ -10,7 +12,8 @@ type Variables = {
 
 const pages = new Hono<{ Variables: Variables }>()
 
-// Favicon route
+// Favicon route - return 204 (no content) to avoid 404 noise in logs
+// Actual favicon is loaded via <link> tag pointing to the logo PNG
 pages.get('/favicon.ico', (c) => {
   return new Response(null, { status: 204 })
 })

@@ -9,7 +9,7 @@
   "icons": [
     {
       "src": "/images/graphics/hillbilly-fightwear-logo.png",
-      "sizes": "1024x687",
+      "sizes": "any",
       "type": "image/png"
     }
   ]

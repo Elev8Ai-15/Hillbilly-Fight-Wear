@@ -1,7 +1,24 @@
 // ============================================
 // Product Catalog Data
-// Garments, Graphics, Placements, Shop Products, Featured, Slides
+// Single source of truth for all garments, graphics, placements,
+// shop products, featured products, and carousel slides.
+// Consumed by: homepage (index.tsx), API routes, build page.
 // ============================================
+
+// Type for shop products displayed in category grids and cart
+export type ShopProduct = {
+  id: string
+  title: string
+  vendor: string
+  price: string
+  priceNum: number
+  image: string
+  type: 'garment' | 'decal'
+  garmentType?: string
+  sizes?: string[]
+  colors?: string[]
+  styles?: string[]
+}
 
 export const garments = [
   {
@@ -309,6 +326,7 @@ export const hats = [
   { id: 'h3', title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_Hat_site_pic.jpg?v=1544660239', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
   { id: 'h4', title: 'Fitted Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfighter_fitted.jpg?v=1556679360', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
   { id: 'h5', title: 'Fitted Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_fitted.jpg?v=1556679540', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  // NOTE: h6 intentionally skipped (previously removed Hard Hittin hat). IDs are stable references and should not be reused.
   { id: 'h7', title: 'Adjustable Hat - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/It_s_A_Fun_Ride_adjustable_trucker.jpg?v=1556678568', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black','White'] },
   { id: 'h8', title: 'Adjustable Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/HFW_adjusted.jpg?v=1556679508', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
   { id: 'h9', title: 'Adjustable Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/cockfigher_adjustable.jpg?v=1556679321', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
@@ -336,8 +354,9 @@ export const decals = [
   { id: 'd15', title: 'Decal - HFW Logo', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hfw-logo.png?v=1', type: 'decal' }
 ]
 
-// Combined shopProducts for API endpoint
-export const shopProducts = [...mensClothing, ...womensClothing, ...kidsClothing, ...hats, ...decals]
+// Combined shopProducts for API endpoint and homepage rendering
+// Order: mens → womens → kids → hats → decals (matches UI category order)
+export const shopProducts: ShopProduct[] = [...mensClothing, ...womensClothing, ...kidsClothing, ...hats, ...decals]
 
 // Featured products for Build Your Own section (internal links, prices reflect base T-shirt cost)
 // Only 3 featured: GPG Design, Human Cockfighter, Thump a Stranger
@@ -347,6 +366,8 @@ export const products = [
   { id: 3, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-thump.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
 ]
 
+// Carousel slides — all have hasOverlay:false (no text overlays currently in use)
+// Title/subtitle fields retained for future use
 export const slides = [
   { id: 0, image: '/images/slides/slide-cage-coach.jpg', title: '', subtitle: '', hasOverlay: false },
   { id: 1, image: '/images/slides/slide-gpg-handshake.jpg', title: '', subtitle: '', hasOverlay: false },

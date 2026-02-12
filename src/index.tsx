@@ -5,7 +5,8 @@ import pageRoutes from './routes/pages'
 import {
   garments, graphics, placements,
   products, shopProducts, slides,
-  mensClothing, womensClothing, kidsClothing, hats, decals
+  mensClothing, womensClothing, kidsClothing, hats, decals,
+  type ShopProduct
 } from './data/catalog'
 
 type Bindings = {
@@ -95,7 +96,7 @@ app.get('/', (c) => {
   `).join('')
 
   // HTML-escape helper for product titles in attributes (XSS prevention)
-  const escHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+  const escHtml = (s: string): string => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 
   const productsHtml = products.map(product => `
     <a href="${product.url}" class="product-card">
@@ -110,7 +111,7 @@ app.get('/', (c) => {
 
   // Helper function to generate product cards - opens detail modal on click
   // Product titles and vendors are HTML-escaped to prevent XSS
-  const generateProductCards = (items: any[]) => items.map(product => `
+  const generateProductCards = (items: ShopProduct[]) => items.map(product => `
     <div class="product-card" role="listitem" aria-label="${escHtml(product.title)} - ${product.price}" data-action="openProductModal" data-product-id="${product.id}" tabindex="0">
       <div class="product-image-wrapper">
         <img src="${product.image}" alt="${escHtml(product.title)}" class="product-image" loading="lazy" width="280" height="280">
@@ -177,8 +178,8 @@ app.get('/', (c) => {
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" as="style">
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/images/graphics/hillbilly-fightwear-logo.png">
-  <link rel="apple-touch-icon" href="/images/graphics/hillbilly-fightwear-logo.png">
+  <link rel="icon" type="image/png" href="/images/graphics/hillbilly-fightwear-logo.png" sizes="any">
+  <link rel="apple-touch-icon" href="/images/graphics/hillbilly-fightwear-logo.png" sizes="180x180">
   
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json" nonce="${nonce}">
@@ -457,6 +458,7 @@ app.get('/', (c) => {
       width: 100%;
       height: 100vh;
       min-height: 600px;
+      max-height: 1200px;
       overflow: hidden;
       background: #0a0a0a;
     }
@@ -1185,7 +1187,7 @@ app.get('/', (c) => {
          L:1% + L:17% ... R:8% (moved left 1"). All +25% size. */
     .sticker-collage .sticker-1  { top: 1%;  left: 1%;    width: 181px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* HCF 181x103 */
     .sticker-collage .sticker-4  { top: 2%;  left: 17%;   width: 144px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* Thump 144x115 */
-    .sticker-collage .sticker-2  { display: none; }  /* GNF-RB DELETED per request */
+    .sticker-collage .sticker-2  { display: none !important; }  /* GNF-RB DELETED per request */
     .sticker-collage .sticker-7  { top: 2%;  right: 15%;  width: 162px; transform: rotate(7deg);   --hover-rotate: rotate(3deg); }   /* YourNeck — left 1" more (right:8→15%) */
 
     /* --- LEFT COLUMN: 3 stickers — #6 moved down 1" + right 1.25", #11 moved down 0.5" + right 1" ---
@@ -1303,7 +1305,7 @@ app.get('/', (c) => {
     <div class="sticker-collage" aria-hidden="true">
       <!-- TOP ROW -->
       <img class="sticker sticker-1"  src="/images/stickers/sticker-hcf.png?v=13"           alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-2"  src="/images/stickers/sticker-gnf-redblue.png?v=15"    alt="" loading="eager" draggable="false">
+      <!-- GNF Red/Blue (#2) removed per user request -->
       <img class="sticker sticker-3"  src="/images/stickers/sticker-obama-tap.png?v=13"      alt="" loading="eager" draggable="false">
       <img class="sticker sticker-4"  src="/images/stickers/sticker-thump.png?v=13"          alt="" loading="eager" draggable="false">
       <img class="sticker sticker-5"  src="/images/stickers/sticker-fun-ride.png?v=13"       alt="" loading="eager" draggable="false">
@@ -1755,8 +1757,8 @@ app.get('/', (c) => {
     // ========================================
     function getCookieConsent() {
       try {
-        const consent = localStorage.getItem('cookieConsent');
-        return consent ? JSON.parse(consent) : null;
+        var raw = localStorage.getItem('cookieConsent');
+        return raw ? JSON.parse(raw) : null;
       } catch (e) { return null; }
     }
     
@@ -1852,7 +1854,7 @@ app.get('/', (c) => {
       document.addEventListener('click', function(e) {
         var el = e.target.closest('[data-action]');
         if (!el) return;
-        var action = el.getAttribute('data-action');
+        var action = el.dataset.action;
         
         switch(action) {
           // Cookie consent
@@ -1869,7 +1871,7 @@ app.get('/', (c) => {
           
           // Slideshow
           case 'togglePause': togglePause(); break;
-          case 'goToSlide': goToSlide(parseInt(el.getAttribute('data-index'), 10)); break;
+          case 'goToSlide': goToSlide(parseInt(el.dataset.index, 10)); break;
           
           // Product cards & modal
           case 'openProductModal': openProductModal(el.getAttribute('data-product-id')); break;
@@ -1880,17 +1882,17 @@ app.get('/', (c) => {
           
           // Modal option steps
           case 'selectModalSize':
-            selectModalSize(el.getAttribute('data-product-id'), el.getAttribute('data-size'));
+            selectModalSize(el.dataset.productId, el.dataset.size);
             break;
           case 'selectModalColor':
-            selectModalColor(el.getAttribute('data-product-id'), el.getAttribute('data-color'));
+            selectModalColor(el.dataset.productId, el.dataset.color);
             break;
           case 'selectModalStyle':
-            selectModalStyle(el.getAttribute('data-product-id'), el.getAttribute('data-style'));
+            selectModalStyle(el.dataset.productId, el.dataset.style);
             break;
           case 'renderGarmentModalBack':
-            var pid = el.getAttribute('data-product-id');
-            var step = el.getAttribute('data-step');
+            var pid = el.dataset.productId;
+            var step = el.dataset.step;
             var prod = allShopProducts.find(function(p) { return p.id === pid; });
             if (prod) renderGarmentModal(prod, step);
             break;
@@ -1900,17 +1902,17 @@ app.get('/', (c) => {
           case 'cartCheckout': cartCheckout(); break;
           case 'addToCart':
             addToCart(
-              el.getAttribute('data-product-id'),
-              el.getAttribute('data-size'),
-              el.getAttribute('data-color'),
-              el.getAttribute('data-style')
+              el.dataset.productId,
+              el.dataset.size,
+              el.dataset.color,
+              el.dataset.style
             );
             break;
           case 'changeQty':
-            changeQty(parseInt(el.getAttribute('data-index'), 10), parseInt(el.getAttribute('data-delta'), 10));
+            changeQty(parseInt(el.dataset.index, 10), parseInt(el.dataset.delta, 10));
             break;
           case 'removeFromCart':
-            removeFromCart(parseInt(el.getAttribute('data-index'), 10));
+            removeFromCart(parseInt(el.dataset.index, 10));
             break;
         }
       });
@@ -1990,13 +1992,15 @@ app.get('/', (c) => {
             style.textContent = '*, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }';
             document.head.appendChild(style);
             // Also pause slideshow
-            if (typeof clearInterval !== 'undefined' && typeof slideInterval !== 'undefined') {
+            if (slideInterval) {
               clearInterval(slideInterval);
+              isPaused = true;
             }
           } else {
             var el = document.getElementById('ada-no-animations');
             if (el) el.remove();
-            if (typeof startInterval === 'function') startInterval();
+            isPaused = false;
+            startInterval();
           }
           break;
         case 'cursor':
@@ -2214,7 +2218,7 @@ app.get('/', (c) => {
     function openProductModal(productId) {
       try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
-      if (!product) return;
+      if (!product) { console.warn('Product not found:', productId); return; }
       modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '', productId: productId };
       
       if (product.type === 'garment') {
