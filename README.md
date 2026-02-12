@@ -234,7 +234,17 @@ webapp/
 └── README.md
 ```
 
-## Recent Updates (v4.0.0 - Production Hardening)
+## Recent Updates (v5.0.0 - Code Review & Stability)
+- **Fixed: Hoodie graphic disappearing on color change** - Added 30ms debounce to `updatePreview()` eliminating the async race condition where rapid state changes caused stale `previewUpdateId` callbacks to drop graphics
+- **Fixed: All garment backgrounds now pure white** - Changed `#f7f7f7` to `#ffffff` across product-image-wrapper, Shop modal previews, decal modal previews, cart thumbnails, and Build canvas
+- **Refactored canvas constants**: Extracted `PRINT_AREA`, `PLACEMENT_POSITIONS`, and `isPlacementVisibleForView()` helper to reduce duplication and improve calibration clarity
+- **Fixed: Add Graphic modal now filters restricted graphics** - Modal was previously showing all graphics regardless of garment; now respects `restrictToGarments`
+- **Improved keyboard accessibility**: Space key now triggers product card modals with proper `preventDefault`
+- **Hardened null checks**: Defensive guards in `renderAdditionalGraphics`, `addToCart` (zipupHoodieImages guard), and API validation
+- **Simplified scaling handler**: Canvas object:scaling reduced to single clamped expression
+- **Cleaned up dead code**: Removed no-op event handler comment, improved inline documentation
+
+## Previous Updates (v4.0.0 - Production Hardening)
 - **CSP Nonces**: Per-request cryptographic nonces for inline script protection
 - **Local Tailwind CSS**: Replaced CDN with pre-built 7KB minified CSS
 - **Modular Routes**: Extracted API (279 lines), pages (331 lines), catalog (346 lines)
@@ -265,5 +275,5 @@ Enhanced from: https://hillbilly-fightwear.myshopify.com/
 
 ---
 **Status**: Active  
-**Last Updated**: 2026-02-11  
-**Version**: 4.0.0 (Production Hardening - CSP Nonces, Modular Routes, Asset Fixes)
+**Last Updated**: 2026-02-12  
+**Version**: 5.0.0 (Code Review & Stability - Debounced preview, white backgrounds, refactored constants)
