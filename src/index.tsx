@@ -1227,7 +1227,7 @@ app.get('/', (c) => {
       .sticker-collage .sticker-9  { width: 75px; }
     }
 
-    /* Mobile — compact layout with same relative moves */
+    /* Mobile — push stickers to edges so center logo/buttons stay clear */
     @media (max-width: 768px) {
       .scrapbook-hero { min-height: 100vh; }
       .scrapbook-center { max-width: 200px; padding: 15px 10px; }
@@ -1236,42 +1236,42 @@ app.get('/', (c) => {
       .scrapbook-cta a { padding: 7px 18px; font-size: 0.75rem; }
       .scrapbook-cta { flex-direction: column; align-items: center; gap: 6px; }
 
-      /* Top row */
-      .sticker-collage .sticker-1  { top: 1%;  left: 1%;   width: 90px !important; }
-      .sticker-collage .sticker-4  { top: 1%;  left: 22%;  width: 72px !important; }
-      .sticker-collage .sticker-7  { top: 1%;  right: 12%; left: auto; width: 82px !important; }
-      /* Left side — #6 moved down+right, #11 moved down+right */
-      .sticker-collage .sticker-6  { top: 18%; left: 15%;  right: auto; width: 68px !important; }
-      .sticker-collage .sticker-3  { top: 32%; left: 1%;   right: auto; width: 50px !important; }
-      .sticker-collage .sticker-11 { top: 52%; left: 6%;   right: auto; width: 75px !important; }
-      /* Right side — #8 moved left, #9 moved up */
-      .sticker-collage .sticker-5  { top: 13%; right: 1%;  left: auto; width: 48px !important; }
-      .sticker-collage .sticker-8  { top: 38%; right: 13%; left: auto; width: 50px !important; }
-      .sticker-collage .sticker-9  { top: 54%; right: 1%;  left: auto; width: 48px !important; }
-      /* Bottom row — #12 moved right */
-      .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 78px !important; }
-      .sticker-collage .sticker-12 { bottom: 1%; left: 29%;  width: 62px !important; }
-      .sticker-collage .sticker-13 { bottom: 1%; right: 23%; left: auto; width: 78px !important; }
-      .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 72px !important; }
+      /* Top row — across the top, well above logo */
+      .sticker-collage .sticker-1  { top: 1%;  left: 1%;   width: 80px !important; }
+      .sticker-collage .sticker-4  { top: 1%;  left: 20%;  width: 65px !important; }
+      .sticker-collage .sticker-7  { top: 1%;  right: 1%;  left: auto; width: 75px !important; }
+      /* Left side — hugging left edge */
+      .sticker-collage .sticker-6  { top: 15%; left: 1%;   right: auto; width: 60px !important; }
+      .sticker-collage .sticker-3  { top: 30%; left: 1%;   right: auto; width: 45px !important; }
+      .sticker-collage .sticker-11 { top: 55%; left: 1%;   right: auto; width: 65px !important; }
+      /* Right side — hugging right edge */
+      .sticker-collage .sticker-5  { top: 14%; right: 1%;  left: auto; width: 42px !important; }
+      .sticker-collage .sticker-8  { top: 42%; right: 1%;  left: auto; width: 45px !important; }
+      .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 42px !important; }
+      /* Bottom row — across the bottom, below buttons */
+      .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 70px !important; }
+      .sticker-collage .sticker-12 { bottom: 1%; left: 22%;  width: 55px !important; }
+      .sticker-collage .sticker-13 { bottom: 1%; right: 18%; left: auto; width: 70px !important; }
+      .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 65px !important; }
     }
 
-    /* Small phones */
+    /* Small phones — even smaller stickers, same edge-hugging positions */
     @media (max-width: 400px) {
       .scrapbook-center img { max-width: 140px; }
       .scrapbook-tagline { font-size: 0.7rem; letter-spacing: 2px; }
-      .sticker-collage .sticker-1  { width: 72px !important; }
-      .sticker-collage .sticker-4  { width: 58px !important; }
-      .sticker-collage .sticker-7  { width: 65px !important; }
-      .sticker-collage .sticker-5  { width: 38px !important; }
-      .sticker-collage .sticker-8  { width: 40px !important; }
-      .sticker-collage .sticker-6  { width: 54px !important; }
-      .sticker-collage .sticker-3  { width: 40px !important; }
-      .sticker-collage .sticker-11 { width: 60px !important; }
-      .sticker-collage .sticker-10 { width: 62px !important; }
-      .sticker-collage .sticker-12 { width: 50px !important; }
-      .sticker-collage .sticker-14 { width: 58px !important; }
-      .sticker-collage .sticker-13 { width: 62px !important; }
-      .sticker-collage .sticker-9  { width: 38px !important; }
+      .sticker-collage .sticker-1  { width: 65px !important; }
+      .sticker-collage .sticker-4  { width: 52px !important; }
+      .sticker-collage .sticker-7  { width: 60px !important; }
+      .sticker-collage .sticker-5  { width: 34px !important; }
+      .sticker-collage .sticker-8  { width: 36px !important; }
+      .sticker-collage .sticker-6  { width: 48px !important; }
+      .sticker-collage .sticker-3  { width: 36px !important; }
+      .sticker-collage .sticker-11 { width: 52px !important; }
+      .sticker-collage .sticker-10 { width: 55px !important; }
+      .sticker-collage .sticker-12 { width: 44px !important; }
+      .sticker-collage .sticker-14 { width: 50px !important; }
+      .sticker-collage .sticker-13 { width: 55px !important; }
+      .sticker-collage .sticker-9  { width: 34px !important; }
     }
   </style>
 </head>
