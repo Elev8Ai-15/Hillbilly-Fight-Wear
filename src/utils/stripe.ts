@@ -1,0 +1,393 @@
+// ============================================
+// Stripe Integration Module
+// Handles: product creation, price management, checkout sessions,
+// webhook verification, and Stripe-native email receipts.
+//
+// ACTIVATION: Set STRIPE_SECRET_KEY as a Cloudflare secret.
+// Once set, all checkout endpoints will use Stripe automatically.
+// ============================================
+import { shopProducts, garments, graphics, placements } from '../data/catalog'
+import {
+  type PricingBreakdown,
+  type BuilderPricing,
+  type CartItem,
+  calculateCartPricing,
+  calculateBuilderPricing,
+  roundCurrency,
+  generateStripeCheckoutParams,
+} from './pricing'
+import { generateShopReceipt, generateShopReceiptPlainText, type OrderInfo } from './email-receipt'
+
+const STRIPE_API = 'https://api.stripe.com/v1'
+
+// ============================================
+// TYPES
+// ============================================
+
+type StripeProduct = {
+  id: string
+  name: string
+  metadata: Record<string, string>
+  default_price?: string
+}
+
+type StripePrice = {
+  id: string
+  unit_amount: number
+  currency: string
+  product: string
+}
+
+type StripeSession = {
+  id: string
+  url?: string
+  payment_intent?: string
+  customer_email?: string
+  customer_details?: {
+    email?: string
+    name?: string
+    address?: {
+      line1?: string
+      line2?: string
+      city?: string
+      state?: string
+      postal_code?: string
+      country?: string
+    }
+  }
+  metadata?: Record<string, string>
+  amount_total?: number
+  error?: { message: string }
+}
+
+type StripeWebhookEvent = {
+  id: string
+  type: string
+  data: {
+    object: any
+  }
+}
+
+// ============================================
+// STRIPE API HELPER
+// ============================================
+
+async function stripeRequest(
+  method: string,
+  endpoint: string,
+  secretKey: string,
+  body?: URLSearchParams | string,
+): Promise<any> {
+  const headers: Record<string, string> = {
+    'Authorization': `Bearer ${secretKey}`,
+  }
+
+  if (body) {
+    headers['Content-Type'] = 'application/x-www-form-urlencoded'
+  }
+
+  const response = await fetch(`${STRIPE_API}${endpoint}`, {
+    method,
+    headers,
+    ...(body ? { body: body.toString() } : {}),
+  })
+
+  return response.json()
+}
+
+// ============================================
+// SHOP CHECKOUT (Cart → Stripe Checkout Session)
+// ============================================
+
+/**
+ * Create a Stripe Checkout Session for the shop cart.
+ * Applies promotions, validates pricing, and handles email receipts.
+ */
+export async function createShopCheckoutSession(
+  secretKey: string,
+  cartItems: CartItem[],
+  origin: string,
+): Promise<{ url?: string; error?: string; pricing?: PricingBreakdown }> {
+  // Calculate server-side pricing with promotions
+  const pricing = calculateCartPricing(cartItems)
+
+  if (pricing.total <= 0 || pricing.total > 50000) {
+    return { error: 'Invalid order total' }
+  }
+
+  // Build Stripe checkout params
+  const params = generateStripeCheckoutParams(
+    pricing,
+    `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+    `${origin}/#shop`,
+  )
+
+  // If there are discounts, we need to adjust line item prices
+  // Stripe doesn't support negative line items, so we distribute
+  // the discount proportionally across all items
+  if (pricing.discount > 0) {
+    // Clear existing line items and rebuild with discounted prices
+    const adjustedParams = new URLSearchParams()
+    adjustedParams.append('mode', 'payment')
+    adjustedParams.append('success_url', `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`)
+    adjustedParams.append('cancel_url', `${origin}/#shop`)
+    adjustedParams.append('shipping_address_collection[allowed_countries][]', 'US')
+    adjustedParams.append('phone_number_collection[enabled]', 'true')
+
+    // Calculate discount ratio
+    const discountRatio = pricing.discount / pricing.subtotal
+
+    pricing.lineItems.forEach((item, i) => {
+      const desc = [item.size, item.style, item.color].filter(Boolean).join(', ')
+      const discountedUnitPrice = roundCurrency(item.unitPrice * (1 - discountRatio))
+      
+      adjustedParams.append(`line_items[${i}][price_data][currency]`, 'usd')
+      adjustedParams.append(`line_items[${i}][price_data][product_data][name]`, item.title)
+      if (desc) {
+        adjustedParams.append(`line_items[${i}][price_data][product_data][description]`, desc)
+      }
+      adjustedParams.append(`line_items[${i}][price_data][unit_amount]`, String(Math.max(1, Math.round(discountedUnitPrice * 100))))
+      adjustedParams.append(`line_items[${i}][quantity]`, String(item.qty))
+    })
+
+    // Copy metadata
+    adjustedParams.append('metadata[order_source]', 'hillbilly-fightwear-shop')
+    adjustedParams.append('metadata[subtotal]', pricing.subtotal.toFixed(2))
+    adjustedParams.append('metadata[discount]', pricing.discount.toFixed(2))
+    adjustedParams.append('metadata[promotions]', pricing.discountDetails.map(d => d.type).join(','))
+    if (pricing.freeItems.length > 0) {
+      adjustedParams.append('metadata[free_items]', pricing.freeItems.map(f => f.title).join(', '))
+    }
+
+    // Enable Stripe's built-in receipt emails
+    adjustedParams.append('payment_intent_data[receipt_email]', '') // Will be set by customer
+    adjustedParams.append('metadata[pricing_json]', JSON.stringify({
+      subtotal: pricing.subtotal,
+      discount: pricing.discount,
+      total: pricing.total,
+      discounts: pricing.discountDetails,
+      freeItems: pricing.freeItems,
+    }))
+
+    const session = await stripeRequest('POST', '/checkout/sessions', secretKey, adjustedParams) as StripeSession
+
+    if (session.error) {
+      return { error: session.error.message }
+    }
+
+    return { url: session.url, pricing }
+  }
+
+  // No discounts — use standard params
+  const session = await stripeRequest('POST', '/checkout/sessions', secretKey, params) as StripeSession
+
+  if (session.error) {
+    return { error: session.error.message }
+  }
+
+  return { url: session.url, pricing }
+}
+
+// ============================================
+// BUILDER CHECKOUT (Custom Design → Stripe Checkout)
+// ============================================
+
+/**
+ * Create a Stripe Checkout Session for a custom builder order.
+ */
+export async function createBuilderCheckoutSession(
+  secretKey: string,
+  order: { garment: string; size: string; color: string; graphic: string; placement: string; additionalGraphics: { graphic: string; placement: string }[] },
+  origin: string,
+): Promise<{ url?: string; error?: string; pricing?: BuilderPricing }> {
+  const pricing = calculateBuilderPricing(order)
+
+  if ('error' in pricing) {
+    return { error: pricing.error }
+  }
+
+  const g = garments.find(x => x.id === order.garment)!
+  const gr = graphics.find(x => x.id === order.graphic)!
+
+  const params = new URLSearchParams()
+  params.append('mode', 'payment')
+  params.append('success_url', `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`)
+  params.append('cancel_url', `${origin}/build`)
+  params.append('shipping_address_collection[allowed_countries][]', 'US')
+  params.append('phone_number_collection[enabled]', 'true')
+
+  // Garment line item
+  params.append('line_items[0][price_data][currency]', 'usd')
+  params.append('line_items[0][price_data][product_data][name]', `${g.name} - Custom Design`)
+  params.append('line_items[0][price_data][product_data][description]', `Size: ${order.size}, Color: ${order.color}`)
+  params.append('line_items[0][price_data][unit_amount]', String(Math.round(g.basePrice * 100)))
+  params.append('line_items[0][quantity]', '1')
+
+  // Primary graphic line item
+  const primaryPrice = pricing.primaryGraphic.price
+  params.append('line_items[1][price_data][currency]', 'usd')
+  params.append('line_items[1][price_data][product_data][name]', `Graphic: ${gr.name}`)
+  params.append('line_items[1][price_data][product_data][description]', `Placement: ${pricing.primaryGraphic.placement}`)
+  params.append('line_items[1][price_data][unit_amount]', String(Math.round(primaryPrice * 100)))
+  params.append('line_items[1][quantity]', '1')
+
+  // Additional graphics
+  pricing.additionalGraphics.forEach((ag, i) => {
+    const idx = i + 2
+    params.append(`line_items[${idx}][price_data][currency]`, 'usd')
+    params.append(`line_items[${idx}][price_data][product_data][name]`, `+ ${ag.name}`)
+    params.append(`line_items[${idx}][price_data][product_data][description]`, `Placement: ${ag.placement}`)
+    params.append(`line_items[${idx}][price_data][unit_amount]`, String(Math.round(ag.price * 100)))
+    params.append(`line_items[${idx}][quantity]`, '1')
+  })
+
+  // Metadata for order tracking
+  params.append('metadata[order_source]', 'hillbilly-fightwear-builder')
+  params.append('metadata[garment]', order.garment)
+  params.append('metadata[size]', order.size)
+  params.append('metadata[color]', order.color)
+  params.append('metadata[graphic]', order.graphic)
+  params.append('metadata[placement]', order.placement)
+  if (order.additionalGraphics.length > 0) {
+    params.append('metadata[additional_graphics]', JSON.stringify(order.additionalGraphics))
+  }
+
+  const session = await stripeRequest('POST', '/checkout/sessions', secretKey, params) as StripeSession
+
+  if (session.error) {
+    return { error: session.error.message }
+  }
+
+  return { url: session.url, pricing }
+}
+
+// ============================================
+// STRIPE PRODUCT CATALOG SYNC
+// Pushes all products + prices to Stripe
+// ============================================
+
+/**
+ * Push entire product catalog to Stripe.
+ * Creates products and prices, skipping existing ones.
+ * Returns summary of created/skipped items.
+ */
+export async function syncProductCatalog(secretKey: string): Promise<{
+  created: string[]
+  skipped: string[]
+  errors: string[]
+}> {
+  const created: string[] = []
+  const skipped: string[] = []
+  const errors: string[] = []
+
+  // First, fetch existing products to avoid duplicates
+  const existingProducts = await stripeRequest('GET', '/products?limit=100&active=true', secretKey) as { data?: StripeProduct[] }
+  const existingByMetaId = new Map<string, StripeProduct>()
+
+  if (existingProducts.data) {
+    for (const p of existingProducts.data) {
+      if (p.metadata?.product_id) {
+        existingByMetaId.set(p.metadata.product_id, p)
+      }
+    }
+  }
+
+  // Create or skip each catalog product
+  for (const product of shopProducts) {
+    if (existingByMetaId.has(product.id)) {
+      skipped.push(`${product.title} (already exists)`)
+      continue
+    }
+
+    try {
+      const desc = [
+        product.type === 'garment' ? 'Apparel' : 'Decal/Sticker',
+        product.sizes ? `Sizes: ${product.sizes.join(', ')}` : '',
+        product.colors ? `Colors: ${product.colors.join(', ')}` : '',
+      ].filter(Boolean).join(' | ')
+
+      const params = new URLSearchParams()
+      params.append('name', product.title)
+      params.append('description', desc || `${product.vendor} - ${product.title}`)
+      params.append('metadata[product_id]', product.id)
+      params.append('metadata[type]', product.type)
+      params.append('metadata[vendor]', product.vendor)
+      if (product.garmentType) params.append('metadata[garment_type]', product.garmentType)
+
+      // Set default price
+      params.append('default_price_data[currency]', 'usd')
+      params.append('default_price_data[unit_amount]', String(Math.round(product.priceNum * 100)))
+
+      // Add image if it's an absolute URL
+      if (product.image.startsWith('http')) {
+        params.append('images[]', product.image)
+      }
+
+      const result = await stripeRequest('POST', '/products', secretKey, params) as StripeProduct & { error?: { message: string } }
+
+      if (result.error) {
+        errors.push(`${product.title}: ${result.error.message}`)
+      } else {
+        created.push(product.title)
+      }
+    } catch (e) {
+      errors.push(`${product.title}: ${e instanceof Error ? e.message : 'Unknown error'}`)
+    }
+  }
+
+  return { created, skipped, errors }
+}
+
+// ============================================
+// WEBHOOK: Retrieve session details for receipt generation
+// ============================================
+
+/**
+ * Retrieve a completed checkout session to generate receipt data.
+ * Called after successful payment to get customer details.
+ */
+export async function getSessionForReceipt(
+  secretKey: string,
+  sessionId: string,
+): Promise<{ orderInfo: OrderInfo; session: StripeSession } | { error: string }> {
+  const session = await stripeRequest(
+    'GET',
+    `/checkout/sessions/${sessionId}?expand[]=customer_details`,
+    secretKey,
+  ) as StripeSession
+
+  if (session.error) {
+    return { error: session.error.message }
+  }
+
+  const orderInfo: OrderInfo = {
+    orderId: session.id.replace('cs_', 'HFW-').substring(0, 20).toUpperCase(),
+    orderDate: new Date().toISOString(),
+    customerEmail: session.customer_details?.email || session.customer_email || '',
+    customerName: session.customer_details?.name || undefined,
+    shippingAddress: session.customer_details?.address ? {
+      line1: session.customer_details.address.line1 || '',
+      line2: session.customer_details.address.line2 || undefined,
+      city: session.customer_details.address.city || '',
+      state: session.customer_details.address.state || '',
+      postalCode: session.customer_details.address.postal_code || '',
+      country: session.customer_details.address.country || 'US',
+    } : undefined,
+  }
+
+  return { orderInfo, session }
+}
+
+// ============================================
+// GENERATE ORDER ID
+// ============================================
+
+/**
+ * Generate a unique order ID (HFW-YYYYMMDD-XXXXX format)
+ */
+export function generateOrderId(): string {
+  const now = new Date()
+  const date = now.toISOString().split('T')[0].replace(/-/g, '')
+  const random = Math.random().toString(36).substring(2, 7).toUpperCase()
+  return `HFW-${date}-${random}`
+}

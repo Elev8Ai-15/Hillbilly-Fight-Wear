@@ -2,12 +2,38 @@
 // API Routes
 // GET endpoints serve catalog data; POST endpoints handle checkout and pricing.
 // All POST endpoints validate inputs server-side and enforce catalog pricing.
+//
+// Pricing engine: src/utils/pricing.ts (single source of truth)
+// Stripe integration: src/utils/stripe.ts (activated with STRIPE_SECRET_KEY)
+// Email receipts: src/utils/email-receipt.ts
 // ============================================
 import { Hono } from 'hono'
 import {
   garments, graphics, placements,
   products, shopProducts, slides
 } from '../data/catalog'
+import {
+  calculateCartPricing,
+  calculateBuilderPricing,
+  validateCart,
+  PRICING,
+  roundCurrency,
+  getGraphicPrice,
+  type CartItem,
+} from '../utils/pricing'
+import {
+  createShopCheckoutSession,
+  createBuilderCheckoutSession,
+  syncProductCatalog,
+  getSessionForReceipt,
+  generateOrderId,
+} from '../utils/stripe'
+import {
+  generateShopReceipt,
+  generateShopReceiptPlainText,
+  generateBuilderReceipt,
+  type OrderInfo,
+} from '../utils/email-receipt'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
@@ -30,7 +56,92 @@ api.get('/products', (c) => c.json(products))
 api.get('/shop-products', (c) => c.json(shopProducts))
 api.get('/slides', (c) => c.json(slides))
 
-// Shop cart checkout endpoint
+// ============================================
+// PRICING INFO ENDPOINT
+// Returns pricing constants and current promotions
+// ============================================
+api.get('/pricing', (c) => {
+  return c.json({
+    graphicPricing: {
+      smallPlacement: PRICING.GRAPHIC_SMALL_PLACEMENT,
+      fullPlacement: PRICING.GRAPHIC_FULL_PLACEMENT,
+      smallPlacements: ['left-chest', 'right-chest', 'hat-front'],
+      fullPlacements: ['full-front', 'full-back'],
+    },
+    shipping: { type: 'free', amount: PRICING.SHIPPING_FLAT },
+    promotions: [
+      ...(PRICING.PROMO_TSHIRT_TANK_BUY2_GET1 ? [{
+        type: 'BUY2_GET1_TSHIRT',
+        title: 'Buy 2, Get 1 FREE',
+        description: 'Buy 2 T-Shirts or Tanks, Get the 3rd FREE (cheapest item free)',
+        appliesTo: 'T-Shirts & Tank Tops',
+      }] : []),
+      ...(PRICING.PROMO_STICKER_BUNDLE_5_FOR_29 ? [{
+        type: 'STICKER_BUNDLE',
+        title: '5 Stickers for $29',
+        description: 'Bundle 5 stickers/decals for just $29 (regular $35)',
+        appliesTo: 'Decals & Stickers',
+      }] : []),
+      ...(PRICING.PROMO_HAT_HOODIE_FREE_STICKER ? [{
+        type: 'FREE_STICKER',
+        title: 'Free Sticker with Purchase',
+        description: 'Every hat and hoodie purchase comes with a complimentary sticker',
+        appliesTo: 'Hats & Hoodies',
+      }] : []),
+    ],
+  })
+})
+
+// ============================================
+// CART PRICING PREVIEW
+// Calculate pricing breakdown without creating a checkout session
+// ============================================
+api.post('/cart-pricing', async (c) => {
+  let body: any
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+
+  const { cart: cartItems } = body
+
+  // Validate cart
+  const validation = validateCart(cartItems)
+  if (!validation.valid) {
+    return c.json({ error: (validation as { valid: false; error: string }).error }, 400)
+  }
+
+  // Calculate full pricing with promotions
+  const pricing = calculateCartPricing(cartItems as CartItem[])
+
+  return c.json({
+    subtotal: pricing.subtotal.toFixed(2),
+    discount: pricing.discount.toFixed(2),
+    discountDetails: pricing.discountDetails,
+    shipping: pricing.shipping.toFixed(2),
+    shippingLabel: 'FREE',
+    tax: pricing.tax.toFixed(2),
+    total: pricing.total.toFixed(2),
+    lineItems: pricing.lineItems.map(item => ({
+      productId: item.productId,
+      title: item.title,
+      unitPrice: item.unitPrice.toFixed(2),
+      qty: item.qty,
+      subtotal: item.subtotal.toFixed(2),
+      size: item.size,
+      color: item.color,
+      style: item.style,
+    })),
+    freeItems: pricing.freeItems,
+    promotionsApplied: pricing.discountDetails.length > 0 || pricing.freeItems.length > 0,
+  })
+})
+
+// ============================================
+// SHOP CART CHECKOUT
+// Validates cart, calculates pricing, creates Stripe session or demo
+// ============================================
 api.post('/shop-checkout', async (c) => {
   let body: any
   try {
@@ -38,99 +149,69 @@ api.post('/shop-checkout', async (c) => {
   } catch {
     return c.json({ error: 'Invalid JSON body' }, 400)
   }
-  const { cart: cartItems } = body
-  
-  if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
-    return c.json({ error: 'Cart is empty' }, 400)
+
+  const { cart: cartItems, email } = body
+
+  // Validate cart
+  const validation = validateCart(cartItems)
+  if (!validation.valid) {
+    return c.json({ error: (validation as { valid: false; error: string }).error }, 400)
   }
-  
-  // Validate each cart item and enforce server-side pricing
-  for (const item of cartItems) {
-    if (!item.title || typeof item.price !== 'number' || typeof item.qty !== 'number' || item.qty < 1 || item.price < 0) {
-      return c.json({ error: 'Invalid cart item data' }, 400)
-    }
-    if (item.qty > 100) {
-      return c.json({ error: 'Maximum quantity per item is 100' }, 400)
-    }
-    if (!Number.isFinite(item.price) || !Number.isInteger(item.qty)) {
-      return c.json({ error: 'Invalid price or quantity format' }, 400)
-    }
-    // Server-side price validation: verify price matches catalog
-    if (item.productId) {
-      const catalogItem = shopProducts.find(p => p.id === item.productId)
-      if (catalogItem && Math.abs(catalogItem.priceNum - item.price) > 0.01) {
-        return c.json({ error: `Price mismatch for ${item.title}. Expected $${catalogItem.priceNum}, got $${item.price}` }, 400)
-      }
-    }
-  }
-  
-  // Cap cart at 50 items to prevent abuse
-  if (cartItems.length > 50) {
-    return c.json({ error: 'Too many items in cart' }, 400)
-  }
-  
-  const total = cartItems.reduce((sum: number, item: { price: number; qty: number }) => sum + (item.price * item.qty), 0)
-  
-  // Guard against floating-point precision issues
-  const roundedTotal = Math.round(total * 100) / 100
-  
-  // Sanity check total
-  if (roundedTotal <= 0 || roundedTotal > 50000) {
+
+  // Calculate server-side pricing with promotions
+  const pricing = calculateCartPricing(cartItems as CartItem[])
+
+  // Guard against invalid totals
+  if (pricing.total <= 0 || pricing.total > PRICING.MAX_ORDER_TOTAL) {
     return c.json({ error: 'Invalid order total' }, 400)
   }
-  
+
   const stripeKey = c.env?.STRIPE_SECRET_KEY
-  
+
   if (!stripeKey) {
+    // Demo mode — return full pricing breakdown
+    const orderId = generateOrderId()
     return c.json({
       demo: true,
-      total: roundedTotal.toFixed(2),
-      items: cartItems.map((item: { title: string; size?: string; color?: string; style?: string; qty: number; price: number }) => ({
+      orderId,
+      subtotal: pricing.subtotal.toFixed(2),
+      discount: pricing.discount.toFixed(2),
+      discountDetails: pricing.discountDetails,
+      shipping: 'FREE',
+      tax: pricing.tax.toFixed(2),
+      total: pricing.total.toFixed(2),
+      items: pricing.lineItems.map(item => ({
         title: item.title,
         size: item.size,
         color: item.color,
         style: item.style,
         qty: item.qty,
-        subtotal: (item.price * item.qty).toFixed(2)
-      }))
+        unitPrice: item.unitPrice.toFixed(2),
+        subtotal: item.subtotal.toFixed(2),
+      })),
+      freeItems: pricing.freeItems,
+      message: `Stripe is not configured. Your order total would be $${pricing.total.toFixed(2)}.`,
     })
   }
-  
+
   try {
-    // Build Stripe line items
-    const params = new URLSearchParams()
-    params.append('mode', 'payment')
     const origin = new URL(c.req.url).origin
-    params.append('success_url', `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`)
-    params.append('cancel_url', `${origin}/#shop`)
-    
-    cartItems.forEach((item: { title: string; size?: string; color?: string; style?: string; qty: number; price: number }, i: number) => {
-      const desc = [item.size, item.style, item.color].filter(Boolean).join(', ')
-      params.append(`line_items[${i}][price_data][currency]`, 'usd')
-      params.append(`line_items[${i}][price_data][product_data][name]`, item.title)
-      if (desc) params.append(`line_items[${i}][price_data][product_data][description]`, desc)
-      params.append(`line_items[${i}][price_data][unit_amount]`, String(Math.round(item.price * 100)))
-      params.append(`line_items[${i}][quantity]`, String(item.qty))
-    })
-    
-    const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${stripeKey}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: params
-    })
-    
-    const session = await stripeResponse.json() as { error?: { message: string }; url?: string }
-    if (session.error) return c.json({ error: session.error.message }, 400)
-    return c.json({ url: session.url })
+    const result = await createShopCheckoutSession(stripeKey, cartItems as CartItem[], origin)
+
+    if (result.error) {
+      return c.json({ error: result.error }, 400)
+    }
+
+    return c.json({ url: result.url })
   } catch (error) {
     console.error('Stripe shop checkout error:', error)
     return c.json({ error: 'Failed to create checkout session' }, 500)
   }
 })
 
+// ============================================
+// BUILDER PRICE CALCULATOR
+// ============================================
 api.post('/calculate-price', async (c) => {
   let body: any
   try {
@@ -138,31 +219,55 @@ api.post('/calculate-price', async (c) => {
   } catch {
     return c.json({ error: 'Invalid JSON body' }, 400)
   }
-  const { garment, additionalGraphics = [] } = body
-  
+
+  const { garment, placement, additionalGraphics = [] } = body
+
   if (!garment || typeof garment !== 'string') {
     return c.json({ error: 'Garment ID is required' }, 400)
   }
-  
+
   const g = garments.find(x => x.id === garment)
   if (!g) return c.json({ error: 'Invalid garment' }, 400)
-  
+
   if (!Array.isArray(additionalGraphics) || additionalGraphics.length > 10) {
     return c.json({ error: 'Invalid additional graphics data' }, 400)
   }
-  
+
   const basePrice = g.basePrice
-  // Calculate additional cost: $10 for small placements, $15 for full placements
-  // Must match client-side getGraphicPrice() in the Build page
+  // Primary graphic price
+  const primaryGraphicPrice = placement ? getGraphicPrice(placement) : 0
+  // Additional graphics cost
   const additionalCost = additionalGraphics.reduce((acc: number, ag: { placement: string }) => {
-    const p = placements.find(x => x.id === ag.placement)
-    return acc + (p && p.isSmall ? 10 : 15)
+    return acc + getGraphicPrice(ag.placement)
   }, 0)
-  const total = basePrice + additionalCost
-  
-  return c.json({ basePrice, additionalCost, total })
+  const total = basePrice + primaryGraphicPrice + additionalCost
+
+  return c.json({
+    basePrice,
+    primaryGraphicPrice,
+    additionalCost,
+    total,
+    breakdown: {
+      garment: { name: g.name, price: basePrice },
+      primaryGraphic: placement ? {
+        placement,
+        price: primaryGraphicPrice,
+        isSmall: placements.find(x => x.id === placement)?.isSmall || false,
+      } : null,
+      additionalGraphics: additionalGraphics.map((ag: { graphic: string; placement: string }) => ({
+        graphic: ag.graphic,
+        placement: ag.placement,
+        price: getGraphicPrice(ag.placement),
+        isSmall: placements.find(x => x.id === ag.placement)?.isSmall || false,
+      })),
+    },
+  })
 })
 
+// ============================================
+// BUILDER CHECKOUT
+// Validates custom design, calculates pricing, creates Stripe session or demo
+// ============================================
 api.post('/create-checkout', async (c) => {
   let body: any
   try {
@@ -171,7 +276,7 @@ api.post('/create-checkout', async (c) => {
     return c.json({ error: 'Invalid JSON body' }, 400)
   }
   const { garment, size, color, graphic, placement, additionalGraphics = [] } = body
-  
+
   // Validate all required fields are strings
   if (!garment || !size || !color || !graphic || !placement) {
     return c.json({ error: 'All fields required: garment, size, color, graphic, placement' }, 400)
@@ -179,31 +284,28 @@ api.post('/create-checkout', async (c) => {
   if ([garment, size, color, graphic, placement].some(f => typeof f !== 'string')) {
     return c.json({ error: 'Invalid field types' }, 400)
   }
-  
+
+  // Validate against catalog
   const g = garments.find(x => x.id === garment)
   const gr = graphics.find(x => x.id === graphic)
   const pl = placements.find(x => x.id === placement)
-  
+
   if (!g || !gr || !pl) {
     return c.json({ error: 'Invalid garment, graphic, or placement ID' }, 400)
   }
-  
-  // Validate size is available for this garment
+
   if (!g.sizes.includes(size)) {
     return c.json({ error: 'Invalid size for this garment' }, 400)
   }
-  
-  // Validate color is available for this garment
-  if (!g.images[color]) {
+
+  if (!(g.images as Record<string, any>)[color]) {
     return c.json({ error: 'Invalid color for this garment' }, 400)
   }
-  
-  // Validate graphic restrictions
+
   if (gr.restrictToGarments && gr.restrictToGarments.length > 0 && !gr.restrictToGarments.includes(garment)) {
     return c.json({ error: `Graphic "${gr.name}" is not available for this garment` }, 400)
   }
-  
-  // Validate additionalGraphics is an array with valid entries
+
   if (!Array.isArray(additionalGraphics)) {
     return c.json({ error: 'additionalGraphics must be an array' }, 400)
   }
@@ -221,72 +323,255 @@ api.post('/create-checkout', async (c) => {
       return c.json({ error: `Invalid additional placement ID: ${ag.placement}` }, 400)
     }
   }
-  
-  const basePrice = g.basePrice
-  // Calculate additional cost: $10 for small placements, $15 for full placements
-  // Must match client-side getGraphicPrice() in the Build page
-  const additionalCost = additionalGraphics.reduce((acc: number, ag: { graphic: string; placement: string }) => {
-    const p = placements.find(x => x.id === ag.placement)
-    return acc + (p && p.isSmall ? 10 : 15)
-  }, 0)
-  const total = basePrice + additionalCost
-  
+
+  // Calculate server-side pricing
+  const pricing = calculateBuilderPricing({ garment, size, color, graphic, placement, additionalGraphics })
+
+  if ('error' in pricing) {
+    return c.json({ error: pricing.error }, 400)
+  }
+
   const stripeKey = c.env?.STRIPE_SECRET_KEY
-  
+
   if (!stripeKey) {
+    const orderId = generateOrderId()
     return c.json({
       demo: true,
-      message: 'Stripe is not configured. Demo mode - your order would be: $' + total.toFixed(2),
+      orderId,
+      message: `Stripe is not configured. Demo mode - your order would be: $${pricing.total.toFixed(2)}`,
       orderDetails: {
-        garment: g.name,
-        size,
-        color,
-        graphic: gr.name,
-        placement,
-        additionalGraphics: additionalGraphics.map((ag: { graphic: string; placement: string }) => ({
-          graphic: graphics.find(x => x.id === ag.graphic)?.name,
-          placement: ag.placement
+        garment: pricing.garmentName,
+        garmentPrice: pricing.garmentPrice.toFixed(2),
+        size: pricing.size,
+        color: pricing.color,
+        graphic: pricing.primaryGraphic.name,
+        graphicPlacement: pricing.primaryGraphic.placement,
+        graphicPrice: pricing.primaryGraphic.price.toFixed(2),
+        additionalGraphics: pricing.additionalGraphics.map(ag => ({
+          graphic: ag.name,
+          placement: ag.placement,
+          price: ag.price.toFixed(2),
         })),
-        total: total.toFixed(2)
-      }
+        total: pricing.total.toFixed(2),
+      },
     })
   }
-  
+
   try {
-    const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${stripeKey}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams({
-        'mode': 'payment',
-        'success_url': `${new URL(c.req.url).origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        'cancel_url': `${new URL(c.req.url).origin}/build`,
-        'line_items[0][price_data][currency]': 'usd',
-        'line_items[0][price_data][product_data][name]': `${g.name} - ${gr.name}`,
-        'line_items[0][price_data][product_data][description]': `Size: ${size}, Color: ${color}, Placement: ${placement}`,
-        'line_items[0][price_data][unit_amount]': String(Math.round(total * 100)),
-        'line_items[0][quantity]': '1',
-        'metadata[garment]': garment,
-        'metadata[size]': size,
-        'metadata[color]': color,
-        'metadata[graphic]': graphic,
-        'metadata[placement]': placement,
-        'metadata[additionalGraphics]': JSON.stringify(additionalGraphics)
-      })
-    })
-    
-    const session = await stripeResponse.json() as { error?: { message: string }; url?: string }
-    
-    if (session.error) {
-      return c.json({ error: session.error.message }, 400)
+    const origin = new URL(c.req.url).origin
+    const result = await createBuilderCheckoutSession(
+      stripeKey,
+      { garment, size, color, graphic, placement, additionalGraphics },
+      origin,
+    )
+
+    if (result.error) {
+      return c.json({ error: result.error }, 400)
     }
-    
-    return c.json({ url: session.url })
+
+    return c.json({ url: result.url })
   } catch (error) {
-    console.error('Stripe error:', error)
+    console.error('Stripe builder checkout error:', error)
     return c.json({ error: 'Failed to create checkout session' }, 500)
+  }
+})
+
+// ============================================
+// EMAIL RECEIPT PREVIEW (for testing)
+// Generates an HTML receipt for preview without sending
+// ============================================
+api.post('/preview-receipt', async (c) => {
+  let body: any
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+
+  const { cart: cartItems, type = 'shop' } = body
+
+  if (type === 'shop') {
+    const validation = validateCart(cartItems)
+    if (!validation.valid) {
+      return c.json({ error: (validation as { valid: false; error: string }).error }, 400)
+    }
+
+    const pricing = calculateCartPricing(cartItems as CartItem[])
+    const orderInfo: OrderInfo = {
+      orderId: generateOrderId(),
+      orderDate: new Date().toISOString(),
+      customerEmail: body.email || 'customer@example.com',
+      customerName: body.name || 'Valued Customer',
+      shippingAddress: body.address || {
+        line1: '123 Main St',
+        city: 'Nashville',
+        state: 'TN',
+        postalCode: '37201',
+        country: 'US',
+      },
+    }
+
+    const htmlReceipt = generateShopReceipt(orderInfo, pricing)
+    const textReceipt = generateShopReceiptPlainText(orderInfo, pricing)
+
+    return c.json({
+      orderId: orderInfo.orderId,
+      pricing: {
+        subtotal: pricing.subtotal.toFixed(2),
+        discount: pricing.discount.toFixed(2),
+        discountDetails: pricing.discountDetails,
+        total: pricing.total.toFixed(2),
+        freeItems: pricing.freeItems,
+      },
+      htmlReceipt,
+      textReceipt,
+    })
+  }
+
+  return c.json({ error: 'Invalid receipt type' }, 400)
+})
+
+// ============================================
+// STRIPE PRODUCT CATALOG SYNC
+// Push all products and prices to Stripe
+// ============================================
+api.post('/stripe/sync-catalog', async (c) => {
+  const stripeKey = c.env?.STRIPE_SECRET_KEY
+  if (!stripeKey) {
+    return c.json({
+      error: 'Stripe is not configured. Set STRIPE_SECRET_KEY to enable.',
+      hint: 'Use: npx wrangler pages secret put STRIPE_SECRET_KEY --project-name hillbilly-fightwear',
+    }, 400)
+  }
+
+  try {
+    const result = await syncProductCatalog(stripeKey)
+    return c.json({
+      success: true,
+      summary: {
+        created: result.created.length,
+        skipped: result.skipped.length,
+        errors: result.errors.length,
+      },
+      details: result,
+    })
+  } catch (error) {
+    console.error('Stripe catalog sync error:', error)
+    return c.json({ error: 'Failed to sync catalog' }, 500)
+  }
+})
+
+// ============================================
+// STRIPE STATUS CHECK
+// Check if Stripe is configured and verify key
+// ============================================
+api.get('/stripe/status', async (c) => {
+  const stripeKey = c.env?.STRIPE_SECRET_KEY
+  if (!stripeKey) {
+    return c.json({
+      configured: false,
+      mode: 'demo',
+      message: 'Stripe is not configured. All checkout operations run in demo mode.',
+      setupInstructions: {
+        step1: 'Get your Stripe Secret Key from https://dashboard.stripe.com/apikeys',
+        step2: 'Run: npx wrangler pages secret put STRIPE_SECRET_KEY --project-name hillbilly-fightwear',
+        step3: 'Paste your key when prompted (starts with sk_live_ or sk_test_)',
+        step4: 'Redeploy: npm run deploy',
+      },
+    })
+  }
+
+  // Verify the key is valid
+  try {
+    const response = await fetch('https://api.stripe.com/v1/balance', {
+      headers: { 'Authorization': `Bearer ${stripeKey}` },
+    })
+    const data = await response.json() as any
+
+    if (data.error) {
+      return c.json({
+        configured: true,
+        valid: false,
+        mode: 'error',
+        error: data.error.message,
+      })
+    }
+
+    const isLive = stripeKey.startsWith('sk_live_')
+    return c.json({
+      configured: true,
+      valid: true,
+      mode: isLive ? 'live' : 'test',
+      message: `Stripe is active in ${isLive ? 'LIVE' : 'TEST'} mode.`,
+    })
+  } catch {
+    return c.json({
+      configured: true,
+      valid: false,
+      mode: 'error',
+      error: 'Could not connect to Stripe API',
+    })
+  }
+})
+
+// ============================================
+// ORDER RECEIPT RETRIEVAL (after checkout)
+// ============================================
+api.get('/order/receipt/:sessionId', async (c) => {
+  const stripeKey = c.env?.STRIPE_SECRET_KEY
+  const sessionId = c.req.param('sessionId')
+
+  if (!sessionId) {
+    return c.json({ error: 'Session ID required' }, 400)
+  }
+
+  if (!stripeKey) {
+    // Demo mode: generate a sample receipt
+    const samplePricing = calculateCartPricing([{
+      productId: 'm3',
+      title: 'T-Shirt - HFW Classic',
+      price: 30,
+      image: '',
+      size: 'L',
+      color: 'Black',
+      style: '',
+      qty: 1,
+    }])
+
+    const orderInfo: OrderInfo = {
+      orderId: generateOrderId(),
+      orderDate: new Date().toISOString(),
+      customerEmail: 'demo@example.com',
+      customerName: 'Demo Customer',
+    }
+
+    return c.html(generateShopReceipt(orderInfo, samplePricing))
+  }
+
+  try {
+    const result = await getSessionForReceipt(stripeKey, sessionId)
+
+    if ('error' in result) {
+      return c.json({ error: result.error }, 400)
+    }
+
+    // For now, return the receipt HTML
+    // In production, you'd also send this via email
+    const pricingData = result.session.metadata?.pricing_json
+      ? JSON.parse(result.session.metadata.pricing_json)
+      : null
+
+    // Build a basic pricing breakdown from the session
+    const pricing = calculateCartPricing([]) // Placeholder
+    return c.json({
+      orderId: result.orderInfo.orderId,
+      customerEmail: result.orderInfo.customerEmail,
+      customerName: result.orderInfo.customerName,
+      total: result.session.amount_total ? (result.session.amount_total / 100).toFixed(2) : '0.00',
+    })
+  } catch (error) {
+    console.error('Receipt retrieval error:', error)
+    return c.json({ error: 'Failed to retrieve receipt' }, 500)
   }
 })
 
