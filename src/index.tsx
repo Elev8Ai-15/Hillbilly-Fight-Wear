@@ -119,6 +119,7 @@ app.get('/', (c) => {
       <h4 class="product-title">${escHtml(product.title)}</h4>
       <div class="product-vendor">${escHtml(product.vendor)}</div>
       <div class="product-price" aria-label="Price: ${product.price}">${product.price}</div>
+      <div class="price-includes-badge"><i class="fas fa-check-circle"></i> Tax &amp; Shipping Included</div>
     </div>
   `).join('')
 
@@ -742,6 +743,14 @@ app.get('/', (c) => {
     }
     .product-vendor { font-size: 0.9rem; color: #666; margin-bottom: 8px; }
     .product-price { font-size: 1rem; font-weight: 600; color: #333; }
+    .price-includes-badge {
+      font-size: 0.7rem;
+      color: #4CAF50;
+      font-weight: 500;
+      margin-top: 4px;
+      letter-spacing: 0.3px;
+    }
+    .price-includes-badge i { margin-right: 3px; }
     
     /* Mobile touch targets - minimum 44px for accessibility */
     @media (max-width: 768px) {
@@ -824,6 +833,24 @@ app.get('/', (c) => {
     
     .category-title i {
       font-size: 1.2rem;
+    }
+    
+    .category-promo-banner {
+      background: rgba(139,0,0,0.06);
+      border: 1px solid rgba(139,0,0,0.2);
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      color: #8B0000;
+      font-weight: 500;
+      margin-bottom: 5px;
+      letter-spacing: 0.3px;
+    }
+    .category-promo-banner i {
+      margin-right: 6px;
+    }
+    @media (max-width: 600px) {
+      .category-promo-banner { font-size: 0.78rem; padding: 8px 12px; }
     }
     
     .category-section .product-grid {
@@ -1355,6 +1382,9 @@ app.get('/', (c) => {
     <div class="promo-permanent">
       <p><i class="fas fa-gift" aria-hidden="true"></i> All hat & hoodie purchases come with a free sticker</p>
     </div>
+    <div class="promo-permanent" style="margin-top:12px; background:rgba(76,175,80,0.15); border-color:rgba(76,175,80,0.4);">
+      <p style="color:#b8ffb8;"><i class="fas fa-shield-alt" style="color:#66ff66;" aria-hidden="true"></i> <strong>All prices include tax &amp; free shipping</strong> &mdash; what you see is what you pay</p>
+    </div>
   </section>
 
   <!-- Shop Now Section - All Products from Official Store (Organized by Category) -->
@@ -1364,6 +1394,7 @@ app.get('/', (c) => {
     <!-- MENS CLOTHING -->
     <div class="category-section" role="region" aria-labelledby="mens-heading">
       <h3 class="category-title" id="mens-heading"><i class="fas fa-male" aria-hidden="true"></i> Men's Clothing</h3>
+      <div class="category-promo-banner"><i class="fas fa-tags"></i> Buy 2, Get 1 FREE on all T-Shirts &amp; Tanks &mdash; prices include tax &amp; shipping!</div>
       <div class="product-grid shop-grid" role="list">
         ${mensClothingHtml}
       </div>
@@ -1372,6 +1403,7 @@ app.get('/', (c) => {
     <!-- WOMENS CLOTHING -->
     <div class="category-section" role="region" aria-labelledby="womens-heading">
       <h3 class="category-title" id="womens-heading"><i class="fas fa-female" aria-hidden="true"></i> Women's Clothing</h3>
+      <div class="category-promo-banner"><i class="fas fa-tags"></i> Buy 2, Get 1 FREE on all Tanks &mdash; prices include tax &amp; shipping!</div>
       <div class="product-grid shop-grid" role="list">
         ${womensClothingHtml}
       </div>
@@ -1380,6 +1412,7 @@ app.get('/', (c) => {
     <!-- KIDS CLOTHING -->
     <div class="category-section" role="region" aria-labelledby="kids-heading">
       <h3 class="category-title" id="kids-heading"><i class="fas fa-child" aria-hidden="true"></i> Kids' Clothing</h3>
+      <div class="category-promo-banner" style="background:rgba(76,175,80,0.08); border-color:rgba(76,175,80,0.3); color:#2e7d32;"><i class="fas fa-truck"></i> All prices include tax &amp; free shipping!</div>
       <div class="product-grid shop-grid" role="list">
         ${kidsClothingHtml}
       </div>
@@ -1388,6 +1421,7 @@ app.get('/', (c) => {
     <!-- HATS -->
     <div class="category-section" role="region" aria-labelledby="hats-heading">
       <h3 class="category-title" id="hats-heading"><i class="fas fa-hat-cowboy" aria-hidden="true"></i> Hats</h3>
+      <div class="category-promo-banner"><i class="fas fa-gift"></i> FREE sticker with every hat purchase &mdash; prices include tax &amp; shipping!</div>
       <div class="product-grid shop-grid" role="list">
         ${hatsHtml}
       </div>
@@ -1396,6 +1430,7 @@ app.get('/', (c) => {
     <!-- DECALS / STICKERS -->
     <div class="category-section" role="region" aria-labelledby="decals-heading">
       <h3 class="category-title" id="decals-heading"><i class="fas fa-sticky-note" aria-hidden="true"></i> Decals & Stickers</h3>
+      <div class="category-promo-banner"><i class="fas fa-layer-group"></i> Grab 5 for just $29 (save $6!) &mdash; prices include tax &amp; shipping!</div>
       <div class="product-grid shop-grid" role="list">
         ${decalsHtml}
       </div>
@@ -1590,7 +1625,10 @@ app.get('/', (c) => {
         <span>Total:</span>
         <span id="cartTotal">$0.00</span>
       </div>
-      <div style="text-align:center; margin-bottom:12px; color:#4CAF50; font-size:0.8rem; font-weight:500;"><i class="fas fa-truck"></i> All prices include free shipping</div>
+      <div id="cartPricingGuarantee" style="text-align:center; margin-bottom:12px; padding:10px; background:rgba(76,175,80,0.08); border:1px solid rgba(76,175,80,0.2); border-radius:6px;">
+        <div style="color:#2e7d32; font-size:0.82rem; font-weight:600; margin-bottom:2px;"><i class="fas fa-shield-alt"></i> All-Inclusive Pricing</div>
+        <div style="color:#4CAF50; font-size:0.75rem; font-weight:500;">Tax &amp; shipping included &mdash; what you see is what you pay</div>
+      </div>
       <button data-action="cartCheckout" style="width:100%; padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; cursor:pointer; transition:background 0.3s;">
         <i class="fas fa-lock"></i> Proceed to Checkout
       </button>
@@ -2394,7 +2432,7 @@ app.get('/', (c) => {
       var headerHtml = '<div style="padding:20px 20px 10px;">' +
         '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</h3>' +
         '<div style="color:#8B0000; font-size:1.2rem; font-weight:600;">' + product.price + '</div>' +
-        '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-top:4px;"><i class="fas fa-truck"></i> Free shipping included</div>' +
+        '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-top:4px;"><i class="fas fa-shield-alt"></i> Tax &amp; shipping included</div>' +
       '</div>';
       
       // Helper to build selection summary pills
@@ -2502,7 +2540,7 @@ app.get('/', (c) => {
           '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + safeTitle + '</h3>' +
           '<div style="color:#666; font-size:0.9rem; margin-bottom:8px;">' + product.vendor + '</div>' +
           '<div style="color:#8B0000; font-size:1.3rem; font-weight:600; margin-bottom:4px;">' + product.price + '</div>' +
-          '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-bottom:16px;"><i class="fas fa-truck"></i> Free shipping included</div>' +
+          '<div style="color:#4CAF50; font-size:0.8rem; font-weight:500; margin-bottom:16px;"><i class="fas fa-shield-alt"></i> Tax &amp; shipping included</div>' +
           '<div style="display:flex; flex-direction:column; gap:10px;">' +
             '<button data-action="addToCart" data-product-id="' + product.id + '" data-size="" data-color="" style="padding:16px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
             '<button data-action="closeProductModal" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
@@ -3212,7 +3250,10 @@ app.get('/build', (c) => {
           <span>Total</span>
           <span id="totalPrice">$0.00</span>
         </div>
-        <div style="text-align:center; color:#4CAF50; font-size:0.8rem; font-weight:500; margin-bottom:8px;"><i class="fas fa-truck"></i> Free shipping included</div>
+        <div style="text-align:center; margin-bottom:8px; padding:8px; background:rgba(76,175,80,0.08); border:1px solid rgba(76,175,80,0.2); border-radius:6px;">
+          <div style="color:#2e7d32; font-size:0.78rem; font-weight:600;"><i class="fas fa-shield-alt"></i> All-Inclusive Pricing</div>
+          <div style="color:#4CAF50; font-size:0.72rem;">Tax &amp; shipping included</div>
+        </div>
         <button class="checkout-btn" id="checkoutBtn" disabled>
           <i class="fas fa-lock"></i> Proceed to Checkout
         </button>
