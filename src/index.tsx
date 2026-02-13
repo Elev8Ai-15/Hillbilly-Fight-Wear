@@ -38,7 +38,7 @@ app.use('*', async (c, next) => {
   // style-src uses 'unsafe-inline' WITHOUT a nonce - per CSP3 spec, 'unsafe-inline' is ignored
   // when a nonce/hash is present, so we deliberately omit the nonce from style-src.
   // Inline style injection is not a meaningful XSS vector; nonces protect scripts.
-  c.res.headers.set('Content-Security-Policy', `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://api.stripe.com https://cdn.shopify.com; frame-src 'self' https://js.stripe.com; frame-ancestors *; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests`)
+  c.res.headers.set('Content-Security-Policy', `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://api.stripe.com https://cdn.shopify.com https://api.mailchannels.net; frame-src 'self' https://js.stripe.com https://open.spotify.com https://anchor.fm; frame-ancestors *; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests`)
   c.res.headers.set('X-Content-Type-Options', 'nosniff')
   c.res.headers.set('X-XSS-Protection', '1; mode=block')
   c.res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
@@ -1287,6 +1287,7 @@ app.get('/', (c) => {
         <a href="#shop" class="nav-tab"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop</a>
         <a href="#deals" class="nav-tab nav-tab-deals"><i class="fas fa-tags" aria-hidden="true"></i> Deals</a>
         <a href="/build" class="nav-tab"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build</a>
+        <a href="/contact" class="nav-tab"><i class="fas fa-envelope" aria-hidden="true"></i> Contact</a>
         <button data-action="toggleCart" class="nav-cart" aria-label="Shopping cart" title="View Cart">
           <i class="fas fa-shopping-cart"></i>
           <span id="cartBadge" class="cart-badge">0</span>
@@ -1458,6 +1459,55 @@ app.get('/', (c) => {
     </div>
   </section>
   
+  <!-- PODCAST / BLOG SECTION -->
+  <section id="podcast" style="background: #fff; padding: 50px 20px;" aria-labelledby="podcast-heading">
+    <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+      <h2 id="podcast-heading" style="font-size: 1.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #333; margin: 0 0 8px;">
+        <i class="fas fa-podcast" style="color: #8B0000;" aria-hidden="true"></i> The Podcast
+      </h2>
+      <p style="color: #666; font-size: 1rem; margin: 0 0 30px; line-height: 1.6;">
+        Conversations with the Human Cockfighter &mdash; stories, discipline, and life on the mat.
+      </p>
+      
+      <!-- Spotify Embed: Hillbilly Fightwear Podcast -->
+      <div style="max-width: 700px; margin: 0 auto 30px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+        <iframe 
+          style="border-radius:12px; border:0; width:100%; height:352px;" 
+          src="https://open.spotify.com/embed/show/4RbslfSGJhey2oFMEEtMbT?utm_source=generator&theme=0" 
+          allowfullscreen="" 
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+          loading="lazy"
+          title="Hillbilly Fightwear Podcast on Spotify">
+        </iframe>
+      </div>
+
+      <!-- Recent Episodes Quick Links -->
+      <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 25px;">
+        <a href="https://anchor.fm/hillbillyfightwear/episodes/Discipline-e1h4qf8" target="_blank" rel="noopener noreferrer" 
+           style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #1a1a1a; color: #fff; text-decoration: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s;">
+          <i class="fas fa-play-circle" style="color: #8B0000;"></i> Discipline
+        </a>
+        <a href="https://anchor.fm/hillbillyfightwear/episodes/Investment-e1h4q73" target="_blank" rel="noopener noreferrer" 
+           style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #1a1a1a; color: #fff; text-decoration: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s;">
+          <i class="fas fa-play-circle" style="color: #8B0000;"></i> Investment
+        </a>
+        <a href="https://anchor.fm/hillbillyfightwear/episodes/Medicine-e1h4q02" target="_blank" rel="noopener noreferrer" 
+           style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #1a1a1a; color: #fff; text-decoration: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s;">
+          <i class="fas fa-play-circle" style="color: #8B0000;"></i> Medicine
+        </a>
+        <a href="https://anchor.fm/hillbillyfightwear/episodes/Crime-e1h4ppk" target="_blank" rel="noopener noreferrer" 
+           style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #1a1a1a; color: #fff; text-decoration: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s;">
+          <i class="fas fa-play-circle" style="color: #8B0000;"></i> Crime
+        </a>
+      </div>
+      
+      <a href="https://anchor.fm/hillbillyfightwear" target="_blank" rel="noopener noreferrer" 
+         style="display: inline-block; padding: 14px 40px; background: #8B0000; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; font-size: 0.95rem; border-radius: 4px; transition: all 0.3s;">
+        <i class="fas fa-headphones"></i> Listen to All Episodes
+      </a>
+    </div>
+  </section>
+
   </main>
   
   <!-- Footer -->
@@ -1468,6 +1518,8 @@ app.get('/', (c) => {
       <nav aria-label="Footer navigation" style="margin-top: 20px;">
         <a href="/build" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Build Your Own</a>
         <a href="#shop" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Shop Now</a>
+        <a href="/contact" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Contact Us</a>
+        <a href="#podcast" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Podcast</a>
         <a href="https://hillbillyfightwear.com" target="_blank" rel="noopener noreferrer" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Official Store</a>
       </nav>
       <nav aria-label="Legal navigation" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">

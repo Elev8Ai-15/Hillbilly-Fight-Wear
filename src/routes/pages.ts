@@ -357,6 +357,420 @@ pages.get('/cookie-policy', (c) => {
 })
 
 // ============================================
+// CONTACT US PAGE
+// ============================================
+pages.get('/contact', (c) => {
+  const nonce = c.get('nonce')
+  return c.html(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Hillbilly Fightwear</title>
+  <link rel="stylesheet" href="/static/tailwind.css">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+  <style nonce="${nonce}">
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; }
+    body { font-family: 'Oswald', Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+    
+    .contact-nav {
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 44px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .contact-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .contact-nav a:hover { color: #ccc; }
+    .contact-nav .nav-links {
+      display: flex;
+      gap: 6px;
+    }
+    .contact-nav .nav-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-decoration: none;
+      border-radius: 3px;
+      color: #fff;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      transition: all 0.25s;
+    }
+    .contact-nav .nav-tab:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.6);
+    }
+    
+    .contact-header {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);
+      color: #fff;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    .contact-header h1 { font-size: 2.5rem; margin: 0; text-transform: uppercase; letter-spacing: 3px; }
+    .contact-header p { color: #aaa; margin: 10px 0 0; font-size: 1.1rem; }
+    
+    .contact-container {
+      max-width: 900px;
+      margin: -30px auto 40px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    @media (max-width: 768px) {
+      .contact-container { grid-template-columns: 1fr; margin-top: -20px; }
+    }
+    
+    .contact-form-card {
+      background: #fff;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .contact-form-card h2 {
+      font-size: 1.3rem;
+      color: #8B0000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #8B0000;
+    }
+    
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+      background: #fff;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #8B0000;
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #8B0000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .submit-btn:hover { background: #a50000; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139,0,0,0.4); }
+    .submit-btn:disabled { background: #999; cursor: not-allowed; transform: none; box-shadow: none; }
+    
+    .contact-info-card {
+      background: #fff;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+    .contact-info-card h2 {
+      font-size: 1.3rem;
+      color: #8B0000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #8B0000;
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .info-item:last-child { border-bottom: none; }
+    .info-item .icon-circle {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #8B0000, #c0392b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .info-item h3 { margin: 0 0 4px; font-size: 0.95rem; color: #333; }
+    .info-item p { margin: 0; font-size: 0.9rem; color: #666; line-height: 1.5; }
+    .info-item a { color: #8B0000; text-decoration: none; }
+    .info-item a:hover { text-decoration: underline; }
+    
+    .social-links {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+    .social-link {
+      width: 44px;
+      height: 44px;
+      background: #1a1a1a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .social-link:hover { background: #8B0000; transform: translateY(-3px); }
+    
+    .form-status {
+      padding: 14px 18px;
+      border-radius: 6px;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .form-status.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .form-status.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+    .contact-footer {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .contact-footer p { margin: 0; font-size: 0.85rem; color: #999; }
+    .contact-footer a { color: #8B0000; text-decoration: none; }
+    .contact-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav class="contact-nav">
+    <a href="/">Hillbilly Fightwear</a>
+    <div class="nav-links">
+      <a href="/" class="nav-tab"><i class="fas fa-home"></i> Home</a>
+      <a href="/#shop" class="nav-tab"><i class="fas fa-shopping-bag"></i> Shop</a>
+      <a href="/build" class="nav-tab"><i class="fas fa-paint-brush"></i> Build</a>
+    </div>
+  </nav>
+
+  <div class="contact-header">
+    <h1><i class="fas fa-envelope"></i> Contact Us</h1>
+    <p>Got a question? We'd love to hear from you. Send us a message!</p>
+  </div>
+
+  <div class="contact-container">
+    <!-- Contact Form -->
+    <div class="contact-form-card">
+      <h2><i class="fas fa-paper-plane"></i> Send Us a Message</h2>
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="contactName"><i class="fas fa-user"></i> Your Name *</label>
+          <input type="text" id="contactName" name="name" required placeholder="Enter your full name" maxlength="100">
+        </div>
+        <div class="form-group">
+          <label for="contactEmail"><i class="fas fa-envelope"></i> Email Address *</label>
+          <input type="email" id="contactEmail" name="email" required placeholder="your@email.com" maxlength="200">
+        </div>
+        <div class="form-group">
+          <label for="contactPhone"><i class="fas fa-phone"></i> Phone Number</label>
+          <input type="tel" id="contactPhone" name="phone" placeholder="(optional)" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label for="contactSubject"><i class="fas fa-tag"></i> Subject *</label>
+          <select id="contactSubject" name="subject" required>
+            <option value="">Select a topic...</option>
+            <option value="General Inquiry">General Inquiry</option>
+            <option value="Order Question">Order Question</option>
+            <option value="Custom Design Request">Custom Design Request</option>
+            <option value="Wholesale / Bulk Order">Wholesale / Bulk Order</option>
+            <option value="Sponsorship">Sponsorship</option>
+            <option value="Returns / Exchange">Returns / Exchange</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="contactMessage"><i class="fas fa-comment-alt"></i> Message *</label>
+          <textarea id="contactMessage" name="message" required placeholder="Tell us what's on your mind..." maxlength="2000"></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+        <div id="formStatus" class="form-status"></div>
+      </form>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="contact-info-card">
+      <h2><i class="fas fa-info-circle"></i> Get In Touch</h2>
+      
+      <div class="info-item">
+        <div class="icon-circle"><i class="fas fa-envelope"></i></div>
+        <div>
+          <h3>Email Us</h3>
+          <p><a href="mailto:brian@hillbillyfightwear.com">brian@hillbillyfightwear.com</a></p>
+          <p style="font-size: 0.8rem; color: #999; margin-top: 4px;">We typically respond within 24 hours</p>
+        </div>
+      </div>
+      
+      <div class="info-item">
+        <div class="icon-circle"><i class="fas fa-globe"></i></div>
+        <div>
+          <h3>Website</h3>
+          <p><a href="https://hillbillyfightwear.com" target="_blank" rel="noopener">hillbillyfightwear.com</a></p>
+        </div>
+      </div>
+      
+      <div class="info-item">
+        <div class="icon-circle"><i class="fas fa-podcast"></i></div>
+        <div>
+          <h3>Podcast</h3>
+          <p><a href="https://anchor.fm/hillbillyfightwear" target="_blank" rel="noopener">Listen on Spotify / Anchor</a></p>
+          <p style="font-size: 0.8rem; color: #999; margin-top: 4px;">The Human Cockfighter Podcast</p>
+        </div>
+      </div>
+      
+      <div class="info-item">
+        <div class="icon-circle"><i class="fas fa-clock"></i></div>
+        <div>
+          <h3>Response Time</h3>
+          <p>We aim to respond to all inquiries within 24-48 hours during business days.</p>
+        </div>
+      </div>
+      
+      <div class="social-links">
+        <a href="https://www.facebook.com/hillbillyfightwear" target="_blank" rel="noopener" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/hillbillyfightwear" target="_blank" rel="noopener" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://anchor.fm/hillbillyfightwear" target="_blank" rel="noopener" class="social-link" aria-label="Podcast"><i class="fas fa-podcast"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="contact-footer">
+    <p>&copy; ${new Date().getFullYear()} Hillbilly Fightwear. All rights reserved.</p>
+    <p style="margin-top: 8px;">
+      <a href="/">Home</a> &bull;
+      <a href="/#shop">Shop</a> &bull;
+      <a href="/build">Build Your Own</a> &bull;
+      <a href="/privacy-policy">Privacy Policy</a>
+    </p>
+  </footer>
+
+  <script nonce="${nonce}">
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      var btn = document.getElementById('submitBtn');
+      var status = document.getElementById('formStatus');
+      
+      // Validate
+      var name = document.getElementById('contactName').value.trim();
+      var email = document.getElementById('contactEmail').value.trim();
+      var subject = document.getElementById('contactSubject').value;
+      var message = document.getElementById('contactMessage').value.trim();
+      
+      if (!name || !email || !subject || !message) {
+        status.className = 'form-status error';
+        status.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all required fields.';
+        return;
+      }
+      
+      // Email validation
+      var emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+      if (!emailRegex.test(email)) {
+        status.className = 'form-status error';
+        status.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter a valid email address.';
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      status.className = 'form-status';
+      status.style.display = 'none';
+      
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          phone: document.getElementById('contactPhone').value.trim(),
+          subject: subject,
+          message: message
+        })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.success) {
+          status.className = 'form-status success';
+          status.innerHTML = '<i class="fas fa-check-circle"></i> ' + data.message;
+          document.getElementById('contactForm').reset();
+        } else {
+          status.className = 'form-status error';
+          status.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.error || 'Something went wrong. Please try again.');
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+      })
+      .catch(function(err) {
+        status.className = 'form-status error';
+        status.innerHTML = '<i class="fas fa-exclamation-circle"></i> Network error. Please try again later.';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+      });
+    });
+  </script>
+</body>
+</html>`)
+})
+
+// ============================================
 // Catch-All Route - 404 handler for unmatched paths
 // ============================================
 pages.all('*', (c) => {
