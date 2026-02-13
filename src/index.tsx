@@ -1192,9 +1192,9 @@ app.get('/', (c) => {
 
     /* --- LEFT COLUMN: 3 stickers — #6 moved down 1" + right 1.25", #11 moved down 0.5" + right 1" ---
          All +25% size. */
-    .sticker-collage .sticker-6  { top: 23%; left: 24%;   width: 131px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — right 1" more (left:17→24%) */
+    .sticker-collage .sticker-6  { top: 30%; left: 24%;   width: 131px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — down 1" (top:23→30%), right 1" (left:17→24%) */
     .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 98px;  transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 98x129 */
-    .sticker-collage .sticker-11 { top: 58%; left: 8%;    width: 150px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW — moved down 0.5" + right 1" */
+    .sticker-collage .sticker-11 { top: 62%; left: 15%;   width: 150px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW sticker — down 0.5" (top:58→62%), right 1" (left:8→15%) */
 
     /* --- RIGHT COLUMN: #8 moved left 1", #9 moved up 0.5" ---
          All +25% size. */
@@ -1241,9 +1241,9 @@ app.get('/', (c) => {
       .sticker-collage .sticker-4  { top: 1%;  left: 20%;  width: 65px !important; }
       .sticker-collage .sticker-7  { top: 1%;  right: 1%;  left: auto; width: 75px !important; }
       /* Left side — hugging left edge */
-      .sticker-collage .sticker-6  { top: 15%; left: 1%;   right: auto; width: 60px !important; }
+      .sticker-collage .sticker-6  { top: 22%; left: 1%;   right: auto; width: 60px !important; }
       .sticker-collage .sticker-3  { top: 30%; left: 1%;   right: auto; width: 45px !important; }
-      .sticker-collage .sticker-11 { top: 55%; left: 1%;   right: auto; width: 65px !important; }
+      .sticker-collage .sticker-11 { top: 59%; left: 5%;   right: auto; width: 65px !important; }
       /* Right side — hugging right edge */
       .sticker-collage .sticker-5  { top: 14%; right: 1%;  left: auto; width: 42px !important; }
       .sticker-collage .sticker-8  { top: 42%; right: 1%;  left: auto; width: 45px !important; }
