@@ -1118,8 +1118,26 @@ app.get('/', (c) => {
               drop-shadow(0 0 40px rgba(139,0,0,0.2));
     }
 
+    .hero-slogan {
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 8px;
+      color: #8B0000;
+      margin: 18px 0 0;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+      opacity: 0.95;
+    }
+    @media (max-width: 768px) {
+      .hero-slogan { font-size: 0.9rem; letter-spacing: 4px; margin-top: 10px; }
+    }
+    @media (max-width: 400px) {
+      .hero-slogan { font-size: 0.75rem; letter-spacing: 3px; }
+    }
+
     .scrapbook-cta {
-      margin-top: 25px;
+      margin-top: 20px;
       display: flex;
       gap: 16px;
       justify-content: center;
@@ -1207,9 +1225,9 @@ app.get('/', (c) => {
     .sticker-collage .sticker-7  { top: 2%;  right: 22%;  width: 211px; transform: rotate(7deg);   --hover-rotate: rotate(3deg); }   /* ClingToGuns 162→211 (+30%) */
 
     /* --- LEFT COLUMN --- */
-    .sticker-collage .sticker-6  { top: 30%; left: 24%;   width: 170px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm 131→170 (+30%) */
+    .sticker-collage .sticker-6  { top: 34%; left: 17%;   width: 170px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — left 1" (24→17%), down 0.5" (30→34%) */
     .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 127px; transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 98→127 (+30%) */
-    .sticker-collage .sticker-11 { top: 62%; left: 15%;   width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW 150→195 (+30%) */
+    .sticker-collage .sticker-11 { top: 70%; left: 15%;   width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW — down 0.75" (62→70%) */
 
     /* --- RIGHT COLUMN --- */
     .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 117px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 90→117 (+30%) */
@@ -1338,7 +1356,7 @@ app.get('/', (c) => {
     <!-- Centered Logo + CTA (z-index 3) -->
     <div class="scrapbook-center">
       <img src="/images/graphics/hillbilly-fightwear-logo.png?v=3" alt="Hillbilly Fightwear Logo">
-
+      <p class="hero-slogan">Thump A Stranger</p>
       <div class="scrapbook-cta">
         <a href="#shop" class="btn-primary"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
         <a href="/build" class="btn-secondary"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Your Own</a>
