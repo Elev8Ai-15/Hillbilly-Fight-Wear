@@ -1220,14 +1220,14 @@ app.get('/', (c) => {
     /* --- TOP ROW: 3 stickers (GNF-RB #2 deleted) ---
          L:1% + L:17% ... R:8% (moved left 1"). All +25% size. */
     .sticker-collage .sticker-1  { top: 1%;  left: 1%;    width: 235px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* HCF 181→235 (+30%) */
-    .sticker-collage .sticker-4  { top: 2%;  left: 17%;   width: 187px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* Thump 144→187 (+30%) */
+    .sticker-collage .sticker-4  { top: 2%;  left: 19%;   width: 187px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* Thump — right 0.25" (17→19%) */
     .sticker-collage .sticker-2  { display: none !important; }  /* GNF-RB DELETED per request */
     .sticker-collage .sticker-7  { top: 2%;  right: 22%;  width: 211px; transform: rotate(7deg);   --hover-rotate: rotate(3deg); }   /* ClingToGuns 162→211 (+30%) */
 
     /* --- LEFT COLUMN --- */
     .sticker-collage .sticker-6  { top: 34%; left: 17%;   width: 170px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — left 1" (24→17%), down 0.5" (30→34%) */
     .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 127px; transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 98→127 (+30%) */
-    .sticker-collage .sticker-11 { top: 70%; left: 15%;   width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW — down 0.75" (62→70%) */
+    .sticker-collage .sticker-11 { top: 70%; left: 35%;   width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW — right 20% (15→35%) */
 
     /* --- RIGHT COLUMN --- */
     .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 117px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 90→117 (+30%) */
@@ -1269,12 +1269,12 @@ app.get('/', (c) => {
 
       /* Top row — across the top, well above logo */
       .sticker-collage .sticker-1  { top: 1%;  left: 1%;   width: 104px !important; }
-      .sticker-collage .sticker-4  { top: 1%;  left: 20%;  width: 85px !important; }
+      .sticker-collage .sticker-4  { top: 1%;  left: 22%;  width: 85px !important; }
       .sticker-collage .sticker-7  { top: 1%;  right: 1%;  left: auto; width: 98px !important; }
       /* Left side — hugging left edge */
       .sticker-collage .sticker-6  { top: 22%; left: 1%;   right: auto; width: 78px !important; }
       .sticker-collage .sticker-3  { top: 30%; left: 1%;   right: auto; width: 59px !important; }
-      .sticker-collage .sticker-11 { top: 59%; left: 5%;   right: auto; width: 85px !important; }
+      .sticker-collage .sticker-11 { top: 59%; left: 20%;  right: auto; width: 85px !important; }
       /* Right side — hugging right edge */
       .sticker-collage .sticker-5  { top: 14%; right: 1%;  left: auto; width: 55px !important; }
       .sticker-collage .sticker-8  { top: 42%; right: 1%;  left: auto; width: 59px !important; }
