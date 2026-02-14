@@ -2421,6 +2421,74 @@ app.get('/', (c) => {
       garments.find(g => g.id === 'zipup-hoodie')?.images || {}
     ).replace(/<\//g, '<\\/')};
     
+    // Canvas-based preview compositing for Shop modal
+    // Loads garment image, then overlays the product graphic at the correct position
+    function renderShopPreviewCanvas(garmentSrc, graphicSrc, garmentType, viewKey) {
+      var cvs = document.getElementById('shopPreviewCanvas');
+      if (!cvs) return;
+      var ctx = cvs.getContext('2d');
+      var W = 400, H = 400;
+      cvs.width = W;
+      cvs.height = H;
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, W, H);
+
+      var garmentImg = new Image();
+      garmentImg.crossOrigin = 'anonymous';
+      garmentImg.onload = function() {
+        // Scale garment to fit canvas (90% like Builder)
+        var scale = Math.min((W * 0.9) / garmentImg.width, (H * 0.9) / garmentImg.height);
+        var gw = garmentImg.width * scale;
+        var gh = garmentImg.height * scale;
+        var gx = (W - gw) / 2;
+        var gy = (H - gh) / 2;
+        ctx.drawImage(garmentImg, gx, gy, gw, gh);
+
+        // Now overlay the graphic if provided
+        if (!graphicSrc) return;
+        var gfxImg = new Image();
+        gfxImg.crossOrigin = 'anonymous';
+        gfxImg.onload = function() {
+          // Print area definitions (fraction of garment area) matching Builder
+          var printArea;
+          var isHeadwear = (garmentType === 'trucker-hat' || garmentType === 'beanie');
+          if (isHeadwear) {
+            printArea = { xOff: 0.20, yOff: 0.15, wFrac: 0.60, hFrac: 0.55 };
+          } else {
+            // Full front/back placement
+            printArea = { xOff: 0.18, yOff: 0.15, wFrac: 0.64, hFrac: 0.55 };
+          }
+
+          // Compute print area in pixel coords relative to the garment on canvas
+          var paX = gx + gw * printArea.xOff;
+          var paY = gy + gh * printArea.yOff;
+          var paW = gw * printArea.wFrac;
+          var paH = gh * printArea.hFrac;
+
+          // Scale graphic to fit within print area (like Builder's 90% initial scale)
+          var gfxScale = Math.min(paW / gfxImg.width, paH / gfxImg.height) * 0.85;
+          var fw = gfxImg.width * gfxScale;
+          var fh = gfxImg.height * gfxScale;
+
+          // Center graphic in print area
+          var fx = paX + (paW - fw) / 2;
+          var fy = paY + (paH - fh) / 2;
+
+          ctx.drawImage(gfxImg, fx, fy, fw, fh);
+        };
+        gfxImg.onerror = function() { /* graphic failed to load, garment shown alone */ };
+        gfxImg.src = graphicSrc;
+      };
+      garmentImg.onerror = function() {
+        ctx.fillStyle = '#999';
+        ctx.font = '14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Preview unavailable', W / 2, H / 2);
+      };
+      garmentImg.src = garmentSrc;
+    }
+    
     function renderGarmentModal(product, step) {
       modalState.step = step;
       var mc = document.getElementById('modalContent');
@@ -2463,25 +2531,31 @@ app.get('/', (c) => {
       }
       
       // Determine graphic overlay for current view
-      var graphicOverlayHtml = '';
+      var activeGraphicId = null;
       if (modalState.selectedColor && product.garmentType) {
-        var activeGraphicId = (viewKey === 'back' && product.backGraphicId) ? product.backGraphicId : (viewKey === 'front' && product.graphicId) ? product.graphicId : null;
-        if (activeGraphicId && graphicsMap[activeGraphicId]) {
-          // Position graphic in center of garment area — similar to Builder placement
-          var gTop = product.garmentType === 'hoodie' ? '42%' : '40%';
-          var gMaxW = '38%';
-          var gMaxH = '35%';
-          graphicOverlayHtml = '<img src="' + graphicsMap[activeGraphicId] + '" alt="" style="position:absolute; top:' + gTop + '; left:50%; transform:translate(-50%,-50%); max-width:' + gMaxW + '; max-height:' + gMaxH + '; object-fit:contain; pointer-events:none;">';
-        }
+        activeGraphicId = (viewKey === 'back' && product.backGraphicId) ? product.backGraphicId : (viewKey === 'front' && product.graphicId) ? product.graphicId : null;
       }
       
-      var imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center; position:relative;">' +
-        '<div style="position:relative; display:inline-block;">' +
-          '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
-          graphicOverlayHtml +
-        '</div>' +
-        viewToggleHtml +
-      '</div>';
+      // Use canvas-based compositing when we have a garment mockup (with or without graphic)
+      // Canvas gives pixel-perfect placement; falls back to regular <img> for items without garment mockups
+      var hasGarmentMockup = modalState.selectedColor && product.garmentType && previewImg && previewImg.indexOf('/images/garments/') !== -1;
+      var hasGraphicOverlay = activeGraphicId && graphicsMap[activeGraphicId];
+      var useCanvas = hasGarmentMockup && (hasGraphicOverlay || (product.graphicId || product.backGraphicId));
+      
+      var imageHtml;
+      if (useCanvas) {
+        imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center;">' +
+          '<canvas id="shopPreviewCanvas" width="400" height="400" style="max-width:100%; max-height:320px; display:block; margin:0 auto;"></canvas>' +
+          viewToggleHtml +
+        '</div>';
+      } else {
+        imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center; position:relative;">' +
+          '<div style="position:relative; display:inline-block;">' +
+            '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
+          '</div>' +
+          viewToggleHtml +
+        '</div>';
+      }
       
       var headerHtml = '<div style="padding:20px 20px 10px;">' +
         '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</h3>' +
@@ -2559,6 +2633,12 @@ app.get('/', (c) => {
             '<button data-action="closeProductModal" style="padding:12px; background:transparent; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Keep Shopping</button>' +
             '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="size" style="padding:10px; background:transparent; color:#666; border:none; cursor:pointer; font-size:0.85rem; text-decoration:underline;">Change Options</button>' +
           '</div>';
+      }
+      
+      // After innerHTML is set, render the canvas preview if applicable
+      if (useCanvas) {
+        var graphicUrl = (activeGraphicId && graphicsMap[activeGraphicId]) ? graphicsMap[activeGraphicId] : null;
+        renderShopPreviewCanvas(previewImg, graphicUrl, product.garmentType, viewKey);
       }
     }
     
