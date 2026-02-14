@@ -1646,6 +1646,13 @@ app.get('/', (c) => {
         return acc
       }, {} as Record<string, Record<string, { front: string; back?: string }>>)
     ).replace(/<\//g, '<\\/')};
+    // Graphics lookup map: graphicId → fullImage URL
+    var graphicsMap = ${JSON.stringify(
+      graphics.reduce((acc: Record<string, string>, g: { id: string; fullImage: string }) => {
+        acc[g.id] = g.fullImage
+        return acc
+      }, {} as Record<string, string>)
+    ).replace(/<\//g, '<\\/')};
     function getColorPreviewImage(product, color) {
       if (!product.garmentType || !color) return product.image;
       var colorKey = color.toLowerCase();
@@ -2443,8 +2450,8 @@ app.get('/', (c) => {
         }
       }
       
-      // Show front/back toggle for products that have back images (hoodies, t-shirts with styles)
-      var showViewToggle = product.garmentType === 'hoodie' && modalState.selectedColor;
+      // Show front/back toggle for products with garment mockups (hoodies, t-shirts when color selected)
+      var showViewToggle = product.garmentType && modalState.selectedColor && (product.garmentType === 'hoodie' || product.graphicId);
       var viewToggleHtml = '';
       if (showViewToggle) {
         var frontActive = viewKey === 'front' ? 'background:#8B0000; color:#fff;' : 'background:#f5f5f5; color:#333;';
@@ -2455,8 +2462,24 @@ app.get('/', (c) => {
         '</div>';
       }
       
+      // Determine graphic overlay for current view
+      var graphicOverlayHtml = '';
+      if (modalState.selectedColor && product.garmentType) {
+        var activeGraphicId = (viewKey === 'back' && product.backGraphicId) ? product.backGraphicId : (viewKey === 'front' && product.graphicId) ? product.graphicId : null;
+        if (activeGraphicId && graphicsMap[activeGraphicId]) {
+          // Position graphic in center of garment area — similar to Builder placement
+          var gTop = product.garmentType === 'hoodie' ? '42%' : '40%';
+          var gMaxW = '38%';
+          var gMaxH = '35%';
+          graphicOverlayHtml = '<img src="' + graphicsMap[activeGraphicId] + '" alt="" style="position:absolute; top:' + gTop + '; left:50%; transform:translate(-50%,-50%); max-width:' + gMaxW + '; max-height:' + gMaxH + '; object-fit:contain; pointer-events:none;">';
+        }
+      }
+      
       var imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center; position:relative;">' +
-        '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
+        '<div style="position:relative; display:inline-block;">' +
+          '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
+          graphicOverlayHtml +
+        '</div>' +
         viewToggleHtml +
       '</div>';
       
