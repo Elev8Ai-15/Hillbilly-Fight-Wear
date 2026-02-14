@@ -9,8 +9,10 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 
 ## URLs
 - **Production**: https://hillbilly-fightwear.pages.dev
-- **Builder**: https://hillbilly-fightwear.pages.dev/build
-- **Custom Domain**: (Pending client approval - DNS configuration ready)
+- **Custom Domain (www)**: https://www.hillbillyfightwear.com ✅ Active
+- **Custom Domain (apex)**: https://hillbillyfightwear.com ⏳ Pending DNS propagation
+- **Builder**: https://www.hillbillyfightwear.com/build
+- **Contact**: https://www.hillbillyfightwear.com/contact
 
 ## Features
 
@@ -234,7 +236,15 @@ webapp/
 └── README.md
 ```
 
-## Recent Updates (v5.0.0 - Code Review & Stability)
+## Recent Updates (v5.1.0 - Publishing & Final Cleanup)
+- **GNF sticker position fix**: Moved left from 25% → 12% (matching HFW sticker adjustment)
+- **Apex domain added**: `hillbillyfightwear.com` registered as custom domain on Cloudflare Pages
+- **www domain active**: `www.hillbillyfightwear.com` fully operational with SSL
+- **Comprehensive cleanup completed**: Removed dead files (10 files, 735 lines), merged duplicate CSS, cleaned unused code blocks
+- **All 12+ routes verified**: Homepage, Builder, Contact, Privacy, Cookie policy, API endpoints all returning HTTP 200
+- **Zero console errors**: Only 1 minor iframe attribute warning (Spotify embed)
+
+## Previous Updates (v5.0.0 - Code Review & Stability)
 - **Fixed: Hoodie graphic disappearing on color change** - Added 30ms debounce to `updatePreview()` eliminating the async race condition where rapid state changes caused stale `previewUpdateId` callbacks to drop graphics
 - **Fixed: All garment backgrounds now pure white** - Changed `#f7f7f7` to `#ffffff` across product-image-wrapper, Shop modal previews, decal modal previews, cart thumbnails, and Build canvas
 - **Refactored canvas constants**: Extracted `PRINT_AREA`, `PLACEMENT_POSITIONS`, and `isPlacementVisibleForView()` helper to reduce duplication and improve calibration clarity
@@ -274,6 +284,6 @@ webapp/
 Enhanced from: https://hillbilly-fightwear.myshopify.com/
 
 ---
-**Status**: Active  
-**Last Updated**: 2026-02-12  
-**Version**: 5.0.0 (Code Review & Stability - Debounced preview, white backgrounds, refactored constants)
+**Status**: ✅ Active / Published  
+**Last Updated**: 2026-02-14  
+**Version**: 5.1.0 (Published - DNS configured, sticker fixes, comprehensive cleanup)
