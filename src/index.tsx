@@ -1234,9 +1234,9 @@ app.get('/', (c) => {
        Sticker map (aspect ratios) — all widths +25%:
          1=HCF(181px) 3=ObamaTap(98px) 4=Thump(144px)
          5=FunRide(90px) 6=PutItOnEm(131px,moved↓1\"→right2.25\")
-         7=YourNeck/ClingToGuns(162px,moved←2\") 8=YesYouCan(98px,moved←2\")
+         7=YourNeck/ClingToGuns(162px,moved←2\") 8=YesYouCan(127px,moved↓1.25\")
          9=ThumpinLovin(94px,moved↑0.5\") 10=Community(156px)
-         11=HFW(150px,moved↓0.5\"→right1\") 12=GNF(125px,moved→1.5\")
+         11=HFW(150px,moved↓0.5\"→right1\") 12=GNF(163px,moved→1\" center-right)
          13=MYOB(156px,moved←2\") 14=Cunt(144px)
        ======================================================= */
 
@@ -1254,12 +1254,12 @@ app.get('/', (c) => {
 
     /* --- RIGHT COLUMN --- */
     .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 117px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 90→117 (+30%) */
-    .sticker-collage .sticker-8  { top: 48%; right: 22%;  width: 127px; transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* YesYouCan 98→127 (+30%) */
+    .sticker-collage .sticker-8  { top: 63%; right: 22%;  width: 127px; transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* YesYouCan — moved ↓1.25" (48→63%) */
     .sticker-collage .sticker-9  { top: 64%; right: 2%;   width: 122px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* ThumpinLovin 94→122 (+30%) */
 
     /* --- BOTTOM ROW --- */
     .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 203px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 156→203 (+30%) */
-    .sticker-collage .sticker-12 { bottom: 1%; left: 25%;  width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — right 1.25" (12→25%) */
+    .sticker-collage .sticker-12 { bottom: 1%; left: 33%;  width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved 1" center-right of logo (25→33%) */
     .sticker-collage .sticker-13 { bottom: 1%; right: 30%; width: 203px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 156→203 (+30%) */
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
@@ -1300,11 +1300,11 @@ app.get('/', (c) => {
       .sticker-collage .sticker-11 { top: 59%; left: 20%;  right: auto; width: 85px !important; }
       /* Right side — hugging right edge */
       .sticker-collage .sticker-5  { top: 14%; right: 1%;  left: auto; width: 55px !important; }
-      .sticker-collage .sticker-8  { top: 42%; right: 1%;  left: auto; width: 59px !important; }
+      .sticker-collage .sticker-8  { top: 55%; right: 1%;  left: auto; width: 59px !important; }
       .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 55px !important; }
       /* Bottom row — across the bottom, below buttons */
       .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 91px !important; }
-      .sticker-collage .sticker-12 { bottom: 1%; left: 22%;  width: 72px !important; }
+      .sticker-collage .sticker-12 { bottom: 1%; left: 30%;  width: 72px !important; }
       .sticker-collage .sticker-13 { bottom: 1%; right: 18%; left: auto; width: 91px !important; }
       .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 85px !important; }
     }
