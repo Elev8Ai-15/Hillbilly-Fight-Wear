@@ -1105,22 +1105,19 @@ app.get('/', (c) => {
       position: relative;
       width: 100%;
       min-height: 85vh;
-      background: #f5f5f0;
+      background: #ffffff;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    /* Subtle worn-paper texture */
+    /* Clean white background — no texture */
     .scrapbook-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(139,0,0,0.05) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 30%, rgba(139,0,0,0.04) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 80%, rgba(0,0,0,0.02) 0%, transparent 40%);
+      background: none;
       z-index: 0;
     }
 
@@ -1254,12 +1251,12 @@ app.get('/', (c) => {
 
     /* --- RIGHT COLUMN --- */
     .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 117px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 90→117 (+30%) */
-    .sticker-collage .sticker-8  { top: 63%; right: 22%;  width: 127px; transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* YesYouCan — moved ↓1.25" (48→63%) */
+    .sticker-collage .sticker-8  { top: 66%; right: 22%;  width: 127px; transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* YesYouCan — moved ↓0.25" more (63→66%) */
     .sticker-collage .sticker-9  { top: 64%; right: 2%;   width: 122px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* ThumpinLovin 94→122 (+30%) */
 
     /* --- BOTTOM ROW --- */
     .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 203px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 156→203 (+30%) */
-    .sticker-collage .sticker-12 { bottom: 1%; left: 33%;  width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved 1" center-right of logo (25→33%) */
+    .sticker-collage .sticker-12 { bottom: 1%; right: 18%;  left: auto; width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved to right side, 1" center-right of logo */
     .sticker-collage .sticker-13 { bottom: 1%; right: 30%; width: 203px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 156→203 (+30%) */
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
@@ -1300,11 +1297,11 @@ app.get('/', (c) => {
       .sticker-collage .sticker-11 { top: 59%; left: 20%;  right: auto; width: 85px !important; }
       /* Right side — hugging right edge */
       .sticker-collage .sticker-5  { top: 14%; right: 1%;  left: auto; width: 55px !important; }
-      .sticker-collage .sticker-8  { top: 55%; right: 1%;  left: auto; width: 59px !important; }
+      .sticker-collage .sticker-8  { top: 58%; right: 1%;  left: auto; width: 59px !important; }
       .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 55px !important; }
       /* Bottom row — across the bottom, below buttons */
       .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 91px !important; }
-      .sticker-collage .sticker-12 { bottom: 1%; left: 30%;  width: 72px !important; }
+      .sticker-collage .sticker-12 { bottom: 1%; right: 15%;  left: auto; width: 72px !important; }
       .sticker-collage .sticker-13 { bottom: 1%; right: 18%; left: auto; width: 91px !important; }
       .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 85px !important; }
     }
@@ -3620,8 +3617,11 @@ app.get('/build', (c) => {
       var grid = document.getElementById('sizeGrid');
       var g = garments.find(function(x) { return x.id === garmentId; });
       if (!g) return;
+      // Display-friendly size labels (YS→Youth S, YM→Youth M, YL→Youth L)
+      var sizeLabels = { YS: 'Youth S', YM: 'Youth M', YL: 'Youth L', YXL: 'Youth XL' };
       grid.innerHTML = g.sizes.map(function(s) {
-        return '<div class="size-option" data-size="' + s + '">' + s + '</div>';
+        var label = sizeLabels[s] || s;
+        return '<div class="size-option" data-size="' + s + '">' + label + '</div>';
       }).join('');
     }
     
