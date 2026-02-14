@@ -3327,6 +3327,10 @@ app.get('/build', (c) => {
     let modalSelectedPlacement = null;
     let previewUpdateId = 0; // Used to cancel stale async updates
     
+    // Store user-customized graphic positions so they persist across preview refreshes.
+    // Key: "graphicId::placementId", Value: { left, top, scaleX, scaleY, angle }
+    var userGraphicPositions = {};
+    
     // Mobile navigation - scroll to step
     function scrollToStep(stepNum) {
       var element = document.getElementById('step' + stepNum);
@@ -3485,6 +3489,38 @@ app.get('/build', (c) => {
         var clamped = Math.max(obj.minScale, Math.min(obj.maxScale, (obj.scaleX + obj.scaleY) / 2));
         obj.scaleX = clamped;
         obj.scaleY = clamped;
+      });
+      
+      // Constrain graphics to printable area during move/scale
+      // Prevents dragging outside garment, over zippers, and off seams
+      canvas.on('object:moving', function(e) {
+        var obj = e.target;
+        if (!obj || !obj.isGraphic) return;
+        
+        var bounds = getGraphicBounds(obj.placementId, state.garment);
+        var halfW = (obj.width * obj.scaleX) / 2;
+        var halfH = (obj.height * obj.scaleY) / 2;
+        
+        // Clamp position to keep graphic within printable bounds
+        if (obj.left - halfW < bounds.minX) obj.left = bounds.minX + halfW;
+        if (obj.left + halfW > bounds.maxX) obj.left = bounds.maxX - halfW;
+        if (obj.top - halfH < bounds.minY) obj.top = bounds.minY + halfH;
+        if (obj.top + halfH > bounds.maxY) obj.top = bounds.maxY - halfH;
+      });
+      
+      // Save user position after any move, scale, or rotate
+      canvas.on('object:modified', function(e) {
+        var obj = e.target;
+        if (!obj || !obj.isGraphic || !obj.graphicId || !obj.placementId) return;
+        
+        var key = obj.graphicId + '::' + obj.placementId;
+        userGraphicPositions[key] = {
+          left: obj.left,
+          top: obj.top,
+          scaleX: obj.scaleX,
+          scaleY: obj.scaleY,
+          angle: obj.angle || 0
+        };
       });
     }
     
@@ -4031,13 +4067,25 @@ app.get('/build', (c) => {
           var maxScale = Math.min(maxPrintW / graphicImg.width, maxPrintH / graphicImg.height);
           var initialScale = maxScale * 0.9;
           
-          graphicImg.scale(initialScale);
           graphicImg.maxScale = maxScale;
           graphicImg.minScale = maxScale * 0.15;
           
+          // Restore user-saved position if available, otherwise use default placement
+          var posKey = item.graphicId + '::' + item.placementId;
+          var saved = userGraphicPositions[posKey];
           var pos = getPlacementPosition(item.placementId, canvas.width, canvas.height);
+          
+          if (saved) {
+            graphicImg.scale(saved.scaleX);
+            graphicImg.scaleY = saved.scaleY;
+            graphicImg.angle = saved.angle || 0;
+          } else {
+            graphicImg.scale(initialScale);
+          }
+          
           graphicImg.set({
-            left: pos.x, top: pos.y,
+            left: saved ? saved.left : pos.x,
+            top: saved ? saved.top : pos.y,
             originX: 'center', originY: 'center',
             selectable: true, hasControls: true, hasBorders: true,
             lockRotation: false, lockScalingFlip: true,
@@ -4067,6 +4115,39 @@ app.get('/build', (c) => {
       var pos = PLACEMENT_POSITIONS[placementId];
       if (!pos) return { x: w / 2, y: h / 2 };
       return { x: w * pos.xFrac, y: h * pos.yFrac };
+    }
+    
+    // Printable area bounds per placement — restricts graphics to garment body,
+    // avoiding zippers, seams, and off-garment areas.
+    // Values are fractions of canvas dimensions [minXFrac, minYFrac, maxXFrac, maxYFrac].
+    // Calibrated for 350x467 canvas with 90%-scaled garment images.
+    var PRINTABLE_BOUNDS = {
+      'full-front':  { minX: 0.22, minY: 0.18, maxX: 0.78, maxY: 0.72 },
+      'full-back':   { minX: 0.22, minY: 0.18, maxX: 0.78, maxY: 0.72 },
+      'left-chest':  { minX: 0.22, minY: 0.20, maxX: 0.48, maxY: 0.45 },
+      'right-chest': { minX: 0.52, minY: 0.20, maxX: 0.78, maxY: 0.45 },
+      'hat-front':   { minX: 0.25, minY: 0.25, maxX: 0.75, maxY: 0.60 }
+    };
+    
+    // Zip-up hoodies have a center zipper — split the printable area to avoid it
+    var PRINTABLE_BOUNDS_ZIPUP = {
+      'full-front':  { minX: 0.22, minY: 0.18, maxX: 0.78, maxY: 0.72 },
+      'left-chest':  { minX: 0.22, minY: 0.20, maxX: 0.45, maxY: 0.45 },
+      'right-chest': { minX: 0.55, minY: 0.20, maxX: 0.78, maxY: 0.45 }
+    };
+    
+    function getGraphicBounds(placementId, garmentId) {
+      var isZipUp = garmentId === 'zip-up-hoodie';
+      var boundsMap = isZipUp ? PRINTABLE_BOUNDS_ZIPUP : PRINTABLE_BOUNDS;
+      var b = boundsMap[placementId] || PRINTABLE_BOUNDS[placementId] || { minX: 0.10, minY: 0.10, maxX: 0.90, maxY: 0.90 };
+      var w = canvas.width;
+      var h = canvas.height;
+      return {
+        minX: w * b.minX,
+        minY: h * b.minY,
+        maxX: w * b.maxX,
+        maxY: h * b.maxY
+      };
     }
     
     // Order summary
