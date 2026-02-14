@@ -124,7 +124,8 @@ export function getProductById(productId: string): ShopProduct | undefined {
 
 /** Determine if a product is a T-shirt or Tank (for buy 2 get 1 promo) */
 function isTshirtOrTank(item: CartItem): boolean {
-  const gt = item.garmentType || ''
+  // Check cart item garmentType first, then fall back to catalog lookup
+  const gt = item.garmentType || (getProductById(item.productId)?.garmentType) || ''
   return gt === 'tshirt' || gt === 'tank-womens' || gt === 'tank-mens'
 }
 
@@ -135,7 +136,7 @@ function isDecal(item: CartItem): boolean {
 
 /** Determine if a product is a hat or hoodie (for free sticker promo) */
 function isHatOrHoodie(item: CartItem): boolean {
-  const gt = item.garmentType || ''
+  const gt = item.garmentType || (getProductById(item.productId)?.garmentType) || ''
   return gt === 'hoodie' || gt === 'trucker-hat' || gt === 'beanie' ||
     item.productId.startsWith('h') ||
     item.title.toLowerCase().includes('hoodie')

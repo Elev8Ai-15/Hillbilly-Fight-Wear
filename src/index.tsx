@@ -2290,7 +2290,9 @@ app.get('/', (c) => {
             size: size || '',
             color: color || '',
             style: style || '',
-            qty: 1
+            qty: 1,
+            type: product.type === 'Decal' ? 'decal' : 'garment',
+            garmentType: product.garmentType || ''
           });
         }
         saveCart();
