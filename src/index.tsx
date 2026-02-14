@@ -1247,16 +1247,16 @@ app.get('/', (c) => {
     /* --- LEFT COLUMN --- */
     .sticker-collage .sticker-6  { top: 34%; left: 17%;   width: 170px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — left 1" (24→17%), down 0.5" (30→34%) */
     .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 127px; transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 98→127 (+30%) */
-    .sticker-collage .sticker-11 { top: 70%; left: 12%;   width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW — left 1.25" (21→12%) */
+    .sticker-collage .sticker-11 { top: 77%; left: 9%;    width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* YesYouCan (swapped from sticker-8) — was HFW pos, moved ↓0.5"+0.25", right 0.25" */
 
     /* --- RIGHT COLUMN --- */
     .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 117px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 90→117 (+30%) */
-    .sticker-collage .sticker-8  { top: 66%; right: 22%;  width: 127px; transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* YesYouCan — moved ↓0.25" more (63→66%) */
+    .sticker-collage .sticker-8  { top: 69%; right: 17%;  width: 127px; transform: rotate(6deg);   --hover-rotate: rotate(3deg); }   /* HFW (swapped from sticker-11) — was YesYouCan pos, moved ↓0.25", right 0.5" */
     .sticker-collage .sticker-9  { top: 64%; right: 2%;   width: 122px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* ThumpinLovin 94→122 (+30%) */
 
     /* --- BOTTOM ROW --- */
     .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 203px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 156→203 (+30%) */
-    .sticker-collage .sticker-12 { bottom: 37%; right: 18%;  left: auto; width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved up 3.5" total (bottom 1→37%) and right side, 1" center-right of logo */
+    .sticker-collage .sticker-12 { bottom: 39%; right: 18%;  left: auto; width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved up 3.75" total (bottom 1→39%) */
     .sticker-collage .sticker-13 { bottom: 1%; right: 30%; width: 203px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 156→203 (+30%) */
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
@@ -1294,14 +1294,14 @@ app.get('/', (c) => {
       /* Left side — hugging left edge */
       .sticker-collage .sticker-6  { top: 22%; left: 1%;   right: auto; width: 78px !important; }
       .sticker-collage .sticker-3  { top: 30%; left: 1%;   right: auto; width: 59px !important; }
-      .sticker-collage .sticker-11 { top: 59%; left: 20%;  right: auto; width: 85px !important; }
+      .sticker-collage .sticker-11 { top: 65%; left: 16%;  right: auto; width: 85px !important; }
       /* Right side — hugging right edge */
       .sticker-collage .sticker-5  { top: 14%; right: 1%;  left: auto; width: 55px !important; }
-      .sticker-collage .sticker-8  { top: 58%; right: 1%;  left: auto; width: 59px !important; }
+      .sticker-collage .sticker-8  { top: 61%; right: 1%;  left: auto; width: 59px !important; }
       .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 55px !important; }
       /* Bottom row — across the bottom, below buttons */
       .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 91px !important; }
-      .sticker-collage .sticker-12 { bottom: 33%; right: 15%;  left: auto; width: 72px !important; }
+      .sticker-collage .sticker-12 { bottom: 35%; right: 15%;  left: auto; width: 72px !important; }
       .sticker-collage .sticker-13 { bottom: 1%; right: 18%; left: auto; width: 91px !important; }
       .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 85px !important; }
     }
@@ -1363,11 +1363,11 @@ app.get('/', (c) => {
       <!-- MIDDLE ROW (flanking logo) -->
       <img class="sticker sticker-6"  src="/images/stickers/sticker-put-it-on-em.png?v=15"   alt="" loading="eager" draggable="false">
       <img class="sticker sticker-7"  src="/images/stickers/sticker-your-neck.png?v=13"      alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-8"  src="/images/stickers/sticker-yes-you-can.png?v=13"    alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-8"  src="/images/stickers/sticker-hfw.png?v=13"            alt="" loading="eager" draggable="false">
       <img class="sticker sticker-9"  src="/images/stickers/sticker-thumpin-is-lovin.png?v=13" alt="" loading="eager" draggable="false">
       <!-- BOTTOM ROW -->
       <img class="sticker sticker-10" src="/images/stickers/sticker-community.png?v=13"      alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-11" src="/images/stickers/sticker-hfw.png?v=13"            alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-11" src="/images/stickers/sticker-yes-you-can.png?v=13"    alt="" loading="eager" draggable="false">
       <img class="sticker sticker-12" src="/images/stickers/sticker-gnf.png?v=13"            alt="" loading="eager" draggable="false">
       <img class="sticker sticker-13" src="/images/stickers/sticker-myob.png?v=15"           alt="" loading="eager" draggable="false">
       <img class="sticker sticker-14" src="/images/stickers/sticker-cunt.png?v=13"           alt="" loading="eager" draggable="false">
