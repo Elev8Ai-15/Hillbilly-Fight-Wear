@@ -1247,7 +1247,7 @@ app.get('/', (c) => {
     /* --- LEFT COLUMN --- */
     .sticker-collage .sticker-6  { top: 34%; left: 17%;   width: 170px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — left 1" (24→17%), down 0.5" (30→34%) */
     .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 127px; transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 98→127 (+30%) */
-    .sticker-collage .sticker-11 { top: 77%; left: 22%;   width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* YesYouCan — moved right 1.25" (left 9→22%) */
+    .sticker-collage .sticker-11 { top: 72%; left: 22%;   width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* YesYouCan — moved up 0.5" (top 77→72%) */
 
     /* --- RIGHT COLUMN --- */
     .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 117px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 90→117 (+30%) */
@@ -1255,9 +1255,9 @@ app.get('/', (c) => {
     .sticker-collage .sticker-9  { top: 64%; right: 2%;   width: 122px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* ThumpinLovin 94→122 (+30%) */
 
     /* --- BOTTOM ROW --- */
-    .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 203px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 156→203 (+30%) */
+    .sticker-collage .sticker-10 { bottom: 3%; left: 1%;   width: 264px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 203→264 (+30%), up 0.15" */
     .sticker-collage .sticker-12 { bottom: 39%; right: 18%;  left: auto; width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved up 3.75" total (bottom 1→39%) */
-    .sticker-collage .sticker-13 { bottom: 1%; right: 30%; width: 203px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 156→203 (+30%) */
+    .sticker-collage .sticker-13 { bottom: 3%; right: 30%; width: 264px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 203→264 (+30%), up 0.15" */
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
     /* Tablet — proportionally scaled, positions preserved */
@@ -1271,11 +1271,11 @@ app.get('/', (c) => {
       .sticker-collage .sticker-8  { width: 101px; }
       .sticker-collage .sticker-6  { width: 137px; }
       .sticker-collage .sticker-3  { width: 101px; }
-      .sticker-collage .sticker-11 { width: 156px; }
-      .sticker-collage .sticker-10 { width: 163px; }
+      .sticker-collage .sticker-11 { width: 156px; top: 72%; }
+      .sticker-collage .sticker-10 { width: 212px; bottom: 3%; }
       .sticker-collage .sticker-12 { width: 130px; }
       .sticker-collage .sticker-14 { width: 150px; }
-      .sticker-collage .sticker-13 { width: 163px; }
+      .sticker-collage .sticker-13 { width: 212px; bottom: 3%; }
       .sticker-collage .sticker-9  { width: 98px; }
     }
 
@@ -1294,15 +1294,15 @@ app.get('/', (c) => {
       /* Left side — hugging left edge */
       .sticker-collage .sticker-6  { top: 22%; left: 1%;   right: auto; width: 78px !important; }
       .sticker-collage .sticker-3  { top: 30%; left: 1%;   right: auto; width: 59px !important; }
-      .sticker-collage .sticker-11 { top: 65%; left: 28%;  right: auto; width: 85px !important; }
+      .sticker-collage .sticker-11 { top: 60%; left: 28%;  right: auto; width: 85px !important; }
       /* Right side — hugging right edge */
       .sticker-collage .sticker-5  { top: 14%; right: 1%;  left: auto; width: 55px !important; }
       .sticker-collage .sticker-8  { top: 61%; right: 1%;  left: auto; width: 59px !important; }
       .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 55px !important; }
       /* Bottom row — across the bottom, below buttons */
-      .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 91px !important; }
+      .sticker-collage .sticker-10 { bottom: 3%; left: 1%;   width: 118px !important; }
       .sticker-collage .sticker-12 { bottom: 35%; right: 15%;  left: auto; width: 72px !important; }
-      .sticker-collage .sticker-13 { bottom: 1%; right: 18%; left: auto; width: 91px !important; }
+      .sticker-collage .sticker-13 { bottom: 3%; right: 18%; left: auto; width: 118px !important; }
       .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 85px !important; }
     }
 
@@ -1317,10 +1317,10 @@ app.get('/', (c) => {
       .sticker-collage .sticker-6  { width: 62px !important; }
       .sticker-collage .sticker-3  { width: 47px !important; }
       .sticker-collage .sticker-11 { width: 68px !important; }
-      .sticker-collage .sticker-10 { width: 72px !important; }
+      .sticker-collage .sticker-10 { width: 94px !important; }
       .sticker-collage .sticker-12 { width: 57px !important; }
       .sticker-collage .sticker-14 { width: 65px !important; }
-      .sticker-collage .sticker-13 { width: 72px !important; }
+      .sticker-collage .sticker-13 { width: 94px !important; }
       .sticker-collage .sticker-9  { width: 44px !important; }
     }
   </style>
