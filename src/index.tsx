@@ -1256,7 +1256,7 @@ app.get('/', (c) => {
 
     /* --- BOTTOM ROW --- */
     .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 203px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 156→203 (+30%) */
-    .sticker-collage .sticker-12 { bottom: 32%; right: 18%;  left: auto; width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved up 3" total (bottom 1→22→32%) and right side, 1" center-right of logo */
+    .sticker-collage .sticker-12 { bottom: 37%; right: 18%;  left: auto; width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved up 3.5" total (bottom 1→37%) and right side, 1" center-right of logo */
     .sticker-collage .sticker-13 { bottom: 1%; right: 30%; width: 203px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 156→203 (+30%) */
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
@@ -1301,7 +1301,7 @@ app.get('/', (c) => {
       .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 55px !important; }
       /* Bottom row — across the bottom, below buttons */
       .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 91px !important; }
-      .sticker-collage .sticker-12 { bottom: 28%; right: 15%;  left: auto; width: 72px !important; }
+      .sticker-collage .sticker-12 { bottom: 33%; right: 15%;  left: auto; width: 72px !important; }
       .sticker-collage .sticker-13 { bottom: 1%; right: 18%; left: auto; width: 91px !important; }
       .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 85px !important; }
     }
