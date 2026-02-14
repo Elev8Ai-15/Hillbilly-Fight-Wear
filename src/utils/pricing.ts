@@ -466,23 +466,8 @@ export function generateStripeCheckoutParams(
     params.append(`line_items[${i}][quantity]`, String(item.qty))
   })
 
-  // If there's a discount, add it as a coupon line item
-  // Stripe approach: Create a one-time coupon or adjust via metadata
-  if (pricing.discount > 0) {
-    const nextIdx = pricing.lineItems.length
-    const discountDescriptions = pricing.discountDetails.map(d => d.description).join('; ')
-    params.append(`line_items[${nextIdx}][price_data][currency]`, 'usd')
-    params.append(`line_items[${nextIdx}][price_data][product_data][name]`, 'Promotional Discount')
-    params.append(`line_items[${nextIdx}][price_data][product_data][description]`, discountDescriptions)
-    // Negative amount: Stripe doesn't support negative unit_amount in line_items
-    // Instead, we reduce the unit_amount of the most expensive item to absorb the discount
-    // OR better: use Stripe's built-in discount system with coupons
-    // For simplicity and correctness: we'll adjust the total by distributing discount
-    // across items proportionally. But cleanest: just use a separate discount line.
-    // NOTE: Stripe Checkout DOES support discounts via 'discounts' parameter with coupon IDs.
-    // Since we can't pre-create coupons without Stripe secret key, we'll handle this
-    // by adjusting item prices to reflect discounted amounts.
-  }
+  // Note: Discount handling is done in stripe.ts createShopCheckoutSession()
+  // by distributing discounts proportionally across line item prices.
 
   // Add order metadata
   params.append('metadata[order_source]', 'hillbilly-fightwear-shop')

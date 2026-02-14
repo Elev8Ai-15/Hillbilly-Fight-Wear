@@ -28,9 +28,6 @@ logs/
 *.tar.gz
 *.zip
 
-# Sticker conversion artifacts
-sticker_pngs/
-
 # IDE
 .vscode/
 .idea/

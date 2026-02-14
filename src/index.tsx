@@ -786,10 +786,6 @@ app.get('/', (c) => {
       .shop-grid { grid-template-columns: 1fr; }
     }
     
-    .product-card {
-      position: relative;
-    }
-    
     .external-link {
       position: absolute;
       top: 10px;

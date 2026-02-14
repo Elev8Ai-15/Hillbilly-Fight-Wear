@@ -555,19 +555,13 @@ api.get('/order/receipt/:sessionId', async (c) => {
       return c.json({ error: result.error }, 400)
     }
 
-    // For now, return the receipt HTML
-    // In production, you'd also send this via email
-    const pricingData = result.session.metadata?.pricing_json
-      ? JSON.parse(result.session.metadata.pricing_json)
-      : null
-
-    // Build a basic pricing breakdown from the session
-    const pricing = calculateCartPricing([]) // Placeholder
+    // Return order details from the Stripe session
     return c.json({
       orderId: result.orderInfo.orderId,
       customerEmail: result.orderInfo.customerEmail,
       customerName: result.orderInfo.customerName,
       total: result.session.amount_total ? (result.session.amount_total / 100).toFixed(2) : '0.00',
+      metadata: result.session.metadata || {},
     })
   } catch (error) {
     console.error('Receipt retrieval error:', error)
