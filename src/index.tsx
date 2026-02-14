@@ -38,7 +38,7 @@ app.use('*', async (c, next) => {
   // style-src uses 'unsafe-inline' WITHOUT a nonce - per CSP3 spec, 'unsafe-inline' is ignored
   // when a nonce/hash is present, so we deliberately omit the nonce from style-src.
   // Inline style injection is not a meaningful XSS vector; nonces protect scripts.
-  c.res.headers.set('Content-Security-Policy', `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://api.stripe.com https://cdn.shopify.com https://api.resend.com; frame-src 'self' https://js.stripe.com https://open.spotify.com https://anchor.fm; frame-ancestors *; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests`)
+  c.res.headers.set('Content-Security-Policy', `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://api.stripe.com https://api.resend.com; frame-src 'self' https://js.stripe.com https://open.spotify.com https://anchor.fm; frame-ancestors *; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests`)
   c.res.headers.set('X-Content-Type-Options', 'nosniff')
   c.res.headers.set('X-XSS-Protection', '1; mode=block')
   c.res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
@@ -173,7 +173,7 @@ app.get('/', (c) => {
   <!-- Preconnect for Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.shopify.com">
+  <!-- Shopify CDN preconnect removed - all images now served locally -->
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   
   <!-- Critical CSS Preload -->
@@ -1256,7 +1256,7 @@ app.get('/', (c) => {
 
     /* --- BOTTOM ROW --- */
     .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 203px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 156→203 (+30%) */
-    .sticker-collage .sticker-12 { bottom: 1%; right: 18%;  left: auto; width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved to right side, 1" center-right of logo */
+    .sticker-collage .sticker-12 { bottom: 22%; right: 18%;  left: auto; width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — moved up 2" (bottom 1→22%) and right side, 1" center-right of logo */
     .sticker-collage .sticker-13 { bottom: 1%; right: 30%; width: 203px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 156→203 (+30%) */
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
@@ -1301,7 +1301,7 @@ app.get('/', (c) => {
       .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 55px !important; }
       /* Bottom row — across the bottom, below buttons */
       .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 91px !important; }
-      .sticker-collage .sticker-12 { bottom: 1%; right: 15%;  left: auto; width: 72px !important; }
+      .sticker-collage .sticker-12 { bottom: 18%; right: 15%;  left: auto; width: 72px !important; }
       .sticker-collage .sticker-13 { bottom: 1%; right: 18%; left: auto; width: 91px !important; }
       .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 85px !important; }
     }
