@@ -1247,7 +1247,7 @@ app.get('/', (c) => {
     /* --- LEFT COLUMN --- */
     .sticker-collage .sticker-6  { top: 34%; left: 17%;   width: 170px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — left 1" (24→17%), down 0.5" (30→34%) */
     .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 127px; transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 98→127 (+30%) */
-    .sticker-collage .sticker-11 { top: 72%; left: 22%;   width: 156px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* YesYouCan — reduced 20% (195→156px) */
+    .sticker-collage .sticker-11 { top: 69%; left: 22%;   width: 156px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* YesYouCan — up 0.25" (72→69%) */
 
     /* --- RIGHT COLUMN --- */
     .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 117px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 90→117 (+30%) */
@@ -1294,7 +1294,7 @@ app.get('/', (c) => {
       /* Left side — hugging left edge */
       .sticker-collage .sticker-6  { top: 22%; left: 1%;   right: auto; width: 78px !important; }
       .sticker-collage .sticker-3  { top: 30%; left: 1%;   right: auto; width: 59px !important; }
-      .sticker-collage .sticker-11 { top: 60%; left: 28%;  right: auto; width: 68px !important; }
+      .sticker-collage .sticker-11 { top: 57%; left: 28%;  right: auto; width: 68px !important; }
       /* Right side — hugging right edge */
       .sticker-collage .sticker-5  { top: 14%; right: 1%;  left: auto; width: 55px !important; }
       .sticker-collage .sticker-8  { top: 61%; right: 1%;  left: auto; width: 59px !important; }
