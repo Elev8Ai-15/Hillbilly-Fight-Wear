@@ -1227,7 +1227,7 @@ app.get('/', (c) => {
     /* --- LEFT COLUMN --- */
     .sticker-collage .sticker-6  { top: 34%; left: 17%;   width: 170px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* PutItOnEm — left 1" (24→17%), down 0.5" (30→34%) */
     .sticker-collage .sticker-3  { top: 36%; left: 2%;    width: 127px; transform: rotate(-8deg);  --hover-rotate: rotate(-4deg); }  /* ObamaTap 98→127 (+30%) */
-    .sticker-collage .sticker-11 { top: 70%; left: 35%;   width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW — right 20% (15→35%) */
+    .sticker-collage .sticker-11 { top: 70%; left: 21%;   width: 195px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW — left 2" (35→21%) */
 
     /* --- RIGHT COLUMN --- */
     .sticker-collage .sticker-5  { top: 16%; right: 2%;   width: 117px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* FunRide 90→117 (+30%) */
@@ -1236,7 +1236,7 @@ app.get('/', (c) => {
 
     /* --- BOTTOM ROW --- */
     .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   width: 203px; transform: rotate(-3deg);  --hover-rotate: rotate(-1deg); }  /* Community 156→203 (+30%) */
-    .sticker-collage .sticker-12 { bottom: 1%; left: 34%;  width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF 125→163 (+30%) */
+    .sticker-collage .sticker-12 { bottom: 1%; left: 25%;  width: 163px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* GNF — left 1.25" (34→25%) */
     .sticker-collage .sticker-13 { bottom: 1%; right: 30%; width: 203px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB 156→203 (+30%) */
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
