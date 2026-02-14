@@ -2455,122 +2455,18 @@ app.get('/', (c) => {
       garments.find(g => g.id === 'zipup-hoodie')?.images || {}
     ).replace(/<\//g, '<\\/')};
     
-    // Canvas-based preview compositing for Shop modal
-    // Loads garment image, then overlays the product graphic at the correct position
-    function renderShopPreviewCanvas(garmentSrc, graphicSrc, garmentType, viewKey) {
-      var cvs = document.getElementById('shopPreviewCanvas');
-      if (!cvs) return;
-      var ctx = cvs.getContext('2d');
-      var W = 400, H = 400;
-      cvs.width = W;
-      cvs.height = H;
-      ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, W, H);
-
-      var garmentImg = new Image();
-      garmentImg.crossOrigin = 'anonymous';
-      garmentImg.onload = function() {
-        // Scale garment to fit canvas (90% like Builder)
-        var scale = Math.min((W * 0.9) / garmentImg.width, (H * 0.9) / garmentImg.height);
-        var gw = garmentImg.width * scale;
-        var gh = garmentImg.height * scale;
-        var gx = (W - gw) / 2;
-        var gy = (H - gh) / 2;
-        ctx.drawImage(garmentImg, gx, gy, gw, gh);
-
-        // Now overlay the graphic if provided
-        if (!graphicSrc) return;
-        var gfxImg = new Image();
-        gfxImg.crossOrigin = 'anonymous';
-        gfxImg.onload = function() {
-          // Print area definitions (fraction of garment area) per garment type
-          var printArea;
-          var isHeadwear = (garmentType === 'trucker-hat' || garmentType === 'beanie');
-          if (isHeadwear) {
-            printArea = { xOff: 0.20, yOff: 0.15, wFrac: 0.60, hFrac: 0.55 };
-          } else if (garmentType === 'hoodie') {
-            // Hoodies: graphic sits below the hood/neckline, centered on chest
-            printArea = { xOff: 0.22, yOff: 0.32, wFrac: 0.56, hFrac: 0.40 };
-          } else if (garmentType === 'tank-womens' || garmentType === 'tank-mens') {
-            // Tanks: narrower torso, graphic centered on chest
-            printArea = { xOff: 0.20, yOff: 0.22, wFrac: 0.60, hFrac: 0.48 };
-          } else {
-            // T-shirts and other garments: standard chest area
-            printArea = { xOff: 0.20, yOff: 0.25, wFrac: 0.60, hFrac: 0.45 };
-          }
-
-          // Compute print area in pixel coords relative to the garment on canvas
-          var paX = gx + gw * printArea.xOff;
-          var paY = gy + gh * printArea.yOff;
-          var paW = gw * printArea.wFrac;
-          var paH = gh * printArea.hFrac;
-
-          // Scale graphic to fill print area (larger = more accurate to actual product)
-          var gfxScale = Math.min(paW / gfxImg.width, paH / gfxImg.height) * 0.92;
-          var fw = gfxImg.width * gfxScale;
-          var fh = gfxImg.height * gfxScale;
-
-          // Center graphic in print area
-          var fx = paX + (paW - fw) / 2;
-          var fy = paY + (paH - fh) / 2;
-
-          ctx.drawImage(gfxImg, fx, fy, fw, fh);
-        };
-        gfxImg.onerror = function() { /* graphic failed to load, garment shown alone */ };
-        gfxImg.src = graphicSrc;
-      };
-      garmentImg.onerror = function() {
-        ctx.fillStyle = '#999';
-        ctx.font = '14px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('Preview unavailable', W / 2, H / 2);
-      };
-      garmentImg.src = garmentSrc;
-    }
-    
+    // Shop modal: always displays Shopify product photos (no color-based preview changes)
     function renderGarmentModal(product, step) {
       modalState.step = step;
       var mc = document.getElementById('modalContent');
       
-      // Shop Now: update preview image based on selected color, style, and front/back view
-      var previewImg = product.image;
+      // Shop Now: always use Shopify product photos (no color-based preview changes)
       var viewKey = modalState.modalView || 'front';
+      var previewImg = (viewKey === 'back' && product.backImage) ? product.backImage : product.image;
       
-      // Handle back view: use backImage (Shopify CDN photo) when no color selected,
-      // or local garment mockup when color is selected
-      if (viewKey === 'back' && !modalState.selectedColor && product.backImage) {
-        previewImg = product.backImage;
-      } else if (viewKey === 'back' && !modalState.selectedColor) {
-        previewImg = product.image; // fallback to front if no back available
-      } else if (modalState.selectedColor) {
-        var colorKey = modalState.selectedColor.toLowerCase();
-        // Determine which garment type images to use (zip-up vs pullover)
-        if (modalState.selectedStyle === 'Zip-Up' && product.garmentType === 'hoodie') {
-          if (zipupHoodieImages[colorKey] && zipupHoodieImages[colorKey][viewKey]) {
-            previewImg = zipupHoodieImages[colorKey][viewKey];
-          } else if (zipupHoodieImages[colorKey] && zipupHoodieImages[colorKey].front) {
-            previewImg = zipupHoodieImages[colorKey].front;
-          } else {
-            previewImg = getColorPreviewImage(product, modalState.selectedColor);
-          }
-        } else {
-          // Pullover or non-hoodie: use garmentColorImages with front/back support
-          var gType = product.garmentType;
-          if (gType && garmentColorImages[gType] && garmentColorImages[gType][colorKey]) {
-            previewImg = garmentColorImages[gType][colorKey][viewKey] || garmentColorImages[gType][colorKey].front || product.image;
-          } else {
-            previewImg = getColorPreviewImage(product, modalState.selectedColor);
-          }
-        }
-      }
-      
-      // Show front/back toggle when:
-      // 1. Product has a backImage (Shopify CDN photo) — always show toggle
-      // 2. OR color is selected and product has garment mockups with graphic overlays
-      var showViewToggle = product.backImage || (product.garmentType && modalState.selectedColor && (product.garmentType === 'hoodie' || product.graphicId));
+      // Show front/back toggle when product has a backImage
       var viewToggleHtml = '';
-      if (showViewToggle) {
+      if (product.backImage) {
         var frontActive = viewKey === 'front' ? 'background:#8B0000; color:#fff;' : 'background:#f5f5f5; color:#333;';
         var backActive = viewKey === 'back' ? 'background:#8B0000; color:#fff;' : 'background:#f5f5f5; color:#333;';
         viewToggleHtml = '<div style="display:flex; justify-content:center; gap:8px; padding:8px 0 0;">' +
@@ -2579,32 +2475,13 @@ app.get('/', (c) => {
         '</div>';
       }
       
-      // Determine graphic overlay for current view
-      var activeGraphicId = null;
-      if (modalState.selectedColor && product.garmentType) {
-        activeGraphicId = (viewKey === 'back' && product.backGraphicId) ? product.backGraphicId : (viewKey === 'front' && product.graphicId) ? product.graphicId : null;
-      }
-      
-      // Use canvas-based compositing when we have a garment mockup (with or without graphic)
-      // Canvas gives pixel-perfect placement; falls back to regular <img> for items without garment mockups
-      var hasGarmentMockup = modalState.selectedColor && product.garmentType && previewImg && previewImg.indexOf('/images/garments/') !== -1;
-      var hasGraphicOverlay = activeGraphicId && graphicsMap[activeGraphicId];
-      var useCanvas = hasGarmentMockup && (hasGraphicOverlay || (product.graphicId || product.backGraphicId));
-      
-      var imageHtml;
-      if (useCanvas) {
-        imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center;">' +
-          '<canvas id="shopPreviewCanvas" width="400" height="400" style="max-width:100%; max-height:320px; display:block; margin:0 auto;"></canvas>' +
-          viewToggleHtml +
-        '</div>';
-      } else {
-        imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center; position:relative;">' +
+      // Always use a simple <img> — no canvas compositing in the Shop section
+      var imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center; position:relative;">' +
           '<div style="position:relative; display:inline-block;">' +
             '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
           '</div>' +
           viewToggleHtml +
         '</div>';
-      }
       
       var headerHtml = '<div style="padding:20px 20px 10px;">' +
         '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + product.title.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</h3>' +
@@ -2684,11 +2561,6 @@ app.get('/', (c) => {
           '</div>';
       }
       
-      // After innerHTML is set, render the canvas preview if applicable
-      if (useCanvas) {
-        var graphicUrl = (activeGraphicId && graphicsMap[activeGraphicId]) ? graphicsMap[activeGraphicId] : null;
-        renderShopPreviewCanvas(previewImg, graphicUrl, product.garmentType, viewKey);
-      }
     }
     
     function selectModalSize(productId, size) {
@@ -2711,9 +2583,8 @@ app.get('/', (c) => {
     
     function selectModalStyle(productId, style) {
       modalState.selectedStyle = style;
-      modalState.modalView = 'front'; // Reset view when style changes
       var product = allShopProducts.find(function(p) { return p.id === productId; });
-      // Stay on style step so user sees the image update (pullover vs zip-up)
+      // Stay on style step so user can see selection highlight
       renderGarmentModal(product, 'style');
     }
     
