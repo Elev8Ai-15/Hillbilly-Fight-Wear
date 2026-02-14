@@ -51,6 +51,13 @@ pages.get('/checkout/success', (c) => {
     .success-icon { width: 80px; height: 80px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; font-size: 2.5rem; color: #fff; }
     h1 { font-size: 2rem; margin: 0 0 15px; }
     p { color: #666; margin: 0 0 30px; line-height: 1.6; }
+    .order-details { text-align: left; background: #f8f8f8; border-radius: 8px; padding: 20px; margin: 0 0 25px; font-size: 0.95rem; }
+    .order-details .detail-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eee; }
+    .order-details .detail-row:last-child { border-bottom: none; }
+    .order-details .label { color: #888; }
+    .order-details .value { font-weight: 600; color: #333; }
+    .email-status { font-size: 0.85rem; color: #28a745; margin: 10px 0 20px; }
+    .email-status.pending { color: #888; }
     .btn { display: inline-block; padding: 15px 40px; background: #8B0000; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; border-radius: 4px; transition: all 0.3s; }
     .btn:hover { background: #a00000; }
   </style>
@@ -59,9 +66,54 @@ pages.get('/checkout/success', (c) => {
   <div class="success-container">
     <div class="success-icon"><i class="fas fa-check"></i></div>
     <h1>Order Confirmed!</h1>
-    <p>Thank you for your order! You'll receive an email confirmation shortly with your order details and tracking information.</p>
+    <p>Thank you for your order! We're preparing it now.</p>
+    <div id="orderDetails" class="order-details" style="display:none;"></div>
+    <p id="emailStatus" class="email-status pending"><i class="fas fa-spinner fa-spin"></i> Sending confirmation email...</p>
     <a href="/" class="btn">Continue Shopping</a>
   </div>
+  <script nonce="${nonce}">
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var sessionId = params.get('session_id');
+      if (!sessionId) return;
+
+      var detailsEl = document.getElementById('orderDetails');
+      var statusEl = document.getElementById('emailStatus');
+
+      fetch('/api/order/receipt/' + encodeURIComponent(sessionId))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.error) {
+            statusEl.innerHTML = '<i class="fas fa-envelope"></i> A confirmation email will be sent shortly.';
+            statusEl.className = 'email-status';
+            return;
+          }
+
+          // Show order details
+          var html = '';
+          if (data.orderId) html += '<div class="detail-row"><span class="label">Order #</span><span class="value">' + data.orderId + '</span></div>';
+          if (data.total) html += '<div class="detail-row"><span class="label">Total</span><span class="value">$' + data.total + '</span></div>';
+          if (data.customerEmail) html += '<div class="detail-row"><span class="label">Email</span><span class="value">' + data.customerEmail + '</span></div>';
+
+          if (html) {
+            detailsEl.innerHTML = html;
+            detailsEl.style.display = 'block';
+          }
+
+          if (data.emailsSent) {
+            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Confirmation email sent to ' + (data.customerEmail || 'your email');
+            statusEl.className = 'email-status';
+          } else {
+            statusEl.innerHTML = '<i class="fas fa-envelope"></i> A confirmation email will be sent shortly.';
+            statusEl.className = 'email-status';
+          }
+        })
+        .catch(function() {
+          statusEl.innerHTML = '<i class="fas fa-envelope"></i> A confirmation email will be sent shortly.';
+          statusEl.className = 'email-status';
+        });
+    })();
+  </script>
 </body>
 </html>`)
 })

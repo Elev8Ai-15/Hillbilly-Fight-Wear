@@ -42,6 +42,7 @@ type StripeSession = {
   id: string
   url?: string
   payment_intent?: string
+  payment_status?: string
   customer_email?: string
   customer_details?: {
     email?: string
@@ -54,10 +55,22 @@ type StripeSession = {
       postal_code?: string
       country?: string
     }
+    phone?: string
   }
   metadata?: Record<string, string>
   amount_total?: number
   error?: { message: string }
+}
+
+type StripeLineItem = {
+  id: string
+  description?: string
+  amount_total: number
+  quantity: number
+  price?: {
+    unit_amount: number
+    product_data?: { name: string; description?: string }
+  }
 }
 
 type StripeWebhookEvent = {
@@ -159,14 +172,31 @@ export async function createShopCheckoutSession(
       adjustedParams.append('metadata[free_items]', pricing.freeItems.map(f => f.title).join(', '))
     }
 
-    // Enable Stripe's built-in receipt emails
-    adjustedParams.append('payment_intent_data[receipt_email]', '') // Will be set by customer
+      // Store full cart data in metadata so webhook can reconstruct the order
+    adjustedParams.append('metadata[cart_json]', JSON.stringify(cartItems.map(item => ({
+      productId: item.productId,
+      title: item.title,
+      price: item.price,
+      size: item.size,
+      color: item.color,
+      style: item.style,
+      qty: item.qty,
+    }))))
     adjustedParams.append('metadata[pricing_json]', JSON.stringify({
       subtotal: pricing.subtotal,
       discount: pricing.discount,
       total: pricing.total,
       discounts: pricing.discountDetails,
       freeItems: pricing.freeItems,
+      lineItems: pricing.lineItems.map(li => ({
+        title: li.title,
+        unitPrice: li.unitPrice,
+        qty: li.qty,
+        subtotal: li.subtotal,
+        size: li.size,
+        color: li.color,
+        style: li.style,
+      })),
     }))
 
     const session = await stripeRequest('POST', '/checkout/sessions', secretKey, adjustedParams) as StripeSession
@@ -177,6 +207,33 @@ export async function createShopCheckoutSession(
 
     return { url: session.url, pricing }
   }
+
+  // Store cart data in metadata for webhook receipt generation (no-discount path)
+  params.append('metadata[cart_json]', JSON.stringify(cartItems.map(item => ({
+    productId: item.productId,
+    title: item.title,
+    price: item.price,
+    size: item.size,
+    color: item.color,
+    style: item.style,
+    qty: item.qty,
+  }))))
+  params.append('metadata[pricing_json]', JSON.stringify({
+    subtotal: pricing.subtotal,
+    discount: pricing.discount,
+    total: pricing.total,
+    discounts: pricing.discountDetails,
+    freeItems: pricing.freeItems,
+    lineItems: pricing.lineItems.map(li => ({
+      title: li.title,
+      unitPrice: li.unitPrice,
+      qty: li.qty,
+      subtotal: li.subtotal,
+      size: li.size,
+      color: li.color,
+      style: li.style,
+    })),
+  }))
 
   // No discounts — use standard params
   const session = await stripeRequest('POST', '/checkout/sessions', secretKey, params) as StripeSession
@@ -241,7 +298,7 @@ export async function createBuilderCheckoutSession(
     params.append(`line_items[${idx}][quantity]`, '1')
   })
 
-  // Metadata for order tracking
+  // Metadata for order tracking and receipt generation
   params.append('metadata[order_source]', 'hillbilly-fightwear-builder')
   params.append('metadata[garment]', order.garment)
   params.append('metadata[size]', order.size)
@@ -251,6 +308,17 @@ export async function createBuilderCheckoutSession(
   if (order.additionalGraphics.length > 0) {
     params.append('metadata[additional_graphics]', JSON.stringify(order.additionalGraphics))
   }
+  // Store pricing data for receipt email generation
+  params.append('metadata[pricing_json]', JSON.stringify({
+    garmentName: pricing.garmentName,
+    garmentPrice: pricing.garmentPrice,
+    size: pricing.size,
+    color: pricing.color,
+    primaryGraphic: pricing.primaryGraphic,
+    additionalGraphics: pricing.additionalGraphics,
+    subtotal: pricing.subtotal,
+    total: pricing.total,
+  }))
 
   const session = await stripeRequest('POST', '/checkout/sessions', secretKey, params) as StripeSession
 
@@ -349,7 +417,7 @@ export async function syncProductCatalog(secretKey: string): Promise<{
 export async function getSessionForReceipt(
   secretKey: string,
   sessionId: string,
-): Promise<{ orderInfo: OrderInfo; session: StripeSession } | { error: string }> {
+): Promise<{ orderInfo: OrderInfo; session: StripeSession; pricing: PricingBreakdown | null } | { error: string }> {
   const session = await stripeRequest(
     'GET',
     `/checkout/sessions/${sessionId}?expand[]=customer_details`,
@@ -375,7 +443,70 @@ export async function getSessionForReceipt(
     } : undefined,
   }
 
-  return { orderInfo, session }
+  // Reconstruct pricing from metadata if available
+  let pricing: PricingBreakdown | null = null
+  if (session.metadata?.cart_json) {
+    try {
+      const cartItems = JSON.parse(session.metadata.cart_json) as CartItem[]
+      pricing = calculateCartPricing(cartItems)
+    } catch { /* cart_json parse failed, try pricing_json */ }
+  }
+  if (!pricing && session.metadata?.pricing_json) {
+    try {
+      const pData = JSON.parse(session.metadata.pricing_json)
+      pricing = {
+        subtotal: pData.subtotal || 0,
+        discount: pData.discount || 0,
+        discountDetails: pData.discounts || [],
+        shipping: 0,
+        tax: 0,
+        total: pData.total || (session.amount_total ? session.amount_total / 100 : 0),
+        lineItems: (pData.lineItems || []).map((li: any) => ({
+          productId: li.productId || '',
+          title: li.title || 'Item',
+          unitPrice: li.unitPrice || 0,
+          qty: li.qty || 1,
+          subtotal: li.subtotal || 0,
+          size: li.size,
+          color: li.color,
+          style: li.style,
+        })),
+        freeItems: pData.freeItems || [],
+      }
+    } catch { /* pricing_json parse failed */ }
+  }
+
+  // Fallback: if no metadata pricing, retrieve line items from Stripe
+  if (!pricing) {
+    const lineItemsResponse = await stripeRequest(
+      'GET',
+      `/checkout/sessions/${sessionId}/line_items?limit=100`,
+      secretKey,
+    ) as { data?: StripeLineItem[] }
+
+    if (lineItemsResponse.data && lineItemsResponse.data.length > 0) {
+      const total = session.amount_total ? session.amount_total / 100 : 0
+      const lineItems = lineItemsResponse.data.map(li => ({
+        productId: '',
+        title: li.description || 'Item',
+        unitPrice: li.price?.unit_amount ? li.price.unit_amount / 100 : li.amount_total / 100 / (li.quantity || 1),
+        qty: li.quantity || 1,
+        subtotal: li.amount_total / 100,
+      }))
+      pricing = {
+        subtotal: total,
+        discount: 0,
+        discountDetails: [],
+        shipping: 0,
+        tax: 0,
+        total,
+        lineItems,
+        freeItems: [],
+      }
+    }
+  }
+
+  return { orderInfo, session, pricing }
 }
 
 // ============================================

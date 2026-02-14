@@ -14,6 +14,8 @@ export type OrderInfo = {
   orderDate: string              // ISO date string
   customerEmail: string
   customerName?: string
+  orderTotal?: string            // e.g. "45.00" — used in owner notification subject
+  orderSource?: string           // 'shop' | 'builder' — source of the order
   shippingAddress?: {
     line1: string
     line2?: string
