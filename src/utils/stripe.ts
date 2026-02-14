@@ -273,26 +273,18 @@ export async function createBuilderCheckoutSession(
   params.append('shipping_address_collection[allowed_countries][]', 'US')
   params.append('phone_number_collection[enabled]', 'true')
 
-  // Garment line item
+  // Single line item: garment with front logo + mandatory back HFW logo (all included in base price)
   params.append('line_items[0][price_data][currency]', 'usd')
   params.append('line_items[0][price_data][product_data][name]', `${g.name} - Custom Design`)
-  params.append('line_items[0][price_data][product_data][description]', `Size: ${order.size}, Color: ${order.color}`)
+  params.append('line_items[0][price_data][product_data][description]', `Size: ${order.size}, Color: ${order.color} | Front: ${gr.name} | Back Neck: HFW Logo (3")`)
   params.append('line_items[0][price_data][unit_amount]', String(Math.round(g.basePrice * 100)))
   params.append('line_items[0][quantity]', '1')
 
-  // Primary graphic line item
-  const primaryPrice = pricing.primaryGraphic.price
-  params.append('line_items[1][price_data][currency]', 'usd')
-  params.append('line_items[1][price_data][product_data][name]', `Graphic: ${gr.name}`)
-  params.append('line_items[1][price_data][product_data][description]', `Placement: ${pricing.primaryGraphic.placement}`)
-  params.append('line_items[1][price_data][unit_amount]', String(Math.round(primaryPrice * 100)))
-  params.append('line_items[1][quantity]', '1')
-
-  // Additional graphics
+  // Additional back graphics (+$15 each)
   pricing.additionalGraphics.forEach((ag, i) => {
-    const idx = i + 2
+    const idx = i + 1
     params.append(`line_items[${idx}][price_data][currency]`, 'usd')
-    params.append(`line_items[${idx}][price_data][product_data][name]`, `+ ${ag.name}`)
+    params.append(`line_items[${idx}][price_data][product_data][name]`, `+ Back Graphic: ${ag.name}`)
     params.append(`line_items[${idx}][price_data][product_data][description]`, `Placement: ${ag.placement}`)
     params.append(`line_items[${idx}][price_data][unit_amount]`, String(Math.round(ag.price * 100)))
     params.append(`line_items[${idx}][quantity]`, '1')
@@ -315,6 +307,7 @@ export async function createBuilderCheckoutSession(
     size: pricing.size,
     color: pricing.color,
     primaryGraphic: pricing.primaryGraphic,
+    backHfwLogo: pricing.backHfwLogo,
     additionalGraphics: pricing.additionalGraphics,
     subtotal: pricing.subtotal,
     total: pricing.total,
@@ -360,10 +353,38 @@ export async function syncProductCatalog(secretKey: string): Promise<{
     }
   }
 
-  // Create or skip each catalog product
+  const updated: string[] = []
+
+  // Create or update each catalog product
   for (const product of shopProducts) {
     if (existingByMetaId.has(product.id)) {
-      skipped.push(`${product.title} (already exists)`)
+      // Check if price needs updating
+      const existingProduct = existingByMetaId.get(product.id)!
+      const expectedAmountCents = Math.round(product.priceNum * 100)
+      
+      // Update the product's default price if it has changed
+      try {
+        // Create a new price for this product with the updated amount
+        const newPriceParams = new URLSearchParams()
+        newPriceParams.append('currency', 'usd')
+        newPriceParams.append('unit_amount', String(expectedAmountCents))
+        newPriceParams.append('product', existingProduct.id)
+        
+        const newPrice = await stripeRequest('POST', '/prices', secretKey, newPriceParams) as { id?: string; error?: { message: string } }
+        
+        if (newPrice.id) {
+          // Set this as the default price
+          const updateParams = new URLSearchParams()
+          updateParams.append('default_price', newPrice.id)
+          updateParams.append('name', product.title)  // Also update name in case it changed
+          await stripeRequest('POST', `/products/${existingProduct.id}`, secretKey, updateParams)
+          updated.push(`${product.title} (price updated to $${product.priceNum.toFixed(2)})`)
+        } else {
+          skipped.push(`${product.title} (already exists)`)
+        }
+      } catch (e) {
+        skipped.push(`${product.title} (already exists, price update failed)`)
+      }
       continue
     }
 
@@ -403,7 +424,7 @@ export async function syncProductCatalog(secretKey: string): Promise<{
     }
   }
 
-  return { created, skipped, errors }
+  return { created, updated, skipped, errors }
 }
 
 // ============================================

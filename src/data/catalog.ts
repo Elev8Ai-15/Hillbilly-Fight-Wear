@@ -38,9 +38,9 @@ export const garments = [
     }
   },
   {
-    id: 'sweatshirt',
-    name: 'Sweatshirt',
-    basePrice: 45.00,
+    id: 'thermal',
+    name: 'Thermal',
+    basePrice: 40.00,
     category: 'tops',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
@@ -48,6 +48,7 @@ export const garments = [
       white: { front: '/images/garments/sweatshirt-white-front.png', back: '/images/garments/sweatshirt-white-back.png' },
       black: { front: '/images/garments/sweatshirt-black-front.png', back: '/images/garments/sweatshirt-black-back.png' },
       grey: { front: '/images/garments/sweatshirt-grey-front.png', back: '/images/garments/sweatshirt-grey-back.png' }
+      // Note: Using sweatshirt garment images for thermals until thermal-specific images are added
     }
   },
   {
@@ -79,7 +80,7 @@ export const garments = [
   {
     id: 'tank-mens',
     name: "Tank Top (Men's)",
-    basePrice: 35.00,
+    basePrice: 30.00,
     category: 'tops',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
@@ -92,7 +93,7 @@ export const garments = [
   {
     id: 'tank-womens',
     name: "Tank Top (Women's)",
-    basePrice: 35.00,
+    basePrice: 30.00,
     category: 'tops',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
@@ -103,32 +104,8 @@ export const garments = [
       pink: { front: '/images/garments/tank-womens-pink-front.png', back: '/images/garments/tank-womens-pink-back.png' }
     }
   },
-  {
-    id: 'trucker-hat',
-    name: 'Trucker Hat',
-    basePrice: 35.00,
-    category: 'headwear',
-    sizes: ['One Size', 'S/M', 'L/XL'],
-    supportsPlacement: true,
-    images: {
-      white: { front: '/images/garments/trucker-hat-white.png' },
-      black: { front: '/images/garments/trucker-hat-black.png' },
-      grey: { front: '/images/garments/trucker-hat-grey.png' }
-    }
-  },
-  {
-    id: 'beanie',
-    name: 'Beanie',
-    basePrice: 25.00,
-    category: 'headwear',
-    sizes: ['One Size'],
-    supportsPlacement: true,
-    images: {
-      white: { front: '/images/garments/beanie-white.png' },
-      black: { front: '/images/garments/beanie-black.png' },
-      grey: { front: '/images/garments/beanie-grey.png' }
-    }
-  }
+  // Trucker Hat and Beanie removed from Build Your Own section per request
+  // Hats are still available in the Shop Now section
 ]
 
 // Graphics with optional restrictions for specific garments
@@ -199,13 +176,7 @@ export const graphics = [
     fullImage: '/images/graphics/myob.png?v=11',
     restrictToGarments: []
   },
-  {
-    id: 'gnf',
-    name: 'GNF',
-    thumbnail: '/images/stickers/sticker-gnf.png?v=13',
-    fullImage: '/images/graphics/gnf.png?v=11',
-    restrictToGarments: []
-  },
+  // GNF graphic removed — white "N" on white background issue
   {
     id: 'wimb',
     name: 'WIMB (What\'s It Mean To You?)',
@@ -248,13 +219,7 @@ export const graphics = [
     fullImage: '/images/graphics/good-for-community.png?v=11',
     restrictToGarments: []
   },
-  {
-    id: 'hard-hittin',
-    name: 'Hard Hittin\'',
-    thumbnail: '/images/graphics/hard-hittin.png?v=11',
-    fullImage: '/images/graphics/hard-hittin.png?v=11',
-    restrictToGarments: []
-  },
+  // Hard Hittin' graphic removed from Build Your Own per request
   {
     id: 'staunch-chm',
     name: 'Staunch Properties (CHM)',
@@ -310,12 +275,12 @@ export const mensClothing = [
 // WOMENS CLOTHING - Tank Tops
 // Pink color option is available with garment preview images (pink-tinted variants)
 export const womensClothing = [
-  { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.23_PM.png?v=1556680847', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'fun-logo' },
-  { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.52_PM.png?v=1556681027', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'hfw-logo' },
-  { id: 'w3', title: "Women's Tank - Thump a Stranger", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.19_PM.png?v=1556681368', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.26_PM.png?v=1556681370', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'thump-a-stranger' },
-  { id: 'w4', title: "Women's Tank - Thumpin Is Lovin", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.41_PM.png?v=1556681516', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.48_PM.png?v=1556681523', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'thumpin-is-lovin-pink' },
-  { id: 'w5', title: "Women's Tank - Yes You Can", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.06_PM.png?v=1556681691', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.13_PM.png?v=1556681694', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'yes-you-can' },
-  { id: 'w6', title: "Women's Tank - GNF", vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_-_tank_-_10_15.jpg?v=1556681770', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'gnf' }
+  { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.06_PM.png?v=1556680844', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.20.23_PM.png?v=1556680847', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'fun-logo' },
+  { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.43_PM.png?v=1556681023', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.21.52_PM.png?v=1556681027', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'hfw-logo' },
+  { id: 'w3', title: "Women's Tank - Thump a Stranger", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.19_PM.png?v=1556681368', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.26_PM.png?v=1556681370', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'thump-a-stranger' },
+  { id: 'w4', title: "Women's Tank - Thumpin Is Lovin", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.41_PM.png?v=1556681516', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.25.48_PM.png?v=1556681523', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'thumpin-is-lovin-pink' },
+  { id: 'w5', title: "Women's Tank - Yes You Can", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.06_PM.png?v=1556681691', backImage: 'https://cdn.shopify.com/s/files/1/2978/1770/products/Screen_Shot_2019-04-30_at_11.33.13_PM.png?v=1556681694', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'yes-you-can' },
+  { id: 'w6', title: "Women's Tank - GNF", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: 'https://cdn.shopify.com/s/files/1/2978/1770/products/GNF_-_tank_-_10_15.jpg?v=1556681770', type: 'garment', garmentType: 'tank-womens', sizes: ['XS','S','M','L','XL'], colors: ['Black','White'], graphicId: 'gnf' }
 ]
 
 // KIDS CLOTHING - Youth Hoodie

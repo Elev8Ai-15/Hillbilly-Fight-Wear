@@ -9,8 +9,10 @@ import { garments, graphics, placements, shopProducts, type ShopProduct } from '
 // ============================================
 export const PRICING = {
   // Graphic placement pricing (custom builder)
-  GRAPHIC_SMALL_PLACEMENT: 10.00,   // Left chest, right chest, hat front
-  GRAPHIC_FULL_PLACEMENT: 15.00,    // Full front, full back
+  // NEW MODEL: First logo is INCLUDED in base price. Only additional back graphics cost extra.
+  GRAPHIC_SMALL_PLACEMENT: 10.00,   // Left chest, right chest, hat front (legacy, not used in new model)
+  GRAPHIC_FULL_PLACEMENT: 15.00,    // Full front, full back (legacy)
+  ADDITIONAL_BACK_GRAPHIC: 15.00,   // Second user-selected graphic on back
 
   // Shipping: FREE on all orders (included in product price)
   SHIPPING_FLAT: 0.00,
@@ -52,9 +54,10 @@ export type BuilderOrder = {
   garment: string
   size: string
   color: string
-  graphic: string
-  placement: string
-  additionalGraphics: { graphic: string; placement: string }[]
+  graphic: string                    // User's chosen front logo (included in base price)
+  placement: string                  // Fixed: 'full-front' for all shirts/tanks
+  additionalGraphics: { graphic: string; placement: string }[]  // Optional second back graphic (+$15)
+  // Note: Mandatory 3" HFW logo on back neck is automatic, not in additionalGraphics
 }
 
 export type PricingBreakdown = {
@@ -96,8 +99,9 @@ export type BuilderPricing = {
   garmentPrice: number
   size: string
   color: string
-  primaryGraphic: { name: string; placement: string; price: number }
-  additionalGraphics: { name: string; placement: string; price: number }[]
+  primaryGraphic: { name: string; placement: string; price: number }  // price=0 (included in base)
+  backHfwLogo: { name: string; placement: string; price: number }    // Mandatory 3" HFW logo (included)
+  additionalGraphics: { name: string; placement: string; price: number }[]  // Optional +$15 each
   subtotal: number
   total: number
 }
@@ -292,7 +296,11 @@ export function calculateCartPricing(cartItems: CartItem[]): PricingBreakdown {
 
 /**
  * Calculate pricing for the custom garment builder.
- * Returns full breakdown including garment base price and graphic costs.
+ * NEW MODEL:
+ * - Base price includes garment + first front logo + mandatory 3" HFW back neck logo
+ * - T-Shirts & Tanks: $30 | Thermals: $40 | Hoodies: $50
+ * - Additional second graphic on back: +$15
+ * - No size/location selection for logos — positions are fixed
  */
 export function calculateBuilderPricing(order: BuilderOrder): BuilderPricing | { error: string } {
   const g = garments.find(x => x.id === order.garment)
@@ -300,9 +308,6 @@ export function calculateBuilderPricing(order: BuilderOrder): BuilderPricing | {
 
   const gr = graphics.find(x => x.id === order.graphic)
   if (!gr) return { error: 'Invalid graphic' }
-
-  const pl = placements.find(x => x.id === order.placement)
-  if (!pl) return { error: 'Invalid placement' }
 
   // Validate size
   if (!g.sizes.includes(order.size)) return { error: 'Invalid size for this garment' }
@@ -315,16 +320,17 @@ export function calculateBuilderPricing(order: BuilderOrder): BuilderPricing | {
     return { error: `Graphic "${gr.name}" is not available for this garment` }
   }
 
-  const primaryPrice = getGraphicPrice(order.placement)
+  // Primary graphic is INCLUDED in base price (price = 0)
+  const primaryPrice = 0
 
+  // Additional graphics cost $15 each (for back placement)
   const additionalGraphicDetails = order.additionalGraphics.map(ag => {
     const agGraphic = graphics.find(x => x.id === ag.graphic)
     const agPlacement = placements.find(x => x.id === ag.placement)
-    const price = getGraphicPrice(ag.placement)
     return {
       name: agGraphic?.name || ag.graphic,
       placement: agPlacement?.name || ag.placement,
-      price,
+      price: PRICING.ADDITIONAL_BACK_GRAPHIC,
     }
   })
 
@@ -339,8 +345,13 @@ export function calculateBuilderPricing(order: BuilderOrder): BuilderPricing | {
     color: order.color,
     primaryGraphic: {
       name: gr.name,
-      placement: pl.name,
+      placement: 'Front (Fixed)',
       price: primaryPrice,
+    },
+    backHfwLogo: {
+      name: 'HFW Logo (3" Back Neck)',
+      placement: 'Back Neck',
+      price: 0,  // Included in base price
     },
     additionalGraphics: additionalGraphicDetails,
     subtotal: total,

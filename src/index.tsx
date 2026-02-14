@@ -1501,7 +1501,7 @@ app.get('/', (c) => {
     </div>
     <div class="feature-text">
       <h2>Custom Apparel Builder</h2>
-      <p>Now you can create your own custom apparel with all of our artwork and logos. Choose your garment style, size, color, and graphics to create something unique. T-shirts, hoodies, sweatshirts, tank tops, and trucker hats available!</p>
+      <p>Now you can create your own custom apparel with all of our artwork and logos. Choose your garment style, size, color, and front graphic. Every shirt includes a 3" HFW logo on the back neck. T-shirts, tanks, thermals, and hoodies available!</p>
     </div>
   </section>
 
@@ -3272,25 +3272,32 @@ app.get('/build', (c) => {
         </div>
       </div>
       
-      <!-- Step 4: Graphics -->
+      <!-- Step 4: Choose Front Logo (included in base price) -->
       <div class="option-group" id="step4">
-        <h3><span class="step-num">4</span> Choose Graphics</h3>
+        <h3><span class="step-num">4</span> Choose Front Logo <span style="font-size: 0.75rem; color: #666; font-weight: 400;">(included in price)</span></h3>
         <div class="graphics-grid" id="graphicsGrid"></div>
         
+        <!-- Mandatory Back HFW Logo indicator -->
+        <div id="backLogoNotice" style="margin-top: 15px; padding: 12px 16px; background: linear-gradient(135deg, #f0f7ff 0%, #e8f0fe 100%); border: 1px solid #c0d8f0; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-check-circle" style="color: #2563eb; font-size: 1.1rem;"></i>
+          <div>
+            <div style="font-size: 0.85rem; font-weight: 600; color: #1e40af;">3" HFW Logo on Back Neck</div>
+            <div style="font-size: 0.75rem; color: #666;">Included on all shirts &amp; tanks — mandatory</div>
+          </div>
+        </div>
+        
+        <!-- Optional: Add second back graphic -->
         <div class="additional-graphics" id="additionalGraphics" style="display: none;">
-          <h4 style="margin: 0 0 12px; font-size: 0.85rem; color: #666;">Additional Graphics (+$10 small / +$15 full placement)</h4>
+          <h4 style="margin: 0 0 12px; font-size: 0.85rem; color: #666;">Optional: Add a second graphic to the back (+$15)</h4>
           <div id="additionalList"></div>
           <button class="add-graphic-btn" id="addGraphicBtn">
-            <i class="fas fa-plus"></i> Add Another Graphic
+            <i class="fas fa-plus"></i> Add Back Graphic (+$15)
           </button>
         </div>
       </div>
       
-      <!-- Step 5: Placement -->
-      <div class="option-group" id="step5">
-        <h3><span class="step-num">5</span> Graphic Placement</h3>
-        <div class="placement-grid" id="placementGrid"></div>
-      </div>
+      <!-- Step 5: Placement — REMOVED (positions are fixed for all shirts) -->
+      <!-- Front logo: fixed front center. HFW logo: fixed 3" back neck. Optional second graphic: back, user can position. -->
     </div>
     
     <!-- Preview Section -->
@@ -3440,7 +3447,8 @@ app.get('/build', (c) => {
       initCanvas();
       renderGarments();
       renderGraphics();
-      renderPlacements();
+      // Placements no longer rendered — positions are fixed (front logo + back neck HFW)
+      state.placement = 'full-front';
       
       // ---- Event delegation: all click handlers via container listeners ----
       // Garment grid
@@ -3467,11 +3475,9 @@ app.get('/build', (c) => {
         if (option && option.dataset.id) selectGraphic(option.dataset.id);
       });
       
-      // Placement grid
-      document.getElementById('placementGrid').addEventListener('click', function(e) {
-        var option = e.target.closest('.placement-option');
-        if (option && option.dataset.id) selectPlacement(option.dataset.id);
-      });
+      // Placement grid — removed (positions are fixed in new model)
+      // var placementGrid = document.getElementById('placementGrid');
+      // if (placementGrid) placementGrid.addEventListener('click', ...);
       
       // View toggle buttons (Front/Back)
       document.getElementById('viewToggle').addEventListener('click', function(e) {
@@ -3680,19 +3686,10 @@ app.get('/build', (c) => {
     }
     
     function renderPlacements() {
-      var grid = document.getElementById('placementGrid');
-      var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
-      
-      var available = placements.filter(function(p) {
-        return isHeadwear ? p.forHats : !p.forHats;
-      });
-      
-      grid.innerHTML = available.map(function(p) {
-        var selected = state.placement === p.id ? ' selected' : '';
-        return '<div class="placement-option' + selected + '" data-id="' + p.id + '">' + p.name + '</div>';
-      }).join('');
-      
-      document.getElementById('viewToggle').style.display = isHeadwear ? 'none' : 'flex';
+      // Placement selection removed — positions are fixed in new model
+      // Front logo: fixed front center. HFW logo: fixed 3" back neck.
+      // This function is kept as a no-op for backward compatibility.
+      return;
     }
     
     // ---- Toast notification system ----
@@ -3713,11 +3710,10 @@ app.get('/build', (c) => {
       }, 4000);
     }
     
-    // Helper function to get price for a graphic based on placement
-    // Every graphic is charged individually: small placements (chest, hat): $10, Full placements (front/back): $15
+    // Helper function to get price for additional back graphic
+    // NEW MODEL: First logo is FREE (included in base). Additional back graphics are $15 each.
     function getGraphicPrice(placementId) {
-      var p = placements.find(function(x) { return x.id === placementId; });
-      return (p && p.isSmall) ? 10 : 15;
+      return 15; // All additional graphics are $15
     }
     
     function renderAdditionalGraphics() {
@@ -3727,18 +3723,20 @@ app.get('/build', (c) => {
       if (state.graphic) {
         container.style.display = 'block';
         
+        // Hide the "Add Back Graphic" button if already added one (limit 1 additional)
+        var addBtn = document.getElementById('addGraphicBtn');
+        if (addBtn) addBtn.style.display = state.additionalGraphics.length >= 1 ? 'none' : 'block';
+        
         if (state.additionalGraphics.length > 0) {
           list.innerHTML = state.additionalGraphics.map(function(ag, i) {
             var g = graphics.find(function(x) { return x.id === ag.graphic; });
-            var p = placements.find(function(x) { return x.id === ag.placement; });
-            if (!g || !p) return ''; // Defensive: skip orphaned entries
-            var price = getGraphicPrice(ag.placement);
+            if (!g) return ''; // Defensive: skip orphaned entries
             return '<div class="additional-item">' +
               '<div class="info">' +
                 '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
                 '<div>' +
                   '<div style="font-weight: 600; font-size: 0.85rem;">' + g.name + '</div>' +
-                  '<div style="font-size: 0.75rem; color: #666;">' + p.name + ' &bull; +$' + price.toFixed(2) + '</div>' +
+                  '<div style="font-size: 0.75rem; color: #666;">Back Placement &bull; +$15.00</div>' +
                 '</div>' +
               '</div>' +
               '<button class="remove-btn" data-remove-index="' + i + '">' +
@@ -3777,9 +3775,8 @@ app.get('/build', (c) => {
       }
       renderColors(id);
       
-      var isHeadwear = id === 'trucker-hat' || id === 'beanie';
-      state.placement = isHeadwear ? 'hat-front' : 'full-front';
-      renderPlacements();
+      // Placement is now fixed: full-front for all garments (no headwear in builder)
+      state.placement = 'full-front';
       
       // Re-render graphics to filter based on garment restrictions
       renderGraphics();
@@ -3906,22 +3903,14 @@ app.get('/build', (c) => {
         '</div>';
       }).join('');
       
-      var usedPlacements = [state.placement].concat(state.additionalGraphics.map(function(ag) { return ag.placement; }));
-      var isHeadwear = state.garment === 'trucker-hat' || state.garment === 'beanie';
-      var available = placements.filter(function(p) {
-        return isHeadwear ? p.forHats : !p.forHats;
-      });
-      
+      // Only back placement is available for additional graphics
       var placementGrid = document.getElementById('modalPlacementGrid');
-      placementGrid.innerHTML = available.map(function(p) {
-        var isUsed = usedPlacements.indexOf(p.id) !== -1;
-        var price = getGraphicPrice(p.id);
-        return '<div class="placement-option" data-id="' + p.id + '">' +
-          p.name +
-          (isUsed ? '<span style="font-size:0.7rem; display:block; color:#999;">+ additional graphic</span>' : '') +
-          '<span style="font-size:0.7rem; display:block; color:#8B0000;">+$' + price.toFixed(2) + '</span>' +
-        '</div>';
-      }).join('');
+      placementGrid.innerHTML = '<div class="placement-option selected" data-id="full-back">' +
+        'Full Back' +
+        '<span style="font-size:0.7rem; display:block; color:#8B0000;">+$15.00</span>' +
+      '</div>';
+      // Auto-select full-back placement
+      modalSelectedPlacement = 'full-back';
       
       document.getElementById('addGraphicModal').classList.add('active');
     }
@@ -4241,23 +4230,25 @@ app.get('/build', (c) => {
         }
       }
       
+      // Front logo — included in base price (shown as $0.00)
       if (state.graphic) {
         var gr = graphics.find(function(x) { return x.id === state.graphic; });
-        var pl = placements.find(function(x) { return x.id === state.placement; });
-        if (gr && pl) {
-          var graphicPrice = getGraphicPrice(state.placement);
-          lines.push({ label: gr.name + ' (' + pl.name + ')', price: graphicPrice });
-          total += graphicPrice;
+        if (gr) {
+          lines.push({ label: 'Front: ' + gr.name, note: 'Included' });
         }
       }
       
+      // Mandatory HFW back neck logo — always shown when garment selected
+      if (state.garment) {
+        lines.push({ label: 'Back Neck: HFW Logo (3")', note: 'Included' });
+      }
+      
+      // Additional back graphics (+$15 each)
       state.additionalGraphics.forEach(function(ag) {
         var gr = graphics.find(function(x) { return x.id === ag.graphic; });
-        var pl = placements.find(function(x) { return x.id === ag.placement; });
-        if (gr && pl) {
-          var price = getGraphicPrice(ag.placement);
-          lines.push({ label: '+ ' + gr.name + ' (' + pl.name + ')', price: price });
-          total += price;
+        if (gr) {
+          lines.push({ label: '+ Back: ' + gr.name, price: 15 });
+          total += 15;
         }
       });
       

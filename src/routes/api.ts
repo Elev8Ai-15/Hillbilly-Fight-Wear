@@ -561,6 +561,7 @@ api.post('/stripe/sync-catalog', async (c) => {
       success: true,
       summary: {
         created: result.created.length,
+        updated: result.updated?.length || 0,
         skipped: result.skipped.length,
         errors: result.errors.length,
       },
