@@ -2306,7 +2306,7 @@ app.get('/', (c) => {
             color: color || '',
             style: style || '',
             qty: 1,
-            type: product.type === 'Decal' ? 'decal' : 'garment',
+            type: product.type === 'decal' ? 'decal' : 'garment',
             garmentType: product.garmentType || ''
           });
         }
@@ -2450,14 +2450,20 @@ app.get('/', (c) => {
         var gfxImg = new Image();
         gfxImg.crossOrigin = 'anonymous';
         gfxImg.onload = function() {
-          // Print area definitions (fraction of garment area) matching Builder
+          // Print area definitions (fraction of garment area) per garment type
           var printArea;
           var isHeadwear = (garmentType === 'trucker-hat' || garmentType === 'beanie');
           if (isHeadwear) {
             printArea = { xOff: 0.20, yOff: 0.15, wFrac: 0.60, hFrac: 0.55 };
+          } else if (garmentType === 'hoodie') {
+            // Hoodies: graphic sits below the hood/neckline, centered on chest
+            printArea = { xOff: 0.22, yOff: 0.32, wFrac: 0.56, hFrac: 0.40 };
+          } else if (garmentType === 'tank-womens' || garmentType === 'tank-mens') {
+            // Tanks: narrower torso, graphic centered on chest
+            printArea = { xOff: 0.20, yOff: 0.22, wFrac: 0.60, hFrac: 0.48 };
           } else {
-            // Full front/back placement
-            printArea = { xOff: 0.18, yOff: 0.15, wFrac: 0.64, hFrac: 0.55 };
+            // T-shirts and other garments: standard chest area
+            printArea = { xOff: 0.20, yOff: 0.25, wFrac: 0.60, hFrac: 0.45 };
           }
 
           // Compute print area in pixel coords relative to the garment on canvas
@@ -2466,8 +2472,8 @@ app.get('/', (c) => {
           var paW = gw * printArea.wFrac;
           var paH = gh * printArea.hFrac;
 
-          // Scale graphic to fit within print area (like Builder's 90% initial scale)
-          var gfxScale = Math.min(paW / gfxImg.width, paH / gfxImg.height) * 0.85;
+          // Scale graphic to fill print area (larger = more accurate to actual product)
+          var gfxScale = Math.min(paW / gfxImg.width, paH / gfxImg.height) * 0.92;
           var fw = gfxImg.width * gfxScale;
           var fh = gfxImg.height * gfxScale;
 

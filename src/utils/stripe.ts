@@ -6,7 +6,7 @@
 // ACTIVATION: Set STRIPE_SECRET_KEY as a Cloudflare secret.
 // Once set, all checkout endpoints will use Stripe automatically.
 // ============================================
-import { shopProducts, garments, graphics, placements } from '../data/catalog'
+import { shopProducts, garments, graphics } from '../data/catalog'
 import {
   type PricingBreakdown,
   type BuilderPricing,
@@ -16,7 +16,7 @@ import {
   roundCurrency,
   generateStripeCheckoutParams,
 } from './pricing'
-import { generateShopReceipt, generateShopReceiptPlainText, type OrderInfo } from './email-receipt'
+import { type OrderInfo } from './email-receipt'
 
 const STRIPE_API = 'https://api.stripe.com/v1'
 

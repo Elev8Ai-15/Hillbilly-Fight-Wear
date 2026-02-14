@@ -3,7 +3,7 @@
 // Generates HTML email receipts for order confirmations.
 // Designed to work with any email API (Stripe receipts, SendGrid, etc.)
 // ============================================
-import { type PricingBreakdown, type BuilderPricing, type LineItem, roundCurrency } from './pricing'
+import { type PricingBreakdown, type BuilderPricing } from './pricing'
 
 // ============================================
 // TYPES
@@ -217,12 +217,12 @@ export function generateShopReceipt(
                   </td>
                   <td style="padding: 0 8px; color: #444;">|</td>
                   <td style="padding: 0 8px;">
-                    <a href="mailto:support@hillbillyfightwear.com" style="color: #8B0000; font-size: 12px; text-decoration: none;">Contact</a>
+                    <a href="mailto:brian@hillbillyfightwear.com" style="color: #8B0000; font-size: 12px; text-decoration: none;">Contact</a>
                   </td>
                 </tr>
               </table>
               <p style="margin: 16px 0 0; font-size: 11px; color: #555;">
-                Questions about your order? Reply to this email or contact support@hillbillyfightwear.com
+                Questions about your order? Reply to this email or contact brian@hillbillyfightwear.com
               </p>
             </td>
           </tr>
@@ -298,7 +298,7 @@ export function generateShopReceiptPlainText(
   }
 
   text += `\n${'='.repeat(50)}\n`
-  text += `Questions? Contact support@hillbillyfightwear.com\n`
+  text += `Questions? Contact brian@hillbillyfightwear.com\n`
   text += `Visit: https://hillbillyfightwear.com\n`
 
   return text
@@ -431,7 +431,7 @@ export function generateBuilderReceipt(
               <p style="margin: 0 0 8px; font-size: 14px; color: #fff; font-weight: 600; letter-spacing: 1px;">HILLBILLY FIGHTWEAR</p>
               <p style="margin: 0 0 16px; font-size: 12px; color: #888;">Official MMA & Combat Sports Apparel</p>
               <p style="margin: 0; font-size: 11px; color: #555;">
-                Questions? Contact support@hillbillyfightwear.com
+                Questions? Contact brian@hillbillyfightwear.com
               </p>
             </td>
           </tr>

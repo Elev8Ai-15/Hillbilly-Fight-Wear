@@ -17,7 +17,6 @@ import {
   calculateBuilderPricing,
   validateCart,
   PRICING,
-  roundCurrency,
   getGraphicPrice,
   type CartItem,
 } from '../utils/pricing'
@@ -31,7 +30,6 @@ import {
 import {
   generateShopReceipt,
   generateShopReceiptPlainText,
-  generateBuilderReceipt,
   type OrderInfo,
 } from '../utils/email-receipt'
 
