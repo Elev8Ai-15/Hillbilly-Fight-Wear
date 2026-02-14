@@ -1980,10 +1980,18 @@ app.get('/', (c) => {
             selectModalStyle(el.dataset.productId, el.dataset.style);
             break;
           case 'renderGarmentModalBack':
+          case 'renderGarmentModalStep':
             var pid = el.dataset.productId;
             var step = el.dataset.step;
             var prod = allShopProducts.find(function(p) { return p.id === pid; });
             if (prod) renderGarmentModal(prod, step);
+            break;
+          case 'toggleModalView':
+            var tvPid = el.dataset.productId;
+            var tvView = el.dataset.view;
+            modalState.modalView = tvView;
+            var tvProduct = allShopProducts.find(function(p) { return p.id === tvPid; });
+            if (tvProduct) renderGarmentModal(tvProduct, modalState.step);
             break;
           
           // Cart
@@ -2375,13 +2383,13 @@ app.get('/', (c) => {
     // ========================================
     // PRODUCT DETAIL MODAL
     // ========================================
-    var modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '' };
+    var modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '', modalView: 'front' };
     
     function openProductModal(productId) {
       try {
       var product = allShopProducts.find(function(p) { return p.id === productId; });
       if (!product) { console.warn('Product not found:', productId); return; }
-      modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '', productId: productId };
+      modalState = { step: 'view', selectedSize: '', selectedColor: '', selectedStyle: '', productId: productId, modalView: 'front' };
       
       if (product.type === 'garment') {
         renderGarmentModal(product, 'size');
@@ -2410,24 +2418,46 @@ app.get('/', (c) => {
       modalState.step = step;
       var mc = document.getElementById('modalContent');
       
-      // Shop Now: update preview image based on selected color and style
+      // Shop Now: update preview image based on selected color, style, and front/back view
       var previewImg = product.image;
+      var viewKey = modalState.modalView || 'front';
       if (modalState.selectedColor) {
-        // If Zip-Up style is selected and this is a hoodie, use zip-up images
+        var colorKey = modalState.selectedColor.toLowerCase();
+        // Determine which garment type images to use (zip-up vs pullover)
         if (modalState.selectedStyle === 'Zip-Up' && product.garmentType === 'hoodie') {
-          var colorKey = modalState.selectedColor.toLowerCase();
-          if (zipupHoodieImages[colorKey] && zipupHoodieImages[colorKey].front) {
+          if (zipupHoodieImages[colorKey] && zipupHoodieImages[colorKey][viewKey]) {
+            previewImg = zipupHoodieImages[colorKey][viewKey];
+          } else if (zipupHoodieImages[colorKey] && zipupHoodieImages[colorKey].front) {
             previewImg = zipupHoodieImages[colorKey].front;
           } else {
             previewImg = getColorPreviewImage(product, modalState.selectedColor);
           }
         } else {
-          previewImg = getColorPreviewImage(product, modalState.selectedColor);
+          // Pullover or non-hoodie: use garmentColorImages with front/back support
+          var gType = product.garmentType;
+          if (gType && garmentColorImages[gType] && garmentColorImages[gType][colorKey]) {
+            previewImg = garmentColorImages[gType][colorKey][viewKey] || garmentColorImages[gType][colorKey].front || product.image;
+          } else {
+            previewImg = getColorPreviewImage(product, modalState.selectedColor);
+          }
         }
+      }
+      
+      // Show front/back toggle for products that have back images (hoodies, t-shirts with styles)
+      var showViewToggle = product.garmentType === 'hoodie' && modalState.selectedColor;
+      var viewToggleHtml = '';
+      if (showViewToggle) {
+        var frontActive = viewKey === 'front' ? 'background:#8B0000; color:#fff;' : 'background:#f5f5f5; color:#333;';
+        var backActive = viewKey === 'back' ? 'background:#8B0000; color:#fff;' : 'background:#f5f5f5; color:#333;';
+        viewToggleHtml = '<div style="display:flex; justify-content:center; gap:8px; padding:8px 0 0;">' +
+          '<button data-action="toggleModalView" data-product-id="' + product.id + '" data-view="front" style="padding:6px 16px; border:1px solid #ddd; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:600; ' + frontActive + '">FRONT</button>' +
+          '<button data-action="toggleModalView" data-product-id="' + product.id + '" data-view="back" style="padding:6px 16px; border:1px solid #ddd; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:600; ' + backActive + '">BACK</button>' +
+        '</div>';
       }
       
       var imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center; position:relative;">' +
         '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
+        viewToggleHtml +
       '</div>';
       
       var headerHtml = '<div style="padding:20px 20px 10px;">' +
@@ -2482,9 +2512,11 @@ app.get('/', (c) => {
         // STYLE SELECTION STEP (Pullover / Zip-Up for hoodies)
         var stylesHtml = product.styles.map(function(s) {
           var sel = modalState.selectedStyle === s ? 'background:#8B0000; color:#fff; border-color:#8B0000;' : '';
-          var icon = s === 'Zip-Up' ? 'fa-vest' : 'fa-hoodie';
           return '<button data-action="selectModalStyle" data-product-id="' + product.id + '" data-style="' + s + '" style="padding:16px 28px; border:2px solid #ddd; background:#fff; border-radius:8px; cursor:pointer; font-size:1.05rem; font-weight:600; min-width:120px; transition:all 0.2s; ' + sel + '">' + s + '</button>';
         }).join('');
+        
+        var continueBtn = modalState.selectedStyle ?
+          '<button data-action="renderGarmentModalStep" data-product-id="' + product.id + '" data-step="confirm" style="flex:2; padding:14px; background:#8B0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:1rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-arrow-right"></i> Continue</button>' : '';
         
         mc.innerHTML = imageHtml + headerHtml + summaryPills() +
           '<div style="padding:0 20px 5px;">' +
@@ -2493,6 +2525,7 @@ app.get('/', (c) => {
           '</div>' +
           '<div style="padding:15px 20px 20px; display:flex; gap:10px;">' +
             '<button data-action="renderGarmentModalBack" data-product-id="' + product.id + '" data-step="color" style="flex:1; padding:12px; background:#f5f5f5; color:#333; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
+            continueBtn +
           '</div>';
           
       } else if (step === 'confirm') {
@@ -2526,9 +2559,10 @@ app.get('/', (c) => {
     
     function selectModalStyle(productId, style) {
       modalState.selectedStyle = style;
+      modalState.modalView = 'front'; // Reset view when style changes
       var product = allShopProducts.find(function(p) { return p.id === productId; });
-      // Auto-advance to confirm step
-      renderGarmentModal(product, 'confirm');
+      // Stay on style step so user sees the image update (pullover vs zip-up)
+      renderGarmentModal(product, 'style');
     }
     
     function renderDecalModal(product) {
