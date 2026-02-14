@@ -64,12 +64,10 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 | Hoodie | $50.00 |
 | Additional Graphic | +$10.00 |
 
-### Graphics Library (22 Total)
+### Graphics Library (20 Total)
 
 **Core HFW Logos:**
-- **HFW 3D Black** - 3D effect black logo
 - **HFW Black Shadow** - Black with shadow
-- **HFW Metal Gloves** - Metal gloves variant
 - **HFW White Outline** - White outline variant
 - **HFW Logo** - Original HFW logo
 
@@ -107,7 +105,7 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 | `/api/placements` | GET | Available placement options |
 | `/api/products` | GET | Featured products |
 | `/api/slides` | GET | Homepage slideshow data |
-| `/api/shop-products` | GET | All 46 shop products |
+| `/api/shop-products` | GET | All 48 shop products |
 | `/api/calculate-price` | POST | Calculate order price |
 | `/api/shop-checkout` | POST | Cart checkout via Stripe |
 | `/api/create-checkout` | POST | Create Stripe checkout session |
@@ -236,7 +234,16 @@ webapp/
 └── README.md
 ```
 
-## Recent Updates (v5.1.0 - Publishing & Final Cleanup)
+## Recent Updates (v5.2.0 - Email Update, Code Cleanup & Catalog Expansion)
+- **Email update**: All transaction/receipt emails now use brian@hillbillyfightwear.com
+- **Code cleanup**: Removed 4 unused imports (generateShopReceipt, generateShopReceiptPlainText from stripe.ts; LineItem, roundCurrency from email-receipt.ts)
+- **Removed unreferenced images**: hfw-logo-black-3d.png (132KB), hfw-logo-metal-gloves.png (392KB)
+- **3 new products from Shopify**: T-Shirt - Goodwood (m13), Adjustable Hat - Hard Hittin (h6), Fitted Hat - GNF Patriotic (h13)
+- **Back images added**: 31 products now have backImage URLs (all hoodies, t-shirts, tanks, kids, + 10 decals)
+- **Catalog total**: 48 products (33 garments + 15 decals), with Shopify CDN photography for decal product photos
+- **Full Shopify scrape completed**: All 47 Shopify products analyzed and cross-referenced
+
+## Previous Updates (v5.1.0 - Publishing & Final Cleanup)
 - **GNF sticker position fix**: Moved left from 25% → 12% (matching HFW sticker adjustment)
 - **Apex domain added**: `hillbillyfightwear.com` registered as custom domain on Cloudflare Pages
 - **www domain active**: `www.hillbillyfightwear.com` fully operational with SSL
@@ -264,7 +271,7 @@ webapp/
 - **D11 Sticker Fix**: Distinct red/blue GNF variant image (was duplicate of d1)
 - **Price Calibration**: Corrected featured item pricing to match catalog
 - **Error Handling**: Improved addToCart/openProductModal error logging
-- **46 Shop Products**: 32 garments + 14 decals across 5 categories verified
+- **48 Shop Products**: 33 garments + 15 decals across 5 categories verified
 
 ## Previous Updates (v3.0.0)
 - **Full-screen hero carousel** with 6 new MMA/rodeo action images
