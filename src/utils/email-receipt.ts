@@ -213,7 +213,7 @@ export function generateShopReceipt(
                   </td>
                   <td style="padding: 0 8px; color: #444;">|</td>
                   <td style="padding: 0 8px;">
-                    <a href="https://hillbilly-fightwear.pages.dev/build" style="color: #8B0000; font-size: 12px; text-decoration: none;">Build Your Own</a>
+                    <a href="https://hillbilly-fightwear.pages.dev/build" style="color: #8B0000; font-size: 12px; text-decoration: none;">Build Y'Own</a>
                   </td>
                   <td style="padding: 0 8px; color: #444;">|</td>
                   <td style="padding: 0 8px;">

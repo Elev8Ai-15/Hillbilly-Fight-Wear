@@ -1382,7 +1382,7 @@ app.get('/', (c) => {
       <p class="hero-slogan">Thump A Stranger</p>
       <div class="scrapbook-cta">
         <a href="#shop" class="btn-primary"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
-        <a href="/build" class="btn-secondary"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Your Own</a>
+        <a href="/build" class="btn-secondary"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Y'Own</a>
       </div>
     </div>
 
@@ -1471,7 +1471,7 @@ app.get('/', (c) => {
   
   <!-- Build Your Own CTA -->
   <section class="build-cta" id="build">
-    <h2><i class="fas fa-tshirt"></i> Build Your Own</h2>
+    <h2><i class="fas fa-tshirt"></i> Build Y'Own</h2>
     <p>Design custom apparel with your favorite Hillbilly Fightwear graphics</p>
     <a href="/build" class="build-cta-btn">
       <i class="fas fa-paint-brush"></i> Start Designing
@@ -1490,7 +1490,7 @@ app.get('/', (c) => {
     </div>
     
     <div class="view-all-wrapper">
-      <a href="/build" class="view-all-btn"><i class="fas fa-paint-brush"></i> Build Your Own</a>
+      <a href="/build" class="view-all-btn"><i class="fas fa-paint-brush"></i> Build Y'Own</a>
     </div>
   </section>
   
@@ -1577,7 +1577,7 @@ app.get('/', (c) => {
       <p style="margin: 0 0 10px;"><strong>Hillbilly Fightwear</strong> - Official MMA & Combat Sports Apparel</p>
       <p style="margin: 0; font-size: 0.9rem; color: #999;">© ${new Date().getFullYear()} Hillbilly Fightwear. All rights reserved.</p>
       <nav aria-label="Footer navigation" style="margin-top: 20px;">
-        <a href="/build" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Build Your Own</a>
+        <a href="/build" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Build Y'Own</a>
         <a href="#shop" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Shop Now</a>
         <a href="/contact" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Contact Us</a>
         <a href="#podcast" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Podcast</a>
@@ -2644,7 +2644,7 @@ app.get('/build', (c) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Build Your Own - Hillbilly Fightwear</title>
+  <title>Build Y'Own - Hillbilly Fightwear</title>
   <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
