@@ -112,10 +112,11 @@ app.get('/', (c) => {
   // Helper function to generate product cards - opens detail modal on click
   // Product titles and vendors are HTML-escaped to prevent XSS
   const generateProductCards = (items: ShopProduct[]) => items.map(product => `
-    <div class="product-card" role="listitem" aria-label="${escHtml(product.title)} - ${product.price}" data-action="openProductModal" data-product-id="${product.id}" tabindex="0">
+    <div class="product-card${product.backImage ? ' has-back' : ''}" role="listitem" aria-label="${escHtml(product.title)} - ${product.price}" data-action="openProductModal" data-product-id="${product.id}" tabindex="0">
       <div class="product-image-wrapper">
-        <img src="${product.image}" alt="${escHtml(product.title)}" class="product-image" loading="lazy" width="280" height="280">
-      </div>
+        <img src="${product.image}" alt="${escHtml(product.title)}" class="product-image product-img-front" loading="lazy" width="280" height="280">${product.backImage ? `
+        <img src="${product.backImage}" alt="${escHtml(product.title)} - Back" class="product-image product-img-back" loading="lazy" width="280" height="280">` : ''}
+      </div>${product.backImage ? '<div class="flip-hint"><i class="fas fa-sync-alt"></i> Hover for back</div>' : ''}
       <h4 class="product-title">${escHtml(product.title)}</h4>
       <div class="product-vendor">${escHtml(product.vendor)}</div>
       <div class="product-price" aria-label="Price: ${product.price}">${product.price}</div>
@@ -718,6 +719,7 @@ app.get('/', (c) => {
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      position: relative;
     }
     
     .product-image {
@@ -727,7 +729,32 @@ app.get('/', (c) => {
       margin: 0 auto;
       display: block;
       object-fit: contain;
+      transition: opacity 0.35s ease;
     }
+    
+    /* Front/back image hover swap for products with backImage */
+    .product-img-back {
+      position: absolute;
+      top: 20px; left: 20px; right: 20px; bottom: 20px;
+      width: calc(100% - 40px);
+      max-width: none;
+      height: calc(100% - 40px);
+      opacity: 0;
+    }
+    .product-card.has-back:hover .product-img-front,
+    .product-card.has-back:focus-within .product-img-front { opacity: 0; }
+    .product-card.has-back:hover .product-img-back,
+    .product-card.has-back:focus-within .product-img-back { opacity: 1; }
+    
+    .flip-hint {
+      font-size: 0.7rem;
+      color: #999;
+      text-align: center;
+      margin-top: -8px;
+      margin-bottom: 4px;
+      transition: opacity 0.3s;
+    }
+    .product-card.has-back:hover .flip-hint { opacity: 0; }
     
     .product-title { 
       font-size: 1.1rem; 
@@ -2000,6 +2027,13 @@ app.get('/', (c) => {
             var tvProduct = allShopProducts.find(function(p) { return p.id === tvPid; });
             if (tvProduct) renderGarmentModal(tvProduct, modalState.step);
             break;
+          case 'toggleDecalView':
+            var dvPid = el.dataset.productId;
+            var dvView = el.dataset.view;
+            modalState.modalView = dvView;
+            var dvProduct = allShopProducts.find(function(p) { return p.id === dvPid; });
+            if (dvProduct) renderDecalModal(dvProduct);
+            break;
           
           // Cart
           case 'toggleCart': toggleCart(); break;
@@ -2502,7 +2536,14 @@ app.get('/', (c) => {
       // Shop Now: update preview image based on selected color, style, and front/back view
       var previewImg = product.image;
       var viewKey = modalState.modalView || 'front';
-      if (modalState.selectedColor) {
+      
+      // Handle back view: use backImage (Shopify CDN photo) when no color selected,
+      // or local garment mockup when color is selected
+      if (viewKey === 'back' && !modalState.selectedColor && product.backImage) {
+        previewImg = product.backImage;
+      } else if (viewKey === 'back' && !modalState.selectedColor) {
+        previewImg = product.image; // fallback to front if no back available
+      } else if (modalState.selectedColor) {
         var colorKey = modalState.selectedColor.toLowerCase();
         // Determine which garment type images to use (zip-up vs pullover)
         if (modalState.selectedStyle === 'Zip-Up' && product.garmentType === 'hoodie') {
@@ -2524,8 +2565,10 @@ app.get('/', (c) => {
         }
       }
       
-      // Show front/back toggle for products with garment mockups (hoodies, t-shirts when color selected)
-      var showViewToggle = product.garmentType && modalState.selectedColor && (product.garmentType === 'hoodie' || product.graphicId);
+      // Show front/back toggle when:
+      // 1. Product has a backImage (Shopify CDN photo) — always show toggle
+      // 2. OR color is selected and product has garment mockups with graphic overlays
+      var showViewToggle = product.backImage || (product.garmentType && modalState.selectedColor && (product.garmentType === 'hoodie' || product.graphicId));
       var viewToggleHtml = '';
       if (showViewToggle) {
         var frontActive = viewKey === 'front' ? 'background:#8B0000; color:#fff;' : 'background:#f5f5f5; color:#333;';
@@ -2677,8 +2720,23 @@ app.get('/', (c) => {
     function renderDecalModal(product) {
       var mc = document.getElementById('modalContent');
       var safeTitle = product.title.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      var viewKey = modalState.modalView || 'front';
+      var displayImg = (viewKey === 'back' && product.backImage) ? product.backImage : product.image;
+      
+      // Show front/back toggle for decals that have Shopify photography (backImage)
+      var viewToggleHtml = '';
+      if (product.backImage) {
+        var frontActive = viewKey === 'front' ? 'background:#8B0000; color:#fff;' : 'background:#f5f5f5; color:#333;';
+        var backActive = viewKey === 'back' ? 'background:#8B0000; color:#fff;' : 'background:#f5f5f5; color:#333;';
+        viewToggleHtml = '<div style="display:flex; justify-content:center; gap:8px; padding:10px 0 0;">' +
+          '<button data-action="toggleDecalView" data-product-id="' + product.id + '" data-view="front" style="padding:6px 16px; border:1px solid #ddd; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:600; ' + frontActive + '">GRAPHIC</button>' +
+          '<button data-action="toggleDecalView" data-product-id="' + product.id + '" data-view="back" style="padding:6px 16px; border:1px solid #ddd; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:600; ' + backActive + '">PRODUCT PHOTO</button>' +
+        '</div>';
+      }
+      
       mc.innerHTML = '<div style="background:#ffffff; padding:30px; text-align:center;">' +
-          '<img src="' + product.image + '" alt="' + safeTitle + '" style="max-width:100%; max-height:400px; object-fit:contain;">' +
+          '<img src="' + displayImg + '" alt="' + safeTitle + '" style="max-width:100%; max-height:400px; object-fit:contain;">' +
+          viewToggleHtml +
         '</div>' +
         '<div style="padding:20px;">' +
           '<h3 style="margin:0 0 5px; font-size:1.3rem; font-weight:600;">' + safeTitle + '</h3>' +
