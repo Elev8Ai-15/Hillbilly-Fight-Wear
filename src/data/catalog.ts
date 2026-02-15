@@ -176,7 +176,13 @@ export const graphics = [
     fullImage: '/images/graphics/myob.png?v=11',
     restrictToGarments: []
   },
-  // GNF graphic removed — white "N" on white background issue
+  {
+    id: 'gnf',
+    name: 'GNF',
+    thumbnail: '/images/stickers/sticker-gnf.png?v=15',
+    fullImage: '/images/graphics/gnf.png?v=15',
+    restrictToGarments: []
+  },
   {
     id: 'wimb',
     name: 'WIMB (What\'s It Mean To You?)',

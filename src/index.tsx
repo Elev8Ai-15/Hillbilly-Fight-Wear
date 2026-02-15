@@ -3842,7 +3842,6 @@ app.get('/build', (c) => {
       var g = graphics.find(function(x) { return x.id === id; });
       if (g && g.fullImage && !imageCache[g.fullImage]) {
         var img = new Image();
-        img.crossOrigin = 'anonymous';
         img.src = g.fullImage;
         imageCache[g.fullImage] = img;
       }
@@ -3982,7 +3981,6 @@ app.get('/build', (c) => {
           var url = imgs[view];
           if (!imageCache[url]) {
             var img = new Image();
-            img.crossOrigin = 'anonymous';
             img.src = url;
             imageCache[url] = img;
           }
@@ -3996,10 +3994,35 @@ app.get('/build', (c) => {
     
     function updatePreview() {
       // Debounce rapid calls (e.g. selectGarment -> renderGraphics -> updatePreview cascade)
-      // This ensures only the LAST call within 30ms actually executes,
+      // This ensures only the LAST call within 60ms actually executes,
       // eliminating the stale-update-ID race condition entirely.
       if (_previewDebounceTimer) clearTimeout(_previewDebounceTimer);
-      _previewDebounceTimer = setTimeout(_doUpdatePreview, 30);
+      _previewDebounceTimer = setTimeout(_doUpdatePreview, 60);
+    }
+    
+    // Robust image loader: tries loading an image with a fallback retry.
+    // On first attempt, loads with crossOrigin for canvas export support.
+    // On retry, strips crossOrigin to avoid CORS cache conflicts.
+    // This fixes the "graphics don't transfer" bug where browser-cached
+    // non-CORS images conflict with crossOrigin requests.
+    function _loadFabricImage(url, callback) {
+      // First attempt: no crossOrigin (same-origin images don't need it,
+      // and setting it can conflict with browser cache from <img> thumbnails)
+      fabric.Image.fromURL(url, function(img, isError) {
+        if (!img || isError || !img.width || !img.height) {
+          // Retry: strip query-string cache busters to try bare URL
+          var bareUrl = url.split('?')[0];
+          if (bareUrl !== url) {
+            fabric.Image.fromURL(bareUrl, function(img2, isError2) {
+              callback(img2, isError2);
+            });
+          } else {
+            callback(img, isError);
+          }
+        } else {
+          callback(img, isError);
+        }
+      });
     }
     
     function _doUpdatePreview() {
@@ -4034,8 +4057,8 @@ app.get('/build', (c) => {
         additionalGraphics: state.additionalGraphics.slice()
       };
       
-      // Load garment image
-      fabric.Image.fromURL(imageUrl, function(garmentImg, isError) {
+      // Load garment image using robust loader
+      _loadFabricImage(imageUrl, function(garmentImg, isError) {
         // Stale check: if another updatePreview was called after us, bail out
         if (currentUpdateId !== previewUpdateId) return;
         
@@ -4063,14 +4086,13 @@ app.get('/build', (c) => {
         garmentImg.set({
           left: canvas.width / 2, top: canvas.height / 2,
           originX: 'center', originY: 'center',
-          selectable: false, evented: false,
-          objectCaching: false
+          selectable: false, evented: false
         });
         canvas.add(garmentImg);
         
         // Load graphics on top of garment using snapshotted state
         loadGraphicsOnTop(currentUpdateId, garmentScale, capturedState);
-      }, { crossOrigin: 'anonymous' });
+      });
     }
     
     // Determine if a placement should be visible for the given view
@@ -4123,7 +4145,8 @@ app.get('/build', (c) => {
           return;
         }
         
-        fabric.Image.fromURL(graphic.fullImage, function(graphicImg, isError) {
+        // Use robust loader: no crossOrigin (same-origin), with retry
+        _loadFabricImage(graphic.fullImage, function(graphicImg, isError) {
           if (updateId !== previewUpdateId) return; // Stale check
           loadedCount++;
           
@@ -4165,13 +4188,13 @@ app.get('/build', (c) => {
             lockRotation: false, lockScalingFlip: true,
             borderColor: '#8B0000', cornerColor: '#8B0000',
             cornerSize: 10, cornerStyle: 'circle', transparentCorners: false,
-            padding: 5, objectCaching: false,
+            padding: 5,
             isGraphic: true, graphicId: item.graphicId, placementId: item.placementId
           });
           
           canvas.add(graphicImg);
           if (loadedCount === totalToLoad) canvas.renderAll();
-        }, { crossOrigin: 'anonymous' });
+        });
       });
     }
     
