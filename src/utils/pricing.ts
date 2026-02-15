@@ -10,8 +10,8 @@ import { garments, graphics, placements, shopProducts, type ShopProduct } from '
 export const PRICING = {
   // Graphic placement pricing (custom builder)
   // NEW MODEL: First logo is INCLUDED in base price. Only additional back graphics cost extra.
-  GRAPHIC_SMALL_PLACEMENT: 10.00,   // Left chest, right chest, hat front (legacy, not used in new model)
-  GRAPHIC_FULL_PLACEMENT: 15.00,    // Full front, full back (legacy)
+  GRAPHIC_SMALL_PLACEMENT: 10.00,   // Left chest, right chest, hat front
+  GRAPHIC_FULL_PLACEMENT: 15.00,    // Full front, full back
   ADDITIONAL_BACK_GRAPHIC: 15.00,   // Second user-selected graphic on back
 
   // Shipping: FREE on all orders (included in product price)

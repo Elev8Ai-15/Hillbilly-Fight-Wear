@@ -942,10 +942,6 @@ api.post('/contact', async (c) => {
     return c.json({ error: 'Please provide a valid email address.' }, 400)
   }
 
-  // Rate limiting: simple in-memory timestamp check (per deployment instance)
-  // For production, use Cloudflare KV or D1 for proper rate limiting
-  const now = Date.now()
-
   // Compose the email body
   const emailBody = `
 New Contact Form Submission

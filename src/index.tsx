@@ -173,7 +173,6 @@ app.get('/', (c) => {
   <!-- Preconnect for Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Shopify CDN preconnect removed - all images now served locally -->
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   
   <!-- Critical CSS Preload -->
@@ -1225,7 +1224,7 @@ app.get('/', (c) => {
        All positions verified with pixel-accurate overlap detection
        at viewports: 1200x800, 1400x900, 1024x768, 1000x700, 900x700.
        
-       Layout: 3 top, 3 left, 3 right, 4 bottom = 13 total (GNF-RB #2 deleted)
+       Layout: 3 top, 3 left, 3 right, 4 bottom = 13 total
        All stickers +25% size. Specific moves applied per user request.
        
        Sticker map (aspect ratios) — all widths +25%:
@@ -1237,11 +1236,9 @@ app.get('/', (c) => {
          13=MYOB(156px,moved←2\") 14=Cunt(144px)
        ======================================================= */
 
-    /* --- TOP ROW: 3 stickers (GNF-RB #2 deleted) ---
-         L:1% + L:17% ... R:8% (moved left 1"). All +25% size. */
+    /* --- TOP ROW: 3 stickers --- */
     .sticker-collage .sticker-1  { top: 1%;  left: 1%;    width: 235px; transform: rotate(-6deg);  --hover-rotate: rotate(-3deg); }  /* HCF 181→235 (+30%) */
     .sticker-collage .sticker-4  { top: 2%;  left: 19%;   width: 187px; transform: rotate(5deg);   --hover-rotate: rotate(2deg); }   /* Thump — right 0.25" (17→19%) */
-    .sticker-collage .sticker-2  { display: none !important; }  /* GNF-RB DELETED per request */
     .sticker-collage .sticker-7  { top: 2%;  right: 19%;  width: 211px; transform: rotate(7deg);   --hover-rotate: rotate(3deg); }   /* ClingToGuns — right 0.25" (22→19%) */
 
     /* --- LEFT COLUMN --- */
@@ -1356,7 +1353,6 @@ app.get('/', (c) => {
     <div class="sticker-collage" aria-hidden="true">
       <!-- TOP ROW -->
       <img class="sticker sticker-1"  src="/images/stickers/sticker-hcf.png?v=13"           alt="" loading="eager" draggable="false">
-      <!-- GNF Red/Blue (#2) removed per user request -->
       <img class="sticker sticker-3"  src="/images/stickers/sticker-obama-tap.png?v=13"      alt="" loading="eager" draggable="false">
       <img class="sticker sticker-4"  src="/images/stickers/sticker-thump.png?v=13"          alt="" loading="eager" draggable="false">
       <img class="sticker sticker-5"  src="/images/stickers/sticker-fun-ride.png?v=13"       alt="" loading="eager" draggable="false">
@@ -3311,8 +3307,7 @@ app.get('/build', (c) => {
         </div>
       </div>
       
-      <!-- Step 5: Placement — REMOVED (positions are fixed for all shirts) -->
-      <!-- Front logo: fixed front center. HFW logo: fixed 3" back neck. Optional second graphic: back, user can position. -->
+
     </div>
     
     <!-- Preview Section -->
@@ -3439,7 +3434,7 @@ app.get('/build', (c) => {
     
     // Update mobile nav active state on scroll
     function updateMobileNavOnScroll() {
-      var steps = [1, 2, 3, 4, 5];
+      var steps = [1, 2, 3, 4];
       var currentStep = 1;
       
       steps.forEach(function(step) {
