@@ -25,7 +25,7 @@ export default function CartSidebar() {
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-bold flex items-center gap-2">
             <ShoppingBag size={20} />
-            Your Cart ({items.length})
+            Your Cart ({items.reduce((sum, item) => sum + item.quantity, 0)})
           </h2>
           <button
             onClick={() => setCartOpen(false)}
@@ -83,12 +83,7 @@ export default function CartSidebar() {
                     <div className="flex items-center gap-2 mt-2">
                       <button
                         onClick={() =>
-                          updateQuantity(
-                            item.product.id,
-                            item.size,
-                            item.color.name,
-                            item.quantity - 1
-                          )
+                          updateQuantity(index, item.quantity - 1)
                         }
                         className="p-1 hover:bg-gray-200 rounded transition-colors"
                         aria-label="Decrease quantity"
@@ -100,12 +95,7 @@ export default function CartSidebar() {
                       </span>
                       <button
                         onClick={() =>
-                          updateQuantity(
-                            item.product.id,
-                            item.size,
-                            item.color.name,
-                            item.quantity + 1
-                          )
+                          updateQuantity(index, item.quantity + 1)
                         }
                         className="p-1 hover:bg-gray-200 rounded transition-colors"
                         aria-label="Increase quantity"
@@ -113,13 +103,7 @@ export default function CartSidebar() {
                         <Plus size={14} />
                       </button>
                       <button
-                        onClick={() =>
-                          removeItem(
-                            item.product.id,
-                            item.size,
-                            item.color.name
-                          )
-                        }
+                        onClick={() => removeItem(index)}
                         className="ml-auto p-1 text-red-500 hover:bg-red-50 rounded transition-colors"
                         aria-label="Remove item"
                       >

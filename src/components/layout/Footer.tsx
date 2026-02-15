@@ -81,7 +81,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2">
               {footerLinks.support.map((link) => (
-                <li key={link.href}>
+                <li key={link.name}>
                   <Link
                     href={link.href}
                     className="text-gray-400 text-sm hover:text-primary-light transition-colors"

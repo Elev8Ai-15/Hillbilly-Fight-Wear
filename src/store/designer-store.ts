@@ -4,6 +4,7 @@ import {
   DesignElement,
   ProductCategory,
   TextElementData,
+  ImageElementData,
 } from "@/types";
 
 interface DesignerStore extends GarmentPreviewState {
@@ -57,13 +58,22 @@ export const useDesignerStore = create<DesignerStore>((set, get) => ({
       isDirty: true,
     })),
 
-  removeElement: (id) =>
-    set((state) => ({
-      elements: state.elements.filter((el) => el.id !== id),
+  removeElement: (id) => {
+    const state = get();
+    const element = state.elements.find((el) => el.id === id);
+    if (element?.type === "image") {
+      const src = (element.data as ImageElementData).src;
+      if (src.startsWith("blob:")) {
+        URL.revokeObjectURL(src);
+      }
+    }
+    set((s) => ({
+      elements: s.elements.filter((el) => el.id !== id),
       selectedElementId:
-        state.selectedElementId === id ? null : state.selectedElementId,
+        s.selectedElementId === id ? null : s.selectedElementId,
       isDirty: true,
-    })),
+    }));
+  },
 
   selectElement: (id) => set({ selectedElementId: id }),
 
@@ -116,12 +126,22 @@ export const useDesignerStore = create<DesignerStore>((set, get) => ({
       return { elements: newElements, isDirty: true };
     }),
 
-  clearDesign: () =>
+  clearDesign: () => {
+    const state = get();
+    state.elements.forEach((el) => {
+      if (el.type === "image") {
+        const src = (el.data as ImageElementData).src;
+        if (src.startsWith("blob:")) {
+          URL.revokeObjectURL(src);
+        }
+      }
+    });
     set({
       elements: [],
       selectedElementId: null,
       isDirty: false,
-    }),
+    });
+  },
 
   addTextElement: (text: string) => {
     const id = get().generateId();

@@ -11,13 +11,8 @@ interface CartStore {
     quantity?: number,
     customization?: GarmentCustomization
   ) => void;
-  removeItem: (productId: string, size: Size, colorName: string) => void;
-  updateQuantity: (
-    productId: string,
-    size: Size,
-    colorName: string,
-    quantity: number
-  ) => void;
+  removeItem: (index: number) => void;
+  updateQuantity: (index: number, quantity: number) => void;
   clearCart: () => void;
   toggleCart: () => void;
   setCartOpen: (open: boolean) => void;
@@ -58,31 +53,20 @@ export const useCartStore = create<CartStore>((set, get) => ({
     });
   },
 
-  removeItem: (productId, size, colorName) => {
+  removeItem: (index) => {
     set((state) => ({
-      items: state.items.filter(
-        (item) =>
-          !(
-            item.product.id === productId &&
-            item.size === size &&
-            item.color.name === colorName
-          )
-      ),
+      items: state.items.filter((_, i) => i !== index),
     }));
   },
 
-  updateQuantity: (productId, size, colorName, quantity) => {
+  updateQuantity: (index, quantity) => {
     if (quantity <= 0) {
-      get().removeItem(productId, size, colorName);
+      get().removeItem(index);
       return;
     }
     set((state) => ({
-      items: state.items.map((item) =>
-        item.product.id === productId &&
-        item.size === size &&
-        item.color.name === colorName
-          ? { ...item, quantity }
-          : item
+      items: state.items.map((item, i) =>
+        i === index ? { ...item, quantity } : item
       ),
     }));
   },

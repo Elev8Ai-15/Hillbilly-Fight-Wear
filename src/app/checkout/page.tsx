@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   CreditCard,
@@ -28,13 +28,31 @@ export default function CheckoutPage() {
     cvc: "",
   });
 
+  const [orderNumber] = useState(
+    () => Math.random().toString(36).substring(2, 10).toUpperCase()
+  );
   const subtotal = totalPrice();
   const shipping = subtotal >= 99 ? 0 : 9.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
+  const isShippingValid = () => {
+    const { email, firstName, lastName, address, city, state, zip } = formData;
+    return !!(email && firstName && lastName && address && city && state && zip);
+  };
+
+  const handleContinueToPayment = () => {
+    if (!isShippingValid()) return;
+    setStep("payment");
+  };
+
   const handlePlaceOrder = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isShippingValid()) {
+      setStep("info");
+      return;
+    }
+    if (!formData.cardNumber || !formData.expiry || !formData.cvc) return;
     clearCart();
     setStep("confirmation");
   };
@@ -69,7 +87,7 @@ export default function CheckoutPage() {
           email with tracking information shortly.
         </p>
         <p className="text-sm text-gray-400 mt-2">
-          Order #{Math.random().toString(36).substring(2, 10).toUpperCase()}
+          Order #{orderNumber}
         </p>
         <div className="flex justify-center gap-4 mt-8">
           <Link
@@ -180,8 +198,9 @@ export default function CheckoutPage() {
               </div>
               <button
                 type="button"
-                onClick={() => setStep("payment")}
-                className="mt-6 w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-lg font-bold transition-colors"
+                onClick={handleContinueToPayment}
+                disabled={!isShippingValid()}
+                className="mt-6 w-full bg-primary hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-lg font-bold transition-colors"
               >
                 Continue to Payment
               </button>

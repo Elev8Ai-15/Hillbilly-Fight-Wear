@@ -61,7 +61,15 @@ export default function CustomDesignerPage() {
       {
         baseColor,
         secondaryColor,
-        placement: [],
+        placement: elements.map((el) => ({
+          type: el.type === "image" ? "logo" as const : "text" as const,
+          area: "front" as const,
+          data: el.type === "text"
+            ? JSON.stringify(el.data)
+            : el.type === "image"
+              ? JSON.stringify(el.data)
+              : JSON.stringify(el.data),
+        })),
       }
     );
 

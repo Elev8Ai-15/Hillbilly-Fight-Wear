@@ -235,8 +235,9 @@ export default function ProductDetailPage() {
                 {quantity}
               </span>
               <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={() => setQuantity(Math.min(product.stockCount, quantity + 1))}
+                disabled={quantity >= product.stockCount}
+                className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <Plus size={16} />
               </button>

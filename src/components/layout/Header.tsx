@@ -27,7 +27,9 @@ const categories = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
-  const totalItems = useCartStore((s) => s.totalItems);
+  const itemCount = useCartStore((s) =>
+    s.items.reduce((sum, item) => sum + item.quantity, 0)
+  );
   const toggleCart = useCartStore((s) => s.toggleCart);
 
   return (
@@ -127,9 +129,9 @@ export default function Header() {
               className="relative p-2 hover:text-primary-light transition-colors"
             >
               <ShoppingCart size={20} />
-              {totalItems() > 0 && (
+              {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {totalItems()}
+                  {itemCount}
                 </span>
               )}
             </button>
