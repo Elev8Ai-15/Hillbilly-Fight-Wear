@@ -2947,8 +2947,25 @@ app.get('/build', (c) => {
     
     .additional-graphics {
       margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid #e0e0e0;
+      padding: 20px;
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      position: relative;
+    }
+    .additional-graphics::before {
+      content: 'UPGRADE';
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: #f59e0b;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 3px 12px;
+      border-radius: 4px;
+      font-family: 'Oswald', sans-serif;
     }
     
     .additional-item {
@@ -2986,20 +3003,21 @@ app.get('/build', (c) => {
     
     .add-graphic-btn {
       width: 100%;
-      padding: 12px;
-      border: 2px dashed #999;
-      background: transparent;
-      color: #666;
+      padding: 14px 12px;
+      border: 2px dashed #d97706;
+      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+      color: #92400e;
       cursor: pointer;
-      border-radius: 6px;
+      border-radius: 8px;
       font-family: 'Oswald', sans-serif;
       text-transform: uppercase;
       letter-spacing: 1px;
       transition: all 0.3s;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
+      font-weight: 600;
     }
     
-    .add-graphic-btn:hover { border-color: #8B0000; color: #8B0000; }
+    .add-graphic-btn:hover { border-color: #8B0000; background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); color: #8B0000; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(139,0,0,0.15); }
     
     .order-summary {
       background: #1a1a1a;
@@ -3285,7 +3303,7 @@ app.get('/build', (c) => {
         
         <!-- Optional: Add second back graphic -->
         <div class="additional-graphics" id="additionalGraphics" style="display: none;">
-          <h4 style="margin: 0 0 12px; font-size: 0.85rem; color: #666;">Optional: Add a second graphic to the back (+$15)</h4>
+          <h4 style="margin: 0 0 14px; font-size: 0.95rem; color: #92400e; font-weight: 700;"><i class="fas fa-star" style="color: #f59e0b; margin-right: 6px;"></i>Optional: Add a second graphic to the back <span style="background: #8B0000; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 4px;">+$15</span></h4>
           <div id="additionalList"></div>
           <button class="add-graphic-btn" id="addGraphicBtn">
             <i class="fas fa-plus"></i> Add Back Graphic (+$15)

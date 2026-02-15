@@ -308,19 +308,19 @@ export const hats = [
 // DECALS / STICKERS
 // image = local graphic for site display; backImage = Shopify CDN product photography
 export const decals = [
-  { id: 'd1', title: 'Decal - GNF', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-gnf.png?v=13', backImage: '/images/products/web/d1-back-gnf.png', type: 'decal' },
-  { id: 'd2', title: 'Decal - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-your-neck.png?v=13', backImage: '/images/products/web/d2-back-hfw.png', type: 'decal' },
-  { id: 'd3', title: 'Decal - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hcf.png?v=13', backImage: '/images/products/web/d3-back-thump.png', type: 'decal' },
-  { id: 'd4', title: 'Decal - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-fun-ride.png?v=13', backImage: '/images/products/web/d4-back-funride.png', type: 'decal' },
-  { id: 'd5', title: 'Decal - Put It On Em', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-put-it-on-em.png?v=15', backImage: '/images/products/web/d5-back-cockfighter.png', type: 'decal' },
-  { id: 'd6', title: 'Decal - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-thump.png?v=13', backImage: '/images/products/web/d6-back-hcf.png', type: 'decal' },
-  { id: 'd7', title: 'Decal - Yes You Can', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-yes-you-can.png?v=13', backImage: '/images/products/web/d10-back-yesyoucan.png', type: 'decal' },
-  { id: 'd8', title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-obama-tap.png?v=13', backImage: '/images/products/web/d9-back-myob.png', type: 'decal' },
+  { id: 'd1', title: 'Decal - GNF', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-gnf.png?v=13', backImage: '/images/products/web/d10-back-yesyoucan.png', type: 'decal' },
+  { id: 'd2', title: 'Decal - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-your-neck.png?v=13', backImage: '/images/products/web/d1-back-gnf.png', type: 'decal' },
+  { id: 'd3', title: 'Decal - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hcf.png?v=13', backImage: '/images/products/web/d2-back-hfw.png', type: 'decal' },
+  { id: 'd4', title: 'Decal - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-fun-ride.png?v=13', backImage: '/images/products/web/d3-back-thump.png', type: 'decal' },
+  { id: 'd5', title: 'Decal - Put It On Em', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-put-it-on-em.png?v=15', backImage: '/images/products/web/d4-back-funride.png', type: 'decal' },
+  { id: 'd6', title: 'Decal - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-thump.png?v=13', backImage: '/images/products/web/d5-back-cockfighter.png', type: 'decal' },
+  { id: 'd7', title: 'Decal - Yes You Can', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-yes-you-can.png?v=13', backImage: '/images/products/web/d6-back-hcf.png', type: 'decal' },
+  { id: 'd8', title: 'Decal - Obama Tap', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-obama-tap.png?v=13', backImage: '/images/products/web/d7-back-thumpin.png', type: 'decal' },
   { id: 'd9', title: 'Decal - CHM', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-cunt.png?v=13', backImage: '/images/products/web/d8-back-chm.png', type: 'decal' },
-  { id: 'd10', title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hfw.png?v=13', backImage: '/images/products/web/d1-back-gnf.png', type: 'decal' },
+  { id: 'd10', title: 'Decal - HFW', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hfw.png?v=13', backImage: '/images/products/web/d9-back-myob.png', type: 'decal' },
   { id: 'd11', title: 'Decal - GNF Red/Blue', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-gnf-redblue.png?v=15', type: 'decal' },
-  { id: 'd12', title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-thumpin-is-lovin.png?v=13', backImage: '/images/products/web/d7-back-thumpin.png', type: 'decal' },
-  { id: 'd13', title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-community.png?v=13', backImage: '/images/products/web/d11-back-community.png', type: 'decal' },
+  { id: 'd12', title: 'Decal - Thumpin Is Lovin', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-thumpin-is-lovin.png?v=13', backImage: '/images/products/web/d11-back-community.png', type: 'decal' },
+  { id: 'd13', title: 'Decal - Good for Community', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-community.png?v=13', backImage: '/images/products/web/d12-back-goodwood.png', type: 'decal' },
   { id: 'd14', title: 'Decals - Mind Yown Business', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-myob.png?v=15', type: 'decal' },
   { id: 'd15', title: 'Decal - HFW Logo', vendor: 'Hillbilly Fightwear', price: '$7.00', priceNum: 7, image: '/images/stickers/sticker-hfw-logo.png?v=1', type: 'decal' }
 ]
