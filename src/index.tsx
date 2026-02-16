@@ -450,11 +450,14 @@ app.get('/', (c) => {
       margin-right: 6px;
     }
     @media (max-width: 600px) {
-      .promo-section { padding: 28px 14px; }
-      .promo-section h2 { font-size: 1.2rem; letter-spacing: 2px; }
-      .promo-card { padding: 20px 16px; }
-      .promo-card h3 { font-size: 1rem; }
-      .promo-card .promo-highlight { font-size: 1.15rem; }
+      .promo-section { padding: 20px 10px; }
+      .promo-section h2 { font-size: 1rem; letter-spacing: 2px; margin-bottom: 16px; }
+      .promo-card { padding: 14px 12px; }
+      .promo-card h3 { font-size: 0.85rem; }
+      .promo-card .promo-highlight { font-size: 1rem; }
+      .promo-card p { font-size: 0.78rem; }
+      .promo-permanent { padding: 8px 14px; }
+      .promo-permanent p { font-size: 0.78rem; }
     }
     
     /* HERO CAROUSEL - Full screen background carousel */
@@ -692,7 +695,7 @@ app.get('/', (c) => {
     }
     
     @media (max-width: 480px) {
-      .product-grid { grid-template-columns: 1fr; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 20px 10px; }
     }
     
     .product-card {
@@ -798,6 +801,81 @@ app.get('/', (c) => {
       }
     }
     
+    /* Mobile compact product cards — 2-col friendly */
+    @media (max-width: 480px) {
+      .product-image-wrapper {
+        padding: 8px;
+        margin-bottom: 6px;
+        border-radius: 6px;
+      }
+      .product-image {
+        max-width: 100%;
+      }
+      .product-card {
+        padding: 4px;
+        border-radius: 6px;
+      }
+      .product-title {
+        font-size: 0.78rem;
+        margin: 4px 0 2px;
+        -webkit-line-clamp: 2;
+      }
+      .product-vendor {
+        font-size: 0.68rem;
+        margin-bottom: 2px;
+        display: none;
+      }
+      .product-price {
+        font-size: 0.82rem;
+      }
+      .price-includes-badge {
+        font-size: 0.6rem;
+        margin-top: 2px;
+      }
+      .flip-hint {
+        font-size: 0.6rem;
+        margin-top: -4px;
+        margin-bottom: 2px;
+      }
+      .category-section {
+        padding: 0 8px;
+        margin-bottom: 20px;
+      }
+      .category-section .product-grid {
+        padding: 8px 0;
+      }
+      .category-title {
+        font-size: 1rem;
+        margin: 8px 0 6px;
+        padding-bottom: 4px;
+      }
+      .category-promo-banner {
+        font-size: 0.7rem;
+        padding: 6px 8px;
+      }
+      .section-header {
+        padding: 8px 10px 6px;
+      }
+      .section-header h2 {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+      }
+      .build-cta {
+        padding: 30px 14px;
+      }
+      .build-cta h2 {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+      }
+      .build-cta p {
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+      }
+      #shop {
+        padding: 6px 0 20px !important;
+      }
+    }
+    
     /* Shop grid for all products */
     .shop-grid {
       grid-template-columns: repeat(4, 1fr);
@@ -813,7 +891,7 @@ app.get('/', (c) => {
     }
     
     @media (max-width: 480px) {
-      .shop-grid { grid-template-columns: 1fr; }
+      .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     }
     
     .external-link {
@@ -1288,41 +1366,53 @@ app.get('/', (c) => {
       .scrapbook-cta a { padding: 7px 18px; font-size: 0.75rem; }
       .scrapbook-cta { flex-direction: column; align-items: center; gap: 6px; }
 
-      /* Top row — across the top, well above logo */
-      .sticker-collage .sticker-1  { top: 1%;  left: 1%;   width: 104px !important; }
-      .sticker-collage .sticker-4  { top: 1%;  left: 22%;  width: 85px !important; }
-      .sticker-collage .sticker-7  { top: 1%;  right: 1%;  left: auto; width: 98px !important; }
-      /* Left side — hugging left edge */
-      .sticker-collage .sticker-6  { top: 22%; left: 1%;   right: auto; width: 78px !important; }
-      .sticker-collage .sticker-3  { top: 30%; left: 1%;   right: auto; width: 59px !important; }
-      .sticker-collage .sticker-11 { top: 57%; left: 28%;  right: auto; width: 68px !important; }
-      /* Right side — hugging right edge */
-      .sticker-collage .sticker-5  { top: 14%; right: 1%;  left: auto; width: 55px !important; }
-      .sticker-collage .sticker-8  { top: 61%; right: 1%;  left: auto; width: 59px !important; }
-      .sticker-collage .sticker-9  { top: 58%; right: 1%;  left: auto; width: 55px !important; }
-      /* Bottom row — across the bottom, below buttons */
-      .sticker-collage .sticker-10 { bottom: 3%; left: 1%;   width: 118px !important; }
-      .sticker-collage .sticker-12 { bottom: 35%; right: 15%;  left: auto; width: 72px !important; }
-      .sticker-collage .sticker-13 { bottom: 3%; right: 11%; left: auto; width: 118px !important; }
-      .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  left: auto; width: 85px !important; }
+      /* ===== MOBILE STICKER FRAME =====
+         Organized as a non-overlapping border frame around the logo.
+         Top row: 4 stickers | Left col: 3 | Right col: 3 | Bottom row: 4
+         Each sticker placed in its own "slot" with no overlap. */
+      
+      /* --- TOP ROW: 4 stickers evenly across --- */
+      .sticker-collage .sticker-1  { top: 1%;  left: 1%;   right: auto; bottom: auto; width: 80px !important; transform: rotate(-4deg); }
+      .sticker-collage .sticker-4  { top: 1%;  left: 25%;  right: auto; bottom: auto; width: 72px !important; transform: rotate(3deg); }
+      .sticker-collage .sticker-7  { top: 1%;  right: 24%; left: auto;  bottom: auto; width: 72px !important; transform: rotate(-3deg); }
+      .sticker-collage .sticker-5  { top: 1%;  right: 1%;  left: auto;  bottom: auto; width: 72px !important; transform: rotate(5deg); }
+      
+      /* --- LEFT COLUMN: 3 stickers stacked --- */
+      .sticker-collage .sticker-6  { top: 18%; left: 1%;   right: auto; bottom: auto; width: 68px !important; transform: rotate(4deg); }
+      .sticker-collage .sticker-3  { top: 35%; left: 1%;   right: auto; bottom: auto; width: 56px !important; transform: rotate(-6deg); }
+      .sticker-collage .sticker-11 { top: 50%; left: 1%;   right: auto; bottom: auto; width: 64px !important; transform: rotate(2deg); }
+      
+      /* --- RIGHT COLUMN: 3 stickers stacked --- */
+      .sticker-collage .sticker-12 { top: 18%; right: 1%;  left: auto;  bottom: auto; width: 64px !important; transform: rotate(-4deg); }
+      .sticker-collage .sticker-8  { top: 35%; right: 1%;  left: auto;  bottom: auto; width: 56px !important; transform: rotate(5deg); }
+      .sticker-collage .sticker-9  { top: 50%; right: 1%;  left: auto;  bottom: auto; width: 56px !important; transform: rotate(-3deg); }
+      
+      /* --- BOTTOM ROW: 4 stickers evenly across --- */
+      .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   right: auto; top: auto; width: 90px !important; transform: rotate(-2deg); }
+      .sticker-collage .sticker-13 { bottom: 1%; left: 28%;  right: auto; top: auto; width: 90px !important; transform: rotate(3deg); }
+      .sticker-collage .sticker-14 { bottom: 1%; right: 24%; left: auto;  top: auto; width: 72px !important; transform: rotate(-4deg); }
     }
 
-    /* Small phones — even smaller stickers, same edge-hugging positions */
+    /* Small phones — scaled-down frame, same non-overlapping positions */
     @media (max-width: 400px) {
       .scrapbook-center img { max-width: 210px; }
-      .sticker-collage .sticker-1  { width: 85px !important; }
-      .sticker-collage .sticker-4  { width: 68px !important; }
-      .sticker-collage .sticker-7  { width: 78px !important; }
-      .sticker-collage .sticker-5  { width: 44px !important; }
-      .sticker-collage .sticker-8  { width: 47px !important; }
-      .sticker-collage .sticker-6  { width: 62px !important; }
-      .sticker-collage .sticker-3  { width: 47px !important; }
-      .sticker-collage .sticker-11 { width: 54px !important; }
-      .sticker-collage .sticker-10 { width: 94px !important; }
-      .sticker-collage .sticker-12 { width: 57px !important; }
-      .sticker-collage .sticker-14 { width: 65px !important; }
-      .sticker-collage .sticker-13 { width: 94px !important; }
-      .sticker-collage .sticker-9  { width: 44px !important; }
+      /* Top row */
+      .sticker-collage .sticker-1  { width: 65px !important; }
+      .sticker-collage .sticker-4  { width: 58px !important; }
+      .sticker-collage .sticker-7  { width: 58px !important; }
+      .sticker-collage .sticker-5  { width: 58px !important; }
+      /* Left column */
+      .sticker-collage .sticker-6  { width: 55px !important; }
+      .sticker-collage .sticker-3  { width: 45px !important; }
+      .sticker-collage .sticker-11 { width: 52px !important; }
+      /* Right column */
+      .sticker-collage .sticker-12 { width: 52px !important; }
+      .sticker-collage .sticker-8  { width: 45px !important; }
+      .sticker-collage .sticker-9  { width: 45px !important; }
+      /* Bottom row */
+      .sticker-collage .sticker-10 { width: 72px !important; }
+      .sticker-collage .sticker-13 { width: 72px !important; }
+      .sticker-collage .sticker-14 { width: 58px !important; }
     }
   </style>
 </head>
