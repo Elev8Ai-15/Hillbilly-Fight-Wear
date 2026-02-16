@@ -328,6 +328,10 @@ app.get('/', (c) => {
       0%, 100% { box-shadow: 0 0 0 0 rgba(139,0,0,0.4); }
       50% { box-shadow: 0 0 8px 2px rgba(139,0,0,0.6); }
     }
+    @keyframes promoNudgePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.008); }
+    }
     .nav-cart {
       position: relative;
       background: none;
@@ -1639,6 +1643,7 @@ app.get('/', (c) => {
       <button data-action="toggleCart" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;" aria-label="Close cart">&times;</button>
     </div>
     <div id="cartItems" style="flex:1; overflow-y:auto; padding:15px;"></div>
+    <div id="cartPromoNudges" style="padding:0 15px;"></div>
     <div id="cartFooter" style="border-top:2px solid #eee; padding:20px; display:none;">
       <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:1.1rem; font-weight:600;">
         <span>Total:</span>
@@ -2215,6 +2220,8 @@ app.get('/', (c) => {
       if (cart.length === 0) {
         container.innerHTML = '<div style="text-align:center; padding:60px 20px; color:#999;"><i class="fas fa-shopping-cart" style="font-size:3rem; margin-bottom:15px; display:block;"></i><p style="font-size:1.1rem; margin:0;">Your cart is empty</p><p style="font-size:0.85rem; margin-top:8px;">Browse products and add items to get started.</p></div>';
         footer.style.display = 'none';
+        var nudgeEl = document.getElementById('cartPromoNudges');
+        if (nudgeEl) nudgeEl.innerHTML = '';
         return;
       }
       // HTML-escape helper for user-facing text in innerHTML
@@ -2247,8 +2254,148 @@ app.get('/', (c) => {
       footer.style.display = 'block';
       document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
       
+      // Show promotion nudge notifications
+      renderPromoNudges();
+      
       // Fetch server-side pricing with promotions
       updateCartPricing();
+    }
+    
+    // ========================================
+    // PROMOTION NUDGE NOTIFICATIONS
+    // Analyze cart and nudge users toward active promotions they're close to qualifying for
+    // ========================================
+    function renderPromoNudges() {
+      var nudgeContainer = document.getElementById('cartPromoNudges');
+      if (!nudgeContainer) return;
+      
+      if (cart.length === 0) {
+        nudgeContainer.innerHTML = '';
+        return;
+      }
+      
+      var nudges = [];
+      
+      // --- T-Shirt / Tank: Buy 2, Get 1 FREE ---
+      var shirtCount = 0;
+      cart.forEach(function(item) {
+        var gt = item.garmentType || '';
+        if (gt === 'tshirt' || gt === 'tank-womens' || gt === 'tank-mens') {
+          shirtCount += item.qty;
+        }
+      });
+      // Show nudge when they have 1 or 2 shirts (need 3 for the deal)
+      // or when they have 4 or 5 shirts (need 6 for two free items)
+      var shirtRemainder = shirtCount % 3;
+      if (shirtCount > 0 && shirtRemainder > 0) {
+        var needed = 3 - shirtRemainder;
+        if (needed === 1) {
+          nudges.push({
+            icon: 'fa-fire',
+            color: '#d32f2f',
+            bg: 'rgba(211,47,47,0.07)',
+            border: 'rgba(211,47,47,0.25)',
+            text: '<strong>SO CLOSE!</strong> Add <strong>1 more T-Shirt or Tank</strong> and get it <strong>FREE!</strong>',
+            sub: 'Buy 2, Get 1 FREE — your cheapest shirt is on us'
+          });
+        } else if (needed === 2 && shirtCount >= 1) {
+          nudges.push({
+            icon: 'fa-tags',
+            color: '#8B0000',
+            bg: 'rgba(139,0,0,0.05)',
+            border: 'rgba(139,0,0,0.2)',
+            text: 'Add <strong>' + needed + ' more T-Shirts or Tanks</strong> to unlock <strong>Buy 2, Get 1 FREE!</strong>',
+            sub: 'Your cheapest shirt becomes free with 3 or more'
+          });
+        }
+      }
+      // Celebrate when they already qualified
+      if (shirtCount >= 3 && shirtRemainder === 0) {
+        nudges.push({
+          icon: 'fa-check-circle',
+          color: '#2e7d32',
+          bg: 'rgba(76,175,80,0.08)',
+          border: 'rgba(76,175,80,0.3)',
+          text: '<strong>Deal Unlocked!</strong> Your cheapest T-Shirt/Tank is <strong>FREE!</strong>',
+          sub: 'Buy 2, Get 1 FREE is applied at checkout'
+        });
+      }
+      
+      // --- Sticker / Decal: 5 for $29 Bundle ---
+      var stickerCount = 0;
+      cart.forEach(function(item) {
+        if (item.type === 'decal' || (item.productId && item.productId.charAt(0) === 'd')) {
+          stickerCount += item.qty;
+        }
+      });
+      var stickerRemainder = stickerCount % 5;
+      if (stickerCount > 0 && stickerCount < 5) {
+        var stickerNeeded = 5 - stickerCount;
+        if (stickerNeeded <= 2) {
+          nudges.push({
+            icon: 'fa-fire',
+            color: '#d32f2f',
+            bg: 'rgba(211,47,47,0.07)',
+            border: 'rgba(211,47,47,0.25)',
+            text: '<strong>ALMOST THERE!</strong> Add <strong>' + stickerNeeded + ' more sticker' + (stickerNeeded > 1 ? 's' : '') + '</strong> to get <strong>5 for $29</strong> (save $6!)',
+            sub: 'Bundle deal: 5 stickers for just $29 instead of $35'
+          });
+        } else {
+          nudges.push({
+            icon: 'fa-layer-group',
+            color: '#1565c0',
+            bg: 'rgba(21,101,192,0.06)',
+            border: 'rgba(21,101,192,0.2)',
+            text: 'Add <strong>' + stickerNeeded + ' more sticker' + (stickerNeeded > 1 ? 's' : '') + '</strong> to unlock the <strong>5 for $29 bundle</strong> (save $6!)',
+            sub: 'Regular price: $7 each ($35 for 5) — bundle price: $29'
+          });
+        }
+      }
+      // Already hit 5+ but has leftover (e.g., 6-9 stickers, nudge toward next bundle of 5)
+      if (stickerCount >= 5 && stickerRemainder > 0) {
+        var nextBundleNeeded = 5 - stickerRemainder;
+        if (nextBundleNeeded <= 3) {
+          nudges.push({
+            icon: 'fa-tags',
+            color: '#8B0000',
+            bg: 'rgba(139,0,0,0.05)',
+            border: 'rgba(139,0,0,0.2)',
+            text: 'Add <strong>' + nextBundleNeeded + ' more sticker' + (nextBundleNeeded > 1 ? 's' : '') + '</strong> to complete another <strong>5 for $29 bundle!</strong>',
+            sub: 'Save $6 on every bundle of 5 stickers'
+          });
+        }
+      }
+      // Celebrate when they hit exact multiples
+      if (stickerCount >= 5 && stickerRemainder === 0) {
+        nudges.push({
+          icon: 'fa-check-circle',
+          color: '#2e7d32',
+          bg: 'rgba(76,175,80,0.08)',
+          border: 'rgba(76,175,80,0.3)',
+          text: '<strong>Bundle Deal Active!</strong> ' + Math.floor(stickerCount / 5) + ' sticker bundle' + (Math.floor(stickerCount / 5) > 1 ? 's' : '') + ' at <strong>$29 each!</strong>',
+          sub: 'Saving $' + (Math.floor(stickerCount / 5) * 6) + ' with bundle pricing'
+        });
+      }
+      
+      // Render nudge banners
+      if (nudges.length === 0) {
+        nudgeContainer.innerHTML = '';
+        return;
+      }
+      
+      var nudgeHtml = '';
+      nudges.forEach(function(n) {
+        nudgeHtml += '<div style="background:' + n.bg + '; border:1px solid ' + n.border + '; border-radius:8px; padding:10px 14px; margin-bottom:8px; animation:promoNudgePulse 2s ease-in-out infinite;">' +
+          '<div style="display:flex; align-items:flex-start; gap:10px;">' +
+            '<i class="fas ' + n.icon + '" style="color:' + n.color + '; font-size:1.1rem; margin-top:2px; flex-shrink:0;"></i>' +
+            '<div>' +
+              '<div style="font-size:0.85rem; color:#333; line-height:1.35;">' + n.text + '</div>' +
+              '<div style="font-size:0.73rem; color:#777; margin-top:3px;">' + n.sub + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      });
+      nudgeContainer.innerHTML = nudgeHtml;
     }
     
     // Fetch server-side pricing breakdown (includes promotions)
