@@ -1358,61 +1358,96 @@ app.get('/', (c) => {
       .sticker-collage .sticker-9  { width: 98px; }
     }
 
-    /* Mobile — push stickers to edges so center logo/buttons stay clear */
+    /* =============================================
+       MOBILE LAYOUT — Clean grid, NO absolute positioning
+       Stickers arranged in 2-col grids above & below logo.
+       Desktop collage is completely untouched.
+       ============================================= */
     @media (max-width: 768px) {
-      .scrapbook-hero { min-height: 100vh; }
-      .scrapbook-center { max-width: 280px; padding: 15px 10px; }
-      .scrapbook-center img { max-width: 255px; }
-      .scrapbook-cta a { padding: 7px 18px; font-size: 0.75rem; }
-      .scrapbook-cta { flex-direction: column; align-items: center; gap: 6px; }
+      /* Hero becomes a vertical column layout */
+      .scrapbook-hero {
+        min-height: auto !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px 10px 20px;
+        overflow: visible;
+      }
 
-      /* ===== MOBILE STICKER FRAME =====
-         Organized as a non-overlapping border frame around the logo.
-         Top row: 4 stickers | Left col: 3 | Right col: 3 | Bottom row: 4
-         Each sticker placed in its own "slot" with no overlap. */
-      
-      /* --- TOP ROW: 4 stickers evenly across --- */
-      .sticker-collage .sticker-1  { top: 1%;  left: 1%;   right: auto; bottom: auto; width: 80px !important; transform: rotate(-4deg); }
-      .sticker-collage .sticker-4  { top: 1%;  left: 25%;  right: auto; bottom: auto; width: 72px !important; transform: rotate(3deg); }
-      .sticker-collage .sticker-7  { top: 1%;  right: 24%; left: auto;  bottom: auto; width: 72px !important; transform: rotate(-3deg); }
-      .sticker-collage .sticker-5  { top: 1%;  right: 1%;  left: auto;  bottom: auto; width: 72px !important; transform: rotate(5deg); }
-      
-      /* --- LEFT COLUMN: 3 stickers stacked --- */
-      .sticker-collage .sticker-6  { top: 18%; left: 1%;   right: auto; bottom: auto; width: 68px !important; transform: rotate(4deg); }
-      .sticker-collage .sticker-3  { top: 35%; left: 1%;   right: auto; bottom: auto; width: 56px !important; transform: rotate(-6deg); }
-      .sticker-collage .sticker-11 { top: 50%; left: 1%;   right: auto; bottom: auto; width: 64px !important; transform: rotate(2deg); }
-      
-      /* --- RIGHT COLUMN: 3 stickers stacked --- */
-      .sticker-collage .sticker-12 { top: 18%; right: 1%;  left: auto;  bottom: auto; width: 64px !important; transform: rotate(-4deg); }
-      .sticker-collage .sticker-8  { top: 35%; right: 1%;  left: auto;  bottom: auto; width: 56px !important; transform: rotate(5deg); }
-      .sticker-collage .sticker-9  { top: 50%; right: 1%;  left: auto;  bottom: auto; width: 56px !important; transform: rotate(-3deg); }
-      
-      /* --- BOTTOM ROW: 4 stickers evenly across --- */
-      .sticker-collage .sticker-10 { bottom: 1%; left: 1%;   right: auto; top: auto; width: 90px !important; transform: rotate(-2deg); }
-      .sticker-collage .sticker-13 { bottom: 1%; left: 28%;  right: auto; top: auto; width: 90px !important; transform: rotate(3deg); }
-      .sticker-collage .sticker-14 { bottom: 1%; right: 24%; left: auto;  top: auto; width: 72px !important; transform: rotate(-4deg); }
+      /* Both sticker groups: switch from absolute to grid */
+      .sticker-collage {
+        position: static !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        width: 100%;
+        max-width: 340px;
+        padding: 0 4px;
+        pointer-events: auto;
+        z-index: auto;
+      }
+
+      /* All stickers: undo absolute positioning, fill grid cells */
+      .sticker-collage .sticker {
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        border-radius: 8px;
+        object-fit: contain;
+        filter: drop-shadow(1px 2px 4px rgba(0,0,0,0.2));
+        background: rgba(255,255,255,0.6);
+        padding: 4px;
+      }
+
+      .sticker-collage .sticker:hover {
+        transform: scale(1.05) !important;
+      }
+
+      /* Top sticker group — slight bottom margin before logo */
+      .sticker-collage-top {
+        order: 1;
+        margin-bottom: 12px;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      /* Logo center area */
+      .scrapbook-center {
+        order: 2;
+        max-width: 300px;
+        padding: 10px 10px 6px;
+        z-index: auto;
+      }
+      .scrapbook-center img {
+        max-width: 260px;
+        filter: drop-shadow(0 4px 15px rgba(0,0,0,0.2))
+                drop-shadow(0 0 20px rgba(139,0,0,0.15));
+      }
+      .scrapbook-cta { flex-direction: row; align-items: center; gap: 10px; }
+      .scrapbook-cta a { padding: 10px 20px; font-size: 0.8rem; }
+
+      /* Bottom sticker group — slight top margin after logo */
+      .sticker-collage-bottom {
+        order: 3;
+        margin-top: 12px;
+      }
     }
 
-    /* Small phones — scaled-down frame, same non-overlapping positions */
+    /* Small phones — tighten grid */
     @media (max-width: 400px) {
-      .scrapbook-center img { max-width: 210px; }
-      /* Top row */
-      .sticker-collage .sticker-1  { width: 65px !important; }
-      .sticker-collage .sticker-4  { width: 58px !important; }
-      .sticker-collage .sticker-7  { width: 58px !important; }
-      .sticker-collage .sticker-5  { width: 58px !important; }
-      /* Left column */
-      .sticker-collage .sticker-6  { width: 55px !important; }
-      .sticker-collage .sticker-3  { width: 45px !important; }
-      .sticker-collage .sticker-11 { width: 52px !important; }
-      /* Right column */
-      .sticker-collage .sticker-12 { width: 52px !important; }
-      .sticker-collage .sticker-8  { width: 45px !important; }
-      .sticker-collage .sticker-9  { width: 45px !important; }
-      /* Bottom row */
-      .sticker-collage .sticker-10 { width: 72px !important; }
-      .sticker-collage .sticker-13 { width: 72px !important; }
-      .sticker-collage .sticker-14 { width: 58px !important; }
+      .sticker-collage {
+        max-width: 300px;
+        gap: 6px;
+      }
+      .sticker-collage-top {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .scrapbook-center img { max-width: 220px; }
+      .scrapbook-cta a { padding: 8px 16px; font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -1443,24 +1478,14 @@ app.get('/', (c) => {
   <!-- SCRAPBOOK STICKER COLLAGE HERO -->
   <section class="scrapbook-hero" aria-label="Hillbilly Fightwear Sticker Collage">
 
-    <!-- Sticker Collage Layer (z-index 1) — above background, below logo -->
-    <div class="sticker-collage" aria-hidden="true">
-      <!-- TOP ROW -->
+    <!-- Top stickers (desktop: absolute collage, mobile: 2-col grid above logo) -->
+    <div class="sticker-collage sticker-collage-top" aria-hidden="true">
       <img class="sticker sticker-1"  src="/images/stickers/sticker-hcf.png?v=13"           alt="" loading="eager" draggable="false">
       <img class="sticker sticker-3"  src="/images/stickers/sticker-obama-tap.png?v=13"      alt="" loading="eager" draggable="false">
       <img class="sticker sticker-4"  src="/images/stickers/sticker-thump.png?v=13"          alt="" loading="eager" draggable="false">
       <img class="sticker sticker-5"  src="/images/stickers/sticker-fun-ride.png?v=13"       alt="" loading="eager" draggable="false">
-      <!-- MIDDLE ROW (flanking logo) -->
       <img class="sticker sticker-6"  src="/images/stickers/sticker-put-it-on-em.png?v=15"   alt="" loading="eager" draggable="false">
       <img class="sticker sticker-7"  src="/images/stickers/sticker-your-neck.png?v=13"      alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-8"  src="/images/stickers/sticker-hfw.png?v=13"            alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-9"  src="/images/stickers/sticker-thumpin-is-lovin.png?v=13" alt="" loading="eager" draggable="false">
-      <!-- BOTTOM ROW -->
-      <img class="sticker sticker-10" src="/images/stickers/sticker-community.png?v=13"      alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-11" src="/images/stickers/sticker-yes-you-can.png?v=13"    alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-12" src="/images/stickers/sticker-gnf.png?v=13"            alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-13" src="/images/stickers/sticker-myob.png?v=15"           alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-14" src="/images/stickers/sticker-cunt.png?v=13"           alt="" loading="eager" draggable="false">
     </div>
 
     <!-- Centered Logo + CTA (z-index 3) -->
@@ -1471,6 +1496,17 @@ app.get('/', (c) => {
         <a href="#shop" class="btn-primary"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop Now</a>
         <a href="/build" class="btn-secondary"><i class="fas fa-paint-brush" aria-hidden="true"></i> Build Y'Own</a>
       </div>
+    </div>
+
+    <!-- Bottom stickers (desktop: absolute collage, mobile: 2-col grid below logo) -->
+    <div class="sticker-collage sticker-collage-bottom" aria-hidden="true">
+      <img class="sticker sticker-8"  src="/images/stickers/sticker-hfw.png?v=13"            alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-9"  src="/images/stickers/sticker-thumpin-is-lovin.png?v=13" alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-10" src="/images/stickers/sticker-community.png?v=13"      alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-11" src="/images/stickers/sticker-yes-you-can.png?v=13"    alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-12" src="/images/stickers/sticker-gnf.png?v=13"            alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-13" src="/images/stickers/sticker-myob.png?v=15"           alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-14" src="/images/stickers/sticker-cunt.png?v=13"           alt="" loading="eager" draggable="false">
     </div>
 
   </section>
