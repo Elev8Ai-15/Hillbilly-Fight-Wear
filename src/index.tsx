@@ -2837,6 +2837,10 @@ app.get('/build', (c) => {
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+    }
+    .canvas-wrapper.dark-bg {
+      background: #3a3a3a;
     }
     
     #previewCanvas {
@@ -4185,10 +4189,23 @@ app.get('/build', (c) => {
       // Increment update ID to cancel any in-flight async image loads
       var currentUpdateId = ++previewUpdateId;
       
-      // Clear canvas and set white background
+      // Clear canvas and set background based on garment color
+      // Use dark background for white garments so they're visible
+      var isWhiteGarment = state.color === 'white';
+      var canvasBg = isWhiteGarment ? '#3a3a3a' : '#ffffff';
       canvas.clear();
-      canvas.backgroundColor = '#ffffff';
+      canvas.backgroundColor = canvasBg;
       canvas.renderAll();
+      
+      // Also update the wrapper background for seamless appearance
+      var wrapper = document.querySelector('.canvas-wrapper');
+      if (wrapper) {
+        if (isWhiteGarment) {
+          wrapper.classList.add('dark-bg');
+        } else {
+          wrapper.classList.remove('dark-bg');
+        }
+      }
       
       if (!state.garment || !state.color) return;
       

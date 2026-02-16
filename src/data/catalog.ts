@@ -45,10 +45,9 @@ export const garments = [
     sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: { front: '/images/garments/sweatshirt-white-front.png', back: '/images/garments/sweatshirt-white-back.png' },
-      black: { front: '/images/garments/sweatshirt-black-front.png', back: '/images/garments/sweatshirt-black-back.png' },
-      grey: { front: '/images/garments/sweatshirt-grey-front.png', back: '/images/garments/sweatshirt-grey-back.png' }
-      // Note: Using sweatshirt garment images for thermals until thermal-specific images are added
+      white: { front: '/images/garments/thermal-white-front.png', back: '/images/garments/thermal-white-back.png' },
+      black: { front: '/images/garments/thermal-black-front.png', back: '/images/garments/thermal-black-back.png' },
+      grey: { front: '/images/garments/thermal-grey-front.png', back: '/images/garments/thermal-grey-back.png' }
     }
   },
   {
