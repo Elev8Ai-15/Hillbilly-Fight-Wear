@@ -3238,6 +3238,12 @@ app.get('/build', (c) => {
       border-radius: 10px;
       border: 1px solid #eee;
     }
+    .portfolio-showcase .portfolio-count {
+      font-size: 0.7rem;
+      color: #999;
+      font-weight: 400;
+      margin-left: 6px;
+    }
     .portfolio-showcase h4 {
       font-size: 0.85rem;
       color: #333;
@@ -3248,23 +3254,40 @@ app.get('/build', (c) => {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 4px;
     }
+    .portfolio-grid::-webkit-scrollbar { width: 4px; }
+    .portfolio-grid::-webkit-scrollbar-track { background: #f0f0f0; border-radius: 2px; }
+    .portfolio-grid::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
     @media (max-width: 480px) {
       .portfolio-grid {
         grid-template-columns: repeat(2, 1fr);
+        max-height: 360px;
       }
     }
     .portfolio-item {
       border-radius: 6px;
       overflow: hidden;
       aspect-ratio: 1;
-      background: #eee;
+      background: #222;
       position: relative;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .portfolio-item:hover {
+      transform: scale(1.03);
+      z-index: 2;
     }
     .portfolio-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: opacity 0.2s ease;
+    }
+    .portfolio-item:hover img {
+      opacity: 0.9;
     }
     .portfolio-item .portfolio-label {
       position: absolute;
@@ -3708,7 +3731,7 @@ app.get('/build', (c) => {
           
           <!-- Portfolio showcase -->
           <div class="portfolio-showcase">
-            <h4><i class="fas fa-trophy"></i> Custom Fightwear Portfolio</h4>
+            <h4><i class="fas fa-trophy"></i> Custom Fightwear Portfolio <span class="portfolio-count" id="portfolioCount"></span></h4>
             <p style="font-size: 0.75rem; color: #777; margin: 0 0 10px;">Examples of custom work for fighters and teams:</p>
             <div class="portfolio-grid" id="portfolioGrid">
               <!-- Populated by JS with existing product images as examples -->
@@ -4388,21 +4411,30 @@ app.get('/build', (c) => {
       return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
     }
     
-    // Render portfolio with custom fightwear examples
+    // Render portfolio with real custom fightwear photos
     function renderPortfolio() {
       var grid = document.getElementById('portfolioGrid');
       if (!grid) return;
       
-      // Custom fightwear portfolio examples - diverse product showcase
+      // Real custom fightwear portfolio - actual client work
       var examples = [
-        { img: '/images/products/web/m4-yycf-front.png', label: 'YYCF Team Tee' },
-        { img: '/images/products/web/m1-myob-hoodie-front.png', label: 'Custom Hoodie' },
-        { img: '/images/products/web/w3-thump-tank.png', label: "Women's Tank" },
-        { img: '/images/products/chm-front-web.png', label: 'Sponsor Tee' },
-        { img: '/images/products/web/m9-wimb-front.png', label: 'Fighter Tee' },
-        { img: '/images/products/web/m2-thump-hoodie-front.png', label: 'Team Hoodie' },
-        { img: '/images/products/web/m6-gnf-front.png', label: 'GNF Custom' },
-        { img: '/images/products/web/m13-goodwood-front.png', label: 'Event Tee' }
+        { img: '/images/portfolio/custom-fight-shorts.jpg', label: 'Sponsor Vale Tudo' },
+        { img: '/images/portfolio/red-mma-shorts-thrall.jpg', label: 'MMA Fight Shorts' },
+        { img: '/images/portfolio/sponsor-tee-thump.jpg', label: 'Sponsor Tee' },
+        { img: '/images/portfolio/vale-tudo-sponsor-shorts.jpg', label: 'Custom Vale Tudo' },
+        { img: '/images/portfolio/mma-shorts-antle-gnf.jpg', label: 'GNF Fight Shorts' },
+        { img: '/images/portfolio/vale-tudo-glory-sponsors.jpg', label: 'Multi-Sponsor Shorts' },
+        { img: '/images/portfolio/body-shop-tees-mockup.jpg', label: 'Sponsor Tee Design' },
+        { img: '/images/portfolio/mma-shorts-maupins.jpg', label: 'Custom MMA Shorts' },
+        { img: '/images/portfolio/vale-tudo-best-take-media.jpg', label: 'Sponsor Vale Tudo' },
+        { img: '/images/portfolio/vale-tudo-direct-vapor.jpg', label: 'Fight Shorts' },
+        { img: '/images/portfolio/boxing-shorts-reyes.jpg', label: 'Boxing Trunks' },
+        { img: '/images/portfolio/sponsor-tee-dirty-antle.jpg', label: 'Fighter Walkout Tee' },
+        { img: '/images/portfolio/thump-stranger-tees-colors.jpg', label: 'Event Tees' },
+        { img: '/images/portfolio/womens-shorts-gnf.jpg', label: "Women's Fight Shorts" },
+        { img: '/images/portfolio/cockfighter-mma-shorts.jpg', label: 'Cockfighter Shorts' },
+        { img: '/images/portfolio/vale-tudo-b2b-impact.jpg', label: 'Sponsor Fight Shorts' },
+        { img: '/images/portfolio/sponsor-tee-cling-guns.jpg', label: 'Sponsor Back Tee' }
       ];
       
       grid.innerHTML = examples.map(function(ex) {
@@ -4418,6 +4450,10 @@ app.get('/build', (c) => {
           img.closest('.portfolio-item').style.display = 'none';
         });
       });
+      
+      // Update count
+      var countEl = document.getElementById('portfolioCount');
+      if (countEl) countEl.textContent = '(' + examples.length + ' examples)';
     }
 
     function renderPlacements() {
