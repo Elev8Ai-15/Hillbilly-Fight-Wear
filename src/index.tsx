@@ -3078,6 +3078,201 @@ app.get('/build', (c) => {
     
     .graphic-option .name { font-size: 0.6rem; color: #666; line-height: 1.2; }
     
+    /* Custom Sponsor Build - Tab system and Upload area */
+    .logo-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+    .logo-tab {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      background: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.3s;
+      text-align: center;
+    }
+    .logo-tab:hover { color: #555; }
+    .logo-tab.active {
+      color: #8B0000;
+      border-bottom-color: #8B0000;
+    }
+    .logo-tab i { margin-right: 5px; }
+    
+    .upload-zone {
+      border: 2px dashed #ccc;
+      border-radius: 12px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #fafafa;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: #8B0000;
+      background: #fff5f5;
+    }
+    .upload-zone .upload-icon {
+      font-size: 2.5rem;
+      color: #bbb;
+      margin-bottom: 10px;
+    }
+    .upload-zone:hover .upload-icon { color: #8B0000; }
+    .upload-zone .upload-text {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 6px;
+    }
+    .upload-zone .upload-formats {
+      font-size: 0.72rem;
+      color: #999;
+    }
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .upload-preview {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      background: #f8f8f8;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+    }
+    .upload-preview.has-image { display: block; }
+    .upload-preview-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .upload-preview img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      border-radius: 6px;
+      background: #fff;
+      border: 1px solid #ddd;
+    }
+    .upload-preview .file-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .upload-preview .file-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .upload-preview .file-size {
+      font-size: 0.7rem;
+      color: #999;
+      margin-top: 2px;
+    }
+    .upload-preview .file-status {
+      font-size: 0.7rem;
+      color: #28a745;
+      margin-top: 4px;
+    }
+    .upload-preview .file-status.error { color: #dc3545; }
+    .upload-preview .upload-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .upload-preview .btn-use-graphic {
+      background: #8B0000;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .upload-preview .btn-use-graphic:hover { background: #6B0000; }
+    .upload-preview .btn-remove-upload {
+      background: none;
+      border: 1px solid #ddd;
+      color: #999;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .upload-preview .btn-remove-upload:hover { color: #dc3545; border-color: #dc3545; }
+    
+    .upload-guidelines {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      color: #92400e;
+      line-height: 1.5;
+    }
+    .upload-guidelines strong { color: #78350f; }
+    .upload-guidelines ul {
+      margin: 6px 0 0;
+      padding-left: 16px;
+    }
+    
+    /* Portfolio showcase */
+    .portfolio-showcase {
+      margin-top: 16px;
+      padding: 14px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border: 1px solid #eee;
+    }
+    .portfolio-showcase h4 {
+      font-size: 0.85rem;
+      color: #333;
+      margin: 0 0 10px;
+    }
+    .portfolio-showcase h4 i { color: #8B0000; margin-right: 6px; }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .portfolio-item {
+      border-radius: 6px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: #eee;
+      position: relative;
+    }
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .portfolio-item .portfolio-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      font-size: 0.6rem;
+      padding: 3px 6px;
+      text-align: center;
+    }
+    
     .placement-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -3443,7 +3638,83 @@ app.get('/build', (c) => {
       <!-- Step 4: Choose Front Logo (included in base price) -->
       <div class="option-group" id="step4">
         <h3><span class="step-num">4</span> Choose Front Logo <span style="font-size: 0.75rem; color: #666; font-weight: 400;">(included in price)</span></h3>
-        <div class="graphics-grid" id="graphicsGrid"></div>
+        
+        <!-- Tab switcher: HFW Graphics vs Custom Upload -->
+        <div class="logo-tabs">
+          <button class="logo-tab active" data-tab="hfw-graphics" id="tabHfwGraphics">
+            <i class="fas fa-palette"></i> HFW Graphics
+          </button>
+          <button class="logo-tab" data-tab="custom-upload" id="tabCustomUpload">
+            <i class="fas fa-upload"></i> Custom Sponsor Build
+          </button>
+        </div>
+        
+        <!-- Tab content: HFW Graphics (default) -->
+        <div id="tabContentHfw" style="display: block;">
+          <div class="graphics-grid" id="graphicsGrid"></div>
+        </div>
+        
+        <!-- Tab content: Custom Sponsor Build -->
+        <div id="tabContentCustom" style="display: none;">
+          <div style="margin-bottom: 12px; padding: 10px 14px; background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border: 1px solid #fca5a5; border-radius: 8px;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: #8B0000; margin-bottom: 3px;">
+              <i class="fas fa-fist-raised" style="margin-right: 5px;"></i> Custom Fightwear Builder
+            </div>
+            <div style="font-size: 0.75rem; color: #666; line-height: 1.4;">
+              Upload your fighter logo, team crest, or sponsor artwork. We print exactly what you send — high-quality DTG on premium garments.
+            </div>
+          </div>
+          
+          <!-- Upload drop zone -->
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" id="uploadInput" accept=".png,.jpg,.jpeg,.pdf,.svg,.tiff,.tif,.eps,.ai,.webp,.bmp" />
+            <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <div class="upload-text">Drag & drop your graphic here, or <strong>click to browse</strong></div>
+            <div class="upload-formats">PNG, JPEG, PDF, SVG, TIFF, WebP &bull; Max 15 MB &bull; Min 300 DPI recommended</div>
+          </div>
+          
+          <!-- Upload preview (shown after file selected) -->
+          <div class="upload-preview" id="uploadPreview">
+            <div class="upload-preview-inner">
+              <img id="uploadThumb" src="" alt="Preview" />
+              <div class="file-info">
+                <div class="file-name" id="uploadFileName">—</div>
+                <div class="file-size" id="uploadFileSize">—</div>
+                <div class="file-status" id="uploadFileStatus"><i class="fas fa-check-circle"></i> Ready to use</div>
+              </div>
+              <div class="upload-actions">
+                <button class="btn-use-graphic" id="btnUseUpload"><i class="fas fa-check"></i> Use This</button>
+                <button class="btn-remove-upload" id="btnRemoveUpload"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Upload guidelines -->
+          <div class="upload-guidelines">
+            <strong><i class="fas fa-info-circle"></i> Upload Guidelines:</strong>
+            <ul>
+              <li><strong>Best quality:</strong> PNG with transparent background, 300+ DPI, at least 2000×2000 px</li>
+              <li><strong>Accepted:</strong> PNG, JPEG, PDF, SVG, TIFF, WebP, BMP</li>
+              <li><strong>Max file size:</strong> 15 MB</li>
+              <li>Avoid low-res screenshots or images with white boxes around them</li>
+              <li>Vector formats (SVG, PDF) will give the sharpest print results</li>
+            </ul>
+          </div>
+          
+          <!-- Portfolio showcase -->
+          <div class="portfolio-showcase">
+            <h4><i class="fas fa-trophy"></i> Custom Fightwear Portfolio</h4>
+            <p style="font-size: 0.75rem; color: #777; margin: 0 0 10px;">Examples of custom work for fighters and teams:</p>
+            <div class="portfolio-grid" id="portfolioGrid">
+              <!-- Populated by JS with existing product images as examples -->
+            </div>
+            <div style="margin-top: 10px; text-align: center;">
+              <a href="mailto:brian@hillbillyfightwear.com?subject=Custom%20Fightwear%20Inquiry" style="font-size: 0.75rem; color: #8B0000; text-decoration: none; font-weight: 600;">
+                <i class="fas fa-envelope" style="margin-right: 4px;"></i> Contact us for bulk team orders &amp; custom design work
+              </a>
+            </div>
+          </div>
+        </div>
         
         <!-- Mandatory Back HFW Logo indicator -->
         <div id="backLogoNotice" style="margin-top: 15px; padding: 12px 16px; background: linear-gradient(135deg, #f0f7ff 0%, #e8f0fe 100%); border: 1px solid #c0d8f0; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
@@ -3565,7 +3836,10 @@ app.get('/build', (c) => {
       graphic: null,
       placement: 'full-front',
       additionalGraphics: [],
-      view: 'front'
+      view: 'front',
+      customUploadUrl: null,  // data URL of user-uploaded graphic
+      customUploadName: null, // filename of upload
+      usingCustomGraphic: false // whether the custom upload is active on canvas
     };
     
     let canvas;
@@ -3700,6 +3974,55 @@ app.get('/build', (c) => {
       if (params.get('graphic')) {
         selectGraphic(params.get('graphic'));
       }
+      
+      // ---- Custom Sponsor Build: Tab switching ----
+      document.getElementById('tabHfwGraphics').addEventListener('click', function() {
+        switchLogoTab('hfw-graphics');
+      });
+      document.getElementById('tabCustomUpload').addEventListener('click', function() {
+        switchLogoTab('custom-upload');
+      });
+      
+      // ---- Custom Sponsor Build: Upload handling ----
+      var uploadZone = document.getElementById('uploadZone');
+      var uploadInput = document.getElementById('uploadInput');
+      
+      // Drag-and-drop styling
+      uploadZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadZone.classList.add('dragover');
+      });
+      uploadZone.addEventListener('dragleave', function() {
+        uploadZone.classList.remove('dragover');
+      });
+      uploadZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleUploadFile(e.dataTransfer.files[0]);
+        }
+      });
+      
+      uploadInput.addEventListener('change', function() {
+        if (uploadInput.files && uploadInput.files.length > 0) {
+          handleUploadFile(uploadInput.files[0]);
+        }
+      });
+      
+      // Use This button
+      document.getElementById('btnUseUpload').addEventListener('click', function() {
+        if (state.customUploadUrl) {
+          useCustomGraphic();
+        }
+      });
+      
+      // Remove upload
+      document.getElementById('btnRemoveUpload').addEventListener('click', function() {
+        clearCustomUpload();
+      });
+      
+      // Render portfolio showcase
+      renderPortfolio();
 
     });
     
@@ -3857,6 +4180,239 @@ app.get('/build', (c) => {
       }
     }
     
+    // ========================================
+    // CUSTOM SPONSOR BUILD — Upload & Tab Logic
+    // ========================================
+    
+    function switchLogoTab(tab) {
+      // Update tab buttons
+      document.getElementById('tabHfwGraphics').classList.toggle('active', tab === 'hfw-graphics');
+      document.getElementById('tabCustomUpload').classList.toggle('active', tab === 'custom-upload');
+      
+      // Show/hide tab content
+      document.getElementById('tabContentHfw').style.display = tab === 'hfw-graphics' ? 'block' : 'none';
+      document.getElementById('tabContentCustom').style.display = tab === 'custom-upload' ? 'block' : 'none';
+      
+      // If switching to HFW tab, deactivate custom graphic (they can re-select an HFW one)
+      // If switching to Custom tab with an uploaded image already active, keep it
+    }
+    
+    var MAX_UPLOAD_SIZE = 15 * 1024 * 1024; // 15 MB
+    var ACCEPTED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'image/tiff', 
+                          'image/webp', 'image/bmp', 'application/pdf',
+                          'application/postscript', 'application/illustrator'];
+    var ACCEPTED_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.svg', '.tiff', '.tif', '.webp', '.bmp', '.pdf', '.eps', '.ai'];
+    
+    function handleUploadFile(file) {
+      var preview = document.getElementById('uploadPreview');
+      var thumb = document.getElementById('uploadThumb');
+      var nameEl = document.getElementById('uploadFileName');
+      var sizeEl = document.getElementById('uploadFileSize');
+      var statusEl = document.getElementById('uploadFileStatus');
+      
+      // Validate file size
+      if (file.size > MAX_UPLOAD_SIZE) {
+        statusEl.className = 'file-status error';
+        statusEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> File too large (max 15 MB)';
+        preview.classList.add('has-image');
+        nameEl.textContent = file.name;
+        sizeEl.textContent = formatFileSize(file.size);
+        thumb.src = '';
+        return;
+      }
+      
+      // Validate file type by extension
+      var ext = '.' + file.name.split('.').pop().toLowerCase();
+      var typeOk = ACCEPTED_EXTENSIONS.includes(ext);
+      if (!typeOk) {
+        statusEl.className = 'file-status error';
+        statusEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Unsupported format. Use PNG, JPEG, PDF, SVG, or TIFF.';
+        preview.classList.add('has-image');
+        nameEl.textContent = file.name;
+        sizeEl.textContent = formatFileSize(file.size);
+        thumb.src = '';
+        return;
+      }
+      
+      nameEl.textContent = file.name;
+      sizeEl.textContent = formatFileSize(file.size);
+      statusEl.className = 'file-status';
+      statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+      preview.classList.add('has-image');
+      
+      // Handle PDF: convert first page to image using canvas
+      if (ext === '.pdf') {
+        statusEl.innerHTML = '<i class="fas fa-file-pdf"></i> PDF detected — will be sent as-is for best print quality';
+        // For preview, create a placeholder
+        var pdfReader = new FileReader();
+        pdfReader.onload = function(e) {
+          state.customUploadUrl = e.target.result;
+          state.customUploadName = file.name;
+          thumb.src = '';
+          thumb.style.display = 'none';
+          statusEl.className = 'file-status';
+          statusEl.innerHTML = '<i class="fas fa-check-circle"></i> PDF ready — click "Use This" to place on garment (preview may be approximate)';
+          // Create a simple placeholder for the canvas
+          createPdfPlaceholder(file.name);
+        };
+        pdfReader.readAsDataURL(file);
+        return;
+      }
+      
+      // Handle SVG
+      if (ext === '.svg') {
+        var svgReader = new FileReader();
+        svgReader.onload = function(e) {
+          var dataUrl = e.target.result;
+          state.customUploadUrl = dataUrl;
+          state.customUploadName = file.name;
+          thumb.src = dataUrl;
+          thumb.style.display = 'block';
+          statusEl.className = 'file-status';
+          statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Vector graphic ready — click "Use This" to place on garment';
+        };
+        svgReader.readAsDataURL(file);
+        return;
+      }
+      
+      // Handle raster images (PNG, JPEG, TIFF, WebP, BMP)
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var dataUrl = e.target.result;
+        
+        // Create an image to check dimensions
+        var img = new Image();
+        img.onload = function() {
+          state.customUploadUrl = dataUrl;
+          state.customUploadName = file.name;
+          thumb.src = dataUrl;
+          thumb.style.display = 'block';
+          
+          var w = img.naturalWidth;
+          var h = img.naturalHeight;
+          sizeEl.textContent = formatFileSize(file.size) + ' — ' + w + ' x ' + h + ' px';
+          
+          // Quality assessment
+          var quality = '';
+          if (w >= 2000 && h >= 2000) {
+            quality = '<i class="fas fa-check-circle"></i> Excellent quality — perfect for printing';
+          } else if (w >= 1000 && h >= 1000) {
+            quality = '<i class="fas fa-check-circle"></i> Good quality — suitable for most placements';
+          } else if (w >= 500 && h >= 500) {
+            quality = '<i class="fas fa-exclamation-triangle" style="color:#f59e0b;"></i> Acceptable — may look slightly soft on large prints';
+          } else {
+            quality = '<i class="fas fa-exclamation-triangle" style="color:#dc3545;"></i> Low resolution — may appear pixelated. 1000+ px recommended.';
+          }
+          statusEl.className = 'file-status';
+          statusEl.innerHTML = quality;
+        };
+        img.onerror = function() {
+          statusEl.className = 'file-status error';
+          statusEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Could not read this image file';
+        };
+        img.src = dataUrl;
+      };
+      reader.readAsDataURL(file);
+    }
+    
+    function createPdfPlaceholder(fileName) {
+      // For PDF files we can't render them natively on Fabric.js canvas,
+      // so we create a colored placeholder rectangle with the file name
+      // The actual PDF will be sent to production for printing
+      var placeholderCanvas = document.createElement('canvas');
+      placeholderCanvas.width = 800;
+      placeholderCanvas.height = 800;
+      var ctx = placeholderCanvas.getContext('2d');
+      ctx.fillStyle = '#f8f8f8';
+      ctx.fillRect(0, 0, 800, 800);
+      ctx.strokeStyle = '#8B0000';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(20, 20, 760, 760);
+      ctx.fillStyle = '#8B0000';
+      ctx.font = 'bold 48px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('PDF', 400, 380);
+      ctx.font = '24px Arial';
+      ctx.fillStyle = '#666';
+      ctx.fillText(fileName, 400, 430);
+      ctx.font = '20px Arial';
+      ctx.fillText('(High-res for production)', 400, 470);
+      state.customUploadUrl = placeholderCanvas.toDataURL('image/png');
+    }
+    
+    function useCustomGraphic() {
+      if (!state.customUploadUrl) return;
+      
+      // Deselect any HFW graphic
+      state.graphic = null;
+      state.usingCustomGraphic = true;
+      
+      // Remove selected state from HFW graphic options
+      document.querySelectorAll('#graphicsGrid .graphic-option').forEach(function(el) {
+        el.classList.remove('selected');
+      });
+      
+      // Update preview and summary
+      updatePreview();
+      updateSummary();
+      updateDragHint();
+      
+      showToast('Custom graphic placed on garment! Drag to reposition.');
+    }
+    
+    function clearCustomUpload() {
+      state.customUploadUrl = null;
+      state.customUploadName = null;
+      state.usingCustomGraphic = false;
+      
+      // Reset upload UI
+      var preview = document.getElementById('uploadPreview');
+      preview.classList.remove('has-image');
+      document.getElementById('uploadInput').value = '';
+      document.getElementById('uploadThumb').src = '';
+      document.getElementById('uploadThumb').style.display = 'block';
+      
+      updatePreview();
+      updateSummary();
+      updateDragHint();
+    }
+    
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+    
+    // Render portfolio with existing product images as examples
+    function renderPortfolio() {
+      var grid = document.getElementById('portfolioGrid');
+      if (!grid) return;
+      
+      // Use a selection of existing product images as portfolio examples
+      var examples = [
+        { img: '/images/products/web/m1-myob-hoodie-front.png', label: 'Custom Hoodie' },
+        { img: '/images/products/web/m3-hfw-classic-front.png', label: 'Classic Tee' },
+        { img: '/images/products/web/m5-fun-ride-front.png', label: 'Graphic Tee' },
+        { img: '/images/products/web/m2-thump-hoodie-front.png', label: 'Team Hoodie' },
+        { img: '/images/products/web/w1-fun-ride-tank.png', label: 'Custom Tank' },
+        { img: '/images/products/web/m7-hcf-front.png', label: 'Fighter Tee' }
+      ];
+      
+      grid.innerHTML = examples.map(function(ex) {
+        return '<div class="portfolio-item">' +
+          '<img src="' + ex.img + '" alt="' + ex.label + '" loading="lazy">' +
+          '<div class="portfolio-label">' + ex.label + '</div>' +
+        '</div>';
+      }).join('');
+      
+      // Hide portfolio items with broken images
+      grid.querySelectorAll('img').forEach(function(img) {
+        img.addEventListener('error', function() {
+          img.closest('.portfolio-item').style.display = 'none';
+        });
+      });
+    }
+
     function renderPlacements() {
       // Placement selection removed — positions are fixed in new model
       // Front logo: fixed front center. HFW logo: fixed 3" back neck.
@@ -4005,6 +4561,9 @@ app.get('/build', (c) => {
     function selectGraphic(id) {
       state.graphic = id;
       
+      // Deactivate custom upload when selecting an HFW graphic
+      state.usingCustomGraphic = false;
+      
       // Preload graphic image for instant rendering
       var g = graphics.find(function(x) { return x.id === id; });
       if (g && g.fullImage && !imageCache[g.fullImage]) {
@@ -4025,7 +4584,7 @@ app.get('/build', (c) => {
     
     function updateDragHint() {
       var dragHint = document.getElementById('dragHint');
-      var hasGraphics = state.graphic !== null;
+      var hasGraphics = state.graphic !== null || (state.usingCustomGraphic && state.customUploadUrl);
       dragHint.style.display = hasGraphics ? 'block' : 'none';
     }
     
@@ -4241,7 +4800,9 @@ app.get('/build', (c) => {
         placement: state.placement,
         view: state.view,
         garment: state.garment,
-        additionalGraphics: state.additionalGraphics.slice()
+        additionalGraphics: state.additionalGraphics.slice(),
+        customUploadUrl: state.customUploadUrl,
+        usingCustomGraphic: state.usingCustomGraphic
       };
       
       // Load garment image using robust loader
@@ -4315,7 +4876,10 @@ app.get('/build', (c) => {
       // Build list of graphics visible in this view
       var graphicsToShow = [];
       
-      if (cs.graphic && cs.placement && isPlacementVisibleForView(cs.placement, cs.view)) {
+      // Custom uploaded graphic (only on front view, full-front placement)
+      if (cs.usingCustomGraphic && cs.customUploadUrl && cs.view === 'front') {
+        graphicsToShow.push({ graphicId: '__custom_upload__', placementId: 'full-front', isCustom: true, dataUrl: cs.customUploadUrl });
+      } else if (cs.graphic && cs.placement && isPlacementVisibleForView(cs.placement, cs.view)) {
         graphicsToShow.push({ graphicId: cs.graphic, placementId: cs.placement });
       }
       cs.additionalGraphics.forEach(function(ag) {
@@ -4334,17 +4898,31 @@ app.get('/build', (c) => {
       var totalToLoad = graphicsToShow.length;
       
       graphicsToShow.forEach(function(item) {
-        var graphic = graphics.find(function(g) { return g.id === item.graphicId; });
         var placement = placements.find(function(p) { return p.id === item.placementId; });
         
-        if (!graphic || !placement) {
+        // Resolve the image URL to load
+        var imageUrlToLoad;
+        if (item.isCustom) {
+          // Custom uploaded graphic — use the data URL directly
+          imageUrlToLoad = item.dataUrl;
+        } else {
+          var graphic = graphics.find(function(g) { return g.id === item.graphicId; });
+          if (!graphic || !placement) {
+            loadedCount++;
+            if (loadedCount === totalToLoad) canvas.renderAll();
+            return;
+          }
+          imageUrlToLoad = graphic.fullImage;
+        }
+        
+        if (!placement) {
           loadedCount++;
           if (loadedCount === totalToLoad) canvas.renderAll();
           return;
         }
         
         // Use robust loader: no crossOrigin (same-origin), with retry
-        _loadFabricImage(graphic.fullImage, function(graphicImg, isError) {
+        _loadFabricImage(imageUrlToLoad, function(graphicImg, isError) {
           if (updateId !== previewUpdateId) return; // Stale check
           loadedCount++;
           
@@ -4465,7 +5043,9 @@ app.get('/build', (c) => {
       }
       
       // Front logo — included in base price (shown as $0.00)
-      if (state.graphic) {
+      if (state.usingCustomGraphic && state.customUploadName) {
+        lines.push({ label: 'Front: Custom — ' + state.customUploadName, note: 'Included' });
+      } else if (state.graphic) {
         var gr = graphics.find(function(x) { return x.id === state.graphic; });
         if (gr) {
           lines.push({ label: 'Front: ' + gr.name, note: 'Included' });
@@ -4496,7 +5076,8 @@ app.get('/build', (c) => {
       
       totalEl.textContent = '$' + total.toFixed(2);
       
-      var isComplete = state.garment && state.size && state.color && state.graphic;
+      var hasGraphic = state.graphic || (state.usingCustomGraphic && state.customUploadUrl);
+      var isComplete = state.garment && state.size && state.color && hasGraphic;
       checkoutBtn.disabled = !isComplete;
     }
     
