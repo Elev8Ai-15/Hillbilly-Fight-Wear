@@ -1339,6 +1339,10 @@ app.get('/', (c) => {
     .sticker-collage .sticker-13 { bottom: 3%; right: 22%; width: 264px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB +30%, up 0.15", right 0.75" (30→22%) */
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
+    /* --- NEW stickers (desktop positions) --- */
+    .sticker-collage .sticker-15 { top: 14%; left: 2%;   width: 130px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW Logo — left side, below HCF */
+    .sticker-collage .sticker-16 { bottom: 20%; right: 2%; width: 140px; transform: rotate(-4deg);  --hover-rotate: rotate(-2deg); }  /* GNF Red/Blue — right side, above bottom row */
+
     /* Tablet — proportionally scaled, positions preserved */
     @media (max-width: 1024px) {
       .scrapbook-hero { min-height: 80vh; }
@@ -1356,11 +1360,23 @@ app.get('/', (c) => {
       .sticker-collage .sticker-14 { width: 150px; }
       .sticker-collage .sticker-13 { width: 212px; bottom: 3%; }
       .sticker-collage .sticker-9  { width: 98px; }
+      .sticker-collage .sticker-15 { width: 104px; }
+      .sticker-collage .sticker-16 { width: 112px; }
     }
 
     /* =============================================
-       MOBILE LAYOUT — Clean grid, NO absolute positioning
-       Stickers in 2-col / 3-col grids above & below the logo.
+       MOBILE LAYOUT — Clean 3-column grid, NO absolute positioning
+       
+       Mobile grid layout (3 cols × 5 rows around centered logo):
+       TOP GROUP (above logo):
+         Row 1: HCF | Thump A Stranger | Cling to Guns
+         Row 2: Put It On Em | Fun Ride | HFW Logo
+       LOGO + SLOGAN + CTA
+       BOTTOM GROUP (below logo):
+         Row 3: Yes You Can | Thumpin Is Lovin | HFW
+         Row 4: Community | MYOB | GNF Red/Blue
+         Row 5: Obama Tap | Cunt | GNF
+       
        Desktop collage is completely untouched.
        ============================================= */
     @media (max-width: 768px) {
@@ -1381,7 +1397,7 @@ app.get('/', (c) => {
         display: none !important;
       }
 
-      /* Both sticker groups: completely override absolute collage */
+      /* Both sticker groups: 3-column grid */
       .sticker-collage,
       .sticker-collage-top,
       .sticker-collage-bottom {
@@ -1392,7 +1408,7 @@ app.get('/', (c) => {
         right: auto !important;
         bottom: auto !important;
         display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(3, 1fr) !important;
         gap: 8px !important;
         width: 100% !important;
         max-width: 340px !important;
@@ -1401,11 +1417,10 @@ app.get('/', (c) => {
         z-index: auto !important;
       }
 
-      /* Top group: 3 columns (6 stickers = 3×2) */
+      /* Top group: 3 cols × 2 rows (6 stickers) */
       .sticker-collage-top {
         order: 1 !important;
         margin-bottom: 12px !important;
-        grid-template-columns: repeat(3, 1fr) !important;
       }
 
       /* Logo center */
@@ -1424,11 +1439,10 @@ app.get('/', (c) => {
       .scrapbook-cta { flex-direction: row !important; align-items: center !important; gap: 10px !important; }
       .scrapbook-cta a { padding: 10px 20px !important; font-size: 0.8rem !important; }
 
-      /* Bottom group: 2 columns (7 stickers = 2×3 + 1) */
+      /* Bottom group: 3 cols × 3 rows (9 stickers) */
       .sticker-collage-bottom {
         order: 3 !important;
         margin-top: 12px !important;
-        grid-template-columns: repeat(2, 1fr) !important;
       }
 
       /* EVERY sticker: kill all absolute positioning */
@@ -1445,7 +1459,9 @@ app.get('/', (c) => {
       .sticker-collage .sticker-11,
       .sticker-collage .sticker-12,
       .sticker-collage .sticker-13,
-      .sticker-collage .sticker-14 {
+      .sticker-collage .sticker-14,
+      .sticker-collage .sticker-15,
+      .sticker-collage .sticker-16 {
         position: static !important;
         inset: auto !important;
         top: auto !important;
@@ -1473,9 +1489,6 @@ app.get('/', (c) => {
       .sticker-collage-bottom {
         max-width: 300px !important;
         gap: 6px !important;
-      }
-      .sticker-collage-top {
-        grid-template-columns: repeat(3, 1fr) !important;
       }
       .scrapbook-center img { max-width: 220px !important; }
       .scrapbook-cta a { padding: 8px 16px !important; font-size: 0.75rem !important; }
@@ -1509,14 +1522,16 @@ app.get('/', (c) => {
   <!-- SCRAPBOOK STICKER COLLAGE HERO -->
   <section class="scrapbook-hero" aria-label="Hillbilly Fightwear Sticker Collage">
 
-    <!-- Top stickers (desktop: absolute collage, mobile: 2-col grid above logo) -->
+    <!-- Top stickers (desktop: absolute collage, mobile: 3-col grid above logo)
+         Mobile row 1: HCF | Thump | Cling to Guns
+         Mobile row 2: Put It On Em | Fun Ride | HFW Logo -->
     <div class="sticker-collage sticker-collage-top" aria-hidden="true">
-      <img class="sticker sticker-1"  src="/images/stickers/sticker-hcf.png?v=13"           alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-3"  src="/images/stickers/sticker-obama-tap.png?v=13"      alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-4"  src="/images/stickers/sticker-thump.png?v=13"          alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-5"  src="/images/stickers/sticker-fun-ride.png?v=13"       alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-6"  src="/images/stickers/sticker-put-it-on-em.png?v=15"   alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-7"  src="/images/stickers/sticker-your-neck.png?v=13"      alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-1"  src="/images/stickers/sticker-hcf.png?v=14"           alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-4"  src="/images/stickers/sticker-thump.png?v=14"          alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-7"  src="/images/stickers/sticker-your-neck.png?v=14"      alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-6"  src="/images/stickers/sticker-put-it-on-em.png?v=16"   alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-5"  src="/images/stickers/sticker-fun-ride.png?v=14"       alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-15" src="/images/stickers/sticker-hfw-logo.png?v=14"       alt="" loading="eager" draggable="false">
     </div>
 
     <!-- Centered Logo + CTA (z-index 3) -->
@@ -1529,15 +1544,20 @@ app.get('/', (c) => {
       </div>
     </div>
 
-    <!-- Bottom stickers (desktop: absolute collage, mobile: 2-col grid below logo) -->
+    <!-- Bottom stickers (desktop: absolute collage, mobile: 3-col grid below logo)
+         Mobile row 3: Yes You Can | Thumpin Is Lovin | HFW
+         Mobile row 4: Community | MYOB | GNF Red/Blue
+         Mobile row 5: Obama Tap | Cunt | GNF -->
     <div class="sticker-collage sticker-collage-bottom" aria-hidden="true">
-      <img class="sticker sticker-8"  src="/images/stickers/sticker-hfw.png?v=13"            alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-9"  src="/images/stickers/sticker-thumpin-is-lovin.png?v=13" alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-10" src="/images/stickers/sticker-community.png?v=13"      alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-11" src="/images/stickers/sticker-yes-you-can.png?v=13"    alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-12" src="/images/stickers/sticker-gnf.png?v=13"            alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-13" src="/images/stickers/sticker-myob.png?v=15"           alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-14" src="/images/stickers/sticker-cunt.png?v=13"           alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-11" src="/images/stickers/sticker-yes-you-can.png?v=14"    alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-9"  src="/images/stickers/sticker-thumpin-is-lovin.png?v=14" alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-8"  src="/images/stickers/sticker-hfw.png?v=14"            alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-10" src="/images/stickers/sticker-community.png?v=14"      alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-13" src="/images/stickers/sticker-myob.png?v=16"           alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-16" src="/images/stickers/sticker-gnf-redblue.png?v=14"    alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-3"  src="/images/stickers/sticker-obama-tap.png?v=14"      alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-14" src="/images/stickers/sticker-cunt.png?v=14"           alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-12" src="/images/stickers/sticker-gnf.png?v=14"            alt="" loading="eager" draggable="false">
     </div>
 
   </section>
