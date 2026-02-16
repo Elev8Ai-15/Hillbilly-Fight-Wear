@@ -4000,24 +4000,31 @@ app.get('/build', (c) => {
       _previewDebounceTimer = setTimeout(_doUpdatePreview, 60);
     }
     
-    // Robust image loader: tries loading an image with a fallback retry.
-    // On first attempt, loads with crossOrigin for canvas export support.
-    // On retry, strips crossOrigin to avoid CORS cache conflicts.
-    // This fixes the "graphics don't transfer" bug where browser-cached
-    // non-CORS images conflict with crossOrigin requests.
+    // Robust image loader with retry fallback.
+    // Attempts loading without crossOrigin (same-origin), then retries
+    // with bare URL (no query params) if the first attempt fails.
+    // Finally falls back with crossOrigin:'anonymous' for CDN-served images.
     function _loadFabricImage(url, callback) {
-      // First attempt: no crossOrigin (same-origin images don't need it,
-      // and setting it can conflict with browser cache from <img> thumbnails)
       fabric.Image.fromURL(url, function(img, isError) {
         if (!img || isError || !img.width || !img.height) {
-          // Retry: strip query-string cache busters to try bare URL
+          // Retry 1: strip query-string cache busters
           var bareUrl = url.split('?')[0];
           if (bareUrl !== url) {
             fabric.Image.fromURL(bareUrl, function(img2, isError2) {
-              callback(img2, isError2);
+              if (!img2 || isError2 || !img2.width || !img2.height) {
+                // Retry 2: try with crossOrigin for CDN/edge scenarios
+                fabric.Image.fromURL(bareUrl, function(img3, isError3) {
+                  callback(img3, isError3);
+                }, { crossOrigin: 'anonymous' });
+              } else {
+                callback(img2, isError2);
+              }
             });
           } else {
-            callback(img, isError);
+            // Retry with crossOrigin for CDN/edge scenarios
+            fabric.Image.fromURL(url, function(img2, isError2) {
+              callback(img2, isError2);
+            }, { crossOrigin: 'anonymous' });
           }
         } else {
           callback(img, isError);
