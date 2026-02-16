@@ -3246,8 +3246,13 @@ app.get('/build', (c) => {
     .portfolio-showcase h4 i { color: #8B0000; margin-right: 6px; }
     .portfolio-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
+    }
+    @media (max-width: 480px) {
+      .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
     .portfolio-item {
       border-radius: 6px;
@@ -4383,19 +4388,21 @@ app.get('/build', (c) => {
       return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
     }
     
-    // Render portfolio with existing product images as examples
+    // Render portfolio with custom fightwear examples
     function renderPortfolio() {
       var grid = document.getElementById('portfolioGrid');
       if (!grid) return;
       
-      // Use a selection of existing product images as portfolio examples
+      // Custom fightwear portfolio examples - diverse product showcase
       var examples = [
+        { img: '/images/products/web/m4-yycf-front.png', label: 'YYCF Team Tee' },
         { img: '/images/products/web/m1-myob-hoodie-front.png', label: 'Custom Hoodie' },
-        { img: '/images/products/web/m3-hfw-classic-front.png', label: 'Classic Tee' },
-        { img: '/images/products/web/m5-fun-ride-front.png', label: 'Graphic Tee' },
+        { img: '/images/products/web/w3-thump-tank.png', label: "Women's Tank" },
+        { img: '/images/products/chm-front-web.png', label: 'Sponsor Tee' },
+        { img: '/images/products/web/m9-wimb-front.png', label: 'Fighter Tee' },
         { img: '/images/products/web/m2-thump-hoodie-front.png', label: 'Team Hoodie' },
-        { img: '/images/products/web/w1-fun-ride-tank.png', label: 'Custom Tank' },
-        { img: '/images/products/web/m7-hcf-front.png', label: 'Fighter Tee' }
+        { img: '/images/products/web/m6-gnf-front.png', label: 'GNF Custom' },
+        { img: '/images/products/web/m13-goodwood-front.png', label: 'Event Tee' }
       ];
       
       grid.innerHTML = examples.map(function(ex) {
