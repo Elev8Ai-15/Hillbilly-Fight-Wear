@@ -2839,8 +2839,8 @@ app.get('/build', (c) => {
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       transition: background-color 0.3s ease;
     }
-    .canvas-wrapper.dark-bg {
-      background: #3a3a3a;
+    .canvas-wrapper.light-contrast-bg {
+      background: #d5d5d5;
     }
     
     #previewCanvas {
@@ -2965,6 +2965,12 @@ app.get('/build', (c) => {
       object-fit: cover;
       border-radius: 4px;
       margin-bottom: 6px;
+      transition: background-color 0.3s ease, filter 0.3s ease;
+    }
+    .garment-option img.white-garment-thumb {
+      background: #d0d0d0;
+      border-radius: 6px;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
     }
     
     .garment-option .name { font-size: 0.7rem; font-weight: 600; color: #333; margin-bottom: 2px; }
@@ -3767,10 +3773,12 @@ app.get('/build', (c) => {
     function renderGarments() {
       var grid = document.getElementById('garmentGrid');
       var colorKey = state.color || 'black';
+      var isWhite = colorKey === 'white';
       grid.innerHTML = garments.map(function(g) {
         var imgSrc = (g.images[colorKey] || g.images.black || {}).front || '';
+        var thumbClass = isWhite ? ' white-garment-thumb' : '';
         return '<div class="garment-option" data-id="' + g.id + '">' +
-          '<img src="' + imgSrc + '" alt="' + g.name + '" loading="lazy">' +
+          '<img src="' + imgSrc + '" alt="' + g.name + '" loading="lazy" class="' + thumbClass + '">' +
           '<div class="name">' + g.name + '</div>' +
           '<div class="price">$' + g.basePrice.toFixed(2) + '</div>' +
         '</div>';
@@ -3974,11 +3982,19 @@ app.get('/build', (c) => {
       });
       
       // Update garment thumbnails to reflect new color
+      var isWhite = color === 'white';
       document.querySelectorAll('.garment-option').forEach(function(el) {
         var g = garments.find(function(x) { return x.id === el.dataset.id; });
         if (g && g.images[color]) {
           var imgEl = el.querySelector('img');
-          if (imgEl) imgEl.src = g.images[color].front;
+          if (imgEl) {
+            imgEl.src = g.images[color].front;
+            if (isWhite) {
+              imgEl.classList.add('white-garment-thumb');
+            } else {
+              imgEl.classList.remove('white-garment-thumb');
+            }
+          }
         }
       });
       
@@ -4190,9 +4206,9 @@ app.get('/build', (c) => {
       var currentUpdateId = ++previewUpdateId;
       
       // Clear canvas and set background based on garment color
-      // Use dark background for white garments so they're visible
+      // Use light-contrast grey for white garments so they're visible
       var isWhiteGarment = state.color === 'white';
-      var canvasBg = isWhiteGarment ? '#3a3a3a' : '#ffffff';
+      var canvasBg = isWhiteGarment ? '#d5d5d5' : '#ffffff';
       canvas.clear();
       canvas.backgroundColor = canvasBg;
       canvas.renderAll();
@@ -4201,9 +4217,9 @@ app.get('/build', (c) => {
       var wrapper = document.querySelector('.canvas-wrapper');
       if (wrapper) {
         if (isWhiteGarment) {
-          wrapper.classList.add('dark-bg');
+          wrapper.classList.add('light-contrast-bg');
         } else {
-          wrapper.classList.remove('dark-bg');
+          wrapper.classList.remove('light-contrast-bg');
         }
       }
       
@@ -4259,6 +4275,17 @@ app.get('/build', (c) => {
           originX: 'center', originY: 'center',
           selectable: false, evented: false
         });
+        
+        // Add subtle shadow for white garments so edges are visible on light background
+        if (isWhiteGarment) {
+          garmentImg.shadow = new fabric.Shadow({
+            color: 'rgba(0,0,0,0.2)',
+            blur: 8,
+            offsetX: 0,
+            offsetY: 2
+          });
+        }
+        
         canvas.add(garmentImg);
         
         // Load graphics on top of garment using snapshotted state
