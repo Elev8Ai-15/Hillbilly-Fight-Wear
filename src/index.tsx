@@ -5089,7 +5089,8 @@ app.get('/build', (c) => {
     var PRINT_AREA = {
       headwear:  { wFrac: 0.25, hFrac: 0.18 },
       small:     { wFrac: 0.18, hFrac: 0.13 },
-      full:      { wFrac: 0.40, hFrac: 0.35 }
+      full:      { wFrac: 0.40, hFrac: 0.35 },
+      backNeck:  { wFrac: 0.12, hFrac: 0.08 }  // Small 3" HFW logo on rear collar
     };
     
     function loadGraphicsOnTop(updateId, garmentScale, cs) {
@@ -5108,15 +5109,24 @@ app.get('/build', (c) => {
         }
       });
       
-      if (graphicsToShow.length === 0) {
+      var isHeadwear = cs.garment === 'trucker-hat' || cs.garment === 'beanie';
+      
+      // ============================================================
+      // PERMANENT HFW BACK-NECK LOGO — always on back view for garments (not hats)
+      // Included in purchase price, not an additional graphic, not user-editable.
+      // Uses white-outline logo on dark garments, black-shadow on light garments.
+      // ============================================================
+      var needsBackNeckLogo = cs.view === 'back' && !isHeadwear;
+      
+      if (graphicsToShow.length === 0 && !needsBackNeckLogo) {
         canvas.renderAll();
         return;
       }
       
-      var isHeadwear = cs.garment === 'trucker-hat' || cs.garment === 'beanie';
       var loadedCount = 0;
-      var totalToLoad = graphicsToShow.length;
+      var totalToLoad = graphicsToShow.length + (needsBackNeckLogo ? 1 : 0);
       
+      // --- Render user-selected graphics (selectable, draggable) ---
       graphicsToShow.forEach(function(item) {
         var placement = placements.find(function(p) { return p.id === item.placementId; });
         
@@ -5192,6 +5202,58 @@ app.get('/build', (c) => {
           if (loadedCount === totalToLoad) canvas.renderAll();
         });
       });
+      
+      // --- Render permanent HFW back-neck logo (non-selectable, locked) ---
+      if (needsBackNeckLogo) {
+        // Pick the right logo variant based on garment color:
+        //   Dark garments (black, grey) → white outline logo (visible on dark fabric)
+        //   Light garments (white, pink) → black shadow logo (visible on light fabric)
+        var isLightGarment = (cs.color === 'white' || cs.color === 'pink');
+        var backNeckUrl = isLightGarment
+          ? '/images/graphics/hfw-logo-black-shadow.png?v=11'
+          : '/images/graphics/hfw-logo-white-outline.png?v=11';
+        
+        _loadFabricImage(backNeckUrl, function(logoImg, isError) {
+          if (updateId !== previewUpdateId) return; // Stale check
+          loadedCount++;
+          
+          if (!logoImg || isError || !logoImg.width || !logoImg.height) {
+            if (loadedCount === totalToLoad) canvas.renderAll();
+            return;
+          }
+          
+          // Size the logo to the back-neck print area (~3" on collar)
+          var area = PRINT_AREA.backNeck;
+          var maxW = canvas.width * area.wFrac;
+          var maxH = canvas.height * area.hFrac;
+          var logoScale = Math.min(maxW / logoImg.width, maxH / logoImg.height);
+          
+          logoImg.scale(logoScale);
+          logoImg.set({
+            // Centered horizontally, positioned at rear collar area
+            left: canvas.width * 0.50,
+            top: canvas.height * 0.17,
+            originX: 'center', originY: 'center',
+            // LOCKED — not user-editable, part of the purchase
+            selectable: false,
+            evented: false,
+            hasControls: false,
+            hasBorders: false,
+            lockMovementX: true,
+            lockMovementY: true,
+            lockRotation: true,
+            lockScalingX: true,
+            lockScalingY: true,
+            hoverCursor: 'default',
+            // Metadata
+            isBackNeckLogo: true,
+            isGraphic: false  // Not counted as a user graphic
+          });
+          
+          canvas.add(logoImg);
+          if (loadedCount === totalToLoad) canvas.renderAll();
+        });
+      }
     }
     
     // Placement position map (center coordinates as fraction of canvas dimensions)
@@ -5201,7 +5263,8 @@ app.get('/build', (c) => {
       'full-back':   { xFrac: 0.50, yFrac: 0.45 },
       'left-chest':  { xFrac: 0.35, yFrac: 0.32 },
       'right-chest': { xFrac: 0.65, yFrac: 0.32 },
-      'hat-front':   { xFrac: 0.50, yFrac: 0.42 }
+      'hat-front':   { xFrac: 0.50, yFrac: 0.42 },
+      'back-neck':   { xFrac: 0.50, yFrac: 0.17 }  // Rear collar center — permanent HFW logo
     };
     
     function getPlacementPosition(placementId, w, h) {
