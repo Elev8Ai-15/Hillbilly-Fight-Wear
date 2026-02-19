@@ -1,0 +1,16 @@
+# Cache static assets aggressively on Cloudflare CDN
+# Images, fonts, and other static assets get long cache times
+# HTML pages are not cached (handled by Worker)
+
+/images/*
+  Cache-Control: public, max-age=2592000, immutable
+  
+/static/*
+  Cache-Control: public, max-age=2592000, immutable
+
+/manifest.json
+  Cache-Control: public, max-age=86400
+
+# Prevent caching of API responses (handled by Worker)
+/api/*
+  Cache-Control: no-store

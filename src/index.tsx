@@ -1340,8 +1340,8 @@ app.get('/', (c) => {
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
     /* --- NEW stickers (desktop positions) --- */
-    .sticker-collage .sticker-15 { top: 14%; left: 2%;   width: 130px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW Logo — left side, below HCF */
-    .sticker-collage .sticker-16 { bottom: 20%; right: 2%; width: 140px; transform: rotate(-4deg);  --hover-rotate: rotate(-2deg); }  /* GNF Red/Blue — right side, above bottom row */
+    .sticker-collage .sticker-15 { top: 14%; left: 2%;   width: 130px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW Logo - left side, below HCF */
+
 
     /* Tablet — proportionally scaled, positions preserved */
     @media (max-width: 1024px) {
@@ -1361,7 +1361,7 @@ app.get('/', (c) => {
       .sticker-collage .sticker-13 { width: 212px; bottom: 3%; }
       .sticker-collage .sticker-9  { width: 98px; }
       .sticker-collage .sticker-15 { width: 104px; }
-      .sticker-collage .sticker-16 { width: 112px; }
+
     }
 
     /* =============================================
@@ -1374,8 +1374,8 @@ app.get('/', (c) => {
        LOGO + SLOGAN + CTA
        BOTTOM GROUP (below logo):
          Row 3: Yes You Can | Thumpin Is Lovin | HFW
-         Row 4: Community | MYOB | GNF Red/Blue
-         Row 5: Obama Tap | Cunt | GNF
+         Row 4: Community | MYOB | Obama Tap
+         Row 5: Cunt | GNF
        
        Desktop collage is completely untouched.
        ============================================= */
@@ -1460,8 +1460,7 @@ app.get('/', (c) => {
       .sticker-collage .sticker-12,
       .sticker-collage .sticker-13,
       .sticker-collage .sticker-14,
-      .sticker-collage .sticker-15,
-      .sticker-collage .sticker-16 {
+      .sticker-collage .sticker-15 {
         position: static !important;
         inset: auto !important;
         top: auto !important;
@@ -1546,15 +1545,14 @@ app.get('/', (c) => {
 
     <!-- Bottom stickers (desktop: absolute collage, mobile: 3-col grid below logo)
          Mobile row 3: Yes You Can | Thumpin Is Lovin | HFW
-         Mobile row 4: Community | MYOB | GNF Red/Blue
-         Mobile row 5: Obama Tap | Cunt | GNF -->
+         Mobile row 4: Community | MYOB | Obama Tap
+         Mobile row 5: Cunt | GNF -->
     <div class="sticker-collage sticker-collage-bottom" aria-hidden="true">
       <img class="sticker sticker-11" src="/images/stickers/sticker-yes-you-can.png?v=14"    alt="" loading="eager" draggable="false">
       <img class="sticker sticker-9"  src="/images/stickers/sticker-thumpin-is-lovin.png?v=14" alt="" loading="eager" draggable="false">
       <img class="sticker sticker-8"  src="/images/stickers/sticker-hfw.png?v=14"            alt="" loading="eager" draggable="false">
       <img class="sticker sticker-10" src="/images/stickers/sticker-community.png?v=14"      alt="" loading="eager" draggable="false">
       <img class="sticker sticker-13" src="/images/stickers/sticker-myob.png?v=16"           alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-16" src="/images/stickers/sticker-gnf-redblue.png?v=14"    alt="" loading="eager" draggable="false">
       <img class="sticker sticker-3"  src="/images/stickers/sticker-obama-tap.png?v=14"      alt="" loading="eager" draggable="false">
       <img class="sticker sticker-14" src="/images/stickers/sticker-cunt.png?v=14"           alt="" loading="eager" draggable="false">
       <img class="sticker sticker-12" src="/images/stickers/sticker-gnf.png?v=14"            alt="" loading="eager" draggable="false">
@@ -1707,8 +1705,9 @@ app.get('/', (c) => {
       <!-- Spotify Embed: Hillbilly Fightwear Podcast -->
       <div style="max-width: 700px; margin: 0 auto 30px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
         <iframe 
+          id="spotifyEmbed"
           style="border-radius:12px; border:0; width:100%; height:352px;" 
-          src="https://open.spotify.com/embed/show/4RbslfSGJhey2oFMEEtMbT?utm_source=generator&theme=0" 
+          data-src="https://open.spotify.com/embed/show/4RbslfSGJhey2oFMEEtMbT?utm_source=generator&theme=0" 
           allowfullscreen="" 
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
           loading="lazy"
@@ -2126,6 +2125,23 @@ app.get('/', (c) => {
     
     // Check consent on page load
     document.addEventListener('DOMContentLoaded', function() {
+      // Lazy-load Spotify iframe only when visible (saves ~3s page load)
+      var spotifyEl = document.getElementById('spotifyEmbed');
+      if (spotifyEl && 'IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              var iframe = entry.target;
+              if (iframe.dataset.src) { iframe.src = iframe.dataset.src; }
+              io.unobserve(iframe);
+            }
+          });
+        }, { rootMargin: '200px' });
+        io.observe(spotifyEl);
+      } else if (spotifyEl && spotifyEl.dataset.src) {
+        spotifyEl.src = spotifyEl.dataset.src;
+      }
+
       const consent = getCookieConsent();
       const urlParams = new URLSearchParams(window.location.search);
       
@@ -4946,40 +4962,39 @@ app.get('/build', (c) => {
       _previewDebounceTimer = setTimeout(_doUpdatePreview, 60);
     }
     
-    // Robust image loader with retry fallback.
-    // Attempts loading without crossOrigin (same-origin), then retries
-    // with bare URL (no query params) if the first attempt fails.
-    // Finally falls back with crossOrigin:'anonymous' for CDN-served images.
+    // Robust image loader with crossOrigin support.
+    // Always uses crossOrigin:'anonymous' since Cloudflare Pages serves
+    // all assets with Access-Control-Allow-Origin: * headers.
+    // Falls back to retry without query params if initial load fails.
     function _loadFabricImage(url, callback) {
+      // For data URLs (custom uploads), skip crossOrigin
+      if (url && url.indexOf('data:') === 0) {
+        fabric.Image.fromURL(url, function(img, isError) {
+          callback(img, isError);
+        });
+        return;
+      }
+      
       fabric.Image.fromURL(url, function(img, isError) {
         if (!img || isError || !img.width || !img.height) {
-          // Retry 1: strip query-string cache busters
+          // Retry: strip query-string cache busters and try again
           var bareUrl = url.split('?')[0];
           if (bareUrl !== url) {
             fabric.Image.fromURL(bareUrl, function(img2, isError2) {
-              if (!img2 || isError2 || !img2.width || !img2.height) {
-                // Retry 2: try with crossOrigin for CDN/edge scenarios
-                fabric.Image.fromURL(bareUrl, function(img3, isError3) {
-                  callback(img3, isError3);
-                }, { crossOrigin: 'anonymous' });
-              } else {
-                callback(img2, isError2);
-              }
-            });
-          } else {
-            // Retry with crossOrigin for CDN/edge scenarios
-            fabric.Image.fromURL(url, function(img2, isError2) {
               callback(img2, isError2);
             }, { crossOrigin: 'anonymous' });
+          } else {
+            callback(img, isError);
           }
         } else {
           callback(img, isError);
         }
-      });
+      }, { crossOrigin: 'anonymous' });
     }
     
     function _doUpdatePreview() {
       _previewDebounceTimer = null;
+      var _pt0 = performance.now();
       
       // Increment update ID to cancel any in-flight async image loads
       var currentUpdateId = ++previewUpdateId;
@@ -5029,6 +5044,8 @@ app.get('/build', (c) => {
       _loadFabricImage(imageUrl, function(garmentImg, isError) {
         // Stale check: if another updatePreview was called after us, bail out
         if (currentUpdateId !== previewUpdateId) return;
+        
+        console.log('[Preview] Garment loaded in ' + (performance.now() - _pt0).toFixed(0) + 'ms, ok=' + !!(garmentImg && !isError && garmentImg.width));
         
         if (!garmentImg || isError || !garmentImg.width || !garmentImg.height) {
           // Show error state on canvas
