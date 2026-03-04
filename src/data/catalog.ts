@@ -244,8 +244,8 @@ export const graphics = [
   {
     id: 'thumpin-is-lovin-purple',
     name: 'Thumpin\' Is Lovin\' (Purple)',
-    thumbnail: '/images/graphics/thumpin-is-lovin-purple.png?v=12',
-    fullImage: '/images/graphics/thumpin-is-lovin-purple.png?v=12',
+    thumbnail: '/images/graphics/thumpin-is-lovin-purple.png?v=13',
+    fullImage: '/images/graphics/thumpin-is-lovin-purple.png?v=13',
     restrictToGarments: ['tank-womens', 'tshirt']  // Women's tanks and unisex t-shirts
   }
 ]
