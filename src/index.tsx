@@ -1339,8 +1339,7 @@ app.get('/', (c) => {
     .sticker-collage .sticker-13 { bottom: 3%; right: 22%; width: 264px; transform: rotate(4deg);   --hover-rotate: rotate(2deg); }   /* MYOB +30%, up 0.15", right 0.75" (30→22%) */
     .sticker-collage .sticker-14 { bottom: 1%; right: 1%;  width: 187px; transform: rotate(-5deg);  --hover-rotate: rotate(-2deg); }  /* Cunt 144→187 (+30%) */
 
-    /* --- NEW stickers (desktop positions) --- */
-    .sticker-collage .sticker-15 { top: 14%; left: 2%;   width: 130px; transform: rotate(3deg);   --hover-rotate: rotate(1deg); }   /* HFW Logo - left side, below HCF */
+    /* sticker-15 (HFW Logo) removed — HFW branding shown in center logo and sticker-8 */
 
 
     /* Tablet — proportionally scaled, positions preserved */
@@ -1360,17 +1359,17 @@ app.get('/', (c) => {
       .sticker-collage .sticker-14 { width: 150px; }
       .sticker-collage .sticker-13 { width: 212px; bottom: 3%; }
       .sticker-collage .sticker-9  { width: 98px; }
-      .sticker-collage .sticker-15 { width: 104px; }
+      /* sticker-15 removed */
 
     }
 
     /* =============================================
        MOBILE LAYOUT — Clean 3-column grid, NO absolute positioning
        
-       Mobile grid layout (3 cols × 5 rows around centered logo):
+       Mobile grid layout (3 cols × rows around centered logo):
        TOP GROUP (above logo):
          Row 1: HCF | Thump A Stranger | Cling to Guns
-         Row 2: Put It On Em | Fun Ride | HFW Logo
+         Row 2: Put It On Em | Fun Ride
        LOGO + SLOGAN + CTA
        BOTTOM GROUP (below logo):
          Row 3: Yes You Can | Thumpin Is Lovin | HFW
@@ -1417,7 +1416,7 @@ app.get('/', (c) => {
         z-index: auto !important;
       }
 
-      /* Top group: 3 cols × 2 rows (6 stickers) */
+      /* Top group: 3 cols × 2 rows (5 stickers — sticker-15 removed) */
       .sticker-collage-top {
         order: 1 !important;
         margin-bottom: 12px !important;
@@ -1459,8 +1458,7 @@ app.get('/', (c) => {
       .sticker-collage .sticker-11,
       .sticker-collage .sticker-12,
       .sticker-collage .sticker-13,
-      .sticker-collage .sticker-14,
-      .sticker-collage .sticker-15 {
+      .sticker-collage .sticker-14 {
         position: static !important;
         inset: auto !important;
         top: auto !important;
@@ -1523,14 +1521,14 @@ app.get('/', (c) => {
 
     <!-- Top stickers (desktop: absolute collage, mobile: 3-col grid above logo)
          Mobile row 1: HCF | Thump | Cling to Guns
-         Mobile row 2: Put It On Em | Fun Ride | HFW Logo -->
+         Mobile row 2: Put It On Em | Fun Ride -->
     <div class="sticker-collage sticker-collage-top" aria-hidden="true">
       <img class="sticker sticker-1"  src="/images/stickers/sticker-hcf.png?v=14"           alt="" loading="eager" draggable="false">
       <img class="sticker sticker-4"  src="/images/stickers/sticker-thump.png?v=14"          alt="" loading="eager" draggable="false">
       <img class="sticker sticker-7"  src="/images/stickers/sticker-your-neck.png?v=14"      alt="" loading="eager" draggable="false">
       <img class="sticker sticker-6"  src="/images/stickers/sticker-put-it-on-em.png?v=16"   alt="" loading="eager" draggable="false">
       <img class="sticker sticker-5"  src="/images/stickers/sticker-fun-ride.png?v=14"       alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-15" src="/images/stickers/sticker-hfw-logo.png?v=14"       alt="" loading="eager" draggable="false">
+      <!-- sticker-15 (HFW Logo) removed — HFW branding shown in center logo and sticker-8 -->
     </div>
 
     <!-- Centered Logo + CTA (z-index 3) -->
