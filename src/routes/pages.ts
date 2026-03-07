@@ -43,7 +43,7 @@ pages.get('/checkout/success', (c) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Confirmed - Hillbilly Fightwear</title>
   <link rel="stylesheet" href="/static/tailwind.css">
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
   <style nonce="${nonce}">
     @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
     body { font-family: 'Oswald', sans-serif; background: #f5f5f5; }
@@ -73,9 +73,15 @@ pages.get('/checkout/success', (c) => {
   </div>
   <script nonce="${nonce}">
     (function() {
+      // SEC: HTML-escape helper to prevent XSS from API response data
+      function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
       var params = new URLSearchParams(window.location.search);
       var sessionId = params.get('session_id');
       if (!sessionId) return;
+
+      // SEC: Validate session_id format before sending to API (Stripe session IDs are alphanumeric + underscores)
+      if (!/^cs_[a-zA-Z0-9_]{10,200}$/.test(sessionId)) return;
 
       var detailsEl = document.getElementById('orderDetails');
       var statusEl = document.getElementById('emailStatus');
@@ -89,11 +95,11 @@ pages.get('/checkout/success', (c) => {
             return;
           }
 
-          // Show order details
+          // Show order details (all values HTML-escaped)
           var html = '';
-          if (data.orderId) html += '<div class="detail-row"><span class="label">Order #</span><span class="value">' + data.orderId + '</span></div>';
-          if (data.total) html += '<div class="detail-row"><span class="label">Total</span><span class="value">$' + data.total + '</span></div>';
-          if (data.customerEmail) html += '<div class="detail-row"><span class="label">Email</span><span class="value">' + data.customerEmail + '</span></div>';
+          if (data.orderId) html += '<div class="detail-row"><span class="label">Order #</span><span class="value">' + esc(data.orderId) + '</span></div>';
+          if (data.total) html += '<div class="detail-row"><span class="label">Total</span><span class="value">$' + esc(data.total) + '</span></div>';
+          if (data.customerEmail) html += '<div class="detail-row"><span class="label">Email</span><span class="value">' + esc(data.customerEmail) + '</span></div>';
 
           if (html) {
             detailsEl.innerHTML = html;
@@ -101,7 +107,7 @@ pages.get('/checkout/success', (c) => {
           }
 
           if (data.emailsSent) {
-            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Confirmation email sent to ' + (data.customerEmail || 'your email');
+            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Confirmation email sent to ' + esc(data.customerEmail || 'your email');
             statusEl.className = 'email-status';
           } else {
             statusEl.innerHTML = '<i class="fas fa-envelope"></i> A confirmation email will be sent shortly.';
@@ -132,7 +138,7 @@ pages.get('/privacy-policy', (c) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy - Hillbilly Fightwear</title>
   <link rel="stylesheet" href="/static/tailwind.css">
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
   <style nonce="${nonce}">
     @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
     body { font-family: 'Oswald', sans-serif; background: #f5f5f5; }
@@ -300,7 +306,7 @@ pages.get('/cookie-policy', (c) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cookie Policy - Hillbilly Fightwear</title>
   <link rel="stylesheet" href="/static/tailwind.css">
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
   <style nonce="${nonce}">
     @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
     body { font-family: 'Oswald', sans-serif; background: #f5f5f5; }
@@ -420,7 +426,7 @@ pages.get('/contact', (c) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us - Hillbilly Fightwear</title>
   <link rel="stylesheet" href="/static/tailwind.css">
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
   <style nonce="${nonce}">
     @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
     * { box-sizing: border-box; }
@@ -799,13 +805,15 @@ pages.get('/contact', (c) => {
       })
       .then(function(res) { return res.json(); })
       .then(function(data) {
+        // SEC: Escape API response before inserting into DOM
+        function escTxt(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
         if (data.success) {
           status.className = 'form-status success';
-          status.innerHTML = '<i class="fas fa-check-circle"></i> ' + data.message;
+          status.innerHTML = '<i class="fas fa-check-circle"></i> ' + escTxt(data.message);
           document.getElementById('contactForm').reset();
         } else {
           status.className = 'form-status error';
-          status.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.error || 'Something went wrong. Please try again.');
+          status.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + escTxt(data.error || 'Something went wrong. Please try again.');
         }
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
@@ -831,7 +839,7 @@ pages.all('*', (c) => {
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Page Not Found - Hillbilly Fightwear</title>
 <link rel="stylesheet" href="/static/tailwind.css">
-<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
 <style nonce="${nonce}">body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;}.c{max-width:600px;margin:100px auto;padding:40px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);}.icon{width:80px;height:80px;background:#8B0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 30px;font-size:2.5rem;color:#fff;}h1{font-size:2rem;margin:0 0 15px;}p{color:#666;margin:0 0 30px;line-height:1.6;}.btn{display:inline-block;padding:15px 40px;background:#8B0000;color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-weight:600;border-radius:4px;transition:all 0.3s;margin:5px;}.btn:hover{background:#a00000;}.btn-o{background:transparent;color:#333;border:2px solid #333;}.btn-o:hover{background:#333;color:#fff;}</style>
 </head><body><div class="c"><div class="icon"><i class="fas fa-map-signs"></i></div><h1>Page Not Found</h1><p>Sorry, the page you are looking for does not exist or has been moved.</p><a href="/" class="btn">Go Home</a><a href="/build" class="btn btn-o">Build Y'Own</a></div></body></html>`, 404)
 })

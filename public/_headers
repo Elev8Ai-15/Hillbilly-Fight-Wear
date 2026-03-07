@@ -1,16 +1,36 @@
-# Cache static assets aggressively on Cloudflare CDN
-# Images, fonts, and other static assets get long cache times
-# HTML pages are not cached (handled by Worker)
+# ============================================
+# Cloudflare Pages _headers — Security Hardening
+# Applied by the CDN before the Worker; Worker headers take precedence for HTML.
+# ============================================
 
+# --- Global defaults for ALL responses ---
+/*
+  X-Content-Type-Options: nosniff
+  X-DNS-Prefetch-Control: off
+  X-Permitted-Cross-Domain-Policies: none
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self), usb=(), magnetometer=(), gyroscope=(), accelerometer=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# --- Static images: long cache, immutable, restrict CORS ---
 /images/*
   Cache-Control: public, max-age=2592000, immutable
-  
+  X-Content-Type-Options: nosniff
+  Cross-Origin-Resource-Policy: same-site
+
+# --- Static JS/CSS: long cache, immutable ---
 /static/*
   Cache-Control: public, max-age=2592000, immutable
+  X-Content-Type-Options: nosniff
+  Cross-Origin-Resource-Policy: same-site
 
+# --- Manifest: daily cache ---
 /manifest.json
   Cache-Control: public, max-age=86400
+  X-Content-Type-Options: nosniff
 
-# Prevent caching of API responses (handled by Worker)
+# --- API: no caching, anti-MIME-sniffing ---
 /api/*
-  Cache-Control: no-store
+  Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+  Pragma: no-cache
+  X-Content-Type-Options: nosniff

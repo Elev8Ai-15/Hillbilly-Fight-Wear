@@ -152,6 +152,44 @@ async function sendOrderReceiptEmails(resendApiKey: string | undefined, orderInf
 
 const api = new Hono<{ Bindings: Bindings }>()
 
+// ============================================
+// SEC-09: Request body size limit for all POST endpoints
+// Prevents memory exhaustion / DoS from oversized payloads.
+// Cloudflare Workers has a 100 MB limit; we enforce 1 MB for API routes.
+// ============================================
+api.use('*', async (c, next) => {
+  if (c.req.method === 'POST') {
+    const contentLength = c.req.header('content-length')
+    if (contentLength && parseInt(contentLength) > 1_048_576) {
+      return c.json({ error: 'Request body too large (max 1 MB)' }, 413)
+    }
+  }
+  await next()
+  // SEC: Prevent caching of any API response containing user/order data
+  if (c.req.method === 'POST') {
+    c.res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    c.res.headers.set('Pragma', 'no-cache')
+  }
+  // SEC: Prevent search engines from indexing API responses
+  c.res.headers.set('X-Robots-Tag', 'noindex, nofollow')
+})
+
+// ============================================
+// SEC-10: Session ID format validation helper
+// Stripe session IDs follow pattern: cs_test_xxx or cs_live_xxx
+// ============================================
+function isValidStripeSessionId(id: string): boolean {
+  return /^cs_(test|live)_[a-zA-Z0-9]{10,250}$/.test(id)
+}
+
+// ============================================
+// SEC-11: Sanitise contact-form text — strip HTML tags as defense-in-depth
+// (escaping happens at output; this catches edge cases)
+// ============================================
+function stripHtml(s: string): string {
+  return s.replace(/<[^>]*>/g, '')
+}
+
 // --- Data endpoints (read-only, publicly cacheable for 5 minutes) ---
 api.use('/garments', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
 api.use('/graphics', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
@@ -584,12 +622,7 @@ api.get('/stripe/status', async (c) => {
       configured: false,
       mode: 'demo',
       message: 'Stripe is not configured. All checkout operations run in demo mode.',
-      setupInstructions: {
-        step1: 'Get your Stripe Secret Key from https://dashboard.stripe.com/apikeys',
-        step2: 'Run: npx wrangler pages secret put STRIPE_SECRET_KEY --project-name hillbilly-fightwear',
-        step3: 'Paste your key when prompted (starts with sk_live_ or sk_test_)',
-        step4: 'Redeploy: npm run deploy',
-      },
+      // SEC-13: Removed detailed setup instructions from public API response
     })
   }
 
@@ -605,7 +638,8 @@ api.get('/stripe/status', async (c) => {
         configured: true,
         valid: false,
         mode: 'error',
-        error: data.error.message,
+        // SEC-13: Suppress internal Stripe error details
+        error: 'Stripe key validation failed',
       })
     }
 
@@ -614,7 +648,8 @@ api.get('/stripe/status', async (c) => {
       configured: true,
       valid: true,
       mode: isLive ? 'live' : 'test',
-      message: `Stripe is active in ${isLive ? 'LIVE' : 'TEST'} mode.`,
+      // SEC-13: Do not expose key prefix or balance details
+      message: `Stripe is active.`,
     })
   } catch {
     return c.json({
@@ -637,6 +672,11 @@ api.get('/order/receipt/:sessionId', async (c) => {
 
   if (!sessionId) {
     return c.json({ error: 'Session ID required' }, 400)
+  }
+
+  // SEC-10: Validate Stripe session ID format to prevent injection
+  if (!isValidStripeSessionId(sessionId)) {
+    return c.json({ error: 'Invalid session ID format' }, 400)
   }
 
   if (!stripeKey) {
@@ -871,6 +911,10 @@ api.post('/send-receipt', async (c) => {
   if (!sessionId) {
     return c.json({ error: 'sessionId required' }, 400)
   }
+  // SEC-10: Validate Stripe session ID format
+  if (typeof sessionId !== 'string' || !isValidStripeSessionId(sessionId)) {
+    return c.json({ error: 'Invalid session ID format' }, 400)
+  }
 
   try {
     const result = await getSessionForReceipt(stripeKey, sessionId)
@@ -924,12 +968,19 @@ api.post('/contact', async (c) => {
     return c.json({ error: 'Invalid JSON body' }, 400)
   }
 
-  const { name, email, phone, subject, message } = body
+  const { name: rawName, email: rawEmail, phone: rawPhone, subject: rawSubject, message: rawMessage } = body
 
   // Validate required fields
-  if (!name || !email || !subject || !message) {
+  if (!rawName || !rawEmail || !rawSubject || !rawMessage) {
     return c.json({ error: 'All required fields must be filled in.' }, 400)
   }
+
+  // SEC-11: Strip HTML tags from all text inputs
+  const name = stripHtml(String(rawName).trim())
+  const email = stripHtml(String(rawEmail).trim())
+  const phone = rawPhone ? stripHtml(String(rawPhone).trim()) : ''
+  const subject = stripHtml(String(rawSubject).trim())
+  const message = stripHtml(String(rawMessage).trim())
 
   // Validate field lengths
   if (name.length > 100 || email.length > 200 || (phone && phone.length > 20) || subject.length > 100 || message.length > 2000) {
