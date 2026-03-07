@@ -1675,6 +1675,26 @@ app.get('/', (c) => {
     </div>
   </section>
 
+  <!-- YOUTUBE VIDEO -->
+  <section style="background: #111; padding: 40px 20px;" aria-labelledby="yt-heading">
+    <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+      <h2 id="yt-heading" style="font-size: 1.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #fff; margin: 0 0 20px;">
+        <i class="fab fa-youtube" style="color: #8B0000;" aria-hidden="true"></i> Watch
+      </h2>
+      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.4);">
+        <iframe 
+          src="https://www.youtube.com/embed/MTv9Bz8Diwk?si=fpTNzZ-jzx3XuMpF" 
+          title="Hillbilly Fightwear Video" 
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px;" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen 
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
   <!-- IMAGE CAROUSEL - Moved to bottom of page -->
   <section class="hero-carousel" style="height: 60vh; min-height: 400px;" aria-label="Featured images slideshow" role="region">
     <!-- Carousel Slides -->
