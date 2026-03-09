@@ -153,6 +153,12 @@ async function sendOrderReceiptEmails(resendApiKey: string | undefined, orderInf
 const api = new Hono<{ Bindings: Bindings }>()
 
 // ============================================
+// Constants
+// ============================================
+const MAX_REQUEST_BODY_BYTES = 1_048_576  // 1 MB
+const DATA_CACHE_SECONDS = 300            // 5 minutes
+
+// ============================================
 // SEC-09: Request body size limit for all POST endpoints
 // Prevents memory exhaustion / DoS from oversized payloads.
 // Cloudflare Workers has a 100 MB limit; we enforce 1 MB for API routes.
@@ -160,7 +166,7 @@ const api = new Hono<{ Bindings: Bindings }>()
 api.use('*', async (c, next) => {
   if (c.req.method === 'POST') {
     const contentLength = c.req.header('content-length')
-    if (contentLength && parseInt(contentLength) > 1_048_576) {
+    if (contentLength && parseInt(contentLength) > MAX_REQUEST_BODY_BYTES) {
       return c.json({ error: 'Request body too large (max 1 MB)' }, 413)
     }
   }
@@ -191,12 +197,12 @@ function stripHtml(s: string): string {
 }
 
 // --- Data endpoints (read-only, publicly cacheable for 5 minutes) ---
-api.use('/garments', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
-api.use('/graphics', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
-api.use('/placements', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
-api.use('/products', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
-api.use('/shop-products', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
-api.use('/slides', async (c, next) => { await next(); c.res.headers.set('Cache-Control', 'public, max-age=300') })
+api.use('/garments', async (c, next) => { await next(); c.res.headers.set('Cache-Control', `public, max-age=${DATA_CACHE_SECONDS}`) })
+api.use('/graphics', async (c, next) => { await next(); c.res.headers.set('Cache-Control', `public, max-age=${DATA_CACHE_SECONDS}`) })
+api.use('/placements', async (c, next) => { await next(); c.res.headers.set('Cache-Control', `public, max-age=${DATA_CACHE_SECONDS}`) })
+api.use('/products', async (c, next) => { await next(); c.res.headers.set('Cache-Control', `public, max-age=${DATA_CACHE_SECONDS}`) })
+api.use('/shop-products', async (c, next) => { await next(); c.res.headers.set('Cache-Control', `public, max-age=${DATA_CACHE_SECONDS}`) })
+api.use('/slides', async (c, next) => { await next(); c.res.headers.set('Cache-Control', `public, max-age=${DATA_CACHE_SECONDS}`) })
 
 api.get('/garments', (c) => c.json(garments))
 api.get('/graphics', (c) => c.json(graphics))
@@ -246,6 +252,7 @@ api.get('/pricing', (c) => {
 // Calculate pricing breakdown without creating a checkout session
 // ============================================
 api.post('/cart-pricing', async (c) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
     body = await c.req.json()
@@ -292,6 +299,7 @@ api.post('/cart-pricing', async (c) => {
 // Validates cart, calculates pricing, creates Stripe session or demo
 // ============================================
 api.post('/shop-checkout', async (c) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
     body = await c.req.json()
@@ -362,6 +370,7 @@ api.post('/shop-checkout', async (c) => {
 // BUILDER PRICE CALCULATOR
 // ============================================
 api.post('/calculate-price', async (c) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
     body = await c.req.json()
@@ -418,6 +427,7 @@ api.post('/calculate-price', async (c) => {
 // Validates custom design, calculates pricing, creates Stripe session or demo
 // ============================================
 api.post('/create-checkout', async (c) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
     body = await c.req.json()
@@ -530,6 +540,7 @@ api.post('/create-checkout', async (c) => {
 // Generates an HTML receipt for preview without sending
 // ============================================
 api.post('/preview-receipt', async (c) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
     body = await c.req.json()
@@ -900,6 +911,7 @@ api.post('/send-receipt', async (c) => {
     return c.json({ error: 'Stripe not configured' }, 400)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
     body = await c.req.json()
@@ -961,6 +973,7 @@ api.post('/send-receipt', async (c) => {
 // Sends email to brian@hillbillyfightwear.com via Resend API
 // ============================================
 api.post('/contact', async (c) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
     body = await c.req.json()

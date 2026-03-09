@@ -77,6 +77,7 @@ type StripeWebhookEvent = {
   id: string
   type: string
   data: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Stripe webhook data object
     object: any
   }
 }
@@ -334,10 +335,12 @@ export async function createBuilderCheckoutSession(
  */
 export async function syncProductCatalog(secretKey: string): Promise<{
   created: string[]
+  updated: string[]
   skipped: string[]
   errors: string[]
 }> {
   const created: string[] = []
+  const updated: string[] = []
   const skipped: string[] = []
   const errors: string[] = []
 
@@ -352,8 +355,6 @@ export async function syncProductCatalog(secretKey: string): Promise<{
       }
     }
   }
-
-  const updated: string[] = []
 
   // Create or update each catalog product
   for (const product of shopProducts) {
@@ -482,6 +483,7 @@ export async function getSessionForReceipt(
         shipping: 0,
         tax: 0,
         total: pData.total || (session.amount_total ? session.amount_total / 100 : 0),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Stripe metadata is parsed JSON
         lineItems: (pData.lineItems || []).map((li: any) => ({
           productId: li.productId || '',
           title: li.title || 'Item',

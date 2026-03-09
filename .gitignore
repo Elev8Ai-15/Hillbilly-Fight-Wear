@@ -31,3 +31,6 @@ logs/
 # IDE
 .vscode/
 .idea/
+
+# Temp files
+temp/

@@ -369,6 +369,7 @@ export type ValidationResult = { valid: true } | { valid: false; error: string }
  * Validate cart items for checkout.
  * Checks: non-empty, valid quantities, valid products, price matches, limits.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Cart items from JSON are inherently untyped
 export function validateCart(cartItems: any[]): ValidationResult {
   if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
     return { valid: false, error: 'Cart is empty' }

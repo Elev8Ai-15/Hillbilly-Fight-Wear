@@ -261,17 +261,17 @@ export const placements = [
 // Shop products organized by category
 // type: 'garment' = clothing/hats (shows size→color flow), 'decal' = stickers/decals (shows expanded view)
 // MENS CLOTHING - T-Shirts and Hoodies
-export const mensClothing = [
+export const mensClothing: ShopProduct[] = [
   { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/m1-myob-hoodie-front.png', backImage: '/images/products/web/m1-myob-hoodie-back.png', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'myob', backGraphicId: 'hfw-black-shadow' },
-  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/m2-thump-hoodie-back.png', backImage: '/images/products/web/m2-thump-hoodie-front.png', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'thump-a-stranger', backGraphicId: 'hfw-black-shadow' },
+  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/m2-thump-hoodie-front.png', backImage: '/images/products/web/m2-thump-hoodie-back.png', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'thump-a-stranger', backGraphicId: 'hfw-black-shadow' },
   { id: 'm3', title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m3-hfw-classic-front.png', backImage: '/images/products/web/m3-hfw-classic-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'hfw-logo' },
   { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m4-yycf-front.png', backImage: '/images/products/web/m4-yycf-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'yycf-logo' },
   { id: 'm5', title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m5-fun-ride-front.png', backImage: '/images/products/web/m5-fun-ride-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'fun-logo' },
   { id: 'm6', title: 'T-Shirt - GNF', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m6-gnf-front.png', backImage: '/images/products/web/m6-gnf-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'gnf' },
   { id: 'm7', title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m7-hcf-front.png', backImage: '/images/products/web/m7-hcf-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'human-cockfighter' },
   { id: 'm8', title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m8-thump-front.png', backImage: '/images/products/web/m8-thump-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'thump-a-stranger' },
-  { id: 'm9', title: 'T-Shirt - WIMB', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m9-wimb-back.png', backImage: '/images/products/web/m9-wimb-front.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'wimb' },
-  { id: 'm10', title: 'T-Shirt - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m10-cling-guns-back.png', backImage: '/images/products/web/m10-cling-guns-front.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'cling-to-guns' },
+  { id: 'm9', title: 'T-Shirt - WIMB', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m9-wimb-front.png', backImage: '/images/products/web/m9-wimb-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'wimb' },
+  { id: 'm10', title: 'T-Shirt - Cling to Guns', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m10-cling-guns-front.png', backImage: '/images/products/web/m10-cling-guns-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'cling-to-guns' },
   { id: 'm11', title: 'T-Shirt - MYOB', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m11-myob-front.png', backImage: '/images/products/web/m11-myob-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'myob' },
   { id: 'm12', title: 'Staunch Properties - CHM Edition', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/chm-front-web.png', backImage: '/images/products/chm-back-web.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'staunch-chm' },
   { id: 'm13', title: 'T-Shirt - Goodwood', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m13-goodwood-front.png', backImage: '/images/products/web/m13-goodwood-back.png', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'] }
@@ -279,7 +279,7 @@ export const mensClothing = [
 
 // WOMENS CLOTHING - Tank Tops
 // Pink color option is available with garment preview images (pink-tinted variants)
-export const womensClothing = [
+export const womensClothing: ShopProduct[] = [
   { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/w1-fun-ride-tank.png', backImage: '/images/products/web/womens-tank-back-universal.png', type: 'garment', garmentType: 'tank-womens', sizes: ['S','M','L','XL'], colors: ['Black','White','Grey'], graphicId: 'fun-logo' },
   { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/w2-hfw-tank.png', backImage: '/images/products/web/womens-tank-back-universal.png', type: 'garment', garmentType: 'tank-womens', sizes: ['S','M','L','XL'], colors: ['Black','White','Grey'], graphicId: 'hfw-logo' },
   { id: 'w3', title: "Women's Tank - Thump a Stranger", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/w3-thump-tank.png', backImage: '/images/products/web/womens-tank-back-universal.png', type: 'garment', garmentType: 'tank-womens', sizes: ['S','M','L','XL'], colors: ['Black','White','Grey'], graphicId: 'thump-a-stranger' },
@@ -290,12 +290,12 @@ export const womensClothing = [
 ]
 
 // KIDS CLOTHING - Youth Hoodie
-export const kidsClothing = [
+export const kidsClothing: ShopProduct[] = [
   { id: 'k1', title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/k1-youth-hoodie-front.png', backImage: '/images/products/web/k1-youth-hoodie-back.png', type: 'garment', garmentType: 'hoodie', sizes: ['YS','YM','YL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'hfw-black-shadow', backGraphicId: 'hfw-logo' }
 ]
 
 // HATS - Trucker Hats and Beanies
-export const hats = [
+export const hats: ShopProduct[] = [
   { id: 'h1', title: 'Beanie', vendor: 'Hillbilly Fightwear', price: '$25.00', priceNum: 25, image: '/images/products/web/h1-beanie.png', type: 'garment', garmentType: 'beanie', sizes: ['One Size'], colors: ['Black','Grey','White'] },
   { id: 'h2', title: 'Fitted Hat - GNF White', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h2-gnf-white-fitted.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['White'] },
   { id: 'h3', title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h3-gnf-black-fitted.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
@@ -313,7 +313,7 @@ export const hats = [
 
 // DECALS / STICKERS
 // image = local graphic for site display; backImage = product photography
-export const decals = [
+export const decals: ShopProduct[] = [
   // DECAL BACK IMAGE MAPPING (verified by visual analysis of each back photo):
   // d1-back-gnf.png = "Cling to Guns" text, d2-back-hfw.png = Human Cockfighter rooster,
   // d3-back-thump.png = "Fun Ride" text, d4-back-funride.png = "Put It On Em" text,

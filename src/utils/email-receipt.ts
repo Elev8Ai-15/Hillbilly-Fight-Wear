@@ -4,6 +4,7 @@
 // Designed to work with any email API (Stripe receipts, SendGrid, etc.)
 // ============================================
 import { type PricingBreakdown, type BuilderPricing } from './pricing'
+import { escHtml } from './html'
 
 // ============================================
 // TYPES
@@ -446,14 +447,4 @@ export function generateBuilderReceipt(
 </html>`
 }
 
-// ============================================
-// HELPER: HTML escape for email content
-// ============================================
-function escHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
+// escHtml imported from ./html

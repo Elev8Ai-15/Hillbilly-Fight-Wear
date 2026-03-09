@@ -8,6 +8,7 @@ import {
   mensClothing, womensClothing, kidsClothing, hats, decals,
   type ShopProduct
 } from './data/catalog'
+import { escHtml } from './utils/html'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
@@ -88,8 +89,8 @@ app.use('*', async (c, next) => {
 // SEC-12: Strict origin allowlist; sandbox patterns for dev only
 app.use('/api/*', cors({
   origin: (origin) => {
-    // Allow same-origin requests (no Origin header)
-    if (!origin) return '*'
+    // Allow same-origin requests (no Origin header sent by browser for same-origin)
+    if (!origin) return 'https://hillbillyfightwear.com'
     // Production domains
     const allowed = ['https://hillbillyfightwear.com', 'https://www.hillbillyfightwear.com']
     if (allowed.includes(origin)) return origin
@@ -135,8 +136,7 @@ app.get('/', (c) => {
     <button class="dot ${index === 0 ? 'active' : ''}" data-dot="${index}" data-action="goToSlide" data-index="${index}"></button>
   `).join('')
 
-  // HTML-escape helper for product titles in attributes (XSS prevention)
-  const escHtml = (s: string): string => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+  // escHtml imported from ./utils/html
 
   const productsHtml = products.map(product => `
     <a href="${product.url}" class="product-card">
@@ -2487,7 +2487,7 @@ app.get('/', (c) => {
         if (item.style) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Style: ' + esc(item.style) + '</span> ';
         if (item.color) details += '<span style="background:#f0f0f0; padding:2px 8px; border-radius:3px; font-size:0.75rem;">Color: ' + esc(item.color) + '</span>';
         html += '<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; align-items:flex-start;">' +
-          '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#ffffff; flex-shrink:0;">' +
+          '<img loading="lazy" src="' + esc(item.image) + '" alt="' + esc(item.title) + '" style="width:70px; height:70px; object-fit:contain; border-radius:6px; background:#ffffff; flex-shrink:0;">' +
           '<div style="flex:1; min-width:0;">' +
             '<div style="font-weight:600; font-size:0.9rem; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(item.title) + '</div>' +
             '<div style="margin-bottom:6px;">' + details + '</div>' +
@@ -4443,7 +4443,7 @@ app.get('/build', (c) => {
       
       grid.innerHTML = availableGraphics.map(function(g) {
         return '<div class="graphic-option" data-id="' + g.id + '">' +
-          '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
+          '<img loading="lazy" src="' + g.thumbnail + '" alt="' + g.name + '">' +
           '<div class="name">' + g.name + '</div>' +
         '</div>';
       }).join('');
@@ -4713,13 +4713,6 @@ app.get('/build', (c) => {
       if (countEl) countEl.textContent = '(' + examples.length + ' examples)';
     }
 
-    function renderPlacements() {
-      // Placement selection removed — positions are fixed in new model
-      // Front logo: fixed front center. HFW logo: fixed 3" back neck.
-      // This function is kept as a no-op for backward compatibility.
-      return;
-    }
-    
     // ---- Toast notification system ----
     function showToast(message) {
       var existing = document.getElementById('builderToast');
@@ -4761,7 +4754,7 @@ app.get('/build', (c) => {
             if (!g) return ''; // Defensive: skip orphaned entries
             return '<div class="additional-item">' +
               '<div class="info">' +
-                '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
+                '<img loading="lazy" src="' + g.thumbnail + '" alt="' + g.name + '">' +
                 '<div>' +
                   '<div style="font-weight: 600; font-size: 0.85rem;">' + g.name + '</div>' +
                   '<div style="font-size: 0.75rem; color: #666;">Back Placement &bull; +$15.00</div>' +
@@ -4936,7 +4929,7 @@ app.get('/build', (c) => {
       var graphicsGrid = document.getElementById('modalGraphicsGrid');
       graphicsGrid.innerHTML = availableGraphics.map(function(g) {
         return '<div class="graphic-option" data-id="' + g.id + '">' +
-          '<img src="' + g.thumbnail + '" alt="' + g.name + '">' +
+          '<img loading="lazy" src="' + g.thumbnail + '" alt="' + g.name + '">' +
           '<div class="name">' + g.name + '</div>' +
         '</div>';
       }).join('');
@@ -5109,7 +5102,7 @@ app.get('/build', (c) => {
         // Stale check: if another updatePreview was called after us, bail out
         if (currentUpdateId !== previewUpdateId) return;
         
-        console.log('[Preview] Garment loaded in ' + (performance.now() - _pt0).toFixed(0) + 'ms, ok=' + !!(garmentImg && !isError && garmentImg.width));
+        // Performance timing captured silently
         
         if (!garmentImg || isError || !garmentImg.width || !garmentImg.height) {
           // Show error state on canvas
