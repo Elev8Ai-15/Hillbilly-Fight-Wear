@@ -5,94 +5,62 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 ## Project Overview
 - **Name**: Hillbilly Fightwear Store
 - **Goal**: E-commerce platform with custom apparel builder
-- **Features**: Hero slideshow, product grid, custom garment designer with Fabric.js canvas, Stripe checkout
+- **Features**: Hero slideshow, product grid, custom garment designer with Fabric.js canvas, Stripe checkout, YouTube video embed, comprehensive security hardening
 
 ## URLs
 - **Production**: https://hillbilly-fightwear.pages.dev
-- **Custom Domain (www)**: https://www.hillbillyfightwear.com ✅ Active
-- **Custom Domain (apex)**: https://hillbillyfightwear.com ⏳ Pending DNS propagation
+- **Custom Domain (www)**: https://www.hillbillyfightwear.com
+- **Custom Domain (apex)**: https://hillbillyfightwear.com
 - **Builder**: https://www.hillbillyfightwear.com/build
 - **Contact**: https://www.hillbillyfightwear.com/contact
+- **GitHub**: https://github.com/Elev8Ai-15/Hillbilly-Fight-Wear
 
 ## Features
 
 ### Homepage
 - Announcement bar with promotional messaging
-- **Full-screen hero carousel** with 6 rotating MMA/rodeo action images (4K upscaled)
+- **Scrapbook-style sticker collage** with branded graphics (desktop: absolute positioned, mobile: 3-column grid)
 - Logo overlay with transparent background
-- Pause/Play functionality for slideshow
-- Slide navigation dots
-- Dual CTA buttons: "Build Your Own" + "Shop Now"
-- Scroll indicator animation
-- **"Build Your Own" CTA section**
-- Featured product grid (6 t-shirt products)
+- **"Build Your Own" CTA section** with featured product grid
 - Product cards linking to builder with pre-selections
+- **YouTube video embed** (above photo carousel)
+- **Full-screen hero carousel** with 6 rotating MMA/rodeo action images
+- Pause/Play functionality, navigation dots
+- Podcast/Blog section with Spotify embed
 - Feature row promoting custom apparel builder
 - Fully responsive design (mobile, tablet, desktop)
 
+### Shop
+- **48 products** across 5 categories: Men's (13), Women's (7), Kids (1), Hats (12), Decals (15)
+- Product modal with size/color/style selection
+- Front/Back image hover flip on product cards
+- Shopping cart drawer with promo nudges and real-time pricing
+- Stripe checkout integration
+
 ### Custom Garment Builder (/build)
 - **5-Step Wizard Interface**:
-  1. Choose Garment (T-Shirt, Sweatshirt, Hoodie, Tank Tops, Trucker Hat)
+  1. Choose Garment (T-Shirt, Sweatshirt, Hoodie, Tank Tops, Trucker Hat, Beanie)
   2. Select Size (XS - XXXL, or hat sizes)
   3. Select Color (White, Grey, Black)
-  4. Choose Graphics (11 HFW logos/designs)
-  5. Select Placement (Full Front/Back, Left/Right Chest, Hat Front)
-- **Real-time Fabric.js Canvas Preview**
-  - Live preview of garment with graphic overlay
-  - **Front/Back view toggle** (automatic switching based on placement)
-  - Graphics overlay with proper positioning
-- **Multiple Graphics Support**
-  - Add additional graphics (+$10 each)
-  - Choose different placements for each
-- **Dynamic Pricing**
-  - Real-time price calculation
-  - Order summary with itemized breakdown
-- **Stripe Checkout Integration**
-  - Secure payment processing
-  - Configuration metadata preserved
-  - Success/Cancel pages
+  4. Choose Graphics (20 HFW logos/designs)
+  5. Placement auto-assigned (front center + HFW 3" back neck)
+- **Real-time Fabric.js Canvas Preview** with front/back toggle
+- **Multiple Graphics Support** (+$10 each additional)
+- **Dynamic Pricing** with real-time order summary
+- **Stripe Checkout Integration** with success/cancel pages
 
-### Pricing
-| Garment | Base Price |
-|---------|------------|
-| T-Shirt (Unisex) | $30.00 |
-| Tank Top (Men's) | $35.00 |
-| Tank Top (Women's) | $35.00 |
-| Trucker Hat | $35.00 |
-| Beanie | $25.00 |
-| Sweatshirt | $45.00 |
-| Hoodie | $50.00 |
-| Additional Graphic | +$10.00 |
+### Contact Page (/contact)
+- Contact form with email delivery via Resend API
+- Form validation with HTML sanitization
 
-### Graphics Library (20 Total)
-
-**Core HFW Logos:**
-- **HFW Black Shadow** - Black with shadow
-- **HFW White Outline** - White outline variant
-- **HFW Logo** - Original HFW logo
-
-**Slogan Graphics:**
-- **Thump A Stranger** - Brand slogan design
-- **Human Cockfighter** - Fighter artwork
-- **MYOB** - "Mind Y'own Business" (Red/White/Blue)
-- **GNF** - "G-N-F" patriotic letters
-- **WIMB** - "What's It Mean To You?"
-- **Cling to Guns** - Patriotic slogan
-- **Yes, You Can** - Motivational text
-- **Put It On Em** - Fighting slogan
-- **Obama Tap** - Political humor
-- **Good for Community** - Community message
-- **Hard Hittin'** - Fighting slogan
-- **Staunch Properties (CHM)** - Partner graphic
-
-**Partner Logos:**
-- **GPG Design** - Partner graphic
-- **YYCF Logo** - Partner logo
-- **FUN Logo** - Brand variant
-
-**Women's Exclusive (Tank Tops & T-Shirts Only):**
-- **Thumpin' Is Lovin' (Pink)** 💗 - Women's exclusive
-- **Thumpin' Is Lovin' (Purple)** 💜 - Women's exclusive
+### Security (22 hardening rules)
+- CSP with per-request nonces (no unsafe-eval)
+- HSTS with preload
+- SRI integrity hashes on all CDN resources
+- Stripe session ID validation
+- Open redirect protection
+- CORS strict origin matching
+- Rate-limited request body size (1 MB)
 
 ## API Endpoints
 
@@ -100,93 +68,89 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 |----------|--------|-------------|
 | `/` | GET | Main store homepage |
 | `/build` | GET | Custom garment builder |
+| `/contact` | GET | Contact form page |
+| `/checkout/success` | GET | Order confirmation page |
+| `/privacy-policy` | GET | Privacy policy page |
+| `/cookie-policy` | GET | Cookie policy page |
+| `/robots.txt` | GET | Robots directives |
 | `/api/garments` | GET | All available garments with prices |
 | `/api/graphics` | GET | All available graphics |
 | `/api/placements` | GET | Available placement options |
 | `/api/products` | GET | Featured products |
-| `/api/slides` | GET | Homepage slideshow data |
 | `/api/shop-products` | GET | All 48 shop products |
-| `/api/calculate-price` | POST | Calculate order price |
+| `/api/slides` | GET | Homepage slideshow data |
+| `/api/pricing` | GET | Pricing constants, shipping, promos |
+| `/api/stripe/status` | GET | Stripe configuration status |
+| `/api/calculate-price` | POST | Calculate builder order price |
+| `/api/cart-pricing` | POST | Calculate cart pricing with promos |
 | `/api/shop-checkout` | POST | Cart checkout via Stripe |
-| `/api/create-checkout` | POST | Create Stripe checkout session |
-| `/checkout/success` | GET | Order confirmation page |
-| `/favicon.ico` | GET | Favicon (returns 204) |
+| `/api/create-checkout` | POST | Builder checkout via Stripe |
+| `/api/contact` | POST | Submit contact form |
+| `/api/stripe/webhook` | POST | Stripe webhook handler |
+| `/api/stripe/sync-catalog` | POST | Sync products to Stripe |
+| `/api/send-receipt` | POST | Resend order receipt |
+| `/api/preview-receipt` | POST | Preview receipt HTML |
 
 ## Tech Stack
-- **Framework**: Hono
-- **Canvas**: Fabric.js 5.x
-- **Styling**: Tailwind CSS (local pre-built, 7KB minified) + Custom CSS
-- **Icons**: FontAwesome 6.4.0 (CDN)
+- **Framework**: Hono 4.x
+- **Canvas**: Fabric.js 5.3.1 (with SRI hash)
+- **Styling**: Tailwind CSS (local pre-built, minified) + Custom CSS
+- **Icons**: FontAwesome 6.4.0 (CDN, with SRI hash)
 - **Fonts**: Oswald (Google Fonts)
-- **Payments**: Stripe Checkout
+- **Payments**: Stripe Checkout (live mode)
+- **Email**: Resend API
+- **Build**: Vite 5.x + TypeScript 5.x
+- **CLI**: Wrangler 4.71.0
 - **Deployment**: Cloudflare Pages/Workers
 
 ## Data Architecture
 
-### Garment Images (33 Total)
-All AI-generated flat-lay mockup images served locally:
-- **Front/Back views** for all tops (T-Shirt, Sweatshirt, Hoodie, Tank Tops)
-- **Single view** for Trucker Hats
-- **3 colors each**: White, Black, Grey
-- Location: `/images/garments/`
+### Product Catalog (`src/data/catalog.ts`)
+- **ShopProduct type**: Strictly typed with `'garment' | 'decal'` union
+- **Men's Clothing**: 13 items (2 hoodies, 11 t-shirts)
+- **Women's Clothing**: 7 tank tops (incl. pink/purple Thumpin' variants)
+- **Kids**: 1 youth hoodie
+- **Hats**: 12 (beanies, fitted, adjustable)
+- **Decals**: 15 sticker/decal products
+- All product images served from `/images/products/web/`
 
-### Graphics Assets (11 Total)
+### Graphics Library (20 Total)
 All locally hosted in `/images/graphics/`:
-- No external Shopify CDN dependencies
-- Optimized for canvas overlay
+- 3 HFW logo variants
+- 12 slogan/artwork graphics
+- 3 partner logos (GPG, YYCF, FUN)
+- 2 women's exclusives (Thumpin' Pink/Purple)
 
-### Homepage Assets
-- **Slides**: 6 locally hosted 4K images (`/images/slides/`)
-  - slide-cage-coach.jpg - Coach through cage fence
-  - slide-gpg-handshake.jpg - GPG fighter handshake
-  - slide-backstage.jpg - Backstage after fight
-  - slide-cage-grapple.jpg - Cage grappling with HFW branding
-  - slide-ring-fight.jpg - Ring fight action
-  - slide-bullrider.jpg - Bull riding with HFW gear
-- **Hero Logo**: Transparent 3D embossed logo (`/images/graphics/hillbilly-fightwear-logo.png`)
-- **Product Thumbnails**: Local graphics images
-
-### Storage
-- **Static Assets**: Cloudflare Pages (auto-served from public/)
-- **Product Data**: In-memory TypeScript arrays
-- **Payments**: Stripe (external service)
-- **Future**: Cloudflare D1 for order history
-
-## Asset Summary
+### Static Assets
 | Category | Count | Size |
 |----------|-------|------|
-| Garment Images | 33 | 16MB |
-| Graphics | 10 | 8.3MB |
-| Slides (4K) | 6 | 15MB |
-| Worker Bundle | 1 | 78KB |
-| **Total** | **50** | **~39MB** |
+| Product Images | ~60 | ~8 MB |
+| Garment Mockups | 38 | ~4 MB |
+| Graphics | 20 | ~3 MB |
+| Stickers | 15 | ~1 MB |
+| Slides | 6 | ~2 MB |
+| Portfolio | 17 | ~2 MB |
+| Worker Bundle | 1 | 348 KB |
+| **Total** | **~160** | **~20 MB** |
 
-## User Guide
-
-### Browsing
-1. Visit homepage to see featured products
-2. Watch the hero slideshow auto-rotate
-3. Click any product to jump to builder with that graphic
-
-### Building Custom Apparel
-1. Click "Start Designing" or go to `/build`
-2. **Step 1**: Select your garment type
-3. **Step 2**: Choose your size
-4. **Step 3**: Pick a color (watch preview update!)
-5. **Step 4**: Select a graphic from the gallery
-6. **Step 5**: Choose where to place the graphic
-7. **Toggle Front/Back** to see different placements
-8. Optional: Add more graphics (+$10 each)
-9. Review your order summary
-10. Click "Proceed to Checkout" for Stripe payment
+### Storage
+- **Static Assets**: Cloudflare Pages CDN (30-day cache, immutable)
+- **Product Data**: TypeScript arrays in `src/data/catalog.ts`
+- **Payments**: Stripe (external)
+- **Email**: Resend API (external)
 
 ## Environment Variables
 
-For Stripe integration, set these in `.dev.vars` (local) or Cloudflare secrets (production):
-
+For local development (`.dev.vars`):
 ```
 STRIPE_SECRET_KEY=sk_...
-STRIPE_PUBLISHABLE_KEY=pk_...
+RESEND_API_KEY=re_...
+```
+
+For production (Cloudflare secrets):
+```bash
+npx wrangler pages secret put STRIPE_SECRET_KEY --project-name hillbilly-fightwear
+npx wrangler pages secret put RESEND_API_KEY --project-name hillbilly-fightwear
 ```
 
 ## Development
@@ -196,101 +160,101 @@ STRIPE_PUBLISHABLE_KEY=pk_...
 npm install
 npm run build
 pm2 start ecosystem.config.cjs
+# Server at http://localhost:3000
 ```
 
 ### Production Deployment
 ```bash
 npm run build
-npx wrangler pages deploy dist
+npx wrangler pages deploy dist --project-name hillbilly-fightwear
+```
+
+### Useful Commands
+```bash
+npm run build:css          # Rebuild Tailwind CSS only
+npx tsc --noEmit           # TypeScript type check (0 errors)
+npm audit                  # Security audit (2 moderate, dev-only)
+pm2 logs --nostream        # Check server logs
+pm2 restart hillbilly-fightwear  # Restart dev server
 ```
 
 ## Project Structure
 ```
 webapp/
 ├── src/
-│   ├── index.tsx          # Main Hono app (homepage, build routes)
+│   ├── index.tsx          # Main Hono app (homepage + builder, 5.5K lines)
 │   ├── data/
-│   │   └── catalog.ts     # Product catalog data (garments, graphics, shop products)
+│   │   └── catalog.ts     # Product catalog (garments, graphics, shop products)
 │   ├── routes/
-│   │   ├── api.ts         # API endpoints (data, checkout, pricing)
-│   │   └── pages.ts       # Static pages (success, privacy, cookie, 404)
+│   │   ├── api.ts         # API endpoints (checkout, pricing, webhooks)
+│   │   └── pages.ts       # Static pages (success, privacy, cookie, contact, 404)
+│   ├── utils/
+│   │   ├── html.ts        # Shared HTML escape helper
+│   │   ├── pricing.ts     # Pricing engine (promos, cart calc, validation)
+│   │   ├── stripe.ts      # Stripe API integration (checkout, sync, receipts)
+│   │   └── email-receipt.ts # HTML/text email receipt generator
 │   └── tailwind-input.css # Tailwind CSS entry point
 ├── public/
-│   ├── images/
-│   │   ├── garments/      # 38 garment mockup images (front/back, incl. pink)
-│   │   ├── graphics/      # 10 logo/artwork images + hero logo
-│   │   ├── stickers/      # 14 sticker images (incl. GNF red/blue variant)
-│   │   └── slides/        # 6 slideshow images (4K)
+│   ├── images/            # All product, garment, graphic, slide, portfolio images
 │   ├── static/
 │   │   └── tailwind.css   # Pre-built minified Tailwind CSS
-│   └── _routes.json       # Static file routing config
-├── dist/                  # Build output
-├── tailwind.config.js     # Tailwind CSS configuration
+│   ├── _headers           # Cloudflare security headers config
+│   ├── _routes.json       # Static file routing config
+│   └── manifest.json      # PWA manifest
+├── ecosystem.config.cjs   # PM2 configuration
 ├── package.json
 ├── vite.config.ts
 ├── tsconfig.json
 ├── wrangler.jsonc
-├── ecosystem.config.cjs   # PM2 configuration
 └── README.md
 ```
 
-## Recent Updates (v5.2.0 - Email Update, Code Cleanup & Catalog Expansion)
-- **Email update**: All transaction/receipt emails now use brian@hillbillyfightwear.com
-- **Code cleanup**: Removed 4 unused imports (generateShopReceipt, generateShopReceiptPlainText from stripe.ts; LineItem, roundCurrency from email-receipt.ts)
-- **Removed unreferenced images**: hfw-logo-black-3d.png (132KB), hfw-logo-metal-gloves.png (392KB)
-- **3 new products from Shopify**: T-Shirt - Goodwood (m13), Adjustable Hat - Hard Hittin (h6), Fitted Hat - GNF Patriotic (h13)
-- **Back images added**: 31 products now have backImage URLs (all hoodies, t-shirts, tanks, kids, + 10 decals)
-- **Catalog total**: 48 products (33 garments + 15 decals), with Shopify CDN photography for decal product photos
-- **Full Shopify scrape completed**: All 47 Shopify products analyzed and cross-referenced
+## Recent Updates
 
-## Previous Updates (v5.1.0 - Publishing & Final Cleanup)
-- **GNF sticker position fix**: Moved left from 25% → 12% (matching HFW sticker adjustment)
-- **Apex domain added**: `hillbillyfightwear.com` registered as custom domain on Cloudflare Pages
-- **www domain active**: `www.hillbillyfightwear.com` fully operational with SSL
-- **Comprehensive cleanup completed**: Removed dead files (10 files, 735 lines), merged duplicate CSS, cleaned unused code blocks
-- **All 12+ routes verified**: Homepage, Builder, Contact, Privacy, Cookie policy, API endpoints all returning HTTP 200
-- **Zero console errors**: Only 1 minor iframe attribute warning (Spotify embed)
+### v6.0.0 - Full Project Scan & Optimization (2026-03-09)
+**17 issues fixed across all source files:**
 
-## Previous Updates (v5.0.0 - Code Review & Stability)
-- **Fixed: Hoodie graphic disappearing on color change** - Added 30ms debounce to `updatePreview()` eliminating the async race condition where rapid state changes caused stale `previewUpdateId` callbacks to drop graphics
-- **Fixed: All garment backgrounds now pure white** - Changed `#f7f7f7` to `#ffffff` across product-image-wrapper, Shop modal previews, decal modal previews, cart thumbnails, and Build canvas
-- **Refactored canvas constants**: Extracted `PRINT_AREA`, `PLACEMENT_POSITIONS`, and `isPlacementVisibleForView()` helper to reduce duplication and improve calibration clarity
-- **Fixed: Add Graphic modal now filters restricted graphics** - Modal was previously showing all graphics regardless of garment; now respects `restrictToGarments`
-- **Improved keyboard accessibility**: Space key now triggers product card modals with proper `preventDefault`
-- **Hardened null checks**: Defensive guards in `renderAdditionalGraphics`, `addToCart` (zipupHoodieImages guard), and API validation
-- **Simplified scaling handler**: Canvas object:scaling reduced to single clamped expression
-- **Cleaned up dead code**: Removed no-op event handler comment, improved inline documentation
+**Critical Fixes:**
+- Fixed swapped front/back images for m2 (Thump Hoodie), m9 (WIMB), m10 (Cling to Guns)
+- Fixed 10 TypeScript compilation errors (explicit `ShopProduct[]` typing + Stripe `updated` field)
+- Removed duplicate `updated` variable declaration in `stripe.ts`
 
-## Previous Updates (v4.0.0 - Production Hardening)
-- **CSP Nonces**: Per-request cryptographic nonces for inline script protection
-- **Local Tailwind CSS**: Replaced CDN with pre-built 7KB minified CSS
-- **Modular Routes**: Extracted API (279 lines), pages (331 lines), catalog (346 lines)
-- **XSS Hardening**: HTML-escaped product titles/values in modal and cart rendering
-- **Color Preview Fix**: Modal updates garment preview when color selection changes
-- **Pink Tank Variants**: Added pink color option with generated preview images
-- **D11 Sticker Fix**: Distinct red/blue GNF variant image (was duplicate of d1)
-- **Price Calibration**: Corrected featured item pricing to match catalog
-- **Error Handling**: Improved addToCart/openProductModal error logging
-- **48 Shop Products**: 33 garments + 15 decals across 5 categories verified
+**Security & Dependencies:**
+- Upgraded wrangler 3.114.17 -> 4.71.0 (7 vulns -> 2 dev-only)
+- CORS `!origin` now returns production domain instead of wildcard `*`
+- Annotated all `any` types with eslint-disable comments for traceability
 
-## Previous Updates (v3.0.0)
-- **Full-screen hero carousel** with 6 new MMA/rodeo action images
-- **4K upscaled images** for crisp display on all devices
-- **New 3D embossed logo** with transparent background
-- **Dual CTA buttons** (Build Your Own + Shop Now)
-- **System cleanup**: Removed ~5MB of unused assets
-- **Optimized CSS**: background-size: contain for full image visibility
-- Zero external dependencies for assets
+**Performance:**
+- Optimized 44 PNGs (up to 82% reduction) + 14 JPGs — images 27 MB -> 20 MB
+- Added `loading="lazy"` to 4 dynamically-inserted image templates
+- Updated browserslist database
 
-## Previous Updates (v2.1.0)
-- Generated 33 flat-lay garment images with front/back views
-- Downloaded and localized all graphics (no Shopify CDN)
-- Fixed front/back toggle wiring for canvas preview
+**Code Quality:**
+- Removed dead `renderPlacements()` function
+- Deleted orphaned h6 images and temp/ directory
+- Consolidated 4 duplicate `escHtml` functions into shared `src/utils/html.ts`
+- Extracted magic numbers to named constants (`MAX_REQUEST_BODY_BYTES`, `DATA_CACHE_SECONDS`)
 
-## Original Source
-Enhanced from: https://hillbilly-fightwear.myshopify.com/
+**Build Status:** 0 errors, 0 TypeScript errors, 347.68 KB bundle
+
+### v5.3.0 - Security Hardening (2026-03-04)
+- 22-point security hardening patch (SEC-01 through SEC-22)
+- Removed `unsafe-eval` from CSP; Fabric.js loads with nonce
+- Added HSTS, COOP, SRI hashes, Stripe session validation
+- Open redirect guard, contact form sanitization, strict CORS
+
+### v5.2.0 - YouTube, Sticker Updates (2026-02-19)
+- Added YouTube video embed above photo carousel
+- Removed HFW Logo sticker (sticker-15) from hero collage
+- Added Women's Tank - Thumpin Is Lovin (Hot Pink) as w7
+- Purple Thumpin Is Lovin graphic added to Build Your Own
+
+### v5.1.0 - Publishing & Cleanup
+- Custom domains configured (www + apex)
+- GNF sticker position fix
+- Comprehensive dead code cleanup (10 files, 735 lines removed)
 
 ---
-**Status**: ✅ Active / Published  
-**Last Updated**: 2026-02-14  
-**Version**: 5.1.0 (Published - DNS configured, sticker fixes, comprehensive cleanup)
+**Status**: Active  
+**Last Updated**: 2026-03-09  
+**Version**: 6.0.0
