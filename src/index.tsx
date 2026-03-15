@@ -179,28 +179,28 @@ app.get('/', (c) => {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
   <!-- SEO Meta Tags -->
-  <title>Hillbilly Fightwear - Official MMA & Combat Sports Apparel Store</title>
-  <meta name="description" content="Official Hillbilly Fightwear store. Shop premium MMA apparel, custom fight gear, hoodies, t-shirts, hats, and decals. Build your own custom designs with our unique graphics.">
-  <meta name="keywords" content="MMA apparel, fight gear, Hillbilly Fightwear, custom t-shirts, hoodies, combat sports, UFC gear, wrestling apparel, BJJ clothing">
+  <title>MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear</title>
+  <meta name="description" content="Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs. Free shipping + tax, Buy 2 Get 1 Free. Build Y'Own and make your statement!">
+  <meta name="keywords" content="MMA apparel, custom MMA apparel, MMA t-shirts, MMA hoodies, hillbilly fightwear, fight wear, MMA trucker hat">
   <meta name="author" content="Hillbilly Fightwear">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://hillbillyfightwear.com/">
   
-  <!-- Open Graph / Facebook -->
+  <!-- Open Graph for Instagram/Facebook shares (fighters share gear like crazy) -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://hillbillyfightwear.com/">
-  <meta property="og:title" content="Hillbilly Fightwear - Official MMA & Combat Sports Apparel">
-  <meta property="og:description" content="Shop premium MMA apparel and custom fight gear. Hoodies, t-shirts, hats, and more. Build your own custom designs.">
-  <meta property="og:image" content="/images/graphics/hillbilly-fightwear-logo.png">
+  <meta property="og:title" content="MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear">
+  <meta property="og:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, Buy 2 Get 1 Free. Build your own – make your statement!">
+  <meta property="og:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg">
   <meta property="og:site_name" content="Hillbilly Fightwear">
   <meta property="og:locale" content="en_US">
   
-  <!-- Twitter Card -->
+  <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://hillbillyfightwear.com/">
-  <meta name="twitter:title" content="Hillbilly Fightwear - Official MMA & Combat Sports Apparel">
-  <meta name="twitter:description" content="Shop premium MMA apparel and custom fight gear. Build your own custom designs.">
-  <meta name="twitter:image" content="/images/graphics/hillbilly-fightwear-logo.png">
+  <meta name="twitter:title" content="MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear">
+  <meta name="twitter:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, Buy 2 Get 1 Free. Build your own – make your statement!">
+  <meta name="twitter:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg">
   
   <!-- Mobile & PWA -->
   <meta name="theme-color" content="#8B0000">
@@ -228,7 +228,7 @@ app.get('/', (c) => {
     "@context": "https://schema.org",
     "@type": "Store",
     "name": "Hillbilly Fightwear",
-    "description": "Official MMA and combat sports apparel store",
+    "description": "Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs.",
     "url": "https://hillbillyfightwear.com",
     "logo": "https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png",
     "priceRange": "$$",
