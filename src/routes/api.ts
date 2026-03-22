@@ -6,6 +6,7 @@
 // Pricing engine: src/utils/pricing.ts (single source of truth)
 // Stripe integration: src/utils/stripe.ts (activated with STRIPE_SECRET_KEY)
 // Email receipts: src/utils/email-receipt.ts
+// Rate limiting: src/utils/rate-limit.ts (SEC-12, edge-native per-IP)
 // ============================================
 import { Hono } from 'hono'
 import {
@@ -33,6 +34,7 @@ import {
   generateBuilderReceipt,
   type OrderInfo,
 } from '../utils/email-receipt'
+import { rateLimit } from '../utils/rate-limit'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
@@ -159,6 +161,14 @@ const MAX_REQUEST_BODY_BYTES = 1_048_576  // 1 MB
 const DATA_CACHE_SECONDS = 300            // 5 minutes
 
 // ============================================
+// SEC-12: Rate limiting per endpoint tier
+// Strict = contact/checkout (abuse-prone), Standard = pricing calcs
+// ============================================
+const strictLimit  = rateLimit({ windowMs: 15 * 60 * 1000, max: 5,  message: 'Too many submissions — please try again in 15 minutes.' })
+const standardLimit = rateLimit({ windowMs: 15 * 60 * 1000, max: 30, message: 'Too many requests — please slow down.' })
+const webhookLimit  = rateLimit({ windowMs: 1 * 60 * 1000,  max: 60, message: 'Rate limit exceeded.' })
+
+// ============================================
 // SEC-09: Request body size limit for all POST endpoints
 // Prevents memory exhaustion / DoS from oversized payloads.
 // Cloudflare Workers has a 100 MB limit; we enforce 1 MB for API routes.
@@ -251,7 +261,7 @@ api.get('/pricing', (c) => {
 // CART PRICING PREVIEW
 // Calculate pricing breakdown without creating a checkout session
 // ============================================
-api.post('/cart-pricing', async (c) => {
+api.post('/cart-pricing', standardLimit, async (c) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
@@ -298,7 +308,7 @@ api.post('/cart-pricing', async (c) => {
 // SHOP CART CHECKOUT
 // Validates cart, calculates pricing, creates Stripe session or demo
 // ============================================
-api.post('/shop-checkout', async (c) => {
+api.post('/shop-checkout', strictLimit, async (c) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
@@ -369,7 +379,7 @@ api.post('/shop-checkout', async (c) => {
 // ============================================
 // BUILDER PRICE CALCULATOR
 // ============================================
-api.post('/calculate-price', async (c) => {
+api.post('/calculate-price', standardLimit, async (c) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
@@ -426,7 +436,7 @@ api.post('/calculate-price', async (c) => {
 // BUILDER CHECKOUT
 // Validates custom design, calculates pricing, creates Stripe session or demo
 // ============================================
-api.post('/create-checkout', async (c) => {
+api.post('/create-checkout', strictLimit, async (c) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
@@ -539,7 +549,7 @@ api.post('/create-checkout', async (c) => {
 // EMAIL RECEIPT PREVIEW (for testing)
 // Generates an HTML receipt for preview without sending
 // ============================================
-api.post('/preview-receipt', async (c) => {
+api.post('/preview-receipt', standardLimit, async (c) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
@@ -595,7 +605,7 @@ api.post('/preview-receipt', async (c) => {
 // STRIPE PRODUCT CATALOG SYNC
 // Push all products and prices to Stripe
 // ============================================
-api.post('/stripe/sync-catalog', async (c) => {
+api.post('/stripe/sync-catalog', strictLimit, async (c) => {
   const stripeKey = c.env?.STRIPE_SECRET_KEY
   if (!stripeKey) {
     return c.json({
@@ -775,7 +785,7 @@ api.get('/order/receipt/:sessionId', async (c) => {
 // 4. Copy the signing secret (whsec_...)
 // 5. Run: npx wrangler pages secret put STRIPE_WEBHOOK_SECRET --project-name hillbilly-fightwear
 // ============================================
-api.post('/stripe/webhook', async (c) => {
+api.post('/stripe/webhook', webhookLimit, async (c) => {
   const stripeKey = c.env?.STRIPE_SECRET_KEY
   const webhookSecret = c.env?.STRIPE_WEBHOOK_SECRET
 
@@ -905,7 +915,7 @@ api.post('/stripe/webhook', async (c) => {
 // Use this to manually resend a receipt for any completed session
 // POST /api/send-receipt { sessionId: "cs_xxx" }
 // ============================================
-api.post('/send-receipt', async (c) => {
+api.post('/send-receipt', strictLimit, async (c) => {
   const stripeKey = c.env?.STRIPE_SECRET_KEY
   if (!stripeKey) {
     return c.json({ error: 'Stripe not configured' }, 400)
@@ -972,7 +982,7 @@ api.post('/send-receipt', async (c) => {
 // CONTACT FORM SUBMISSION
 // Sends email to brian@hillbillyfightwear.com via Resend API
 // ============================================
-api.post('/contact', async (c) => {
+api.post('/contact', strictLimit, async (c) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON parse result is inherently untyped
   let body: any
   try {
