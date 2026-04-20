@@ -172,6 +172,27 @@ app.get('/', (c) => {
   const hatsHtml = generateProductCards(hats)
   const decalsHtml = generateProductCards(decals)
 
+  // SEO: Generate Product structured data for top products (first 12 for performance)
+  const topProducts = shopProducts.slice(0, 12)
+  const productSchemaItems = topProducts.map(p => `{
+      "@type": "Product",
+      "name": "${p.title.replace(/"/g, '\\"')}",
+      "image": "https://hillbillyfightwear.com${p.image.split('?')[0]}",
+      "brand": { "@type": "Brand", "name": "Hillbilly Fightwear" },
+      "offers": {
+        "@type": "Offer",
+        "price": "${p.priceNum.toFixed(2)}",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://hillbillyfightwear.com/#shop",
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" },
+          "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "US" }
+        }
+      }
+    }`).join(',\n    ')
+
   return c.html(`<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -223,24 +244,75 @@ app.get('/', (c) => {
   <link rel="icon" type="image/png" href="/images/graphics/hillbilly-fightwear-logo.png" sizes="any">
   <link rel="apple-touch-icon" href="/images/graphics/hillbilly-fightwear-logo.png" sizes="180x180">
   
-  <!-- Structured Data (JSON-LD) -->
+  <!-- Structured Data (JSON-LD): Store + WebSite -->
+  <script type="application/ld+json" nonce="${nonce}">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "Hillbilly Fightwear",
+      "description": "Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs.",
+      "url": "https://hillbillyfightwear.com",
+      "logo": "https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png",
+      "image": "https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg",
+      "priceRange": "$$",
+      "currenciesAccepted": "USD",
+      "paymentAccepted": "Credit Card, Debit Card",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "US"
+      },
+      "sameAs": [
+        "https://www.facebook.com/hillbillyfightwear",
+        "https://www.instagram.com/hillbillyfightwear",
+        "https://anchor.fm/hillbillyfightwear"
+      ],
+      "potentialAction": {
+        "@type": "ViewAction",
+        "target": "https://hillbillyfightwear.com"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "MMA Apparel & Custom Fight Gear",
+        "itemListElement": [
+          { "@type": "OfferCatalog", "name": "Men's Clothing" },
+          { "@type": "OfferCatalog", "name": "Women's Clothing" },
+          { "@type": "OfferCatalog", "name": "Kids' Clothing" },
+          { "@type": "OfferCatalog", "name": "Hats" },
+          { "@type": "OfferCatalog", "name": "Stickers & Decals" }
+        ]
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Hillbilly Fightwear",
+      "url": "https://hillbillyfightwear.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://hillbillyfightwear.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hillbillyfightwear.com/" }
+      ]
+    }
+  ]
+  </script>
+  <!-- SEO: Product structured data for rich results -->
   <script type="application/ld+json" nonce="${nonce}">
   {
     "@context": "https://schema.org",
-    "@type": "Store",
-    "name": "Hillbilly Fightwear",
-    "description": "Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs.",
-    "url": "https://hillbillyfightwear.com",
-    "logo": "https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png",
-    "priceRange": "$$",
-    "sameAs": [
-      "https://www.facebook.com/hillbillyfightwear",
-      "https://www.instagram.com/hillbillyfightwear"
-    ],
-    "potentialAction": {
-      "@type": "ViewAction",
-      "target": "https://hillbillyfightwear.com"
-    }
+    "@type": "ItemList",
+    "name": "MMA Apparel & Custom Fight Gear",
+    "numberOfItems": ${topProducts.length},
+    "itemListElement": [
+    ${productSchemaItems}
+    ]
   }
   </script>
   
@@ -1557,6 +1629,9 @@ app.get('/', (c) => {
   <!-- Main Content -->
   <main id="main-content" role="main">
 
+  <!-- SEO: H1 (visually styled as hero text, critical for search ranking) -->
+  <h1 class="sr-only">Hillbilly Fightwear — MMA Apparel &amp; Custom Fight Gear</h1>
+
   <!-- SCRAPBOOK STICKER COLLAGE HERO -->
   <section class="scrapbook-hero" aria-label="Hillbilly Fightwear Sticker Collage">
 
@@ -1564,11 +1639,11 @@ app.get('/', (c) => {
          Mobile row 1: HCF | Thump | Cling to Guns
          Mobile row 2: Put It On Em | Fun Ride -->
     <div class="sticker-collage sticker-collage-top" aria-hidden="true">
-      <img class="sticker sticker-1"  src="/images/stickers/sticker-hcf.png?v=14"           alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-4"  src="/images/stickers/sticker-thump.png?v=14"          alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-7"  src="/images/stickers/sticker-your-neck.png?v=14"      alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-6"  src="/images/stickers/sticker-put-it-on-em.png?v=16"   alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-5"  src="/images/stickers/sticker-fun-ride.png?v=14"       alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-1"  src="/images/stickers/sticker-hcf.png?v=14"           alt="Human Cockfighter sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-4"  src="/images/stickers/sticker-thump.png?v=14"          alt="Thump a Stranger sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-7"  src="/images/stickers/sticker-your-neck.png?v=14"      alt="Your Neck sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-6"  src="/images/stickers/sticker-put-it-on-em.png?v=16"   alt="Put It On Em sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-5"  src="/images/stickers/sticker-fun-ride.png?v=14"       alt="Fun Ride sticker" loading="eager" draggable="false">
       <!-- sticker-15 (HFW Logo) removed — HFW branding shown in center logo and sticker-8 -->
     </div>
 
@@ -1587,14 +1662,14 @@ app.get('/', (c) => {
          Mobile row 4: Community | MYOB | Obama Tap
          Mobile row 5: Cunt | GNF -->
     <div class="sticker-collage sticker-collage-bottom" aria-hidden="true">
-      <img class="sticker sticker-11" src="/images/stickers/sticker-yes-you-can.png?v=14"    alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-9"  src="/images/stickers/sticker-thumpin-is-lovin.png?v=14" alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-8"  src="/images/stickers/sticker-hfw.png?v=14"            alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-10" src="/images/stickers/sticker-community.png?v=14"      alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-13" src="/images/stickers/sticker-myob.png?v=16"           alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-3"  src="/images/stickers/sticker-obama-tap.png?v=14"      alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-14" src="/images/stickers/sticker-cunt.png?v=14"           alt="" loading="eager" draggable="false">
-      <img class="sticker sticker-12" src="/images/stickers/sticker-gnf.png?v=14"            alt="" loading="eager" draggable="false">
+      <img class="sticker sticker-11" src="/images/stickers/sticker-yes-you-can.png?v=14"    alt="Yes You Can Fight sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-9"  src="/images/stickers/sticker-thumpin-is-lovin.png?v=14" alt="Thumpin Is Lovin sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-8"  src="/images/stickers/sticker-hfw.png?v=14"            alt="HFW brand sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-10" src="/images/stickers/sticker-community.png?v=14"      alt="Community sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-13" src="/images/stickers/sticker-myob.png?v=16"           alt="Mind Your Own Business sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-3"  src="/images/stickers/sticker-obama-tap.png?v=14"      alt="Obama Tap sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-14" src="/images/stickers/sticker-cunt.png?v=14"           alt="Adult humor sticker" loading="eager" draggable="false">
+      <img class="sticker sticker-12" src="/images/stickers/sticker-gnf.png?v=14"            alt="GNF sticker" loading="eager" draggable="false">
     </div>
 
   </section>
@@ -3042,7 +3117,38 @@ app.get('/build', (c) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Build Y'Own - Hillbilly Fightwear</title>
+  <title>Build Y'Own Custom MMA Gear | Hillbilly Fightwear</title>
+  <meta name="description" content="Design your own custom MMA t-shirts, hoodies, thermals & trucker hats. Pick your garment, choose a graphic, select placement — we print & ship free.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://hillbillyfightwear.com/build">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hillbillyfightwear.com/build">
+  <meta property="og:title" content="Build Y'Own Custom MMA Gear | Hillbilly Fightwear">
+  <meta property="og:description" content="Design your own custom MMA t-shirts, hoodies, thermals & trucker hats. Pick your garment, choose a graphic, select placement — we print & ship free.">
+  <meta property="og:image" content="https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Build Y'Own Custom MMA Gear | Hillbilly Fightwear">
+  <meta name="twitter:description" content="Design your own custom MMA t-shirts, hoodies & hats. Free shipping included.">
+  <script type="application/ld+json" nonce="${nonce}">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Build Y'Own Custom MMA Gear",
+      "description": "Design your own custom MMA t-shirts, hoodies, thermals & trucker hats with Hillbilly Fightwear.",
+      "url": "https://hillbillyfightwear.com/build",
+      "isPartOf": { "@type": "WebSite", "name": "Hillbilly Fightwear", "url": "https://hillbillyfightwear.com" }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hillbillyfightwear.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Build Y'Own", "item": "https://hillbillyfightwear.com/build" }
+      ]
+    }
+  ]
+  </script>
   <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
   <script nonce="${nonce}" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js" integrity="sha384-sLpuECXYCB5TUyTbC06pftm/rgurDambREZmV4eRHwEqJzCQtU6lxI2Ve00z4XW5" crossorigin="anonymous"></script>

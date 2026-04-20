@@ -32,7 +32,55 @@ pages.get('/robots.txt', (c) => {
 Allow: /
 Disallow: /api/
 Disallow: /admin/
+Disallow: /checkout/
+
 Sitemap: https://hillbillyfightwear.com/sitemap.xml`)
+})
+
+// ============================================
+// SEO: XML Sitemap
+// ============================================
+pages.get('/sitemap.xml', (c) => {
+  const now = new Date().toISOString().split('T')[0]
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://hillbillyfightwear.com/</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://hillbillyfightwear.com/build</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://hillbillyfightwear.com/contact</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hillbillyfightwear.com/privacy-policy</loc>
+    <lastmod>2026-02-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://hillbillyfightwear.com/cookie-policy</loc>
+    <lastmod>2026-02-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>`
+  return new Response(xml, {
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=86400'
+    }
+  })
 })
 
 pages.get('/checkout/success', (c) => {
@@ -43,6 +91,7 @@ pages.get('/checkout/success', (c) => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Confirmed - Hillbilly Fightwear</title>
+  <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
   <style nonce="${nonce}">
@@ -138,6 +187,9 @@ pages.get('/privacy-policy', (c) => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy - Hillbilly Fightwear</title>
+  <meta name="description" content="Hillbilly Fightwear Privacy Policy — how we collect, use, and protect your personal data. GDPR & CCPA compliant. Payments secured by Stripe.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://hillbillyfightwear.com/privacy-policy">
   <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
   <style nonce="${nonce}">
@@ -306,6 +358,9 @@ pages.get('/cookie-policy', (c) => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cookie Policy - Hillbilly Fightwear</title>
+  <meta name="description" content="Hillbilly Fightwear Cookie Policy — learn how we use cookies to improve your shopping experience. Manage your cookie preferences here.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://hillbillyfightwear.com/cookie-policy">
   <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
   <style nonce="${nonce}">
@@ -425,7 +480,18 @@ pages.get('/contact', (c) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us - Hillbilly Fightwear</title>
+  <title>Contact Us - Hillbilly Fightwear | Custom MMA Gear Questions</title>
+  <meta name="description" content="Contact Hillbilly Fightwear for custom MMA apparel, wholesale orders, sponsorships & more. Email brian@hillbillyfightwear.com — we respond within 24 hours.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://hillbillyfightwear.com/contact">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hillbillyfightwear.com/contact">
+  <meta property="og:title" content="Contact Us - Hillbilly Fightwear">
+  <meta property="og:description" content="Got a question about custom MMA apparel? Reach out — we respond within 24 hours.">
+  <meta property="og:image" content="https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Contact Us - Hillbilly Fightwear">
+  <meta name="twitter:description" content="Got a question about custom MMA apparel? Reach out — we respond within 24 hours.">
   <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
   <style nonce="${nonce}">
@@ -838,7 +904,7 @@ pages.all('*', (c) => {
   const nonce = c.get('nonce')
   return c.html(`<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page Not Found - Hillbilly Fightwear</title>
+<title>Page Not Found - Hillbilly Fightwear</title><meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="/static/tailwind.css">
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
 <style nonce="${nonce}">body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;}.c{max-width:600px;margin:100px auto;padding:40px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);}.icon{width:80px;height:80px;background:#8B0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 30px;font-size:2.5rem;color:#fff;}h1{font-size:2rem;margin:0 0 15px;}p{color:#666;margin:0 0 30px;line-height:1.6;}.btn{display:inline-block;padding:15px 40px;background:#8B0000;color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-weight:600;border-radius:4px;transition:all 0.3s;margin:5px;}.btn:hover{background:#a00000;}.btn-o{background:transparent;color:#333;border:2px solid #333;}.btn-o:hover{background:#333;color:#fff;}</style>
