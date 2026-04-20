@@ -31,6 +31,7 @@ pages.get('/robots.txt', (c) => {
   return c.text(`User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin/
 Sitemap: https://hillbillyfightwear.com/sitemap.xml`)
 })
 

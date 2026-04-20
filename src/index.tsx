@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import apiRoutes from './routes/api'
 import pageRoutes from './routes/pages'
+import adminRoutes from './routes/admin'
 import {
   garments, graphics, placements,
   products, shopProducts, slides,
@@ -5498,6 +5499,11 @@ app.get('/build', (c) => {
 </body>
 </html>`)
 })
+
+// ============================================
+// ADMIN DASHBOARD (password-protected)
+// ============================================
+app.route('/admin', adminRoutes)
 
 // ============================================
 // API ROUTES (extracted to src/routes/api.ts)
