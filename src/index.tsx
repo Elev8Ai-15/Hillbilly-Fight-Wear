@@ -315,6 +315,45 @@ app.get('/', (c) => {
     ]
   }
   </script>
+  <!-- GEO: FAQPage schema for homepage Q&A (AI engines extract these directly) -->
+  <script type="application/ld+json" nonce="${nonce}">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Hillbilly Fightwear?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Hillbilly Fightwear is an American MMA apparel brand offering custom-printed t-shirts, hoodies, thermals, trucker hats, tanks, and vinyl stickers. All prices include free shipping and tax. The brand was founded by Brian for combat sports athletes and fans." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Hillbilly Fightwear offer free shipping?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every item ships free with tax included in the listed price. There are no hidden fees, no minimum orders, and no surprises at checkout." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I design my own custom MMA apparel?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Build Y'Own custom builder at hillbillyfightwear.com/build lets you pick a garment, choose from 20+ original graphics, select front or back placement, and preview your design in real time before ordering." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the Hillbilly Fightwear Buy 2 Get 1 Free deal?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Add any 3 t-shirts or tanks to your cart and the cheapest one is automatically free. This deal applies to both shop items and custom-built designs." }
+      },
+      {
+        "@type": "Question",
+        "name": "What sizes does Hillbilly Fightwear carry?",
+        "acceptedAnswer": { "@type": "Answer", "text": "T-shirts: S–XXXL. Hoodies: S–XXL. Thermals: S–XXXL. Women's tanks: S–XL. Youth hoodies: YS, YM, YL. Fitted hats: S/M and L/XL. Adjustable hats and beanies: one size fits all." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is payment at Hillbilly Fightwear secure?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. All payments are processed through Stripe, which is PCI DSS Level 1 certified — the highest level of payment security. Credit card information is never stored on Hillbilly Fightwear servers." }
+      }
+    ]
+  }
+  </script>
   
   <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
@@ -1876,6 +1915,38 @@ app.get('/', (c) => {
     </div>
   </section>
 
+  <!-- GEO: FAQ Section — AI-extractable Q&A pairs (answer-first format) -->
+  <section id="faq" style="max-width: 900px; margin: 40px auto; padding: 0 20px;" aria-labelledby="faq-heading">
+    <h2 id="faq-heading" style="font-size: 1.6rem; color: #1a1a1a; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 30px;"><i class="fas fa-question-circle" style="color: #8B0000;" aria-hidden="true"></i> Frequently Asked Questions</h2>
+    <div style="background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+      <div style="border-bottom: 1px solid #eee; padding: 18px 0;">
+        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">What is Hillbilly Fightwear?</h3>
+        <p style="color: #555; line-height: 1.7; margin: 0;">Hillbilly Fightwear is an American MMA apparel brand offering custom-printed t-shirts, hoodies, thermals, trucker hats, tanks, and vinyl stickers. All prices include free shipping and tax. The brand was founded by Brian for combat sports athletes and fans who want rugged, original fight gear.</p>
+      </div>
+      <div style="border-bottom: 1px solid #eee; padding: 18px 0;">
+        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">Does Hillbilly Fightwear offer free shipping?</h3>
+        <p style="color: #555; line-height: 1.7; margin: 0;">Yes. Every item ships free with tax included in the listed price. There are no hidden fees, no minimum orders, and no surprises at checkout.</p>
+      </div>
+      <div style="border-bottom: 1px solid #eee; padding: 18px 0;">
+        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">Can I design my own custom MMA apparel?</h3>
+        <p style="color: #555; line-height: 1.7; margin: 0;">Yes. Visit the <a href="/build" style="color: #8B0000; font-weight: 600;">Build Y'Own</a> page to design custom gear. Choose from t-shirts, hoodies, thermals, tanks, or hats, pick from 20+ original graphics, select front or back placement, choose your size and color, and preview your design in real time before ordering.</p>
+      </div>
+      <div style="border-bottom: 1px solid #eee; padding: 18px 0;">
+        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">What is the Buy 2, Get 1 Free deal?</h3>
+        <p style="color: #555; line-height: 1.7; margin: 0;">Add any 3 t-shirts or tanks to your cart and the cheapest one is automatically free. This deal applies to both ready-made shop items and custom-built designs.</p>
+      </div>
+      <div style="border-bottom: 1px solid #eee; padding: 18px 0;">
+        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">What sizes does Hillbilly Fightwear carry?</h3>
+        <p style="color: #555; line-height: 1.7; margin: 0;">T-shirts: S through XXXL. Hoodies: S through XXL (pullover and zip-up). Thermals: S through XXXL. Women's tanks: S through XL. Youth hoodies: YS, YM, YL. Fitted hats: S/M and L/XL. Adjustable hats and beanies: one size fits all.</p>
+      </div>
+      <div style="padding: 18px 0;">
+        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">Is my payment information secure?</h3>
+        <p style="color: #555; line-height: 1.7; margin: 0;">Yes. All payments are processed securely through Stripe, which is PCI DSS Level 1 certified — the highest level of payment security. Hillbilly Fightwear never stores your credit card information.</p>
+      </div>
+    </div>
+    <p style="text-align: center; margin: 20px 0; font-size: 0.9rem; color: #888;">Have more questions? <a href="/contact" style="color: #8B0000; font-weight: 600;">Contact us</a> or visit <a href="/about" style="color: #8B0000; font-weight: 600;">About Hillbilly Fightwear</a> for the full story.</p>
+  </section>
+
   </main>
   
   <!-- Footer -->
@@ -1883,12 +1954,14 @@ app.get('/', (c) => {
     <div style="max-width: 1200px; margin: 0 auto;">
       <p style="margin: 0 0 10px;"><strong>Hillbilly Fightwear</strong> - Official MMA & Combat Sports Apparel</p>
       <p style="margin: 0; font-size: 0.9rem; color: #999;">© ${new Date().getFullYear()} Hillbilly Fightwear. All rights reserved.</p>
+      <!-- GEO: Freshness signal — visible last-updated date -->
+      <p style="margin: 4px 0 0; font-size: 0.8rem; color: #666;">Catalog last updated: April 2026</p>
       <nav aria-label="Footer navigation" style="margin-top: 20px;">
         <a href="/build" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Build Y'Own</a>
         <a href="#shop" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Shop Now</a>
+        <a href="/about" style="color: #8B0000; margin: 0 15px; text-decoration: none;">About</a>
         <a href="/contact" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Contact Us</a>
         <a href="#podcast" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Podcast</a>
-        <a href="https://hillbillyfightwear.com" target="_blank" rel="noopener noreferrer" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Official Store</a>
       </nav>
       <nav aria-label="Legal navigation" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
         <a href="/privacy-policy" style="color: #888; margin: 0 15px; text-decoration: none; font-size: 0.85rem;">Privacy Policy</a>

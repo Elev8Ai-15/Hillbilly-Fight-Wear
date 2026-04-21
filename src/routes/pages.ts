@@ -26,15 +26,114 @@ pages.get('/apple-touch-icon-precomposed.png', (c) => {
   return c.redirect('/images/graphics/hillbilly-fightwear-logo.png', 301)
 })
 
-// Robots.txt
+// Robots.txt — GEO-optimized: explicitly allow all AI crawlers
 pages.get('/robots.txt', (c) => {
-  return c.text(`User-agent: *
+  return c.text(`# Hillbilly Fightwear — AI & Search Crawler Policy
+# Last updated: 2026-04-21
+
+User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /checkout/
 
+# Explicitly allow AI search crawlers for GEO visibility
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
 Sitemap: https://hillbillyfightwear.com/sitemap.xml`)
+})
+
+// ============================================
+// GEO: llms.txt — Machine-readable site summary for AI systems
+// See https://llmstxt.org/
+// ============================================
+pages.get('/llms.txt', (c) => {
+  return c.text(`# Hillbilly Fightwear
+
+> Hillbilly Fightwear is an American MMA apparel brand offering custom-printed t-shirts, hoodies, thermals, trucker hats, tanks, and stickers. All prices include tax and shipping. The brand's tagline is "Thump A Stranger."
+
+## About
+Hillbilly Fightwear was founded by Brian, a lifelong MMA fan who wanted to create rugged, irreverent fight gear for the everyday fighter. The brand serves combat sports athletes and fans across the United States with custom-designed apparel.
+
+## Products & Pricing
+- **T-Shirts (Unisex)**: $30 — available in S through XXXL, Black/White/Grey
+- **Hoodies (Pullover & Zip-Up)**: $50 — available in S through XXL
+- **Thermals**: $40 — available in S through XXXL
+- **Women's Tanks**: $30 — available in S through XL
+- **Youth Hoodies**: $50 — available in YS through YL
+- **Trucker Hats (Fitted)**: $45 — S/M and L/XL
+- **Trucker Hats (Adjustable)**: $35 — One Size
+- **Beanies**: $25 — One Size
+- **Vinyl Decals/Stickers**: $7 each
+
+## Deals
+- **Buy 2, Get 1 Free** on t-shirts and tanks
+- All prices include free shipping and tax (no hidden fees)
+
+## Custom Builder
+Customers can design their own apparel at /build. Choose a garment type, pick from 20+ original graphics, select front/back placement, choose size and color, and order directly. The builder supports real-time preview.
+
+## Popular Graphics
+- Human Cockfighter — the brand's signature rooster design
+- Thump a Stranger — iconic tagline design
+- GNF — bold statement graphic
+- Fun Ride — MMA humor design
+- MYOB (Mind Your Own Business)
+- Yes You Can Fight
+- Thumpin Is Lovin
+
+## Contact
+- Email: brian@hillbillyfightwear.com
+- Website: https://hillbillyfightwear.com
+- Facebook: https://www.facebook.com/hillbillyfightwear
+- Instagram: https://www.instagram.com/hillbillyfightwear
+- Podcast: The Human Cockfighter Podcast on Spotify/Anchor
+
+## Pages
+- Home: https://hillbillyfightwear.com/
+- Custom Builder: https://hillbillyfightwear.com/build
+- About: https://hillbillyfightwear.com/about
+- Contact: https://hillbillyfightwear.com/contact
+- Privacy Policy: https://hillbillyfightwear.com/privacy-policy
+- Cookie Policy: https://hillbillyfightwear.com/cookie-policy
+
+## Technical
+- Hosted on Cloudflare Pages (edge-deployed globally)
+- Payments processed securely via Stripe
+- No user accounts required — guest checkout only
+- GDPR and CCPA compliant
+`)
 })
 
 // ============================================
@@ -61,6 +160,12 @@ pages.get('/sitemap.xml', (c) => {
     <lastmod>${now}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hillbillyfightwear.com/about</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://hillbillyfightwear.com/privacy-policy</loc>
@@ -893,6 +998,305 @@ pages.get('/contact', (c) => {
       });
     });
   </script>
+</body>
+</html>`)
+})
+
+// ============================================
+// GEO: About Page — E-E-A-T Authority + Organization Schema
+// ============================================
+pages.get('/about', (c) => {
+  const nonce = c.get('nonce')
+  return c.html(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Hillbilly Fightwear | MMA Apparel Brand Story</title>
+  <meta name="description" content="Hillbilly Fightwear is an American MMA apparel brand founded by Brian. We make custom t-shirts, hoodies, hats &amp; stickers for combat sports fans. All prices include free shipping &amp; tax.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://hillbillyfightwear.com/about">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hillbillyfightwear.com/about">
+  <meta property="og:title" content="About Hillbilly Fightwear | MMA Apparel Brand Story">
+  <meta property="og:description" content="The working man and woman's MMA apparel brand. Custom fight gear, free shipping, all prices include tax.">
+  <meta property="og:image" content="https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="About Hillbilly Fightwear">
+  <meta name="twitter:description" content="The working man and woman's MMA apparel brand. Custom fight gear, free shipping, tax included.">
+
+  <!-- GEO: Organization + Person + BreadcrumbList + FAQPage Schema -->
+  <script type="application/ld+json" nonce="${nonce}">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Hillbilly Fightwear",
+      "alternateName": "HFW",
+      "url": "https://hillbillyfightwear.com",
+      "logo": "https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png",
+      "description": "American MMA apparel brand offering custom-printed t-shirts, hoodies, thermals, trucker hats, tanks, and vinyl stickers for combat sports athletes and fans.",
+      "foundingDate": "2024",
+      "founder": {
+        "@type": "Person",
+        "name": "Brian",
+        "jobTitle": "Founder & Owner",
+        "url": "https://hillbillyfightwear.com/about"
+      },
+      "address": { "@type": "PostalAddress", "addressCountry": "US" },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "brian@hillbillyfightwear.com",
+        "availableLanguage": "English"
+      },
+      "sameAs": [
+        "https://www.facebook.com/hillbillyfightwear",
+        "https://www.instagram.com/hillbillyfightwear",
+        "https://anchor.fm/hillbillyfightwear"
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hillbillyfightwear.com/" },
+        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://hillbillyfightwear.com/about" }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Hillbilly Fightwear?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hillbilly Fightwear is an American MMA apparel brand that makes custom-printed t-shirts, hoodies, thermals, trucker hats, tanks, and vinyl stickers for combat sports athletes and fans. All prices include free shipping and tax." }
+        },
+        {
+          "@type": "Question",
+          "name": "Who founded Hillbilly Fightwear?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hillbilly Fightwear was founded by Brian, a lifelong MMA fan who wanted to create rugged, irreverent fight gear for the everyday fighter." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Hillbilly Fightwear offer free shipping?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every item at Hillbilly Fightwear includes free shipping and tax in the listed price. There are no hidden fees at checkout." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I design my own custom MMA apparel?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Build Y'Own custom builder at hillbillyfightwear.com/build lets you pick a garment, choose from 20+ original graphics, select front or back placement, and preview your design in real time before ordering." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Hillbilly Fightwear Buy 2 Get 1 Free deal?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hillbilly Fightwear offers a Buy 2, Get 1 Free promotion on t-shirts and tanks. Add 3 qualifying items to your cart and the cheapest is free." }
+        },
+        {
+          "@type": "Question",
+          "name": "What sizes does Hillbilly Fightwear carry?",
+          "acceptedAnswer": { "@type": "Answer", "text": "T-shirts come in S through XXXL. Hoodies come in S through XXL. Women's tanks come in S through XL. Youth sizes (YS, YM, YL) are available for kids' hoodies. Fitted hats come in S/M and L/XL. Adjustable hats and beanies are one size fits all." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I contact Hillbilly Fightwear?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Email brian@hillbillyfightwear.com or use the contact form at hillbillyfightwear.com/contact. The team typically responds within 24 hours." }
+        }
+      ]
+    }
+  ]
+  </script>
+
+  <link rel="stylesheet" href="/static/tailwind.css">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
+  <style nonce="${nonce}">
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; }
+    body { font-family: 'Oswald', Arial, sans-serif; background: #f5f5f5; margin: 0; }
+    .about-nav { background: #0a0a0a; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 44px; position: sticky; top: 0; z-index: 100; }
+    .about-nav a { color: #fff; text-decoration: none; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+    .about-nav .nav-links { display: flex; gap: 6px; }
+    .about-nav .nav-tab { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; border-radius: 3px; color: #fff; background: transparent; border: 1.5px solid rgba(255,255,255,0.3); transition: all 0.25s; }
+    .about-nav .nav-tab:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.6); }
+    .about-hero { background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%); color: #fff; padding: 60px 20px; text-align: center; }
+    .about-hero h1 { font-size: 2.5rem; margin: 0; text-transform: uppercase; letter-spacing: 3px; }
+    .about-hero p { color: #aaa; margin: 12px 0 0; font-size: 1.15rem; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .about-container { max-width: 900px; margin: -30px auto 40px; padding: 0 20px; }
+    .about-card { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 30px; }
+    .about-card h2 { font-size: 1.4rem; color: #8B0000; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 2px solid #8B0000; }
+    .about-card p, .about-card li { color: #555; line-height: 1.8; font-size: 1rem; }
+    .about-card ul { padding-left: 20px; margin: 12px 0; }
+    .about-card li { margin: 6px 0; }
+    .about-card a { color: #8B0000; text-decoration: none; font-weight: 600; }
+    .about-card a:hover { text-decoration: underline; }
+    .brand-values { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 20px 0; }
+    .value-item { background: #f8f8f8; padding: 20px; border-radius: 8px; text-align: center; }
+    .value-item i { font-size: 2rem; color: #8B0000; margin-bottom: 10px; display: block; }
+    .value-item h3 { font-size: 1rem; margin: 0 0 8px; color: #333; }
+    .value-item p { font-size: 0.9rem; margin: 0; color: #666; }
+    .faq-item { border-bottom: 1px solid #eee; padding: 18px 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 1.05rem; color: #333; margin: 0 0 8px; }
+    .faq-item p { margin: 0; }
+    .about-footer { background: #1a1a1a; color: #fff; padding: 30px 20px; text-align: center; margin-top: 20px; }
+    .about-footer p { margin: 0; font-size: 0.85rem; color: #999; }
+    .about-footer a { color: #8B0000; text-decoration: none; }
+    .last-updated { color: #888; font-size: 0.85rem; text-align: right; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <nav class="about-nav">
+    <a href="/">Hillbilly Fightwear</a>
+    <div class="nav-links">
+      <a href="/" class="nav-tab"><i class="fas fa-home"></i> Home</a>
+      <a href="/#shop" class="nav-tab"><i class="fas fa-shopping-bag"></i> Shop</a>
+      <a href="/build" class="nav-tab"><i class="fas fa-paint-brush"></i> Build</a>
+      <a href="/contact" class="nav-tab"><i class="fas fa-envelope"></i> Contact</a>
+    </div>
+  </nav>
+
+  <header class="about-hero">
+    <h1><i class="fas fa-fist-raised"></i> About Hillbilly Fightwear</h1>
+    <p>The working man and woman's MMA apparel brand. Rugged custom fight gear, free shipping, tax included — no hidden fees, no BS.</p>
+  </header>
+
+  <main class="about-container">
+    <!-- TL;DR / Summary Block — optimized for AI extraction -->
+    <div class="about-card">
+      <h2><i class="fas fa-bolt"></i> TL;DR</h2>
+      <p><strong>Hillbilly Fightwear is an American MMA apparel brand</strong> that makes custom-printed t-shirts ($30), hoodies ($50), thermals ($40), trucker hats ($25–$45), women's tanks ($30), and vinyl stickers ($7). Every price includes free shipping and tax. We offer a Buy 2, Get 1 Free deal on t-shirts and tanks. Customers can design their own gear at <a href="/build">hillbillyfightwear.com/build</a>.</p>
+    </div>
+
+    <!-- Brand Story -->
+    <div class="about-card">
+      <h2><i class="fas fa-book-open"></i> Our Story</h2>
+      <p>Hillbilly Fightwear was founded by Brian, a lifelong MMA fan who got tired of overpriced, generic fight gear that didn't say anything real. He wanted to build a brand for the working man and woman — the kind of people who train after a long shift, tape up their hands in a garage gym, and live the fight life on their own terms.</p>
+      <p>What started as a handful of t-shirt designs has grown into a full apparel line with hoodies, thermals, tanks, trucker hats, beanies, and vinyl decals. Every design is original, every item ships free, and every price includes tax — because hidden fees are for people who fight dirty.</p>
+      <p>The brand's signature tagline, <strong>"Thump A Stranger,"</strong> captures the irreverent, no-nonsense attitude that Hillbilly Fightwear customers live by.</p>
+    </div>
+
+    <!-- Brand Values — AI-extractable blocks -->
+    <div class="about-card">
+      <h2><i class="fas fa-star"></i> What Sets Us Apart</h2>
+      <div class="brand-values">
+        <div class="value-item">
+          <i class="fas fa-truck"></i>
+          <h3>Free Shipping</h3>
+          <p>Every item ships free to all U.S. addresses. No minimum order.</p>
+        </div>
+        <div class="value-item">
+          <i class="fas fa-dollar-sign"></i>
+          <h3>Tax Included</h3>
+          <p>The price you see is the price you pay. Zero hidden fees at checkout.</p>
+        </div>
+        <div class="value-item">
+          <i class="fas fa-paint-brush"></i>
+          <h3>Custom Builder</h3>
+          <p>Design your own apparel with 20+ graphics, multiple garments, and real-time preview.</p>
+        </div>
+        <div class="value-item">
+          <i class="fas fa-tags"></i>
+          <h3>Buy 2 Get 1 Free</h3>
+          <p>Stock up on tees and tanks — every third item is on the house.</p>
+        </div>
+        <div class="value-item">
+          <i class="fas fa-lock"></i>
+          <h3>Secure Checkout</h3>
+          <p>Payments processed by Stripe (PCI Level 1 certified). We never store card data.</p>
+        </div>
+        <div class="value-item">
+          <i class="fas fa-globe-americas"></i>
+          <h3>Edge-Fast Delivery</h3>
+          <p>Website served from Cloudflare's global edge network for instant page loads worldwide.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Catalog Summary — table for AI extractability -->
+    <div class="about-card">
+      <h2><i class="fas fa-tshirt"></i> Product Catalog &amp; Pricing</h2>
+      <p>All prices include free shipping and tax. No hidden fees.</p>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+        <thead>
+          <tr style="background:#8B0000;color:#fff;">
+            <th style="padding:10px 12px;text-align:left;">Product</th>
+            <th style="padding:10px 12px;text-align:left;">Price</th>
+            <th style="padding:10px 12px;text-align:left;">Sizes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 12px;">T-Shirts (Unisex)</td><td style="padding:10px 12px;">$30</td><td style="padding:10px 12px;">S – XXXL</td></tr>
+          <tr style="border-bottom:1px solid #eee;background:#f9f9f9;"><td style="padding:10px 12px;">Hoodies (Pullover &amp; Zip-Up)</td><td style="padding:10px 12px;">$50</td><td style="padding:10px 12px;">S – XXL</td></tr>
+          <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 12px;">Thermals</td><td style="padding:10px 12px;">$40</td><td style="padding:10px 12px;">S – XXXL</td></tr>
+          <tr style="border-bottom:1px solid #eee;background:#f9f9f9;"><td style="padding:10px 12px;">Women's Tanks</td><td style="padding:10px 12px;">$30</td><td style="padding:10px 12px;">S – XL</td></tr>
+          <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 12px;">Youth Hoodies</td><td style="padding:10px 12px;">$50</td><td style="padding:10px 12px;">YS – YL</td></tr>
+          <tr style="border-bottom:1px solid #eee;background:#f9f9f9;"><td style="padding:10px 12px;">Fitted Trucker Hats</td><td style="padding:10px 12px;">$45</td><td style="padding:10px 12px;">S/M, L/XL</td></tr>
+          <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 12px;">Adjustable Trucker Hats</td><td style="padding:10px 12px;">$35</td><td style="padding:10px 12px;">One Size</td></tr>
+          <tr style="border-bottom:1px solid #eee;background:#f9f9f9;"><td style="padding:10px 12px;">Beanies</td><td style="padding:10px 12px;">$25</td><td style="padding:10px 12px;">One Size</td></tr>
+          <tr><td style="padding:10px 12px;">Vinyl Decals &amp; Stickers</td><td style="padding:10px 12px;">$7</td><td style="padding:10px 12px;">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FAQ Section — GEO-optimized for AI extraction -->
+    <div class="about-card">
+      <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <h3>What is Hillbilly Fightwear?</h3>
+        <p>Hillbilly Fightwear is an American MMA apparel brand that makes custom-printed t-shirts, hoodies, thermals, trucker hats, tanks, and vinyl stickers for combat sports athletes and fans. All prices include free shipping and tax.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Who founded Hillbilly Fightwear?</h3>
+        <p>Hillbilly Fightwear was founded by Brian, a lifelong MMA fan who wanted to create rugged, irreverent fight gear for the everyday fighter.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does Hillbilly Fightwear offer free shipping?</h3>
+        <p>Yes. Every item at Hillbilly Fightwear includes free shipping and tax in the listed price. There are no hidden fees at checkout.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Can I design my own custom MMA apparel?</h3>
+        <p>Yes. The <a href="/build">Build Y'Own</a> custom builder lets you pick a garment type (t-shirt, hoodie, thermal, tank, or hat), choose from 20+ original graphics, select front or back placement, pick your size and color, and preview your design in real time before ordering.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What is the Buy 2, Get 1 Free deal?</h3>
+        <p>Hillbilly Fightwear offers a Buy 2, Get 1 Free promotion on t-shirts and tanks. Add 3 qualifying items to your cart and the cheapest one is automatically free.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What sizes does Hillbilly Fightwear carry?</h3>
+        <p>T-shirts: S–XXXL. Hoodies: S–XXL. Women's tanks: S–XL. Youth sizes (YS, YM, YL) are available for kids' hoodies. Fitted hats: S/M and L/XL. Adjustable hats and beanies: one size fits all.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How are payments processed?</h3>
+        <p>All payments are securely processed through <strong>Stripe</strong>, which is PCI DSS Level 1 certified — the highest security standard. We never store credit card information on our servers.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do I contact Hillbilly Fightwear?</h3>
+        <p>Email <a href="mailto:brian@hillbillyfightwear.com">brian@hillbillyfightwear.com</a> or use the <a href="/contact">contact form</a>. The team typically responds within 24 hours.</p>
+      </div>
+    </div>
+
+    <p class="last-updated"><i class="fas fa-clock"></i> Last updated: April 2026</p>
+  </main>
+
+  <footer class="about-footer">
+    <p>&copy; ${new Date().getFullYear()} Hillbilly Fightwear. All rights reserved.</p>
+    <p style="margin-top:8px;">
+      <a href="/">Home</a> &bull;
+      <a href="/#shop">Shop</a> &bull;
+      <a href="/build">Build Y'Own</a> &bull;
+      <a href="/contact">Contact</a> &bull;
+      <a href="/privacy-policy">Privacy Policy</a>
+    </p>
+  </footer>
 </body>
 </html>`)
 })
