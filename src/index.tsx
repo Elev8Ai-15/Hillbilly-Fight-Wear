@@ -202,7 +202,7 @@ app.get('/', (c) => {
   
   <!-- SEO Meta Tags -->
   <title>MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear</title>
-  <meta name="description" content="Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs. Free shipping + tax, Buy 2 Get 1 Free. Build Y'Own and make your statement!">
+  <meta name="description" content="Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs. Free shipping + tax, 2 for $40 on shirts & tanks. Build Y'Own and make your statement!">
   <meta name="keywords" content="MMA apparel, custom MMA apparel, MMA t-shirts, MMA hoodies, hillbilly fightwear, fight wear, MMA trucker hat">
   <meta name="author" content="Hillbilly Fightwear">
   <meta name="robots" content="index, follow">
@@ -212,7 +212,7 @@ app.get('/', (c) => {
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://hillbillyfightwear.com/">
   <meta property="og:title" content="MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear">
-  <meta property="og:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, Buy 2 Get 1 Free. Build your own – make your statement!">
+  <meta property="og:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, 2 for $40 on shirts & tanks. Build your own – make your statement!">
   <meta property="og:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg">
   <meta property="og:site_name" content="Hillbilly Fightwear">
   <meta property="og:locale" content="en_US">
@@ -221,7 +221,7 @@ app.get('/', (c) => {
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://hillbillyfightwear.com/">
   <meta name="twitter:title" content="MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear">
-  <meta name="twitter:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, Buy 2 Get 1 Free. Build your own – make your statement!">
+  <meta name="twitter:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, 2 for $40 on shirts & tanks. Build your own – make your statement!">
   <meta name="twitter:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg">
   
   <!-- Mobile & PWA -->
@@ -338,8 +338,8 @@ app.get('/', (c) => {
       },
       {
         "@type": "Question",
-        "name": "What is the Hillbilly Fightwear Buy 2 Get 1 Free deal?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Add any 3 t-shirts or tanks to your cart and the cheapest one is automatically free. This deal applies to both shop items and custom-built designs." }
+        "name": "What is the Hillbilly Fightwear 2 for $40 deal?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Add any 2 t-shirts or tanks to your cart and pay just $40 for the pair. The deal scales — 4 shirts/tanks for $80, 6 for $120, etc. It applies to both ready-made shop items and custom-built designs." }
       },
       {
         "@type": "Question",
@@ -1721,7 +1721,7 @@ app.get('/', (c) => {
         <div class="promo-icon"><i class="fas fa-tshirt"></i></div>
         <h3>T-Shirts & Tanks</h3>
         <p>Stock up on your favorite designs</p>
-        <span class="promo-highlight">Buy 2, Get 1 FREE</span>
+        <span class="promo-highlight">2 for $40</span>
       </div>
       <div class="promo-card">
         <div class="promo-icon"><i class="fas fa-sticky-note"></i></div>
@@ -1745,7 +1745,7 @@ app.get('/', (c) => {
     <!-- MENS CLOTHING -->
     <div class="category-section" role="region" aria-labelledby="mens-heading">
       <h3 class="category-title" id="mens-heading"><i class="fas fa-male" aria-hidden="true"></i> Men's Clothing</h3>
-      <div class="category-promo-banner"><i class="fas fa-tags"></i> Buy 2, Get 1 FREE on all T-Shirts &amp; Tanks &mdash; prices include tax &amp; shipping!</div>
+      <div class="category-promo-banner"><i class="fas fa-tags"></i> 2 for $40 on all T-Shirts &amp; Tanks &mdash; prices include tax &amp; shipping!</div>
       <div class="product-grid shop-grid" role="list">
         ${mensClothingHtml}
       </div>
@@ -1754,7 +1754,7 @@ app.get('/', (c) => {
     <!-- WOMENS CLOTHING -->
     <div class="category-section" role="region" aria-labelledby="womens-heading">
       <h3 class="category-title" id="womens-heading"><i class="fas fa-female" aria-hidden="true"></i> Women's Clothing</h3>
-      <div class="category-promo-banner"><i class="fas fa-tags"></i> Buy 2, Get 1 FREE on all Tanks &mdash; prices include tax &amp; shipping!</div>
+      <div class="category-promo-banner"><i class="fas fa-tags"></i> 2 for $40 on all Tanks &mdash; prices include tax &amp; shipping!</div>
       <div class="product-grid shop-grid" role="list">
         ${womensClothingHtml}
       </div>
@@ -1932,8 +1932,8 @@ app.get('/', (c) => {
         <p style="color: #555; line-height: 1.7; margin: 0;">Yes. Visit the <a href="/build" style="color: #8B0000; font-weight: 600;">Build Y'Own</a> page to design custom gear. Choose from t-shirts, hoodies, thermals, tanks, or hats, pick from 20+ original graphics, select front or back placement, choose your size and color, and preview your design in real time before ordering.</p>
       </div>
       <div style="border-bottom: 1px solid #eee; padding: 18px 0;">
-        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">What is the Buy 2, Get 1 Free deal?</h3>
-        <p style="color: #555; line-height: 1.7; margin: 0;">Add any 3 t-shirts or tanks to your cart and the cheapest one is automatically free. This deal applies to both ready-made shop items and custom-built designs.</p>
+        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">What is the 2 for $40 deal?</h3>
+        <p style="color: #555; line-height: 1.7; margin: 0;">Add any 2 t-shirts or tanks to your cart and pay just $40 for the pair (a $20 savings). The discount scales — 4 shirts for $80, 6 for $120, and so on — and applies to both ready-made shop items and custom-built designs.</p>
       </div>
       <div style="border-bottom: 1px solid #eee; padding: 18px 0;">
         <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">What sizes does Hillbilly Fightwear carry?</h3>
@@ -2676,7 +2676,7 @@ app.get('/', (c) => {
       
       var nudges = [];
       
-      // --- T-Shirt / Tank: Buy 2, Get 1 FREE ---
+      // --- T-Shirt / Tank: 2 for $40 ---
       var shirtCount = 0;
       cart.forEach(function(item) {
         var gt = item.garmentType || '';
@@ -2684,40 +2684,28 @@ app.get('/', (c) => {
           shirtCount += item.qty;
         }
       });
-      // Show nudge when they have 1 or 2 shirts (need 3 for the deal)
-      // or when they have 4 or 5 shirts (need 6 for two free items)
-      var shirtRemainder = shirtCount % 3;
-      if (shirtCount > 0 && shirtRemainder > 0) {
-        var needed = 3 - shirtRemainder;
-        if (needed === 1) {
-          nudges.push({
-            icon: 'fa-fire',
-            color: '#d32f2f',
-            bg: 'rgba(211,47,47,0.07)',
-            border: 'rgba(211,47,47,0.25)',
-            text: '<strong>SO CLOSE!</strong> Add <strong>1 more T-Shirt or Tank</strong> and get it <strong>FREE!</strong>',
-            sub: 'Buy 2, Get 1 FREE — your cheapest shirt is on us'
-          });
-        } else if (needed === 2 && shirtCount >= 1) {
-          nudges.push({
-            icon: 'fa-tags',
-            color: '#8B0000',
-            bg: 'rgba(139,0,0,0.05)',
-            border: 'rgba(139,0,0,0.2)',
-            text: 'Add <strong>' + needed + ' more T-Shirts or Tanks</strong> to unlock <strong>Buy 2, Get 1 FREE!</strong>',
-            sub: 'Your cheapest shirt becomes free with 3 or more'
-          });
-        }
+      // Pairs trigger the bundle. If shirtCount is odd, suggest adding 1 more to complete a pair.
+      var shirtRemainder = shirtCount % 2;
+      if (shirtCount > 0 && shirtRemainder === 1) {
+        nudges.push({
+          icon: 'fa-fire',
+          color: '#d32f2f',
+          bg: 'rgba(211,47,47,0.07)',
+          border: 'rgba(211,47,47,0.25)',
+          text: '<strong>SO CLOSE!</strong> Add <strong>1 more T-Shirt or Tank</strong> to lock in <strong>2 for $40!</strong>',
+          sub: 'Pair any two shirts/tanks for a flat $40'
+        });
       }
-      // Celebrate when they already qualified
-      if (shirtCount >= 3 && shirtRemainder === 0) {
+      // Celebrate when they already qualified (any pair triggers it)
+      if (shirtCount >= 2 && shirtRemainder === 0) {
+        var pairs = shirtCount / 2;
         nudges.push({
           icon: 'fa-check-circle',
           color: '#2e7d32',
           bg: 'rgba(76,175,80,0.08)',
           border: 'rgba(76,175,80,0.3)',
-          text: '<strong>Deal Unlocked!</strong> Your cheapest T-Shirt/Tank is <strong>FREE!</strong>',
-          sub: 'Buy 2, Get 1 FREE is applied at checkout'
+          text: '<strong>Deal Unlocked!</strong> ' + pairs + ' pair' + (pairs > 1 ? 's' : '') + ' at <strong>2 for $40</strong>!',
+          sub: '2 for $40 (T-Shirts & Tanks) applied at checkout'
         });
       }
       
@@ -3060,8 +3048,9 @@ app.get('/', (c) => {
       } else if (step === 'color') {
         // COLOR SELECTION STEP
         var colorsHtml = product.colors.map(function(c) {
-          var bg = c.toLowerCase() === 'black' ? '#1a1a1a' : c.toLowerCase() === 'white' ? '#fff' : c.toLowerCase() === 'grey' ? '#808080' : c.toLowerCase() === 'pink' ? '#FF69B4' : '#ddd';
-          var textColor = (c.toLowerCase() === 'white' || c.toLowerCase() === 'pink') ? '#333' : '#fff';
+          var ckey = c.toLowerCase();
+          var bg = ckey === 'black' ? '#1a1a1a' : ckey === 'white' ? '#fff' : ckey === 'grey' ? '#808080' : ckey === 'pink' ? '#FF69B4' : ckey === 'espresso' ? '#4a2c1f' : ckey === 'heather tan' ? '#c9b38a' : '#ddd';
+          var textColor = (ckey === 'white' || ckey === 'pink' || ckey === 'heather tan') ? '#333' : '#fff';
           var sel = modalState.selectedColor === c ? 'box-shadow:0 0 0 3px #8B0000; transform:scale(1.05);' : '';
           return '<button data-action="selectModalColor" data-product-id="' + product.id + '" data-color="' + c + '" style="padding:14px 24px; border:2px solid #ddd; background:' + bg + '; color:' + textColor + '; border-radius:8px; cursor:pointer; font-size:0.95rem; font-weight:600; min-width:80px; transition:all 0.2s; ' + sel + '">' + c + '</button>';
         }).join('');

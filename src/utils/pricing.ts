@@ -22,7 +22,8 @@ export const PRICING = {
   TAX_RATE: 0.00,
 
   // Promotions
-  PROMO_TSHIRT_TANK_BUY2_GET1: true,       // Buy 2 T-Shirts/Tanks, Get 1 FREE
+  PROMO_TSHIRT_TANK_2_FOR_40: true,         // 2 T-Shirts/Tanks for $40 flat (scales in pairs)
+  PROMO_TSHIRT_TANK_BUNDLE_PRICE: 40,        // Flat price per pair of T-Shirts/Tanks
   PROMO_STICKER_BUNDLE_5_FOR_29: true,      // 5 Stickers for $29
   PROMO_HAT_HOODIE_FREE_STICKER: true,      // Free sticker with hat/hoodie purchase
 
@@ -185,14 +186,16 @@ export function calculateCartPricing(cartItems: CartItem[]): PricingBreakdown {
 
   // Step 2: Apply promotions
 
-  // PROMO 1: Buy 2 T-Shirts/Tanks, Get 1 FREE
-  if (PRICING.PROMO_TSHIRT_TANK_BUY2_GET1) {
+  // PROMO 1: 2 T-Shirts/Tanks for $40 (flat price per pair)
+  // Discount = (regular price of items in pairs) − (pairs × $40)
+  // Pairs are formed from the most-expensive items first to maximize customer savings.
+  if (PRICING.PROMO_TSHIRT_TANK_2_FOR_40) {
     const tshirtTankItems = cartItems.filter(i => isTshirtOrTank(i))
     const totalTshirtTankQty = tshirtTankItems.reduce((sum, i) => sum + i.qty, 0)
-    const freeCount = Math.floor(totalTshirtTankQty / 3) // For every 3, 1 is free
+    const pairCount = Math.floor(totalTshirtTankQty / 2) // every 2 form a $40 pair
 
-    if (freeCount > 0) {
-      // Find the cheapest T-shirt/tank items to make free
+    if (pairCount > 0) {
+      // Expand each item into individual unit prices
       const expandedPrices: number[] = []
       for (const item of tshirtTankItems) {
         const catalogProduct = getProductById(item.productId)
@@ -201,19 +204,23 @@ export function calculateCartPricing(cartItems: CartItem[]): PricingBreakdown {
           expandedPrices.push(price)
         }
       }
-      expandedPrices.sort((a, b) => a - b) // cheapest first
-      
-      let freeDiscount = 0
-      for (let i = 0; i < freeCount && i < expandedPrices.length; i++) {
-        freeDiscount += expandedPrices[i]
-      }
+      // Sort most expensive first so the highest-value pairs get the bundle price
+      expandedPrices.sort((a, b) => b - a)
 
-      if (freeDiscount > 0) {
-        discount += freeDiscount
+      const pairedQty = pairCount * 2
+      let regularPriceForPaired = 0
+      for (let i = 0; i < pairedQty && i < expandedPrices.length; i++) {
+        regularPriceForPaired += expandedPrices[i]
+      }
+      const bundleTotal = pairCount * PRICING.PROMO_TSHIRT_TANK_BUNDLE_PRICE
+      const pairDiscount = regularPriceForPaired - bundleTotal
+
+      if (pairDiscount > 0) {
+        discount += pairDiscount
         discountDetails.push({
-          type: 'BUY2_GET1_TSHIRT',
-          description: `Buy 2, Get 1 FREE (T-Shirts & Tanks) - ${freeCount} free item${freeCount > 1 ? 's' : ''}`,
-          amount: roundCurrency(freeDiscount),
+          type: 'TSHIRT_TANK_2_FOR_40',
+          description: `2 for $40 (T-Shirts & Tanks) - ${pairCount} pair${pairCount > 1 ? 's' : ''}`,
+          amount: roundCurrency(pairDiscount),
         })
       }
     }

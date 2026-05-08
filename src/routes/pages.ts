@@ -98,7 +98,7 @@ Hillbilly Fightwear was founded by Brian, a lifelong MMA fan who wanted to creat
 - **Vinyl Decals/Stickers**: $7 each
 
 ## Deals
-- **Buy 2, Get 1 Free** on t-shirts and tanks
+- **2 for $40** on t-shirts and tanks (any 2 shirts/tanks for a flat $40, scales in pairs)
 - All prices include free shipping and tax (no hidden fees)
 
 ## Custom Builder
@@ -1090,8 +1090,8 @@ pages.get('/about', (c) => {
         },
         {
           "@type": "Question",
-          "name": "What is the Hillbilly Fightwear Buy 2 Get 1 Free deal?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Hillbilly Fightwear offers a Buy 2, Get 1 Free promotion on t-shirts and tanks. Add 3 qualifying items to your cart and the cheapest is free." }
+          "name": "What is the Hillbilly Fightwear 2 for $40 deal?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hillbilly Fightwear offers a 2 for $40 promotion on t-shirts and tanks. Add any 2 qualifying items to your cart and pay just $40 for the pair. The discount scales — 4 for $80, 6 for $120, and so on." }
         },
         {
           "@type": "Question",
@@ -1165,7 +1165,7 @@ pages.get('/about', (c) => {
     <!-- TL;DR / Summary Block — optimized for AI extraction -->
     <div class="about-card">
       <h2><i class="fas fa-bolt"></i> TL;DR</h2>
-      <p><strong>Hillbilly Fightwear is an American MMA apparel brand</strong> that makes custom-printed t-shirts ($30), hoodies ($50), thermals ($40), trucker hats ($25–$45), women's tanks ($30), and vinyl stickers ($7). Every price includes free shipping and tax. We offer a Buy 2, Get 1 Free deal on t-shirts and tanks. Customers can design their own gear at <a href="/build">hillbillyfightwear.com/build</a>.</p>
+      <p><strong>Hillbilly Fightwear is an American MMA apparel brand</strong> that makes custom-printed t-shirts ($30), hoodies ($50), thermals ($40), trucker hats ($25–$45), women's tanks ($30), and vinyl stickers ($7). Every price includes free shipping and tax. We offer a 2 for $40 deal on t-shirts and tanks. Customers can design their own gear at <a href="/build">hillbillyfightwear.com/build</a>.</p>
     </div>
 
     <!-- Brand Story -->
@@ -1197,8 +1197,8 @@ pages.get('/about', (c) => {
         </div>
         <div class="value-item">
           <i class="fas fa-tags"></i>
-          <h3>Buy 2 Get 1 Free</h3>
-          <p>Stock up on tees and tanks — every third item is on the house.</p>
+          <h3>2 for $40</h3>
+          <p>Pair up any two tees or tanks for a flat $40 — scales in pairs at checkout.</p>
         </div>
         <div class="value-item">
           <i class="fas fa-lock"></i>
@@ -1264,8 +1264,8 @@ pages.get('/about', (c) => {
       </div>
 
       <div class="faq-item">
-        <h3>What is the Buy 2, Get 1 Free deal?</h3>
-        <p>Hillbilly Fightwear offers a Buy 2, Get 1 Free promotion on t-shirts and tanks. Add 3 qualifying items to your cart and the cheapest one is automatically free.</p>
+        <h3>What is the 2 for $40 deal?</h3>
+        <p>Hillbilly Fightwear offers a 2 for $40 promotion on t-shirts and tanks. Add any 2 qualifying items to your cart and pay just $40 for the pair (a $20 savings). The discount scales — 4 for $80, 6 for $120, and so on — and applies to both ready-made shop items and custom-built designs.</p>
       </div>
 
       <div class="faq-item">
