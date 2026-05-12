@@ -235,7 +235,12 @@ api.get('/pricing', (c) => {
     },
     shipping: { type: 'free', amount: PRICING.SHIPPING_FLAT },
     promotions: [
-
+      ...(PRICING.PROMO_TSHIRT_TANK_BUNDLE ? [{
+        type: 'TSHIRT_TANK_2_FOR_50',
+        title: `2 for $${PRICING.PROMO_TSHIRT_TANK_BUNDLE_PRICE}`,
+        description: `Any 2 T-Shirts or Tanks for $${PRICING.PROMO_TSHIRT_TANK_BUNDLE_PRICE} flat (scales in pairs)`,
+        appliesTo: 'T-Shirts & Tank Tops',
+      }] : []),
       ...(PRICING.PROMO_STICKER_BUNDLE_5_FOR_29 ? [{
         type: 'STICKER_BUNDLE',
         title: '5 Stickers for $29',

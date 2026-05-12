@@ -202,7 +202,7 @@ app.get('/', (c) => {
   
   <!-- SEO Meta Tags -->
   <title>MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear</title>
-  <meta name="description" content="Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs. Free shipping + tax included on every order. Build Y'Own and make your statement!">
+  <meta name="description" content="Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs. Free shipping + tax, 2 for $50 on shirts & tanks. Build Y'Own and make your statement!">
   <meta name="keywords" content="MMA apparel, custom MMA apparel, MMA t-shirts, MMA hoodies, hillbilly fightwear, fight wear, MMA trucker hat">
   <meta name="author" content="Hillbilly Fightwear">
   <meta name="robots" content="index, follow">
@@ -212,7 +212,7 @@ app.get('/', (c) => {
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://hillbillyfightwear.com/">
   <meta property="og:title" content="MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear">
-  <meta property="og:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax included on every order. Build your own – make your statement!">
+  <meta property="og:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, 2 for $50 on shirts & tanks. Build your own – make your statement!">
   <meta property="og:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg">
   <meta property="og:site_name" content="Hillbilly Fightwear">
   <meta property="og:locale" content="en_US">
@@ -221,7 +221,7 @@ app.get('/', (c) => {
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://hillbillyfightwear.com/">
   <meta name="twitter:title" content="MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear">
-  <meta name="twitter:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax included on every order. Build your own – make your statement!">
+  <meta name="twitter:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, 2 for $50 on shirts & tanks. Build your own – make your statement!">
   <meta name="twitter:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg">
   
   <!-- Mobile & PWA -->
@@ -338,8 +338,8 @@ app.get('/', (c) => {
       },
       {
         "@type": "Question",
-        "name": "Does Hillbilly Fightwear include shipping and tax?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every Hillbilly Fightwear order ships free, and tax is already included in the listed price. What you see on the product page is what you pay at checkout — no hidden fees." }
+        "name": "What is the Hillbilly Fightwear 2 for $50 deal?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Add any 2 t-shirts or tanks to your cart and pay just $50 for the pair. The deal scales — 4 shirts/tanks for $100, 6 for $150, etc. It applies to both ready-made shop items and custom-built designs." }
       },
       {
         "@type": "Question",
@@ -1718,6 +1718,12 @@ app.get('/', (c) => {
     <h2 id="deals-heading"><i class="fas fa-fire" aria-hidden="true"></i> Current Deals</h2>
     <div class="promo-cards">
       <div class="promo-card">
+        <div class="promo-icon"><i class="fas fa-tshirt"></i></div>
+        <h3>T-Shirts & Tanks</h3>
+        <p>Stock up on your favorite designs</p>
+        <span class="promo-highlight">2 for $50</span>
+      </div>
+      <div class="promo-card">
         <div class="promo-icon"><i class="fas fa-sticky-note"></i></div>
         <h3>Sticker Bundle</h3>
         <p>Grab a handful of stickers</p>
@@ -1739,7 +1745,7 @@ app.get('/', (c) => {
     <!-- MENS CLOTHING -->
     <div class="category-section" role="region" aria-labelledby="mens-heading">
       <h3 class="category-title" id="mens-heading"><i class="fas fa-male" aria-hidden="true"></i> Men's Clothing</h3>
-      <div class="category-promo-banner" style="background:rgba(76,175,80,0.08); border-color:rgba(76,175,80,0.3); color:#2e7d32;"><i class="fas fa-truck"></i> All prices include tax &amp; free shipping!</div>
+      <div class="category-promo-banner"><i class="fas fa-tags"></i> 2 for $50 on all T-Shirts &amp; Tanks &mdash; prices include tax &amp; shipping!</div>
       <div class="product-grid shop-grid" role="list">
         ${mensClothingHtml}
       </div>
@@ -1748,7 +1754,7 @@ app.get('/', (c) => {
     <!-- WOMENS CLOTHING -->
     <div class="category-section" role="region" aria-labelledby="womens-heading">
       <h3 class="category-title" id="womens-heading"><i class="fas fa-female" aria-hidden="true"></i> Women's Clothing</h3>
-      <div class="category-promo-banner" style="background:rgba(76,175,80,0.08); border-color:rgba(76,175,80,0.3); color:#2e7d32;"><i class="fas fa-truck"></i> All prices include tax &amp; free shipping!</div>
+      <div class="category-promo-banner"><i class="fas fa-tags"></i> 2 for $50 on all Tanks &mdash; prices include tax &amp; shipping!</div>
       <div class="product-grid shop-grid" role="list">
         ${womensClothingHtml}
       </div>
@@ -1926,8 +1932,8 @@ app.get('/', (c) => {
         <p style="color: #555; line-height: 1.7; margin: 0;">Yes. Visit the <a href="/build" style="color: #8B0000; font-weight: 600;">Build Y'Own</a> page to design custom gear. Choose from t-shirts, hoodies, thermals, tanks, or hats, pick from 20+ original graphics, select front or back placement, choose your size and color, and preview your design in real time before ordering.</p>
       </div>
       <div style="border-bottom: 1px solid #eee; padding: 18px 0;">
-        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">Does Hillbilly Fightwear include shipping and tax?</h3>
-        <p style="color: #555; line-height: 1.7; margin: 0;">Yes. Every order ships free, and tax is already included in the listed price. What you see on the product page is what you pay at checkout — no hidden fees or surprise charges.</p>
+        <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">What is the 2 for $50 deal?</h3>
+        <p style="color: #555; line-height: 1.7; margin: 0;">Add any 2 t-shirts or tanks to your cart and pay just $50 for the pair (a $10 savings). The discount scales — 4 shirts for $100, 6 for $150, and so on — and applies to both ready-made shop items and custom-built designs.</p>
       </div>
       <div style="border-bottom: 1px solid #eee; padding: 18px 0;">
         <h3 style="font-size: 1.05rem; color: #333; margin: 0 0 8px;">What sizes does Hillbilly Fightwear carry?</h3>
@@ -2670,7 +2676,38 @@ app.get('/', (c) => {
       
       var nudges = [];
       
-      // --- T-Shirt / Tank promo REMOVED: no nudges for shirts/tanks ---
+      // --- T-Shirt / Tank: 2 for $50 ---
+      var shirtCount = 0;
+      cart.forEach(function(item) {
+        var gt = item.garmentType || '';
+        if (gt === 'tshirt' || gt === 'tank-womens' || gt === 'tank-mens') {
+          shirtCount += item.qty;
+        }
+      });
+      // Pairs trigger the bundle. If shirtCount is odd, suggest adding 1 more to complete a pair.
+      var shirtRemainder = shirtCount % 2;
+      if (shirtCount > 0 && shirtRemainder === 1) {
+        nudges.push({
+          icon: 'fa-fire',
+          color: '#d32f2f',
+          bg: 'rgba(211,47,47,0.07)',
+          border: 'rgba(211,47,47,0.25)',
+          text: '<strong>SO CLOSE!</strong> Add <strong>1 more T-Shirt or Tank</strong> to lock in <strong>2 for $50!</strong>',
+          sub: 'Pair any two shirts/tanks for a flat $50'
+        });
+      }
+      // Celebrate when they already qualified (any pair triggers it)
+      if (shirtCount >= 2 && shirtRemainder === 0) {
+        var pairs = shirtCount / 2;
+        nudges.push({
+          icon: 'fa-check-circle',
+          color: '#2e7d32',
+          bg: 'rgba(76,175,80,0.08)',
+          border: 'rgba(76,175,80,0.3)',
+          text: '<strong>Deal Unlocked!</strong> ' + pairs + ' pair' + (pairs > 1 ? 's' : '') + ' at <strong>2 for $50</strong>!',
+          sub: '2 for $50 (T-Shirts & Tanks) applied at checkout'
+        });
+      }
       
       // --- Sticker / Decal: 5 for $29 Bundle ---
       var stickerCount = 0;

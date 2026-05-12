@@ -98,6 +98,7 @@ Hillbilly Fightwear was founded by Brian, a lifelong MMA fan who wanted to creat
 - **Vinyl Decals/Stickers**: $7 each
 
 ## Deals
+- **2 for $50** on t-shirts and tanks (any 2 shirts/tanks for a flat $50, scales in pairs)
 - All prices include free shipping and tax (no hidden fees)
 - Sticker bundle: 5 stickers for $29
 - Free sticker with every hat or hoodie purchase
@@ -1091,8 +1092,8 @@ pages.get('/about', (c) => {
         },
         {
           "@type": "Question",
-          "name": "Does Hillbilly Fightwear include shipping and tax?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every Hillbilly Fightwear order ships free, and tax is already included in the listed price. What you see on the product page is what you pay at checkout — no hidden fees." }
+          "name": "What is the Hillbilly Fightwear 2 for $50 deal?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hillbilly Fightwear offers a 2 for $50 promotion on t-shirts and tanks. Add any 2 qualifying items to your cart and pay just $50 for the pair. The discount scales — 4 for $100, 6 for $150, and so on." }
         },
         {
           "@type": "Question",
@@ -1166,7 +1167,7 @@ pages.get('/about', (c) => {
     <!-- TL;DR / Summary Block — optimized for AI extraction -->
     <div class="about-card">
       <h2><i class="fas fa-bolt"></i> TL;DR</h2>
-      <p><strong>Hillbilly Fightwear is an American MMA apparel brand</strong> that makes custom-printed t-shirts ($30), hoodies ($50), thermals ($40), trucker hats ($25–$45), women's tanks ($30), and vinyl stickers ($7). Every price includes free shipping and tax — what you see on the product page is what you pay at checkout. Customers can design their own gear at <a href="/build">hillbillyfightwear.com/build</a>.</p>
+      <p><strong>Hillbilly Fightwear is an American MMA apparel brand</strong> that makes custom-printed t-shirts ($30), hoodies ($50), thermals ($40), trucker hats ($25–$45), women's tanks ($30), and vinyl stickers ($7). Every price includes free shipping and tax. We offer a 2 for $50 deal on t-shirts and tanks. Customers can design their own gear at <a href="/build">hillbillyfightwear.com/build</a>.</p>
     </div>
 
     <!-- Brand Story -->
@@ -1198,8 +1199,8 @@ pages.get('/about', (c) => {
         </div>
         <div class="value-item">
           <i class="fas fa-tags"></i>
-          <h3>Free Shipping & Tax Included</h3>
-          <p>Every order ships free with tax already included — the price you see is the price you pay.</p>
+          <h3>2 for $50</h3>
+          <p>Pair up any two tees or tanks for a flat $50 — scales in pairs at checkout.</p>
         </div>
         <div class="value-item">
           <i class="fas fa-lock"></i>
@@ -1265,8 +1266,8 @@ pages.get('/about', (c) => {
       </div>
 
       <div class="faq-item">
-        <h3>Does Hillbilly Fightwear include shipping and tax?</h3>
-        <p>Yes. Every order ships free, and tax is already included in the listed price. What you see on the product page is what you pay at checkout — no hidden fees or surprise charges.</p>
+        <h3>What is the 2 for $50 deal?</h3>
+        <p>Hillbilly Fightwear offers a 2 for $50 promotion on t-shirts and tanks. Add any 2 qualifying items to your cart and pay just $50 for the pair (a $10 savings). The discount scales — 4 for $100, 6 for $150, and so on — and applies to both ready-made shop items and custom-built designs.</p>
       </div>
 
       <div class="faq-item">
