@@ -22,8 +22,8 @@ export const PRICING = {
   TAX_RATE: 0.00,
 
   // Promotions
-  PROMO_TSHIRT_TANK_2_FOR_40: true,         // 2 T-Shirts/Tanks for $40 flat (scales in pairs)
-  PROMO_TSHIRT_TANK_BUNDLE_PRICE: 40,        // Flat price per pair of T-Shirts/Tanks
+  PROMO_TSHIRT_TANK_2_FOR_40: false,        // DISABLED: T-shirts & tanks now sold at regular price
+  PROMO_TSHIRT_TANK_BUNDLE_PRICE: 40,        // (retained for backward compat — not used while promo disabled)
   PROMO_STICKER_BUNDLE_5_FOR_29: true,      // 5 Stickers for $29
   PROMO_HAT_HOODIE_FREE_STICKER: true,      // Free sticker with hat/hoodie purchase
 
@@ -186,45 +186,9 @@ export function calculateCartPricing(cartItems: CartItem[]): PricingBreakdown {
 
   // Step 2: Apply promotions
 
-  // PROMO 1: 2 T-Shirts/Tanks for $40 (flat price per pair)
-  // Discount = (regular price of items in pairs) − (pairs × $40)
-  // Pairs are formed from the most-expensive items first to maximize customer savings.
-  if (PRICING.PROMO_TSHIRT_TANK_2_FOR_40) {
-    const tshirtTankItems = cartItems.filter(i => isTshirtOrTank(i))
-    const totalTshirtTankQty = tshirtTankItems.reduce((sum, i) => sum + i.qty, 0)
-    const pairCount = Math.floor(totalTshirtTankQty / 2) // every 2 form a $40 pair
-
-    if (pairCount > 0) {
-      // Expand each item into individual unit prices
-      const expandedPrices: number[] = []
-      for (const item of tshirtTankItems) {
-        const catalogProduct = getProductById(item.productId)
-        const price = catalogProduct ? catalogProduct.priceNum : item.price
-        for (let i = 0; i < item.qty; i++) {
-          expandedPrices.push(price)
-        }
-      }
-      // Sort most expensive first so the highest-value pairs get the bundle price
-      expandedPrices.sort((a, b) => b - a)
-
-      const pairedQty = pairCount * 2
-      let regularPriceForPaired = 0
-      for (let i = 0; i < pairedQty && i < expandedPrices.length; i++) {
-        regularPriceForPaired += expandedPrices[i]
-      }
-      const bundleTotal = pairCount * PRICING.PROMO_TSHIRT_TANK_BUNDLE_PRICE
-      const pairDiscount = regularPriceForPaired - bundleTotal
-
-      if (pairDiscount > 0) {
-        discount += pairDiscount
-        discountDetails.push({
-          type: 'TSHIRT_TANK_2_FOR_40',
-          description: `2 for $40 (T-Shirts & Tanks) - ${pairCount} pair${pairCount > 1 ? 's' : ''}`,
-          amount: roundCurrency(pairDiscount),
-        })
-      }
-    }
-  }
+  // PROMO 1: T-Shirts & Tanks (REMOVED)
+  // Previously offered "2 for $40". Now sold at regular catalog price.
+  // Block intentionally left blank — flag PRICING.PROMO_TSHIRT_TANK_2_FOR_40 is false.
 
   // PROMO 2: 5 Stickers for $29
   if (PRICING.PROMO_STICKER_BUNDLE_5_FOR_29) {
