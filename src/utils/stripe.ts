@@ -147,6 +147,13 @@ export async function createShopCheckoutSession(
     adjustedParams.append('cancel_url', `${origin}/#shop`)
     adjustedParams.append('shipping_address_collection[allowed_countries][]', 'US')
     adjustedParams.append('phone_number_collection[enabled]', 'true')
+    // CHECKOUT FIX: Force card-only payment to prevent Stripe dashboard config
+    // from enabling Klarna (which has min-order limits) or Adaptive Pricing
+    // (which can bounce international customers), causing the checkout to
+    // redirect back to cancel_url before payment can complete.
+    adjustedParams.append('payment_method_types[]', 'card')
+    adjustedParams.append('billing_address_collection', 'auto')
+    adjustedParams.append('adaptive_pricing[enabled]', 'false')
 
     // Calculate discount ratio
     const discountRatio = pricing.discount / pricing.subtotal
@@ -273,6 +280,11 @@ export async function createBuilderCheckoutSession(
   params.append('cancel_url', `${origin}/build`)
   params.append('shipping_address_collection[allowed_countries][]', 'US')
   params.append('phone_number_collection[enabled]', 'true')
+  // CHECKOUT FIX: Force card-only payment to prevent Stripe dashboard config
+  // from enabling Klarna or Adaptive Pricing that can bounce customers.
+  params.append('payment_method_types[]', 'card')
+  params.append('billing_address_collection', 'auto')
+  params.append('adaptive_pricing[enabled]', 'false')
 
   // Single line item: garment with front logo + mandatory back HFW logo (all included in base price)
   params.append('line_items[0][price_data][currency]', 'usd')

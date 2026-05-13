@@ -469,6 +469,12 @@ export function generateStripeCheckoutParams(
   params.append('cancel_url', cancelUrl)
   params.append('shipping_address_collection[allowed_countries][]', 'US')
   params.append('phone_number_collection[enabled]', 'true')
+  // CHECKOUT FIX: Force card-only payment to prevent Stripe dashboard config
+  // from enabling Klarna (min-order limits) or Adaptive Pricing (currency conversion)
+  // which can bounce customers back to cancel_url before payment completes.
+  params.append('payment_method_types[]', 'card')
+  params.append('billing_address_collection', 'auto')
+  params.append('adaptive_pricing[enabled]', 'false')
 
   if (customerEmail) {
     params.append('customer_email', customerEmail)
