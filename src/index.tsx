@@ -1516,22 +1516,19 @@ app.get('/', (c) => {
     }
 
     /* =============================================
-       MOBILE LAYOUT — Clean 3-column grid, NO absolute positioning
+       MOBILE LAYOUT — Logo-first, compact sticker collage below
        
-       Mobile grid layout (3 cols × rows around centered logo):
-       TOP GROUP (above logo):
-         Row 1: HCF | Thump A Stranger | Cling to Guns
-         Row 2: Put It On Em | Fun Ride
-       LOGO + SLOGAN + CTA
-       BOTTOM GROUP (below logo):
-         Row 3: Yes You Can | Thumpin Is Lovin | HFW
-         Row 4: Community | MYOB | Obama Tap
-         Row 5: Cunt | GNF
+       Mobile order (top to bottom):
+         1. LOGO + SLOGAN + CTAs (visible above the fold, like desktop)
+         2. Compact sticker collage (decorative, half the size)
+       
+       This matches the desktop visual hierarchy: logo & CTAs are the
+       primary content, stickers are background decoration.
        
        Desktop collage is completely untouched.
        ============================================= */
     @media (max-width: 768px) {
-      /* Hero becomes a simple vertical stack */
+      /* Hero becomes a simple vertical stack, white bg, logo above the fold */
       .scrapbook-hero {
         position: relative !important;
         min-height: auto !important;
@@ -1540,15 +1537,46 @@ app.get('/', (c) => {
         flex-direction: column !important;
         align-items: center !important;
         justify-content: flex-start !important;
-        padding: 16px 10px 20px !important;
+        padding: 20px 12px 24px !important;
         overflow: visible !important;
+        background: #ffffff !important;
       }
       /* Kill the pseudo-element background */
       .scrapbook-hero::before {
         display: none !important;
       }
 
-      /* Both sticker groups: 3-column grid */
+      /* LOGO + CTA: shown FIRST (above the fold) — matches desktop hierarchy */
+      .scrapbook-center {
+        order: 1 !important;
+        position: static !important;
+        max-width: 100% !important;
+        padding: 0 0 12px !important;
+        z-index: auto !important;
+        text-align: center !important;
+      }
+      .scrapbook-center img {
+        max-width: 280px !important;
+        width: 100% !important;
+        height: auto !important;
+        filter: drop-shadow(0 4px 15px rgba(0,0,0,0.2))
+                drop-shadow(0 0 20px rgba(139,0,0,0.15)) !important;
+      }
+      .scrapbook-cta {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        margin-top: 16px !important;
+        flex-wrap: nowrap !important;
+      }
+      .scrapbook-cta a {
+        padding: 11px 22px !important;
+        font-size: 0.85rem !important;
+        white-space: nowrap !important;
+      }
+
+      /* Sticker collages: flex-wrap so orphan rows center (no empty cells) */
       .sticker-collage,
       .sticker-collage-top,
       .sticker-collage-bottom {
@@ -1558,45 +1586,32 @@ app.get('/', (c) => {
         left: auto !important;
         right: auto !important;
         bottom: auto !important;
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 8px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 6px !important;
         width: 100% !important;
-        max-width: 340px !important;
-        padding: 0 4px !important;
+        max-width: 320px !important;
+        padding: 0 !important;
         pointer-events: auto !important;
         z-index: auto !important;
       }
 
-      /* Top group: 3 cols × 2 rows (5 stickers — sticker-15 removed) */
+      /* Top group: now BELOW the logo (order 2) */
       .sticker-collage-top {
-        order: 1 !important;
-        margin-bottom: 12px !important;
-      }
-
-      /* Logo center */
-      .scrapbook-center {
         order: 2 !important;
-        position: static !important;
-        max-width: 300px !important;
-        padding: 10px 10px 6px !important;
-        z-index: auto !important;
+        margin-top: 18px !important;
+        margin-bottom: 0 !important;
       }
-      .scrapbook-center img {
-        max-width: 260px !important;
-        filter: drop-shadow(0 4px 15px rgba(0,0,0,0.2))
-                drop-shadow(0 0 20px rgba(139,0,0,0.15)) !important;
-      }
-      .scrapbook-cta { flex-direction: row !important; align-items: center !important; gap: 10px !important; }
-      .scrapbook-cta a { padding: 10px 20px !important; font-size: 0.8rem !important; }
 
-      /* Bottom group: 3 cols × 3 rows (9 stickers) */
+      /* Bottom group: even further below (order 3) */
       .sticker-collage-bottom {
         order: 3 !important;
-        margin-top: 12px !important;
+        margin-top: 6px !important;
       }
 
-      /* EVERY sticker: kill all absolute positioning */
+      /* EVERY sticker: fixed compact size, ~3 per row at 320px container */
       .sticker-collage .sticker,
       .sticker-collage .sticker-1,
       .sticker-collage .sticker-3,
@@ -1617,30 +1632,39 @@ app.get('/', (c) => {
         left: auto !important;
         right: auto !important;
         bottom: auto !important;
-        width: 100% !important;
-        height: auto !important;
+        flex: 0 0 auto !important;
+        width: 100px !important;
+        height: 70px !important;
+        max-height: 70px !important;
         transform: none !important;
-        border-radius: 8px;
+        border-radius: 6px;
         object-fit: contain;
         filter: drop-shadow(1px 2px 4px rgba(0,0,0,0.2));
         background: rgba(255,255,255,0.6);
-        padding: 4px;
+        padding: 3px;
+        box-sizing: border-box;
       }
       .sticker-collage .sticker:hover {
         transform: scale(1.05) !important;
       }
     }
 
-    /* Small phones — tighten grid */
+    /* Small phones — tighten further */
     @media (max-width: 400px) {
       .sticker-collage,
       .sticker-collage-top,
       .sticker-collage-bottom {
-        max-width: 300px !important;
-        gap: 6px !important;
+        max-width: 290px !important;
+        gap: 5px !important;
       }
-      .scrapbook-center img { max-width: 220px !important; }
-      .scrapbook-cta a { padding: 8px 16px !important; font-size: 0.75rem !important; }
+      .scrapbook-hero { padding: 16px 10px 20px !important; }
+      .scrapbook-center img { max-width: 240px !important; }
+      .scrapbook-cta a { padding: 10px 18px !important; font-size: 0.8rem !important; }
+      .sticker-collage .sticker {
+        width: 88px !important;
+        height: 60px !important;
+        max-height: 60px !important;
+      }
     }
   </style>
 </head>
