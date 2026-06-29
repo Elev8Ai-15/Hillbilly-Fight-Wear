@@ -297,19 +297,19 @@ export const kidsClothing: ShopProduct[] = [
 
 // HATS - Trucker Hats and Beanies
 export const hats: ShopProduct[] = [
-  { id: 'h1', title: 'Beanie', vendor: 'Hillbilly Fightwear', price: '$25.00', priceNum: 25, image: '/images/products/web/h1-beanie.png', type: 'garment', garmentType: 'beanie', sizes: ['One Size'], colors: ['Black','Grey','White'] },
-  { id: 'h2', title: 'Fitted Hat - GNF White', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h2-gnf-white-fitted.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['White'] },
-  { id: 'h3', title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h3-gnf-black-fitted.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
-  { id: 'h4', title: 'Fitted Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h4-cockfighter-fitted.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
-  { id: 'h5', title: 'Fitted Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h5-hfw-fitted.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h1', title: 'Beanie', vendor: 'Hillbilly Fightwear', price: '$25.00', priceNum: 25, image: '/images/products/web/h1-beanie.png?v=2', type: 'garment', garmentType: 'beanie', sizes: ['One Size'], colors: ['Black','Grey','White'] },
+  { id: 'h2', title: 'Fitted Hat - GNF White', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h2-gnf-white-fitted.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['White'] },
+  { id: 'h3', title: 'Fitted Hat - GNF Black', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h3-gnf-black-fitted.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h4', title: 'Fitted Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h4-cockfighter-fitted.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h5', title: 'Fitted Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h5-hfw-fitted.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
   // h6 Hard Hittin hat removed per request
-  { id: 'h7', title: 'Adjustable Hat - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h7-fun-ride-adj.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black','White'] },
-  { id: 'h8', title: 'Adjustable Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h8-hfw-adj.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
-  { id: 'h9', title: 'Adjustable Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h9-cockfighter-adj.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
-  { id: 'h10', title: 'Adjustable Hat - GNF', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h10-gnf-adj.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black','White'] },
-  { id: 'h11', title: 'Adjustable Hat - Cockfighter Grey', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h11-cockfighter-grey-adj.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Grey'] },
-  { id: 'h12', title: 'Adjustable Hat - Cockfighter Black', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h12-cockfighter-black-adj.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
-  { id: 'h13', title: 'Fitted Hat - GNF Patriotic', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h13-gnf-patriotic-fitted.png', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
+  { id: 'h7', title: 'Adjustable Hat - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h7-fun-ride-adj.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black','White'] },
+  { id: 'h8', title: 'Adjustable Hat - HFW', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h8-hfw-adj.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
+  { id: 'h9', title: 'Adjustable Hat - Cockfighter', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h9-cockfighter-adj.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
+  { id: 'h10', title: 'Adjustable Hat - GNF', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h10-gnf-adj.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black','White'] },
+  { id: 'h11', title: 'Adjustable Hat - Cockfighter Grey', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h11-cockfighter-grey-adj.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Grey'] },
+  { id: 'h12', title: 'Adjustable Hat - Cockfighter Black', vendor: 'Hillbilly Fightwear', price: '$35.00', priceNum: 35, image: '/images/products/web/h12-cockfighter-black-adj.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['One Size'], colors: ['Black'] },
+  { id: 'h13', title: 'Fitted Hat - GNF Patriotic', vendor: 'Hillbilly Fightwear', price: '$45.00', priceNum: 45, image: '/images/products/web/h13-gnf-patriotic-fitted.png?v=2', type: 'garment', garmentType: 'trucker-hat', sizes: ['S/M','L/XL'], colors: ['Black'] },
 ]
 
 // DECALS / STICKERS
