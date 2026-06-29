@@ -881,12 +881,18 @@ app.get('/', (c) => {
     }
     
     .product-image {
+      /* Fill the square wrapper and let object-fit:contain preserve the
+         garment's natural aspect ratio (important for tall items like tanks
+         that are ~430x800 vs t-shirts at ~666x800). Without explicit width
+         AND height the image takes its intrinsic aspect ratio and overflows. */
       width: 100%;
-      height: auto;
-      max-width: 280px;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
       margin: 0 auto;
       display: block;
       object-fit: contain;
+      object-position: center;
       transition: opacity 0.35s ease;
     }
     
@@ -897,6 +903,8 @@ app.get('/', (c) => {
       width: calc(100% - 40px);
       max-width: none;
       height: calc(100% - 40px);
+      object-fit: contain;
+      object-position: center;
       opacity: 0;
     }
     .product-card.has-back:hover .product-img-front,
