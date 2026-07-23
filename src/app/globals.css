@@ -16,6 +16,38 @@
   --font-body: "system-ui", "Segoe UI", "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
+/* Self-hosted display fonts for the custom designer (OFL licensed) */
+@font-face {
+  font-family: "Anton";
+  src: url("/fonts/anton.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Alfa Slab One";
+  src: url("/fonts/alfa-slab-one.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Black Ops One";
+  src: url("/fonts/black-ops-one.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Rye";
+  src: url("/fonts/rye.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Special Elite";
+  src: url("/fonts/special-elite.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
 html {
   scroll-behavior: smooth;
 }

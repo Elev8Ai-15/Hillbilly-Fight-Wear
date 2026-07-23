@@ -14,6 +14,51 @@ function loadImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
+// Self-hosted designer fonts. SVG-as-image can't fetch external resources,
+// so used fonts get inlined as data URIs before rasterizing.
+const FONT_FILES: Record<string, string> = {
+  Anton: "/fonts/anton.woff2",
+  "Alfa Slab One": "/fonts/alfa-slab-one.woff2",
+  "Black Ops One": "/fonts/black-ops-one.woff2",
+  Rye: "/fonts/rye.woff2",
+  "Special Elite": "/fonts/special-elite.woff2",
+};
+
+const fontDataCache = new Map<string, string>();
+
+async function buildFontStyle(clone: SVGSVGElement): Promise<string> {
+  const used = new Set<string>();
+  clone.querySelectorAll("text").forEach((t) => {
+    const fam = t.getAttribute("font-family") || "";
+    Object.keys(FONT_FILES).forEach((name) => {
+      if (fam.includes(name)) used.add(name);
+    });
+  });
+  if (used.size === 0) return "";
+
+  const faces: string[] = [];
+  for (const name of used) {
+    try {
+      let dataUrl = fontDataCache.get(name);
+      if (!dataUrl) {
+        const res = await fetch(FONT_FILES[name]);
+        if (!res.ok) continue;
+        const buf = await res.arrayBuffer();
+        let binary = "";
+        new Uint8Array(buf).forEach((b) => (binary += String.fromCharCode(b)));
+        dataUrl = `data:font/woff2;base64,${btoa(binary)}`;
+        fontDataCache.set(name, dataUrl);
+      }
+      faces.push(
+        `@font-face{font-family:"${name}";src:url(${dataUrl}) format("woff2");}`
+      );
+    } catch {
+      // Missing font just falls back in the export
+    }
+  }
+  return faces.join("\n");
+}
+
 /**
  * Rasterize the live designer SVG (#garment-canvas-svg) to a PNG data URL.
  * Selection chrome tagged with data-export-ignore is stripped first.
@@ -33,6 +78,16 @@ export async function renderDesignToPng(scale = 2): Promise<string | null> {
   const height = CANVAS_H * scale;
   clone.setAttribute("width", String(width));
   clone.setAttribute("height", String(height));
+
+  const fontStyle = await buildFontStyle(clone);
+  if (fontStyle) {
+    const styleEl = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "style"
+    );
+    styleEl.textContent = fontStyle;
+    clone.insertBefore(styleEl, clone.firstChild);
+  }
 
   const markup = new XMLSerializer().serializeToString(clone);
   const blob = new Blob([markup], { type: "image/svg+xml;charset=utf-8" });

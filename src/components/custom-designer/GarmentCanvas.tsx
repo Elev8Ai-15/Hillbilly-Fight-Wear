@@ -2,313 +2,385 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import { useDesignerStore } from "@/store/designer-store";
-import { DesignElement, TextElementData, ImageElementData, ShapeElementData } from "@/types";
+import {
+  DesignElement,
+  TextElementData,
+  ImageElementData,
+  ShapeElementData,
+  ClipartElementData,
+} from "@/types";
+import { getClipart } from "@/data/cliparts";
 import { cn } from "@/lib/utils";
 
-// SVG garment templates for each view
-const garmentTemplates = {
-  tshirts: {
-    front: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M120,60 L180,60 L200,80 L240,70 L250,120 L220,110 L220,280 L80,280 L80,110 L50,120 L60,70 L100,80 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        {/* Collar */}
-        <path
-          d="M120,60 C130,75 170,75 180,60"
-          fill="none"
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        {/* Sleeve lines */}
-        <line x1="80" y1="110" x2="100" y2="80" stroke={secondaryColor} strokeWidth="1" opacity="0.3" />
-        <line x1="220" y1="110" x2="200" y2="80" stroke={secondaryColor} strokeWidth="1" opacity="0.3" />
-      </g>
-    ),
-    back: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M120,60 L180,60 L200,80 L240,70 L250,120 L220,110 L220,280 L80,280 L80,110 L50,120 L60,70 L100,80 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        <path
-          d="M120,60 C140,70 160,70 180,60"
-          fill="none"
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-    left: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M100,60 L160,60 L180,80 L200,75 L200,120 L180,110 L180,280 L100,280 L100,110 L60,120 L70,70 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-    right: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M140,60 L200,60 L230,70 L240,120 L200,110 L200,280 L120,280 L120,110 L100,120 L100,75 L120,80 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-  },
-  shorts: {
-    front: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M70,80 L230,80 L230,120 L240,260 L170,260 L150,180 L130,260 L60,260 L70,120 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        {/* Waistband */}
-        <rect x="70" y="80" width="160" height="15" fill={secondaryColor} opacity="0.3" rx="2" />
-        {/* Center seam */}
-        <line x1="150" y1="95" x2="150" y2="180" stroke={secondaryColor} strokeWidth="1" opacity="0.3" />
-      </g>
-    ),
-    back: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M70,80 L230,80 L230,120 L240,260 L170,260 L150,180 L130,260 L60,260 L70,120 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        <rect x="70" y="80" width="160" height="15" fill={secondaryColor} opacity="0.3" rx="2" />
-      </g>
-    ),
-    left: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M100,80 L200,80 L200,120 L210,260 L140,260 L130,180 L120,260 L90,260 L100,120 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-    right: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M100,80 L200,80 L200,120 L210,260 L180,260 L170,180 L160,260 L90,260 L100,120 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-  },
-  rashguards: {
-    front: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M120,50 L180,50 L200,70 L260,60 L265,180 L220,170 L220,290 L80,290 L80,170 L35,180 L40,60 L100,70 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        <path
-          d="M120,50 C130,65 170,65 180,50"
-          fill="none"
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        {/* Compression panel lines */}
-        <line x1="100" y1="120" x2="100" y2="290" stroke={secondaryColor} strokeWidth="1" opacity="0.2" />
-        <line x1="200" y1="120" x2="200" y2="290" stroke={secondaryColor} strokeWidth="1" opacity="0.2" />
-      </g>
-    ),
-    back: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M120,50 L180,50 L200,70 L260,60 L265,180 L220,170 L220,290 L80,290 L80,170 L35,180 L40,60 L100,70 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        <path
-          d="M120,50 C140,60 160,60 180,50"
-          fill="none"
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-    left: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M100,50 L160,50 L180,70 L220,65 L220,180 L180,170 L180,290 L100,290 L100,170 L60,180 L65,65 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-    right: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M140,50 L200,50 L235,65 L240,180 L200,170 L200,290 L120,290 L120,170 L80,180 L80,65 L120,70 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-  },
-  hoodies: {
-    front: (baseColor: string, secondaryColor: string) => (
-      <g>
-        {/* Hood */}
-        <path
-          d="M110,30 C110,10 190,10 190,30 L195,60 L105,60 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-          opacity="0.8"
-        />
-        {/* Body */}
-        <path
-          d="M105,60 L195,60 L210,80 L255,70 L260,140 L225,130 L225,300 L75,300 L75,130 L40,140 L45,70 L90,80 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        {/* Pocket */}
-        <rect x="110" y="200" width="80" height="50" rx="5" fill={secondaryColor} opacity="0.15" stroke={secondaryColor} strokeWidth="1" />
-        {/* Center zip line */}
-        <line x1="150" y1="60" x2="150" y2="300" stroke={secondaryColor} strokeWidth="1" opacity="0.2" />
-      </g>
-    ),
-    back: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M110,30 C110,10 190,10 190,30 L195,60 L105,60 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-          opacity="0.8"
-        />
-        <path
-          d="M105,60 L195,60 L210,80 L255,70 L260,140 L225,130 L225,300 L75,300 L75,130 L40,140 L45,70 L90,80 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-    left: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M100,30 C100,10 160,10 160,30 L165,60 L95,60 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-          opacity="0.8"
-        />
-        <path
-          d="M95,60 L165,60 L185,80 L220,70 L220,140 L185,130 L185,300 L95,300 L95,130 L60,140 L65,70 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-    right: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M140,30 C140,10 200,10 200,30 L205,60 L135,60 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-          opacity="0.8"
-        />
-        <path
-          d="M135,60 L205,60 L225,70 L235,140 L205,130 L205,300 L115,300 L115,130 L80,140 L80,70 L115,80 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-  },
-  spats: {
-    front: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M90,60 L210,60 L210,100 L220,320 L165,320 L150,200 L135,320 L80,320 L90,100 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        <rect x="90" y="60" width="120" height="15" fill={secondaryColor} opacity="0.3" rx="2" />
-      </g>
-    ),
-    back: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M90,60 L210,60 L210,100 L220,320 L165,320 L150,200 L135,320 L80,320 L90,100 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-        <rect x="90" y="60" width="120" height="15" fill={secondaryColor} opacity="0.3" rx="2" />
-      </g>
-    ),
-    left: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M110,60 L190,60 L190,100 L195,320 L150,320 L145,200 L140,320 L105,320 L110,100 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-    right: (baseColor: string, secondaryColor: string) => (
-      <g>
-        <path
-          d="M110,60 L190,60 L190,100 L195,320 L160,320 L155,200 L150,320 L105,320 L110,100 Z"
-          fill={baseColor}
-          stroke={secondaryColor}
-          strokeWidth="2"
-        />
-      </g>
-    ),
-  },
-};
+/**
+ * Garment art. Each view has:
+ *  - outline: silhouette path(s) used for the base fill, shading and the
+ *    clip path that keeps design elements on the garment
+ *  - details: trim/seam art drawn on top (accent = secondaryColor)
+ *  - shadow: soft floor shadow under the garment
+ */
+interface GarmentView {
+  outlines: string[];
+  details: (base: string, accent: string) => React.ReactNode;
+  shadow: { cy: number; rx: number };
+}
 
-// Fallback template for garment types without specific SVG
-const fallbackTemplate = (baseColor: string, secondaryColor: string) => (
-  <g>
-    <rect x="60" y="60" width="180" height="220" rx="10" fill={baseColor} stroke={secondaryColor} strokeWidth="2" />
-  </g>
+const seam = (d: string, w = 1.5, o = 0.25) => (
+  <path key={d} d={d} fill="none" stroke="#000" strokeWidth={w} opacity={o} />
+);
+const stitch = (d: string) => (
+  <path
+    key={d}
+    d={d}
+    fill="none"
+    stroke="#000"
+    strokeWidth="1"
+    opacity="0.2"
+    strokeDasharray="4 3"
+  />
 );
 
-function getTemplate(
-  garmentType: string,
-  viewAngle: string,
-  baseColor: string,
-  secondaryColor: string
-) {
-  const templates = garmentTemplates[garmentType as keyof typeof garmentTemplates];
-  if (!templates) return fallbackTemplate(baseColor, secondaryColor);
-  const viewFn = templates[viewAngle as keyof typeof templates];
-  if (!viewFn) return fallbackTemplate(baseColor, secondaryColor);
-  return viewFn(baseColor, secondaryColor);
+const TEE_FRONT =
+  "M118,58 C130,50 170,50 182,58 L210,72 C228,80 238,94 244,110 C247,118 249,126 246,132 C240,139 229,142 221,138 L216,126 C214,160 212,220 213,290 C213,296 209,300 203,300 L97,300 C91,300 87,296 87,290 C88,220 86,160 84,126 L79,138 C71,142 60,139 54,132 C51,126 53,118 56,110 C62,94 72,80 90,72 Z";
+const SHORTS_FRONT =
+  "M70,78 L230,78 L235,114 C243,158 250,208 254,252 C255,262 252,268 244,268 L172,268 C167,268 164,265 163,260 L152,190 L148,190 L137,260 C136,265 133,268 128,268 L56,268 C48,268 45,262 46,252 C50,208 57,158 65,114 Z";
+const RASH_FRONT =
+  "M124,52 C134,45 166,45 176,52 L200,66 C216,74 226,90 231,110 L249,208 C251,220 252,231 251,238 C245,243 233,244 227,240 C222,230 218,220 215,208 L206,146 C206,200 205,260 205,300 C205,304 201,306 197,306 L103,306 C99,306 95,304 95,300 C95,260 94,200 94,146 L85,208 C82,220 78,230 73,240 C67,244 55,243 49,238 C48,231 49,220 51,208 L69,110 C74,90 84,74 100,66 Z";
+const HOODIE_HOOD =
+  "M106,66 C100,32 126,12 150,12 C174,12 200,32 194,66 L182,72 L118,72 Z";
+const HOODIE_BODY =
+  "M106,66 L94,76 C76,84 66,98 60,116 L44,196 C42,206 43,214 46,218 C52,223 62,223 68,218 L82,180 L84,180 C83,220 83,258 84,288 C84,295 88,300 95,300 L205,300 C212,300 216,295 216,288 C217,258 217,220 216,180 L218,180 L232,218 C238,223 248,223 254,218 C257,214 258,206 256,196 L240,116 C234,98 224,84 206,76 L194,66 L180,64 C170,80 130,80 120,64 Z";
+const SPATS_FRONT =
+  "M94,70 L206,70 L209,102 C212,142 210,182 206,222 L201,318 C201,323 198,326 193,326 L163,326 C159,326 156,323 156,318 L152,186 L148,186 L144,318 C144,323 141,326 137,326 L107,326 C102,326 99,323 99,318 L94,222 C90,182 88,142 91,102 Z";
+
+// Simple side profiles shared by left/right (mirrored via transform)
+const TEE_SIDE =
+  "M126,58 C140,50 168,52 176,60 C186,72 192,88 192,106 L192,290 C192,296 188,300 182,300 L118,300 C112,300 108,296 108,290 L108,106 C108,86 112,68 126,58 Z";
+const SHORTS_SIDE =
+  "M106,78 L194,78 L198,116 C202,160 204,210 204,252 C204,262 200,268 192,268 L108,268 C100,268 96,262 96,252 C96,210 98,160 102,116 Z";
+const RASH_SIDE =
+  "M128,52 C140,45 164,46 172,54 C182,66 188,84 188,104 L188,296 C188,302 184,306 178,306 L122,306 C116,306 112,302 112,296 L112,104 C112,84 116,64 128,52 Z";
+const HOODIE_SIDE_HOOD =
+  "M116,64 C110,32 132,12 152,12 C172,12 190,30 186,62 L176,70 L124,70 Z";
+const HOODIE_SIDE_BODY =
+  "M116,64 L106,76 C96,88 92,104 92,122 L92,286 C92,294 96,300 104,300 L196,300 C204,300 208,294 208,286 L208,122 C208,102 204,86 194,74 L186,62 L176,70 L124,70 Z";
+const SPATS_SIDE =
+  "M118,70 L182,70 L186,104 C188,146 187,188 184,226 L180,318 C180,323 177,326 172,326 L128,326 C123,326 120,323 120,318 L116,226 C113,188 112,146 114,104 Z";
+
+function buildGarmentViews(): Record<string, Record<string, GarmentView>> {
+  const tee = (isBack: boolean): GarmentView => ({
+    outlines: [TEE_FRONT],
+    shadow: { cy: 316, rx: 92 },
+    details: (base, accent) => (
+      <g>
+        <path
+          d={
+            isBack
+              ? "M118,58 C130,52 170,52 182,58 C170,66 130,66 118,58 Z"
+              : "M118,58 C130,52 170,52 182,58 C172,76 128,76 118,58 Z"
+          }
+          fill="#000"
+          opacity="0.45"
+        />
+        <path
+          d={
+            isBack
+              ? "M118,58 C130,52 170,52 182,58 C170,66 130,66 118,58 Z"
+              : "M118,58 C130,52 170,52 182,58 C172,76 128,76 118,58 Z"
+          }
+          fill="none"
+          stroke={accent}
+          strokeWidth="3"
+          opacity="0.9"
+        />
+        {seam("M216,126 C213,108 212,90 210,72")}
+        {seam("M84,126 C87,108 88,90 90,72")}
+        <path
+          d="M221,138 L246,132 C247,135 246,138 243,140 L224,145 Z"
+          fill={accent}
+          opacity="0.95"
+        />
+        <path
+          d="M79,138 L54,132 C53,135 54,138 57,140 L76,145 Z"
+          fill={accent}
+          opacity="0.95"
+        />
+        {stitch("M89,292 L211,292")}
+      </g>
+    ),
+  });
+
+  const shorts = (isBack: boolean): GarmentView => ({
+    outlines: [SHORTS_FRONT],
+    shadow: { cy: 286, rx: 105 },
+    details: (base, accent) => (
+      <g>
+        <path
+          d="M65,114 C57,158 50,208 46,252 C45,262 48,268 56,268 L74,268 C68,212 68,158 72,114 L70,78 Z"
+          fill={accent}
+          opacity="0.9"
+        />
+        <path
+          d="M235,114 C243,158 250,208 254,252 C255,262 252,268 244,268 L226,268 C232,212 232,158 228,114 L230,78 Z"
+          fill={accent}
+          opacity="0.9"
+        />
+        <path d="M70,78 L230,78 L232,96 L68,96 Z" fill="#000" opacity="0.55" />
+        {!isBack && (
+          <path
+            d="M138,84 C144,90 156,90 162,84"
+            stroke={accent}
+            strokeWidth="2.5"
+            fill="none"
+          />
+        )}
+        {!isBack && seam("M150,96 L150,190")}
+        {stitch("M58,258 L134,258")}
+        {stitch("M166,258 L242,258")}
+      </g>
+    ),
+  });
+
+  const rash = (isBack: boolean): GarmentView => ({
+    outlines: [RASH_FRONT],
+    shadow: { cy: 316, rx: 88 },
+    details: (base, accent) => (
+      <g>
+        <path
+          d={
+            isBack
+              ? "M124,52 C134,47 166,47 176,52 C168,60 132,60 124,52 Z"
+              : "M124,52 C134,47 166,47 176,52 C168,66 132,66 124,52 Z"
+          }
+          fill="#000"
+          opacity="0.5"
+        />
+        <path
+          d={
+            isBack
+              ? "M124,52 C134,47 166,47 176,52 C168,60 132,60 124,52 Z"
+              : "M124,52 C134,47 166,47 176,52 C168,66 132,66 124,52 Z"
+          }
+          fill="none"
+          stroke={accent}
+          strokeWidth="2.5"
+          opacity="0.9"
+        />
+        <path
+          d="M227,240 C233,244 245,243 251,238 L252,246 C246,251 234,252 228,248 Z"
+          fill={accent}
+        />
+        <path
+          d="M73,240 C67,244 55,243 49,238 L48,246 C54,251 66,252 72,248 Z"
+          fill={accent}
+        />
+        {seam("M112,70 C106,120 104,200 104,300", 1.2, 0.22)}
+        {seam("M188,70 C194,120 196,200 196,300", 1.2, 0.22)}
+        {seam("M206,146 C209,120 205,90 200,66", 1.8, 0.3)}
+        {seam("M94,146 C91,120 95,90 100,66", 1.8, 0.3)}
+        {stitch("M97,298 L203,298")}
+      </g>
+    ),
+  });
+
+  const hoodie = (isBack: boolean): GarmentView => ({
+    outlines: [HOODIE_HOOD, HOODIE_BODY],
+    shadow: { cy: 316, rx: 98 },
+    details: (base, accent) => (
+      <g>
+        <path d={HOODIE_HOOD} fill="#000" opacity="0.12" />
+        {!isBack && (
+          <path
+            d="M120,64 C120,40 132,30 150,30 C168,30 180,40 180,64 C170,74 130,74 120,64 Z"
+            fill="#000"
+            opacity="0.5"
+          />
+        )}
+        {seam("M84,180 C84,150 86,120 94,76", 2, 0.3)}
+        {seam("M216,180 C216,150 214,120 206,76", 2, 0.3)}
+        {!isBack && (
+          <>
+            <path d="M112,210 L188,210 L196,256 L104,256 Z" fill="#000" opacity="0.18" />
+            <path
+              d="M112,210 L188,210 L196,256 L104,256 Z"
+              fill="none"
+              stroke="#000"
+              strokeWidth="1.5"
+              opacity="0.3"
+            />
+            <path
+              d="M142,74 L140,100 M158,74 L160,100"
+              stroke={accent}
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </>
+        )}
+        <path
+          d="M84,284 L216,284 L216,288 C216,295 212,300 205,300 L95,300 C88,300 84,295 84,288 Z"
+          fill="#000"
+          opacity="0.3"
+        />
+        <path
+          d="M46,218 C52,223 62,223 68,218 L70,226 C63,231 51,231 45,226 Z"
+          fill={accent}
+        />
+        <path
+          d="M254,218 C248,223 238,223 232,218 L230,226 C237,231 249,231 255,226 Z"
+          fill={accent}
+        />
+      </g>
+    ),
+  });
+
+  const spats = (isBack: boolean): GarmentView => ({
+    outlines: [SPATS_FRONT],
+    shadow: { cy: 330, rx: 75 },
+    details: (base, accent) => (
+      <g>
+        <path d="M94,70 L206,70 L207,86 L93,86 Z" fill="#000" opacity="0.55" />
+        <path
+          d="M91,102 C88,142 90,182 94,222 L99,318 L106,318 L101,222 C97,182 95,142 98,102 L98,86 L93,86 Z"
+          fill={accent}
+          opacity="0.9"
+        />
+        <path
+          d="M209,102 C212,142 210,182 206,222 L201,318 L194,318 L199,222 C203,182 205,142 202,102 L202,86 L207,86 Z"
+          fill={accent}
+          opacity="0.9"
+        />
+        {!isBack && seam("M150,86 L150,186")}
+        {seam("M100,240 L143,240", 1, 0.18)}
+        {seam("M157,240 L200,240", 1, 0.18)}
+        <path
+          d="M99,314 L144,314 L144,318 C144,323 141,326 137,326 L107,326 C102,326 99,323 99,318 Z"
+          fill="#000"
+          opacity="0.35"
+        />
+        <path
+          d="M156,314 L201,314 L201,318 C201,323 198,326 193,326 L163,326 C159,326 156,323 156,318 Z"
+          fill="#000"
+          opacity="0.35"
+        />
+      </g>
+    ),
+  });
+
+  const side = (
+    outlines: string[],
+    shadow: GarmentView["shadow"],
+    details: GarmentView["details"]
+  ): GarmentView => ({ outlines, shadow, details });
+
+  const teeSide = side([TEE_SIDE], { cy: 316, rx: 55 }, (base, accent) => (
+    <g>
+      <path
+        d="M112,80 C130,70 172,72 186,82 L188,150 C188,158 182,162 174,162 L128,162 C116,162 110,152 110,138 Z"
+        fill="#000"
+        opacity="0.12"
+      />
+      {seam("M110,160 L190,160", 1.5, 0.28)}
+      <path d="M110,152 L190,152 L190,160 L110,160 Z" fill={accent} opacity="0.9" />
+      {stitch("M110,292 L190,292")}
+    </g>
+  ));
+  const shortsSide = side([SHORTS_SIDE], { cy: 286, rx: 62 }, (base, accent) => (
+    <g>
+      <path d="M106,78 L194,78 L195,96 L105,96 Z" fill="#000" opacity="0.55" />
+      <path
+        d="M142,96 L158,96 L160,268 L140,268 Z"
+        fill={accent}
+        opacity="0.9"
+      />
+      {stitch("M100,258 L200,258")}
+    </g>
+  ));
+  const rashSide = side([RASH_SIDE], { cy: 316, rx: 50 }, (base, accent) => (
+    <g>
+      <path
+        d="M116,84 C130,74 170,76 184,86 L184,236 C184,244 178,248 170,248 L130,248 C122,248 116,244 116,236 Z"
+        fill="#000"
+        opacity="0.12"
+      />
+      {seam("M116,246 L184,246", 1.5, 0.28)}
+      <path d="M116,240 L184,240 L184,248 L116,248 Z" fill={accent} opacity="0.9" />
+      {stitch("M115,298 L185,298")}
+    </g>
+  ));
+  const hoodieSide = side(
+    [HOODIE_SIDE_HOOD, HOODIE_SIDE_BODY],
+    { cy: 316, rx: 68 },
+    (base, accent) => (
+      <g>
+        <path d={HOODIE_SIDE_HOOD} fill="#000" opacity="0.18" />
+        {seam("M124,70 L176,70", 1.5, 0.3)}
+        <path
+          d="M92,284 L208,284 L208,286 C208,294 204,300 196,300 L104,300 C96,300 92,294 92,286 Z"
+          fill="#000"
+          opacity="0.3"
+        />
+        <path
+          d="M120,96 C132,88 168,90 180,98 L182,244 C182,252 176,256 168,256 L132,256 C124,256 118,252 118,244 Z"
+          fill="#000"
+          opacity="0.1"
+        />
+        <path d="M118,248 L182,248 L182,256 L118,256 Z" fill={accent} opacity="0.9" />
+      </g>
+    )
+  );
+  const spatsSide = side([SPATS_SIDE], { cy: 330, rx: 42 }, (base, accent) => (
+    <g>
+      <path d="M118,70 L182,70 L183,86 L117,86 Z" fill="#000" opacity="0.55" />
+      <path d="M144,86 L156,86 L158,326 L142,326 Z" fill={accent} opacity="0.9" />
+      <path
+        d="M120,314 L180,314 L180,318 C180,323 177,326 172,326 L128,326 C123,326 120,323 120,318 Z"
+        fill="#000"
+        opacity="0.35"
+      />
+    </g>
+  ));
+
+  return {
+    tshirts: { front: tee(false), back: tee(true), left: teeSide, right: teeSide },
+    hoodies: {
+      front: hoodie(false),
+      back: hoodie(true),
+      left: hoodieSide,
+      right: hoodieSide,
+    },
+    shorts: {
+      front: shorts(false),
+      back: shorts(true),
+      left: shortsSide,
+      right: shortsSide,
+    },
+    rashguards: {
+      front: rash(false),
+      back: rash(true),
+      left: rashSide,
+      right: rashSide,
+    },
+    spats: {
+      front: spats(false),
+      back: spats(true),
+      left: spatsSide,
+      right: spatsSide,
+    },
+  };
+}
+
+const garmentViews = buildGarmentViews();
+
+const fallbackView: GarmentView = {
+  outlines: [
+    "M70,70 C70,64 76,60 84,60 L216,60 C224,60 230,64 230,70 L230,270 C230,276 224,280 216,280 L84,280 C76,280 70,276 70,270 Z",
+  ],
+  shadow: { cy: 296, rx: 85 },
+  details: () => null,
+};
+
+function getView(garmentType: string, viewAngle: string): GarmentView {
+  return garmentViews[garmentType]?.[viewAngle] ?? fallbackView;
 }
 
 function renderDesignElement(element: DesignElement) {
@@ -318,18 +390,47 @@ function renderDesignElement(element: DesignElement) {
 
   if (element.type === "text") {
     const data = element.data as TextElementData;
-    // Native SVG text (not foreignObject) so PNG export doesn't taint the canvas
     const anchorX =
       data.textAlign === "center"
         ? element.x + element.width / 2
         : data.textAlign === "right"
           ? element.x + element.width
           : element.x;
+    const cy = element.y + element.height / 2;
+
+    // Arched text rides an invisible curved path
+    if (data.arc) {
+      const s = (data.arc / 100) * element.height;
+      const arcPath = `M${element.x},${cy + s / 2} Q${element.x + element.width / 2},${cy - s * 1.5} ${element.x + element.width},${cy + s / 2}`;
+      return (
+        <g key={element.id} style={style}>
+          <path id={`arc-${element.id}`} d={arcPath} fill="none" />
+          <text
+            fontFamily={data.fontFamily}
+            fontSize={data.fontSize}
+            fontWeight={data.fontWeight}
+            fill={data.color}
+            stroke={data.stroke}
+            strokeWidth={data.stroke ? data.strokeWidth || 1 : undefined}
+          >
+            <textPath
+              href={`#arc-${element.id}`}
+              xlinkHref={`#arc-${element.id}`}
+              startOffset="50%"
+              textAnchor="middle"
+            >
+              {data.content}
+            </textPath>
+          </text>
+        </g>
+      );
+    }
+
     return (
       <text
         key={element.id}
         x={anchorX}
-        y={element.y + element.height / 2}
+        y={cy}
         textAnchor={
           data.textAlign === "center"
             ? "middle"
@@ -348,6 +449,33 @@ function renderDesignElement(element: DesignElement) {
       >
         {data.content}
       </text>
+    );
+  }
+
+  if (element.type === "clipart") {
+    const data = element.data as ClipartElementData;
+    const art = getClipart(data.clipartId);
+    if (!art) return null;
+    return (
+      <svg
+        key={element.id}
+        x={element.x}
+        y={element.y}
+        width={element.width}
+        height={element.height}
+        viewBox="0 0 100 100"
+        preserveAspectRatio="xMidYMid meet"
+        style={style}
+        overflow="visible"
+      >
+        {art.paths.map((p, i) => (
+          <path
+            key={i}
+            d={p.d}
+            fill={p.use === "primary" ? data.fill : data.secondaryFill || "#0a0a0a"}
+          />
+        ))}
+      </svg>
     );
   }
 
@@ -454,7 +582,6 @@ type GestureMode = "drag" | "resize";
 interface GestureState {
   mode: GestureMode;
   elementId: string;
-  // drag: pointer offset from element origin; resize: element origin
   offsetX: number;
   offsetY: number;
 }
@@ -486,6 +613,12 @@ export default function GarmentCanvas() {
   const visibleElements = elements.filter(
     (el) => (el.view ?? "front") === viewAngle
   );
+  const selectedElement = visibleElements.find(
+    (el) => el.id === selectedElementId
+  );
+
+  const view = getView(garmentType, viewAngle);
+  const mirrored = viewAngle === "right";
 
   const clientToSvg = useCallback((clientX: number, clientY: number) => {
     const svg = svgRef.current;
@@ -667,7 +800,7 @@ export default function GarmentCanvas() {
       {visibleElements.length === 0 && (
         <div className="absolute inset-x-0 bottom-14 flex justify-center z-10 pointer-events-none">
           <span className="bg-white/80 backdrop-blur-sm text-gray-500 text-xs px-3 py-1.5 rounded-full">
-            Add text, shapes or a logo from the panel — drag to position
+            Start from a template, or add text, art and logos from the panel
           </span>
         </div>
       )}
@@ -690,55 +823,107 @@ export default function GarmentCanvas() {
           if (e.target === svgRef.current) selectElement(null);
         }}
       >
-        {/* Garment template */}
-        {getTemplate(garmentType, viewAngle, baseColor, secondaryColor)}
+        <defs>
+          <linearGradient id="garment-shade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#000" stopOpacity="0.28" />
+            <stop offset="0.16" stopColor="#000" stopOpacity="0" />
+            <stop offset="0.84" stopColor="#000" stopOpacity="0" />
+            <stop offset="1" stopColor="#000" stopOpacity="0.25" />
+          </linearGradient>
+          <linearGradient id="garment-sheen" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#fff" stopOpacity="0.16" />
+            <stop offset="0.3" stopColor="#fff" stopOpacity="0.03" />
+            <stop offset="1" stopColor="#fff" stopOpacity="0" />
+          </linearGradient>
+          <filter id="garment-soft" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="6" />
+          </filter>
+          <clipPath id="garment-clip">
+            {view.outlines.map((d) => (
+              <path key={d} d={d} transform={mirrored ? "translate(300,0) scale(-1,1)" : undefined} />
+            ))}
+          </clipPath>
+        </defs>
 
-        {/* Design elements (only for the active view) */}
-        {visibleElements.map((element) => {
-          const cx = element.x + element.width / 2;
-          const cy = element.y + element.height / 2;
-          const isSelected = selectedElementId === element.id;
-          return (
-            <g
-              key={element.id}
-              transform={`rotate(${element.rotation} ${cx} ${cy})`}
-              onPointerDown={(e) => startDrag(e, element)}
-              style={{ cursor: element.locked ? "not-allowed" : "move" }}
-            >
-              {renderDesignElement(element)}
+        {/* Floor shadow */}
+        <ellipse
+          cx="150"
+          cy={view.shadow.cy}
+          rx={view.shadow.rx}
+          ry="9"
+          fill="#000"
+          opacity="0.12"
+          filter="url(#garment-soft)"
+        />
 
-              {/* Selection indicator + resize handle */}
-              {isSelected && (
-                <g data-export-ignore="true">
-                  <rect
-                    x={element.x - 2}
-                    y={element.y - 2}
-                    width={element.width + 4}
-                    height={element.height + 4}
-                    fill="none"
-                    stroke="#3b82f6"
-                    strokeWidth="1.5"
-                    strokeDasharray="4 2"
-                    rx="2"
-                    className={cn(isGesturing ? "" : "animate-pulse")}
-                  />
-                  {!element.locked && (
-                    <circle
-                      cx={element.x + element.width + 2}
-                      cy={element.y + element.height + 2}
-                      r="7"
-                      fill="#ffffff"
-                      stroke="#3b82f6"
-                      strokeWidth="1.5"
-                      style={{ cursor: "nwse-resize" }}
-                      onPointerDown={(e) => startResize(e, element)}
-                    />
-                  )}
-                </g>
-              )}
+        {/* Garment base + shading + trim */}
+        <g transform={mirrored ? "translate(300,0) scale(-1,1)" : undefined}>
+          {view.outlines.map((d) => (
+            <g key={d}>
+              <path d={d} fill={baseColor} />
+              <path d={d} fill="url(#garment-shade)" />
+              <path d={d} fill="url(#garment-sheen)" />
             </g>
-          );
-        })}
+          ))}
+          {view.details(baseColor, secondaryColor)}
+        </g>
+
+        {/* Design elements, clipped to the garment */}
+        <g clipPath="url(#garment-clip)">
+          {visibleElements.map((element) => {
+            const cx = element.x + element.width / 2;
+            const cy = element.y + element.height / 2;
+            return (
+              <g
+                key={element.id}
+                transform={`rotate(${element.rotation} ${cx} ${cy})`}
+                onPointerDown={(e) => startDrag(e, element)}
+                style={{ cursor: element.locked ? "not-allowed" : "move" }}
+              >
+                {renderDesignElement(element)}
+              </g>
+            );
+          })}
+        </g>
+
+        {/* Selection chrome — unclipped so handles stay reachable */}
+        {selectedElement && (
+          <g
+            data-export-ignore="true"
+            transform={`rotate(${selectedElement.rotation} ${
+              selectedElement.x + selectedElement.width / 2
+            } ${selectedElement.y + selectedElement.height / 2})`}
+          >
+            <rect
+              x={selectedElement.x - 2}
+              y={selectedElement.y - 2}
+              width={selectedElement.width + 4}
+              height={selectedElement.height + 4}
+              fill="none"
+              stroke="#3b82f6"
+              strokeWidth="1.5"
+              strokeDasharray="4 2"
+              rx="2"
+              className={cn(isGesturing ? "" : "animate-pulse")}
+              onPointerDown={(e) => startDrag(e, selectedElement)}
+              style={{
+                cursor: selectedElement.locked ? "not-allowed" : "move",
+              }}
+            />
+            {!selectedElement.locked && (
+              <circle
+                cx={selectedElement.x + selectedElement.width + 2}
+                cy={selectedElement.y + selectedElement.height + 2}
+                r="7"
+                fill="#ffffff"
+                stroke="#3b82f6"
+                strokeWidth="1.5"
+                style={{ cursor: "nwse-resize" }}
+                onPointerDown={(e) => startResize(e, selectedElement)}
+              />
+            )}
+          </g>
+        )}
       </svg>
     </div>
   );

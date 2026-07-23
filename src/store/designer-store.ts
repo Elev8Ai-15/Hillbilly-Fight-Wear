@@ -7,6 +7,7 @@ import {
   TextElementData,
   ViewAngle,
 } from "@/types";
+import { DesignTemplate } from "@/data/design-templates";
 
 interface DesignSnapshot {
   garmentType: ProductCategory;
@@ -45,8 +46,10 @@ interface DesignerStore extends GarmentPreviewState {
   reorderElement: (id: string, direction: "up" | "down") => void;
   clearDesign: () => void;
   loadDesign: (design: DesignSnapshot) => void;
+  applyTemplate: (template: DesignTemplate) => void;
   addTextElement: (text: string) => void;
   addImageElement: (src: string) => void;
+  addClipartElement: (clipartId: string) => void;
   undo: () => void;
   redo: () => void;
   generateId: () => string;
@@ -257,6 +260,42 @@ export const useDesignerStore = create<DesignerStore>()(
           });
         },
 
+        applyTemplate: (template) => {
+          pushHistory();
+          set({
+            baseColor: template.baseColor,
+            secondaryColor: template.secondaryColor,
+            elements: template.elements.map((el) => ({
+              ...el,
+              id: get().generateId(),
+            })),
+            selectedElementId: null,
+            viewAngle: "front",
+            isDirty: true,
+          });
+        },
+
+        addClipartElement: (clipartId: string) => {
+          const id = get().generateId();
+          get().addElement({
+            id,
+            type: "clipart",
+            view: get().viewAngle,
+            x: 110,
+            y: 130,
+            width: 80,
+            height: 80,
+            rotation: 0,
+            opacity: 1,
+            locked: false,
+            data: {
+              clipartId,
+              fill: get().secondaryColor,
+              secondaryFill: get().baseColor,
+            },
+          });
+        },
+
         addTextElement: (text: string) => {
           const id = get().generateId();
           const element: DesignElement = {
@@ -272,7 +311,7 @@ export const useDesignerStore = create<DesignerStore>()(
             locked: false,
             data: {
               content: text,
-              fontFamily: "system-ui",
+              fontFamily: "Anton, system-ui",
               fontSize: 24,
               fontWeight: "bold",
               color: "#ffffff",
