@@ -3021,14 +3021,44 @@ app.get('/', (c) => {
       garments.find(g => g.id === 'zipup-hoodie')?.images || {}
     ).replace(/<\//g, '<\\/')};
     
-    // Shop modal: always displays Shopify product photos (no color-based preview changes)
+    // Shop modal: shows product photography until a color is picked, then a live
+    // composite (blank garment in that color + the product's graphic overlay)
     function renderGarmentModal(product, step) {
       modalState.step = step;
       var mc = document.getElementById('modalContent');
-      
-      // Shop Now: always use Shopify product photos (no color-based preview changes)
+
       var viewKey = modalState.modalView || 'front';
       var previewImg = (viewKey === 'back' && product.backImage) ? product.backImage : product.image;
+      var overlayHtml = '';
+      var previewFilter = '';
+
+      // Color chosen → show the garment in that color, keeping the graphic
+      var colorKey = (modalState.selectedColor || '').toLowerCase();
+      var isHeadwear = product.garmentType === 'beanie' || product.garmentType === 'trucker-hat';
+      if (colorKey && product.garmentType && !isHeadwear) {
+        var setKey = (modalState.selectedStyle === 'Zip-Up' && product.garmentType === 'hoodie') ? 'zipup-hoodie' : product.garmentType;
+        var gImages = garmentColorImages[setKey] || garmentColorImages[product.garmentType];
+        var colorSet = gImages && gImages[colorKey];
+        // Front composite needs the product's graphic to keep the design visible;
+        // back composite is fine bare (most designs are front-printed)
+        var canComposite = colorSet && (viewKey === 'back' ? colorSet.back : (colorSet.front && product.graphicId && graphicsMap[product.graphicId]));
+        if (canComposite) {
+          previewImg = viewKey === 'back' ? colorSet.back : colorSet.front;
+          if (colorKey === 'white') previewFilter = 'filter: drop-shadow(0 2px 10px rgba(0,0,0,0.3));';
+
+          var overlayId = viewKey === 'back' ? product.backGraphicId : product.graphicId;
+          if (overlayId && graphicsMap[overlayId]) {
+            overlayHtml += '<img src="' + graphicsMap[overlayId] + '" alt="" style="position:absolute; left:50%; top:45%; transform:translate(-50%,-50%); max-width:52%; max-height:38%; pointer-events:none;">';
+          }
+          // Mandatory 3-inch HFW back-neck logo on all shirts/tanks/hoodies
+          if (viewKey === 'back') {
+            var neckLogo = (colorKey === 'white' || colorKey === 'pink')
+              ? '/images/graphics/hfw-logo-black-shadow.png?v=11'
+              : '/images/graphics/hfw-logo-white-outline.png?v=11';
+            overlayHtml += '<img src="' + neckLogo + '" alt="" style="position:absolute; left:50%; top:14%; transform:translate(-50%,-50%); max-width:20%; max-height:9%; pointer-events:none;">';
+          }
+        }
+      }
       
       // Show front/back toggle when product has a backImage
       var viewToggleHtml = '';
@@ -3041,10 +3071,11 @@ app.get('/', (c) => {
         '</div>';
       }
       
-      // Always use a simple <img> — no canvas compositing in the Shop section
+      // Plain <img> stack — the graphic overlay is an absolutely positioned image
       var imageHtml = '<div style="background:#ffffff; padding:20px; text-align:center; position:relative;">' +
           '<div style="position:relative; display:inline-block;">' +
-            '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain;">' +
+            '<img id="modalPreviewImg" src="' + previewImg + '" alt="' + product.title.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '" style="max-width:100%; max-height:300px; object-fit:contain; ' + previewFilter + '">' +
+            overlayHtml +
           '</div>' +
           viewToggleHtml +
         '</div>';
