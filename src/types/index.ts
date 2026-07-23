@@ -53,6 +53,8 @@ export interface GarmentCustomization {
   logo?: CustomLogo;
   pattern?: string;
   placement: DesignPlacement[];
+  elements?: DesignElement[];
+  previewImage?: string;
 }
 
 export interface CustomText {
@@ -108,9 +110,13 @@ export interface GarmentPreviewState {
   isDirty: boolean;
 }
 
+export type ViewAngle = "front" | "back" | "left" | "right";
+
 export interface DesignElement {
   id: string;
   type: "text" | "image" | "shape";
+  /** Which garment view this element belongs to. Older designs default to "front". */
+  view?: ViewAngle;
   x: number;
   y: number;
   width: number;

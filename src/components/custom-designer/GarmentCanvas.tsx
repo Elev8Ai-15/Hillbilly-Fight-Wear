@@ -313,50 +313,41 @@ function getTemplate(
 
 function renderDesignElement(element: DesignElement) {
   const style = {
-    transform: `rotate(${element.rotation}deg)`,
     opacity: element.opacity,
   };
 
   if (element.type === "text") {
     const data = element.data as TextElementData;
+    // Native SVG text (not foreignObject) so PNG export doesn't taint the canvas
+    const anchorX =
+      data.textAlign === "center"
+        ? element.x + element.width / 2
+        : data.textAlign === "right"
+          ? element.x + element.width
+          : element.x;
     return (
-      <foreignObject
+      <text
         key={element.id}
-        x={element.x}
-        y={element.y}
-        width={element.width}
-        height={element.height}
+        x={anchorX}
+        y={element.y + element.height / 2}
+        textAnchor={
+          data.textAlign === "center"
+            ? "middle"
+            : data.textAlign === "right"
+              ? "end"
+              : "start"
+        }
+        dominantBaseline="central"
+        fontFamily={data.fontFamily}
+        fontSize={data.fontSize}
+        fontWeight={data.fontWeight}
+        fill={data.color}
+        stroke={data.stroke}
+        strokeWidth={data.stroke ? data.strokeWidth || 1 : undefined}
         style={style}
       >
-        <div
-          style={{
-            fontFamily: data.fontFamily,
-            fontSize: `${data.fontSize}px`,
-            fontWeight: data.fontWeight,
-            color: data.color,
-            textAlign: data.textAlign,
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent:
-              data.textAlign === "center"
-                ? "center"
-                : data.textAlign === "right"
-                  ? "flex-end"
-                  : "flex-start",
-            overflow: "hidden",
-            lineHeight: 1.2,
-            ...(data.stroke
-              ? {
-                  WebkitTextStroke: `${data.strokeWidth || 1}px ${data.stroke}`,
-                }
-              : {}),
-          }}
-        >
-          {data.content}
-        </div>
-      </foreignObject>
+        {data.content}
+      </text>
     );
   }
 
@@ -458,6 +449,16 @@ function renderDesignElement(element: DesignElement) {
   return null;
 }
 
+type GestureMode = "drag" | "resize";
+
+interface GestureState {
+  mode: GestureMode;
+  elementId: string;
+  // drag: pointer offset from element origin; resize: element origin
+  offsetX: number;
+  offsetY: number;
+}
+
 export default function GarmentCanvas() {
   const {
     garmentType,
@@ -465,76 +466,160 @@ export default function GarmentCanvas() {
     secondaryColor,
     viewAngle,
     zoom,
+    setZoom,
     elements,
     selectedElementId,
     selectElement,
+    beginTransform,
     moveElement,
+    resizeElement,
+    nudgeElement,
+    removeElement,
+    undo,
+    redo,
   } = useDesignerStore();
 
   const svgRef = useRef<SVGSVGElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const gestureRef = useRef<GestureState | null>(null);
+  const [isGesturing, setIsGesturing] = useState(false);
 
-  const handleMouseDown = useCallback(
-    (e: React.MouseEvent, element: DesignElement) => {
-      if (element.locked) return;
-      e.stopPropagation();
-      selectElement(element.id);
-
-      const svg = svgRef.current;
-      if (!svg) return;
-
-      const point = svg.createSVGPoint();
-      point.x = e.clientX;
-      point.y = e.clientY;
-      const ctm = svg.getScreenCTM();
-      if (!ctm) return;
-      const svgPoint = point.matrixTransform(ctm.inverse());
-
-      setDragOffset({
-        x: svgPoint.x - element.x,
-        y: svgPoint.y - element.y,
-      });
-      setIsDragging(true);
-    },
-    [selectElement]
+  const visibleElements = elements.filter(
+    (el) => (el.view ?? "front") === viewAngle
   );
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!isDragging || !selectedElementId) return;
-
-      const svg = svgRef.current;
-      if (!svg) return;
-
-      const point = svg.createSVGPoint();
-      point.x = e.clientX;
-      point.y = e.clientY;
-      const ctm = svg.getScreenCTM();
-      if (!ctm) return;
-      const svgPoint = point.matrixTransform(ctm.inverse());
-
-      moveElement(
-        selectedElementId,
-        svgPoint.x - dragOffset.x,
-        svgPoint.y - dragOffset.y
-      );
-    },
-    [isDragging, selectedElementId, dragOffset, moveElement]
-  );
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
+  const clientToSvg = useCallback((clientX: number, clientY: number) => {
+    const svg = svgRef.current;
+    if (!svg) return null;
+    const point = svg.createSVGPoint();
+    point.x = clientX;
+    point.y = clientY;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return null;
+    return point.matrixTransform(ctm.inverse());
   }, []);
 
-  // Global mouse events for drag continuation outside SVG
+  const startDrag = useCallback(
+    (e: React.PointerEvent, element: DesignElement) => {
+      selectElement(element.id);
+      if (element.locked) return;
+      e.stopPropagation();
+      const svgPoint = clientToSvg(e.clientX, e.clientY);
+      if (!svgPoint) return;
+
+      beginTransform();
+      gestureRef.current = {
+        mode: "drag",
+        elementId: element.id,
+        offsetX: svgPoint.x - element.x,
+        offsetY: svgPoint.y - element.y,
+      };
+      setIsGesturing(true);
+      svgRef.current?.setPointerCapture(e.pointerId);
+    },
+    [selectElement, clientToSvg, beginTransform]
+  );
+
+  const startResize = useCallback(
+    (e: React.PointerEvent, element: DesignElement) => {
+      if (element.locked) return;
+      e.stopPropagation();
+      beginTransform();
+      gestureRef.current = {
+        mode: "resize",
+        elementId: element.id,
+        offsetX: element.x,
+        offsetY: element.y,
+      };
+      setIsGesturing(true);
+      svgRef.current?.setPointerCapture(e.pointerId);
+    },
+    [beginTransform]
+  );
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      const gesture = gestureRef.current;
+      if (!gesture) return;
+      const svgPoint = clientToSvg(e.clientX, e.clientY);
+      if (!svgPoint) return;
+
+      if (gesture.mode === "drag") {
+        moveElement(
+          gesture.elementId,
+          svgPoint.x - gesture.offsetX,
+          svgPoint.y - gesture.offsetY
+        );
+      } else {
+        resizeElement(
+          gesture.elementId,
+          svgPoint.x - gesture.offsetX,
+          svgPoint.y - gesture.offsetY
+        );
+      }
+    },
+    [clientToSvg, moveElement, resizeElement]
+  );
+
+  const endGesture = useCallback(() => {
+    gestureRef.current = null;
+    setIsGesturing(false);
+  }, []);
+
+  // Keyboard: delete, nudge with arrows, undo/redo
   useEffect(() => {
-    if (isDragging) {
-      const handleGlobalMouseUp = () => setIsDragging(false);
-      window.addEventListener("mouseup", handleGlobalMouseUp);
-      return () => window.removeEventListener("mouseup", handleGlobalMouseUp);
-    }
-  }, [isDragging]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable
+      ) {
+        return;
+      }
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+        e.preventDefault();
+        if (e.shiftKey) redo();
+        else undo();
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
+        e.preventDefault();
+        redo();
+        return;
+      }
+
+      const { selectedElementId: selectedId } = useDesignerStore.getState();
+      if (!selectedId) return;
+
+      if (e.key === "Delete" || e.key === "Backspace") {
+        e.preventDefault();
+        removeElement(selectedId);
+        return;
+      }
+      if (e.key === "Escape") {
+        selectElement(null);
+        return;
+      }
+
+      const step = e.shiftKey ? 10 : 2;
+      const nudges: Record<string, [number, number]> = {
+        ArrowUp: [0, -step],
+        ArrowDown: [0, step],
+        ArrowLeft: [-step, 0],
+        ArrowRight: [step, 0],
+      };
+      const nudge = nudges[e.key];
+      if (nudge) {
+        e.preventDefault();
+        nudgeElement(selectedId, nudge[0], nudge[1]);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [removeElement, selectElement, nudgeElement, undo, redo]);
 
   return (
     <div className="relative bg-gray-100 rounded-xl overflow-hidden garment-canvas">
@@ -553,17 +638,54 @@ export default function GarmentCanvas() {
         {viewAngle} View
       </div>
 
+      {/* Zoom controls on the canvas */}
+      <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm z-10">
+        <button
+          onClick={() => setZoom(zoom - 0.25)}
+          className="px-2.5 py-1.5 text-sm font-bold hover:bg-gray-100 rounded-l-lg"
+          aria-label="Zoom out"
+        >
+          −
+        </button>
+        <button
+          onClick={() => setZoom(1)}
+          className="px-1.5 py-1.5 text-xs font-medium text-gray-500 hover:bg-gray-100 min-w-[3rem]"
+          aria-label="Reset zoom"
+        >
+          {Math.round(zoom * 100)}%
+        </button>
+        <button
+          onClick={() => setZoom(zoom + 0.25)}
+          className="px-2.5 py-1.5 text-sm font-bold hover:bg-gray-100 rounded-r-lg"
+          aria-label="Zoom in"
+        >
+          +
+        </button>
+      </div>
+
+      {/* Empty-state hint */}
+      {visibleElements.length === 0 && (
+        <div className="absolute inset-x-0 bottom-14 flex justify-center z-10 pointer-events-none">
+          <span className="bg-white/80 backdrop-blur-sm text-gray-500 text-xs px-3 py-1.5 rounded-full">
+            Add text, shapes or a logo from the panel — drag to position
+          </span>
+        </div>
+      )}
+
       <svg
+        id="garment-canvas-svg"
         ref={svgRef}
         viewBox="0 0 300 340"
         className="w-full h-full"
         style={{
           transform: `scale(${zoom})`,
           transformOrigin: "center",
-          transition: "transform 0.2s ease",
+          transition: isGesturing ? "none" : "transform 0.2s ease",
+          touchAction: "none",
         }}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endGesture}
+        onPointerCancel={endGesture}
         onClick={(e) => {
           if (e.target === svgRef.current) selectElement(null);
         }}
@@ -571,32 +693,52 @@ export default function GarmentCanvas() {
         {/* Garment template */}
         {getTemplate(garmentType, viewAngle, baseColor, secondaryColor)}
 
-        {/* Design elements */}
-        {elements.map((element) => (
-          <g
-            key={element.id}
-            onMouseDown={(e) => handleMouseDown(e, element)}
-            style={{ cursor: element.locked ? "not-allowed" : "move" }}
-          >
-            {renderDesignElement(element)}
+        {/* Design elements (only for the active view) */}
+        {visibleElements.map((element) => {
+          const cx = element.x + element.width / 2;
+          const cy = element.y + element.height / 2;
+          const isSelected = selectedElementId === element.id;
+          return (
+            <g
+              key={element.id}
+              transform={`rotate(${element.rotation} ${cx} ${cy})`}
+              onPointerDown={(e) => startDrag(e, element)}
+              style={{ cursor: element.locked ? "not-allowed" : "move" }}
+            >
+              {renderDesignElement(element)}
 
-            {/* Selection indicator */}
-            {selectedElementId === element.id && (
-              <rect
-                x={element.x - 2}
-                y={element.y - 2}
-                width={element.width + 4}
-                height={element.height + 4}
-                fill="none"
-                stroke="#3b82f6"
-                strokeWidth="1.5"
-                strokeDasharray="4 2"
-                rx="2"
-                className={cn(isDragging ? "" : "animate-pulse")}
-              />
-            )}
-          </g>
-        ))}
+              {/* Selection indicator + resize handle */}
+              {isSelected && (
+                <g data-export-ignore="true">
+                  <rect
+                    x={element.x - 2}
+                    y={element.y - 2}
+                    width={element.width + 4}
+                    height={element.height + 4}
+                    fill="none"
+                    stroke="#3b82f6"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 2"
+                    rx="2"
+                    className={cn(isGesturing ? "" : "animate-pulse")}
+                  />
+                  {!element.locked && (
+                    <circle
+                      cx={element.x + element.width + 2}
+                      cy={element.y + element.height + 2}
+                      r="7"
+                      fill="#ffffff"
+                      stroke="#3b82f6"
+                      strokeWidth="1.5"
+                      style={{ cursor: "nwse-resize" }}
+                      onPointerDown={(e) => startResize(e, element)}
+                    />
+                  )}
+                </g>
+              )}
+            </g>
+          );
+        })}
       </svg>
     </div>
   );

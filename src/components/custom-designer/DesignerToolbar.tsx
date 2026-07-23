@@ -6,8 +6,6 @@ import {
   Image,
   Shapes,
   RotateCcw,
-  ZoomIn,
-  ZoomOut,
   Eye,
   Copy,
   Trash2,
@@ -74,6 +72,24 @@ export default function DesignerToolbar() {
   const selectedElement = store.elements.find(
     (el) => el.id === store.selectedElementId
   );
+
+  const elementCountForView = (view: string) =>
+    store.elements.filter((el) => (el.view ?? "front") === view).length;
+
+  const handleImageUpload = (file: File) => {
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Image is too large — max 2MB. Try a smaller file.");
+      return;
+    }
+    // Data URL (not blob URL) so the design survives refresh and can be saved
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        store.addImageElement(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleAiSuggestion = async () => {
     if (!aiPrompt.trim()) return;
@@ -189,22 +205,34 @@ export default function DesignerToolbar() {
                 View Angle
               </label>
               <div className="flex gap-2">
-                {viewAngles.map((angle) => (
-                  <button
-                    key={angle.value}
-                    onClick={() => store.setViewAngle(angle.value)}
-                    className={cn(
-                      "flex-1 px-3 py-2 text-xs rounded-lg border transition-colors flex items-center justify-center gap-1",
-                      store.viewAngle === angle.value
-                        ? "border-primary bg-primary/5 text-primary font-medium"
-                        : "border-gray-200 hover:border-gray-300"
-                    )}
-                  >
-                    <Eye size={12} />
-                    {angle.label}
-                  </button>
-                ))}
+                {viewAngles.map((angle) => {
+                  const count = elementCountForView(angle.value);
+                  return (
+                    <button
+                      key={angle.value}
+                      onClick={() => store.setViewAngle(angle.value)}
+                      className={cn(
+                        "flex-1 px-2 py-2 text-xs rounded-lg border transition-colors flex items-center justify-center gap-1 relative",
+                        store.viewAngle === angle.value
+                          ? "border-primary bg-primary/5 text-primary font-medium"
+                          : "border-gray-200 hover:border-gray-300"
+                      )}
+                    >
+                      <Eye size={12} />
+                      {angle.label}
+                      {count > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                          {count}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
+              <p className="text-xs text-gray-400 mt-1.5">
+                Each view holds its own design — switch views to design the
+                back or sleeves.
+              </p>
             </div>
 
             <div>
@@ -261,28 +289,6 @@ export default function DesignerToolbar() {
               />
             </div>
 
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 block">
-                Zoom
-              </label>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => store.setZoom(store.zoom - 0.25)}
-                  className="p-2 border rounded-lg hover:bg-gray-50"
-                >
-                  <ZoomOut size={14} />
-                </button>
-                <span className="text-sm font-medium flex-1 text-center">
-                  {Math.round(store.zoom * 100)}%
-                </span>
-                <button
-                  onClick={() => store.setZoom(store.zoom + 0.25)}
-                  className="p-2 border rounded-lg hover:bg-gray-50"
-                >
-                  <ZoomIn size={14} />
-                </button>
-              </div>
-            </div>
           </div>
         )}
 
@@ -333,6 +339,19 @@ export default function DesignerToolbar() {
                   Edit Selected Text
                 </label>
                 <div className="space-y-3">
+                  <input
+                    type="text"
+                    value={
+                      (selectedElement.data as { content: string }).content
+                    }
+                    onChange={(e) =>
+                      store.updateElement(selectedElement.id, {
+                        data: { ...selectedElement.data, content: e.target.value },
+                      })
+                    }
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                    placeholder="Text content"
+                  />
                   <select
                     value={
                       (selectedElement.data as { fontFamily: string }).fontFamily
@@ -350,6 +369,30 @@ export default function DesignerToolbar() {
                       </option>
                     ))}
                   </select>
+                  <div>
+                    <label className="text-xs text-gray-500">
+                      Size:{" "}
+                      {(selectedElement.data as { fontSize: number }).fontSize}
+                      px
+                    </label>
+                    <input
+                      type="range"
+                      min="10"
+                      max="72"
+                      value={
+                        (selectedElement.data as { fontSize: number }).fontSize
+                      }
+                      onChange={(e) =>
+                        store.updateElement(selectedElement.id, {
+                          data: {
+                            ...selectedElement.data,
+                            fontSize: parseInt(e.target.value),
+                          },
+                        })
+                      }
+                      className="w-full h-1.5 mt-1"
+                    />
+                  </div>
                   <input
                     type="color"
                     value={
@@ -415,10 +458,8 @@ export default function DesignerToolbar() {
                 className="hidden"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
-                  if (file) {
-                    const url = URL.createObjectURL(file);
-                    store.addImageElement(url);
-                  }
+                  if (file) handleImageUpload(file);
+                  e.target.value = "";
                 }}
               />
             </label>
@@ -577,6 +618,26 @@ export default function DesignerToolbar() {
             </button>
           </div>
 
+          {/* Rotation slider */}
+          <div className="mt-2">
+            <label className="text-xs text-gray-500">
+              Rotation: {selectedElement.rotation}°
+            </label>
+            <input
+              type="range"
+              min="-180"
+              max="180"
+              value={selectedElement.rotation}
+              onChange={(e) =>
+                store.rotateElement(
+                  selectedElement.id,
+                  parseInt(e.target.value)
+                )
+              }
+              className="w-full h-1.5 mt-1"
+            />
+          </div>
+
           {/* Opacity slider */}
           <div className="mt-2">
             <label className="text-xs text-gray-500">
@@ -595,6 +656,11 @@ export default function DesignerToolbar() {
               className="w-full h-1.5 mt-1"
             />
           </div>
+
+          <p className="text-[11px] text-gray-400 mt-2">
+            Tip: drag the corner dot to resize · arrow keys nudge · Delete
+            removes · Ctrl+Z undoes
+          </p>
         </div>
       )}
 

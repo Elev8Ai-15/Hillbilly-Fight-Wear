@@ -60,13 +60,22 @@ export default function CartSidebar() {
                   key={`${item.product.id}-${item.size}-${item.color.name}-${index}`}
                   className="flex gap-4 p-3 bg-gray-50 rounded-lg"
                 >
-                  {/* Product image placeholder */}
-                  <div
-                    className="w-20 h-20 rounded-md flex-shrink-0 flex items-center justify-center text-white text-xs font-bold"
-                    style={{ backgroundColor: item.color.hex }}
-                  >
-                    {item.product.category.slice(0, 3).toUpperCase()}
-                  </div>
+                  {/* Custom design preview or product placeholder */}
+                  {item.customization?.previewImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.customization.previewImage}
+                      alt={`${item.product.name} custom design`}
+                      className="w-20 h-20 rounded-md flex-shrink-0 object-contain bg-gray-100 border"
+                    />
+                  ) : (
+                    <div
+                      className="w-20 h-20 rounded-md flex-shrink-0 flex items-center justify-center text-white text-xs font-bold"
+                      style={{ backgroundColor: item.color.hex }}
+                    >
+                      {item.product.category.slice(0, 3).toUpperCase()}
+                    </div>
+                  )}
 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-sm truncate">

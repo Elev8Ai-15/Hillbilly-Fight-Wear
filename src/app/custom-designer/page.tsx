@@ -1,18 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ShoppingCart,
   Download,
   Share2,
   Undo2,
+  Redo2,
   Paintbrush,
 } from "lucide-react";
 import GarmentCanvas from "@/components/custom-designer/GarmentCanvas";
 import DesignerToolbar from "@/components/custom-designer/DesignerToolbar";
 import { useDesignerStore } from "@/store/designer-store";
 import { useCartStore } from "@/store/cart-store";
+import { getProductById } from "@/data/products";
+import {
+  renderDesignToPng,
+  downloadDataUrl,
+  encodeDesignForUrl,
+  decodeDesignFromUrl,
+} from "@/lib/design-export";
 import { formatPrice } from "@/lib/utils";
+import { Product, ProductCategory } from "@/types";
 
 const customPricing: Record<string, number> = {
   tshirts: 44.99,
@@ -23,22 +32,119 @@ const customPricing: Record<string, number> = {
 };
 
 export default function CustomDesignerPage() {
-  const { garmentType, baseColor, secondaryColor, elements, clearDesign } =
-    useDesignerStore();
+  const {
+    garmentType,
+    baseColor,
+    secondaryColor,
+    elements,
+    past,
+    future,
+    undo,
+    redo,
+    setGarmentType,
+    setBaseColor,
+    loadDesign,
+  } = useDesignerStore();
   const addItem = useCartStore((s) => s.addItem);
   const setCartOpen = useCartStore((s) => s.setCartOpen);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [addedToCart, setAddedToCart] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const [sourceProduct, setSourceProduct] = useState<Product | undefined>();
+  const initializedRef = useRef(false);
 
   const price = customPricing[garmentType] || 49.99;
 
-  const handleAddToCart = () => {
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  };
+
+  // On first load: shared-design link wins, then the product the user came from
+  useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
+    const hash = window.location.hash;
+    if (hash.startsWith("#d=")) {
+      const shared = decodeDesignFromUrl(hash.slice(3));
+      if (shared) {
+        loadDesign(shared);
+        showToast("Shared design loaded");
+        return;
+      }
+    }
+
+    const productId = new URLSearchParams(window.location.search).get(
+      "product"
+    );
+    const product = productId ? getProductById(productId) : undefined;
+    if (product && customPricing[product.category]) {
+      setSourceProduct(product);
+      setGarmentType(product.category as ProductCategory);
+      if (product.colors[0]) {
+        setBaseColor(product.colors[0].hex);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleExport = async () => {
+    const png = await renderDesignToPng(2);
+    if (!png) {
+      showToast("Export failed — try again");
+      return;
+    }
+    downloadDataUrl(png, `hfw-custom-${garmentType}.png`);
+    showToast("Design downloaded");
+  };
+
+  const handleShare = async () => {
+    const encoded = encodeDesignForUrl({
+      v: 1,
+      garmentType,
+      baseColor,
+      secondaryColor,
+      elements,
+    });
+    if (!encoded) {
+      showToast("Design too large to share as a link (uploaded images)");
+      return;
+    }
+    const url = `${window.location.origin}/custom-designer#d=${encoded}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast("Share link copied to clipboard");
+    } catch {
+      // Clipboard API can be blocked (permissions, embedded contexts) — legacy fallback
+      const textarea = document.createElement("textarea");
+      textarea.value = url;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand("copy");
+      textarea.remove();
+      showToast(
+        copied ? "Share link copied to clipboard" : "Couldn't access clipboard"
+      );
+    }
+  };
+
+  const handleAddToCart = async () => {
     if (!selectedSize) return;
+
+    // Snapshot a preview image so the cart shows the actual design
+    const previewImage = (await renderDesignToPng(1)) ?? undefined;
+    const garmentLabel =
+      garmentType.charAt(0).toUpperCase() + garmentType.slice(1);
 
     addItem(
       {
         id: `custom-${Date.now()}`,
-        name: `Custom ${garmentType.charAt(0).toUpperCase() + garmentType.slice(1)} Design`,
+        name: sourceProduct
+          ? `Custom ${sourceProduct.name}`
+          : `Custom ${garmentLabel} Design`,
         slug: "custom-design",
         description: `Custom designed ${garmentType} with ${elements.length} design element(s)`,
         price,
@@ -62,6 +168,8 @@ export default function CustomDesignerPage() {
         baseColor,
         secondaryColor,
         placement: [],
+        elements,
+        previewImage,
       }
     );
 
@@ -69,6 +177,13 @@ export default function CustomDesignerPage() {
     setCartOpen(true);
     setTimeout(() => setAddedToCart(false), 2000);
   };
+
+  const viewCounts = ["front", "back", "left", "right"]
+    .map((view) => ({
+      view,
+      count: elements.filter((el) => (el.view ?? "front") === view).length,
+    }))
+    .filter((v) => v.count > 0);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -81,7 +196,9 @@ export default function CustomDesignerPage() {
               <div>
                 <h1 className="text-xl font-black">Custom Garment Designer</h1>
                 <p className="text-sm text-gray-500">
-                  Design your own fight wear with our interactive preview
+                  {sourceProduct
+                    ? `Designing from: ${sourceProduct.name}`
+                    : "Design your own fight wear with our interactive preview"}
                 </p>
               </div>
             </div>
@@ -106,17 +223,34 @@ export default function CustomDesignerPage() {
             <div className="flex flex-wrap items-center justify-between gap-4 bg-white rounded-xl shadow-sm p-4">
               <div className="flex gap-2">
                 <button
-                  onClick={clearDesign}
-                  className="flex items-center gap-1.5 px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                  onClick={undo}
+                  disabled={past.length === 0}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  title="Undo (Ctrl+Z)"
                 >
                   <Undo2 size={14} />
-                  Reset
+                  Undo
                 </button>
-                <button className="flex items-center gap-1.5 px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <button
+                  onClick={redo}
+                  disabled={future.length === 0}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  title="Redo (Ctrl+Shift+Z)"
+                >
+                  <Redo2 size={14} />
+                  Redo
+                </button>
+                <button
+                  onClick={handleExport}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                >
                   <Download size={14} />
                   Export
                 </button>
-                <button className="flex items-center gap-1.5 px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <button
+                  onClick={handleShare}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                >
                   <Share2 size={14} />
                   Share
                 </button>
@@ -146,6 +280,11 @@ export default function CustomDesignerPage() {
                 </button>
               </div>
             </div>
+            {!selectedSize && (
+              <p className="text-xs text-gray-400 -mt-2 px-1">
+                Pick a size to add your design to the cart.
+              </p>
+            )}
 
             {/* Design info */}
             <div className="bg-white rounded-xl shadow-sm p-4">
@@ -177,7 +316,13 @@ export default function CustomDesignerPage() {
                 </div>
                 <div>
                   <span className="text-gray-500">Elements:</span>
-                  <p className="font-medium">{elements.length} item(s)</p>
+                  <p className="font-medium">
+                    {elements.length === 0
+                      ? "None yet"
+                      : viewCounts
+                          .map((v) => `${v.view}: ${v.count}`)
+                          .join(" · ")}
+                  </p>
                 </div>
               </div>
             </div>
@@ -189,6 +334,13 @@ export default function CustomDesignerPage() {
           </div>
         </div>
       </div>
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-secondary-dark text-white text-sm px-4 py-2.5 rounded-lg shadow-lg z-50">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }
