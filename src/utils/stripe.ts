@@ -262,7 +262,11 @@ export async function createShopCheckoutSession(
  */
 export async function createBuilderCheckoutSession(
   secretKey: string,
-  order: { garment: string; size: string; color: string; graphic: string; placement: string; additionalGraphics: { graphic: string; placement: string }[] },
+  order: {
+    garment: string; size: string; color: string; graphic: string; placement: string;
+    additionalGraphics: { graphic: string; placement: string }[];
+    customUploadName?: string; designJson?: string
+  },
   origin: string,
 ): Promise<{ url?: string; error?: string; pricing?: BuilderPricing }> {
   const pricing = calculateBuilderPricing(order)
@@ -271,8 +275,11 @@ export async function createBuilderCheckoutSession(
     return { error: pricing.error }
   }
 
+  const isCustomUpload = order.graphic === 'custom-upload'
   const g = garments.find(x => x.id === order.garment)!
-  const gr = graphics.find(x => x.id === order.graphic)!
+  const gr = isCustomUpload
+    ? { name: order.customUploadName ? `Custom Artwork (${order.customUploadName})` : 'Custom Artwork (customer upload)' }
+    : graphics.find(x => x.id === order.graphic)!
 
   const params = new URLSearchParams()
   params.append('mode', 'payment')
@@ -312,6 +319,17 @@ export async function createBuilderCheckoutSession(
   params.append('metadata[placement]', order.placement)
   if (order.additionalGraphics.length > 0) {
     params.append('metadata[additional_graphics]', JSON.stringify(order.additionalGraphics))
+  }
+  if (isCustomUpload && order.customUploadName) {
+    params.append('metadata[custom_upload_file]', order.customUploadName.slice(0, 490))
+  }
+  // Design layout (normalized graphic positions) so the print shop can reproduce
+  // the customer's placement. Stripe caps metadata values at 500 chars, so chunk.
+  if (order.designJson) {
+    const chunks = order.designJson.match(/.{1,480}/g) || []
+    chunks.slice(0, 8).forEach((chunk, i) => {
+      params.append(`metadata[design_json_${i + 1}]`, chunk)
+    })
   }
   // Store pricing data for receipt email generation
   params.append('metadata[pricing_json]', JSON.stringify({

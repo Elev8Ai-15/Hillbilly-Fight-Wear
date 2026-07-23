@@ -313,7 +313,12 @@ export function calculateBuilderPricing(order: BuilderOrder): BuilderPricing | {
   const g = garments.find(x => x.id === order.garment)
   if (!g) return { error: 'Invalid garment' }
 
-  const gr = graphics.find(x => x.id === order.graphic)
+  // 'custom-upload' = customer-supplied artwork (Custom Sponsor Build).
+  // Included in base price like a catalog graphic; no catalog restrictions apply.
+  const isCustomUpload = order.graphic === 'custom-upload'
+  const gr = isCustomUpload
+    ? { name: 'Custom Artwork (customer upload)', restrictToGarments: [] as string[] }
+    : graphics.find(x => x.id === order.graphic)
   if (!gr) return { error: 'Invalid graphic' }
 
   // Validate size

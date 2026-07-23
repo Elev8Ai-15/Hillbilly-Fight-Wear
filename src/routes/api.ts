@@ -444,7 +444,7 @@ api.post('/create-checkout', strictLimit, async (c) => {
   } catch {
     return c.json({ error: 'Invalid JSON body' }, 400)
   }
-  const { garment, size, color, graphic, placement, additionalGraphics = [] } = body
+  const { garment, size, color, graphic, placement, additionalGraphics = [], customUploadName, design } = body
 
   // Validate all required fields are strings
   if (!garment || !size || !color || !graphic || !placement) {
@@ -454,9 +454,27 @@ api.post('/create-checkout', strictLimit, async (c) => {
     return c.json({ error: 'Invalid field types' }, 400)
   }
 
+  // 'custom-upload' = Custom Sponsor Build (customer's own artwork)
+  const isCustomUpload = graphic === 'custom-upload'
+  if (isCustomUpload && customUploadName !== undefined && (typeof customUploadName !== 'string' || customUploadName.length > 200)) {
+    return c.json({ error: 'Invalid customUploadName' }, 400)
+  }
+
+  // Optional design layout payload (normalized graphic positions from the builder)
+  let designJson: string | undefined
+  if (design !== undefined) {
+    if (typeof design !== 'object' || design === null || Array.isArray(design)) {
+      return c.json({ error: 'Invalid design payload' }, 400)
+    }
+    designJson = JSON.stringify(design)
+    if (designJson.length > 4000) {
+      return c.json({ error: 'Design payload too large' }, 400)
+    }
+  }
+
   // Validate against catalog
   const g = garments.find(x => x.id === garment)
-  const gr = graphics.find(x => x.id === graphic)
+  const gr = isCustomUpload ? { name: 'Custom Artwork' } : graphics.find(x => x.id === graphic)
   const pl = placements.find(x => x.id === placement)
 
   if (!g || !gr || !pl) {
@@ -471,8 +489,11 @@ api.post('/create-checkout', strictLimit, async (c) => {
     return c.json({ error: 'Invalid color for this garment' }, 400)
   }
 
-  if (gr.restrictToGarments && gr.restrictToGarments.length > 0 && !gr.restrictToGarments.includes(garment)) {
-    return c.json({ error: `Graphic "${gr.name}" is not available for this garment` }, 400)
+  if (!isCustomUpload) {
+    const catalogGraphic = graphics.find(x => x.id === graphic)
+    if (catalogGraphic?.restrictToGarments && catalogGraphic.restrictToGarments.length > 0 && !catalogGraphic.restrictToGarments.includes(garment)) {
+      return c.json({ error: `Graphic "${catalogGraphic.name}" is not available for this garment` }, 400)
+    }
   }
 
   if (!Array.isArray(additionalGraphics)) {
@@ -530,7 +551,7 @@ api.post('/create-checkout', strictLimit, async (c) => {
     const origin = new URL(c.req.url).origin
     const result = await createBuilderCheckoutSession(
       stripeKey,
-      { garment, size, color, graphic, placement, additionalGraphics },
+      { garment, size, color, graphic, placement, additionalGraphics, customUploadName, designJson },
       origin,
     )
 

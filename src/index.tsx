@@ -4231,11 +4231,25 @@ app.get('/build', (c) => {
       <div class="canvas-wrapper">
         <canvas id="previewCanvas" width="350" height="467"></canvas>
       </div>
-      
+      <style>
+        /* Touch devices: let Fabric.js receive drags instead of scrolling the page */
+        .canvas-wrapper, .canvas-wrapper .canvas-container, .canvas-wrapper canvas { touch-action: none; }
+        .preview-tools { display: flex; gap: 8px; justify-content: center; margin: 10px 0 4px; }
+        .preview-tool-btn { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 6px 12px; font-size: 0.78rem; color: #444; cursor: pointer; }
+        .preview-tool-btn:hover { border-color: #8B0000; color: #8B0000; }
+        .preview-tool-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+      </style>
+
       <div class="drag-hint" id="dragHint" style="display: none;">
-        <i class="fas fa-hand-pointer"></i> Click and drag graphics to reposition. Use corners to resize.
+        <i class="fas fa-hand-pointer"></i> Drag graphics to reposition. Use corners to resize. Arrow keys nudge.
       </div>
-      
+
+      <div class="preview-tools">
+        <button class="preview-tool-btn" id="undoBtn" disabled title="Undo (Ctrl+Z)"><i class="fas fa-undo"></i> Undo</button>
+        <button class="preview-tool-btn" id="redoBtn" disabled title="Redo (Ctrl+Y)"><i class="fas fa-redo"></i> Redo</button>
+        <button class="preview-tool-btn" id="centerBtn" title="Reset graphic position"><i class="fas fa-crosshairs"></i> Center</button>
+      </div>
+
       <div class="view-toggle" id="viewToggle">
         <button class="view-btn active" data-view="front">Front</button>
         <button class="view-btn" data-view="back">Back</button>
@@ -4301,9 +4315,9 @@ app.get('/build', (c) => {
         <span class="step-circle">4</span>
         <span class="step-label">Graphics</span>
       </button>
-      <button class="mobile-nav-btn" data-step="5">
-        <span class="step-circle">5</span>
-        <span class="step-label">Place</span>
+      <button class="mobile-nav-btn" id="mobileNavPreview" data-step="preview">
+        <span class="step-circle"><i class="fas fa-eye" style="font-size:0.7rem;"></i></span>
+        <span class="step-label">Preview</span>
       </button>
     </div>
   </nav>
@@ -4336,7 +4350,116 @@ app.get('/build', (c) => {
     // Store user-customized graphic positions so they persist across preview refreshes.
     // Key: "graphicId::placementId", Value: { left, top, scaleX, scaleY, angle }
     var userGraphicPositions = {};
-    
+
+    // ---- Undo / Redo ----
+    // Snapshots capture the full design (selections + graphic positions).
+    var undoStack = [];
+    var redoStack = [];
+    var UNDO_LIMIT = 50;
+
+    function takeSnapshot() {
+      return JSON.stringify({ state: state, positions: userGraphicPositions });
+    }
+
+    function pushUndo() {
+      var snap = takeSnapshot();
+      if (undoStack.length && undoStack[undoStack.length - 1] === snap) return;
+      undoStack.push(snap);
+      if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+      redoStack = [];
+      updateUndoButtons();
+    }
+
+    function applySnapshot(snapJson) {
+      var snap = JSON.parse(snapJson);
+      state = snap.state;
+      userGraphicPositions = snap.positions || {};
+
+      // Rebuild option UI to match restored state
+      document.querySelectorAll('.garment-option').forEach(function(el) {
+        el.classList.toggle('selected', el.dataset.id === state.garment);
+      });
+      if (state.garment) {
+        renderSizes(state.garment);
+        renderColors(state.garment);
+        renderGraphics();
+      }
+      document.querySelectorAll('.size-option').forEach(function(el) {
+        el.classList.toggle('selected', el.dataset.size === state.size);
+      });
+      document.querySelectorAll('.color-option').forEach(function(el) {
+        el.classList.toggle('selected', el.dataset.color === state.color);
+      });
+      document.querySelectorAll('#graphicsGrid .graphic-option').forEach(function(el) {
+        el.classList.toggle('selected', el.dataset.id === state.graphic);
+      });
+      document.querySelectorAll('.view-btn').forEach(function(el) {
+        el.classList.toggle('active', el.dataset.view === state.view);
+      });
+
+      // Upload panel UI
+      var uploadPreviewEl = document.getElementById('uploadPreview');
+      var uploadThumbEl = document.getElementById('uploadThumb');
+      if (uploadPreviewEl && uploadThumbEl) {
+        if (state.customUploadUrl) {
+          uploadThumbEl.src = state.customUploadUrl;
+          uploadPreviewEl.classList.add('has-image');
+        } else {
+          uploadPreviewEl.classList.remove('has-image');
+          uploadThumbEl.src = '';
+        }
+      }
+
+      renderAdditionalGraphics();
+      updatePreview();
+      updateSummary();
+      updateDragHint();
+    }
+
+    function undoDesign() {
+      if (!undoStack.length) return;
+      redoStack.push(takeSnapshot());
+      applySnapshot(undoStack.pop());
+      updateUndoButtons();
+    }
+
+    function redoDesign() {
+      if (!redoStack.length) return;
+      undoStack.push(takeSnapshot());
+      applySnapshot(redoStack.pop());
+      updateUndoButtons();
+    }
+
+    function updateUndoButtons() {
+      var u = document.getElementById('undoBtn');
+      var r = document.getElementById('redoBtn');
+      if (u) u.disabled = undoStack.length === 0;
+      if (r) r.disabled = redoStack.length === 0;
+    }
+
+    // Clamp a fabric object inside its printable bounds (shared by move/scale/restore)
+    function clampObjectToBounds(obj) {
+      if (!obj || !obj.isGraphic) return;
+      var bounds = getGraphicBounds(obj.placementId, state.garment);
+      var halfW = (obj.width * obj.scaleX) / 2;
+      var halfH = (obj.height * obj.scaleY) / 2;
+      if (obj.left - halfW < bounds.minX) obj.left = bounds.minX + halfW;
+      if (obj.left + halfW > bounds.maxX) obj.left = bounds.maxX - halfW;
+      if (obj.top - halfH < bounds.minY) obj.top = bounds.minY + halfH;
+      if (obj.top + halfH > bounds.maxY) obj.top = bounds.maxY - halfH;
+    }
+
+    function persistObjectPosition(obj) {
+      if (!obj || !obj.isGraphic || !obj.graphicId || !obj.placementId) return;
+      userGraphicPositions[obj.graphicId + '::' + obj.placementId] = {
+        left: obj.left,
+        top: obj.top,
+        scaleX: obj.scaleX,
+        scaleY: obj.scaleY,
+        angle: obj.angle || 0
+      };
+    }
+
     // Mobile navigation - scroll to step
     function scrollToStep(stepNum) {
       var element = document.getElementById('step' + stepNum);
@@ -4381,25 +4504,79 @@ app.get('/build', (c) => {
       // Garment grid
       document.getElementById('garmentGrid').addEventListener('click', function(e) {
         var option = e.target.closest('.garment-option');
-        if (option && option.dataset.id) selectGarment(option.dataset.id);
+        if (option && option.dataset.id) { pushUndo(); selectGarment(option.dataset.id); }
       });
-      
+
       // Size grid
       document.getElementById('sizeGrid').addEventListener('click', function(e) {
         var option = e.target.closest('.size-option');
-        if (option && option.dataset.size) selectSize(option.dataset.size);
+        if (option && option.dataset.size) { pushUndo(); selectSize(option.dataset.size); }
       });
-      
+
       // Color grid (dynamic content)
       document.getElementById('colorGrid').addEventListener('click', function(e) {
         var option = e.target.closest('.color-option');
-        if (option && option.dataset.color) selectColor(option.dataset.color);
+        if (option && option.dataset.color) { pushUndo(); selectColor(option.dataset.color); }
       });
-      
+
       // Graphics grid
       document.getElementById('graphicsGrid').addEventListener('click', function(e) {
         var option = e.target.closest('.graphic-option');
-        if (option && option.dataset.id) selectGraphic(option.dataset.id);
+        if (option && option.dataset.id) { pushUndo(); selectGraphic(option.dataset.id); }
+      });
+
+      // Undo / Redo / Center tools
+      document.getElementById('undoBtn').addEventListener('click', undoDesign);
+      document.getElementById('redoBtn').addEventListener('click', redoDesign);
+      document.getElementById('centerBtn').addEventListener('click', function() {
+        var obj = canvas.getActiveObject();
+        pushUndo();
+        if (obj && obj.isGraphic && obj.graphicId && obj.placementId) {
+          delete userGraphicPositions[obj.graphicId + '::' + obj.placementId];
+        } else {
+          // Nothing selected: reset every graphic to its default spot
+          userGraphicPositions = {};
+        }
+        updatePreview();
+        showToast('Graphic position reset');
+      });
+
+      // Keyboard: undo/redo, nudge selected graphic with arrows, Esc deselects
+      document.addEventListener('keydown', function(e) {
+        var t = e.target;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+          e.preventDefault();
+          if (e.shiftKey) redoDesign(); else undoDesign();
+          return;
+        }
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
+          e.preventDefault();
+          redoDesign();
+          return;
+        }
+        if (e.key === 'Escape' && canvas) {
+          canvas.discardActiveObject();
+          canvas.renderAll();
+          return;
+        }
+
+        var nudges = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] };
+        var n = nudges[e.key];
+        if (n && canvas) {
+          var obj = canvas.getActiveObject();
+          if (obj && obj.isGraphic) {
+            e.preventDefault();
+            pushUndo();
+            var step = e.shiftKey ? 10 : 2;
+            obj.left += n[0] * step;
+            obj.top += n[1] * step;
+            clampObjectToBounds(obj);
+            persistObjectPosition(obj);
+            canvas.renderAll();
+          }
+        }
       });
       
       // Placement grid — removed (positions are fixed in new model)
@@ -4432,18 +4609,30 @@ app.get('/build', (c) => {
       
       // Modal: Cancel / Confirm buttons
       document.getElementById('modalCancelBtn').addEventListener('click', closeAddGraphicModal);
-      document.getElementById('modalConfirmBtn').addEventListener('click', confirmAddGraphic);
-      
+      document.getElementById('modalConfirmBtn').addEventListener('click', function() {
+        pushUndo();
+        confirmAddGraphic();
+      });
+
       // Additional graphics: remove buttons (delegated since content is dynamic)
       document.getElementById('additionalList').addEventListener('click', function(e) {
         var btn = e.target.closest('[data-remove-index]');
-        if (btn) removeAdditionalGraphic(parseInt(btn.dataset.removeIndex, 10));
+        if (btn) { pushUndo(); removeAdditionalGraphic(parseInt(btn.dataset.removeIndex, 10)); }
       });
-      
+
       // Mobile nav buttons
       document.getElementById('mobileNav').addEventListener('click', function(e) {
         var btn = e.target.closest('.mobile-nav-btn');
-        if (btn && btn.dataset.step) scrollToStep(parseInt(btn.dataset.step, 10));
+        if (!btn || !btn.dataset.step) return;
+        if (btn.dataset.step === 'preview') {
+          var preview = document.querySelector('.preview-section');
+          if (preview) preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelectorAll('.mobile-nav-btn').forEach(function(b) {
+            b.classList.toggle('active', b === btn);
+          });
+        } else {
+          scrollToStep(parseInt(btn.dataset.step, 10));
+        }
       });
       
       // Add scroll listener for mobile nav
@@ -4498,12 +4687,14 @@ app.get('/build', (c) => {
       // Use This button
       document.getElementById('btnUseUpload').addEventListener('click', function() {
         if (state.customUploadUrl) {
+          pushUndo();
           useCustomGraphic();
         }
       });
-      
+
       // Remove upload
       document.getElementById('btnRemoveUpload').addEventListener('click', function() {
+        pushUndo();
         clearCustomUpload();
       });
       
@@ -4534,47 +4725,37 @@ app.get('/build', (c) => {
         }
       });
       
-      // Enforce max/min scale and uniform aspect ratio during graphic scaling
+      // Snapshot the design at the start of a drag/scale gesture so it can be undone
+      canvas.on('mouse:down', function(e) {
+        if (e.target && e.target.isGraphic) pushUndo();
+      });
+
+      // Enforce max/min scale and uniform aspect ratio during graphic scaling,
+      // and keep the scaled graphic inside its printable bounds
       canvas.on('object:scaling', function(e) {
         var obj = e.target;
         if (!obj || !obj.isGraphic || !obj.maxScale) return;
-        
+
         // Clamp to [minScale, maxScale] and enforce uniform scaling
         var clamped = Math.max(obj.minScale, Math.min(obj.maxScale, (obj.scaleX + obj.scaleY) / 2));
         obj.scaleX = clamped;
         obj.scaleY = clamped;
+        clampObjectToBounds(obj);
       });
-      
-      // Constrain graphics to printable area during move/scale
+
+      // Constrain graphics to printable area during move
       // Prevents dragging outside garment, over zippers, and off seams
       canvas.on('object:moving', function(e) {
-        var obj = e.target;
-        if (!obj || !obj.isGraphic) return;
-        
-        var bounds = getGraphicBounds(obj.placementId, state.garment);
-        var halfW = (obj.width * obj.scaleX) / 2;
-        var halfH = (obj.height * obj.scaleY) / 2;
-        
-        // Clamp position to keep graphic within printable bounds
-        if (obj.left - halfW < bounds.minX) obj.left = bounds.minX + halfW;
-        if (obj.left + halfW > bounds.maxX) obj.left = bounds.maxX - halfW;
-        if (obj.top - halfH < bounds.minY) obj.top = bounds.minY + halfH;
-        if (obj.top + halfH > bounds.maxY) obj.top = bounds.maxY - halfH;
+        clampObjectToBounds(e.target);
       });
-      
-      // Save user position after any move, scale, or rotate
+
+      // Save user position after any move, scale, or rotate (clamped)
       canvas.on('object:modified', function(e) {
         var obj = e.target;
-        if (!obj || !obj.isGraphic || !obj.graphicId || !obj.placementId) return;
-        
-        var key = obj.graphicId + '::' + obj.placementId;
-        userGraphicPositions[key] = {
-          left: obj.left,
-          top: obj.top,
-          scaleX: obj.scaleX,
-          scaleY: obj.scaleY,
-          angle: obj.angle || 0
-        };
+        if (!obj || !obj.isGraphic) return;
+        clampObjectToBounds(obj);
+        persistObjectPosition(obj);
+        canvas.renderAll();
       });
     }
     
@@ -5472,7 +5653,10 @@ app.get('/build', (c) => {
             padding: 5,
             isGraphic: true, graphicId: item.graphicId, placementId: item.placementId
           });
-          
+
+          // A saved position can be stale (garment switch, old bounds) — re-clamp
+          clampObjectToBounds(graphicImg);
+
           canvas.add(graphicImg);
           if (loadedCount === totalToLoad) canvas.renderAll();
         });
@@ -5568,7 +5752,8 @@ app.get('/build', (c) => {
     };
     
     function getGraphicBounds(placementId, garmentId) {
-      var isZipUp = garmentId === 'zip-up-hoodie';
+      // NOTE: catalog id is 'zipup-hoodie'; accept the old hyphenated form too
+      var isZipUp = garmentId === 'zipup-hoodie' || garmentId === 'zip-up-hoodie';
       var boundsMap = isZipUp ? PRINTABLE_BOUNDS_ZIPUP : PRINTABLE_BOUNDS;
       var b = boundsMap[placementId] || PRINTABLE_BOUNDS[placementId] || { minX: 0.10, minY: 0.10, maxX: 0.90, maxY: 0.90 };
       var w = canvas.width;
@@ -5639,12 +5824,28 @@ app.get('/build', (c) => {
       checkoutBtn.disabled = !isComplete;
     }
     
+    // Serialize the user's design layout (normalized 0-1 coordinates) so the
+    // print shop receives actual placement, not just graphic IDs.
+    function collectDesignData() {
+      var positions = {};
+      Object.keys(userGraphicPositions).forEach(function(key) {
+        var p = userGraphicPositions[key];
+        positions[key] = {
+          l: +(p.left / canvas.width).toFixed(3),
+          t: +(p.top / canvas.height).toFixed(3),
+          s: +p.scaleX.toFixed(3),
+          a: Math.round(p.angle || 0)
+        };
+      });
+      return { v: 1, cw: canvas.width, ch: canvas.height, positions: positions };
+    }
+
     // Checkout
     function checkout() {
       var checkoutBtn = document.getElementById('checkoutBtn');
       checkoutBtn.disabled = true;
       checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-      
+
       fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -5652,9 +5853,11 @@ app.get('/build', (c) => {
           garment: state.garment,
           size: state.size,
           color: state.color,
-          graphic: state.graphic,
+          graphic: state.usingCustomGraphic ? 'custom-upload' : state.graphic,
+          customUploadName: state.usingCustomGraphic ? (state.customUploadName || 'custom-artwork') : undefined,
           placement: state.placement,
-          additionalGraphics: state.additionalGraphics
+          additionalGraphics: state.additionalGraphics,
+          design: collectDesignData()
         })
       })
       .then(function(response) { return response.json(); })

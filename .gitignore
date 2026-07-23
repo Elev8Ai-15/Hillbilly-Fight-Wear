@@ -34,3 +34,5 @@ logs/
 
 # Temp files
 temp/
+
+.next/
