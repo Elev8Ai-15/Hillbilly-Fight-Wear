@@ -3032,6 +3032,26 @@ app.get('/', (c) => {
       var overlayHtml = '';
       var previewFilter = '';
 
+      // Print placement per garment type, calibrated against the blank garment
+      // photos (chest center + max graphic size as fractions of the image).
+      // Hoodies: chest sits lower (hood above, pocket below).
+      var SHOP_PRINT_SPOTS = {
+        'tshirt':       { front: { y: 46, w: 50, h: 32 }, back: { y: 46, w: 50, h: 32 }, neck: true },
+        'thermal':      { front: { y: 46, w: 50, h: 32 }, back: { y: 46, w: 50, h: 32 }, neck: true },
+        'tank-mens':    { front: { y: 46, w: 44, h: 30 }, back: { y: 46, w: 44, h: 30 }, neck: true },
+        'tank-womens':  { front: { y: 46, w: 38, h: 28 }, back: { y: 46, w: 38, h: 28 }, neck: true },
+        'hoodie':       { front: { y: 50, w: 42, h: 24 }, back: { y: 55, w: 40, h: 22 }, neck: false },
+        'zipup-hoodie': { front: { y: 50, w: 42, h: 24 }, back: { y: 55, w: 40, h: 22 }, neck: false }
+      };
+
+      // Graphics ship as 1024px canvases with the art floating inside — use the
+      // tight-trimmed preview copies so overlays land where the art actually is.
+      function previewGraphicUrl(graphicId) {
+        var full = graphicsMap[graphicId];
+        if (!full) return null;
+        return full.split('?')[0].replace('/images/graphics/', '/images/graphics/preview/');
+      }
+
       // Color chosen → show the garment in that color, keeping the graphic
       var colorKey = (modalState.selectedColor || '').toLowerCase();
       var isHeadwear = product.garmentType === 'beanie' || product.garmentType === 'trucker-hat';
@@ -3039,23 +3059,27 @@ app.get('/', (c) => {
         var setKey = (modalState.selectedStyle === 'Zip-Up' && product.garmentType === 'hoodie') ? 'zipup-hoodie' : product.garmentType;
         var gImages = garmentColorImages[setKey] || garmentColorImages[product.garmentType];
         var colorSet = gImages && gImages[colorKey];
+        var spots = SHOP_PRINT_SPOTS[setKey] || SHOP_PRINT_SPOTS[product.garmentType];
         // Front composite needs the product's graphic to keep the design visible;
         // back composite is fine bare (most designs are front-printed)
-        var canComposite = colorSet && (viewKey === 'back' ? colorSet.back : (colorSet.front && product.graphicId && graphicsMap[product.graphicId]));
+        var canComposite = colorSet && spots && (viewKey === 'back' ? colorSet.back : (colorSet.front && product.graphicId && graphicsMap[product.graphicId]));
         if (canComposite) {
           previewImg = viewKey === 'back' ? colorSet.back : colorSet.front;
-          if (colorKey === 'white') previewFilter = 'filter: drop-shadow(0 2px 10px rgba(0,0,0,0.3));';
+          // White-on-white photos need a contrast nudge to stay visible
+          if (colorKey === 'white') previewFilter = 'filter: brightness(0.97) contrast(1.07);';
 
+          var spot = viewKey === 'back' ? spots.back : spots.front;
           var overlayId = viewKey === 'back' ? product.backGraphicId : product.graphicId;
-          if (overlayId && graphicsMap[overlayId]) {
-            overlayHtml += '<img src="' + graphicsMap[overlayId] + '" alt="" style="position:absolute; left:50%; top:45%; transform:translate(-50%,-50%); max-width:52%; max-height:38%; pointer-events:none;">';
+          var overlayUrl = overlayId && previewGraphicUrl(overlayId);
+          if (overlayUrl) {
+            overlayHtml += '<img src="' + overlayUrl + '" alt="" style="position:absolute; left:50%; top:' + spot.y + '%; transform:translate(-50%,-50%); max-width:' + spot.w + '%; max-height:' + spot.h + '%; pointer-events:none;">';
           }
-          // Mandatory 3-inch HFW back-neck logo on all shirts/tanks/hoodies
-          if (viewKey === 'back') {
+          // Mandatory 3-inch HFW back-neck logo (hidden under the hood on hoodies)
+          if (viewKey === 'back' && spots.neck) {
             var neckLogo = (colorKey === 'white' || colorKey === 'pink')
-              ? '/images/graphics/hfw-logo-black-shadow.png?v=11'
-              : '/images/graphics/hfw-logo-white-outline.png?v=11';
-            overlayHtml += '<img src="' + neckLogo + '" alt="" style="position:absolute; left:50%; top:14%; transform:translate(-50%,-50%); max-width:20%; max-height:9%; pointer-events:none;">';
+              ? '/images/graphics/preview/hfw-logo-black-shadow.png'
+              : '/images/graphics/preview/hfw-logo-white-outline.png';
+            overlayHtml += '<img src="' + neckLogo + '" alt="" style="position:absolute; left:50%; top:15.5%; transform:translate(-50%,-50%); max-width:18%; max-height:7%; pointer-events:none;">';
           }
         }
       }
