@@ -4124,7 +4124,16 @@ app.get('/build', (c) => {
       <!-- Step 4: Choose Front Logo (included in base price) -->
       <div class="option-group" id="step4">
         <h3><span class="step-num">4</span> Choose Front Logo <span style="font-size: 0.75rem; color: #666; font-weight: 400;">(included in price)</span></h3>
-        
+
+        <!-- Optional: Add second back graphic (shown once a front logo is picked) -->
+        <div class="additional-graphics" id="additionalGraphics" style="display: none; margin-bottom: 15px;">
+          <h4 style="margin: 0 0 14px; font-size: 0.95rem; color: #92400e; font-weight: 700;"><i class="fas fa-star" style="color: #f59e0b; margin-right: 6px;"></i>Optional: Add a second graphic to the back <span style="background: #8B0000; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 4px;">+$15</span></h4>
+          <div id="additionalList"></div>
+          <button class="add-graphic-btn" id="addGraphicBtn">
+            <i class="fas fa-plus"></i> Add Back Graphic (+$15)
+          </button>
+        </div>
+
         <!-- Tab switcher: HFW Graphics vs Custom Upload -->
         <div class="logo-tabs">
           <button class="logo-tab active" data-tab="hfw-graphics" id="tabHfwGraphics">
@@ -4211,14 +4220,6 @@ app.get('/build', (c) => {
           </div>
         </div>
         
-        <!-- Optional: Add second back graphic -->
-        <div class="additional-graphics" id="additionalGraphics" style="display: none;">
-          <h4 style="margin: 0 0 14px; font-size: 0.95rem; color: #92400e; font-weight: 700;"><i class="fas fa-star" style="color: #f59e0b; margin-right: 6px;"></i>Optional: Add a second graphic to the back <span style="background: #8B0000; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 4px;">+$15</span></h4>
-          <div id="additionalList"></div>
-          <button class="add-graphic-btn" id="addGraphicBtn">
-            <i class="fas fa-plus"></i> Add Back Graphic (+$15)
-          </button>
-        </div>
       </div>
       
 
@@ -4283,7 +4284,7 @@ app.get('/build', (c) => {
   <div class="modal-overlay" id="addGraphicModal">
     <div class="modal-content">
       <h3>Add Another Graphic</h3>
-      <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Select a graphic and choose where to place it. Each graphic adds to the total.</p>
+      <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Tap a graphic then hit <strong>Add Graphic</strong> — or double-tap to add it instantly. Goes on the back (+$15).</p>
       <div class="graphics-grid" id="modalGraphicsGrid"></div>
       <div style="margin-top: 20px;">
         <h4 style="margin: 0 0 10px; font-size: 0.9rem;">Placement</h4>
@@ -4556,9 +4557,17 @@ app.get('/build', (c) => {
           redoDesign();
           return;
         }
-        if (e.key === 'Escape' && canvas) {
-          canvas.discardActiveObject();
-          canvas.renderAll();
+        if (e.key === 'Escape') {
+          // Modal first, then canvas deselect
+          var modal = document.getElementById('addGraphicModal');
+          if (modal && modal.classList.contains('active')) {
+            closeAddGraphicModal();
+            return;
+          }
+          if (canvas) {
+            canvas.discardActiveObject();
+            canvas.renderAll();
+          }
           return;
         }
 
@@ -4599,6 +4608,21 @@ app.get('/build', (c) => {
       document.getElementById('modalGraphicsGrid').addEventListener('click', function(e) {
         var option = e.target.closest('.graphic-option');
         if (option && option.dataset.id) modalSelectGraphic(option.dataset.id);
+      });
+
+      // Modal: double-click (or double-tap) a graphic adds it immediately
+      document.getElementById('modalGraphicsGrid').addEventListener('dblclick', function(e) {
+        var option = e.target.closest('.graphic-option');
+        if (option && option.dataset.id) {
+          modalSelectGraphic(option.dataset.id);
+          pushUndo();
+          confirmAddGraphic();
+        }
+      });
+
+      // Modal: clicking the dark backdrop closes it (escape hatch)
+      document.getElementById('addGraphicModal').addEventListener('click', function(e) {
+        if (e.target === this) closeAddGraphicModal();
       });
       
       // Modal: placement selection (delegated since content is dynamic)
@@ -5348,7 +5372,7 @@ app.get('/build', (c) => {
     
     function confirmAddGraphic() {
       if (!modalSelectedGraphic || !modalSelectedPlacement) {
-        alert('Please select both a graphic and placement');
+        showToast('Pick a graphic first — then hit Add Graphic');
         return;
       }
       
