@@ -7,9 +7,7 @@ import {
   TextElementData,
   ImageElementData,
   ShapeElementData,
-  ClipartElementData,
 } from "@/types";
-import { getClipart } from "@/data/cliparts";
 import { cn } from "@/lib/utils";
 
 /**
@@ -449,33 +447,6 @@ function renderDesignElement(element: DesignElement) {
       >
         {data.content}
       </text>
-    );
-  }
-
-  if (element.type === "clipart") {
-    const data = element.data as ClipartElementData;
-    const art = getClipart(data.clipartId);
-    if (!art) return null;
-    return (
-      <svg
-        key={element.id}
-        x={element.x}
-        y={element.y}
-        width={element.width}
-        height={element.height}
-        viewBox="0 0 100 100"
-        preserveAspectRatio="xMidYMid meet"
-        style={style}
-        overflow="visible"
-      >
-        {art.paths.map((p, i) => (
-          <path
-            key={i}
-            d={p.d}
-            fill={p.use === "primary" ? data.fill : data.secondaryFill || "#0a0a0a"}
-          />
-        ))}
-      </svg>
     );
   }
 

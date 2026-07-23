@@ -8,6 +8,7 @@ import {
   ViewAngle,
 } from "@/types";
 import { DesignTemplate } from "@/data/design-templates";
+import { getApprovedGraphic } from "@/data/approved-graphics";
 
 interface DesignSnapshot {
   garmentType: ProductCategory;
@@ -47,9 +48,8 @@ interface DesignerStore extends GarmentPreviewState {
   clearDesign: () => void;
   loadDesign: (design: DesignSnapshot) => void;
   applyTemplate: (template: DesignTemplate) => void;
-  addTextElement: (text: string) => void;
   addImageElement: (src: string) => void;
-  addClipartElement: (clipartId: string) => void;
+  addGraphicElement: (graphicId: string) => void;
   undo: () => void;
   redo: () => void;
   generateId: () => string;
@@ -275,50 +275,30 @@ export const useDesignerStore = create<DesignerStore>()(
           });
         },
 
-        addClipartElement: (clipartId: string) => {
+        addGraphicElement: (graphicId: string) => {
+          const art = getApprovedGraphic(graphicId);
+          if (!art) return;
+          const width = 150;
+          const height = Math.round(width / art.aspect);
           const id = get().generateId();
           get().addElement({
             id,
-            type: "clipart",
+            type: "image",
             view: get().viewAngle,
-            x: 110,
-            y: 130,
-            width: 80,
-            height: 80,
+            x: (300 - width) / 2,
+            y: 160 - height / 2,
+            width,
+            height,
             rotation: 0,
             opacity: 1,
             locked: false,
             data: {
-              clipartId,
-              fill: get().secondaryColor,
-              secondaryFill: get().baseColor,
+              src: art.src,
+              alt: art.label,
+              fit: "contain",
+              graphicId: art.id,
             },
           });
-        },
-
-        addTextElement: (text: string) => {
-          const id = get().generateId();
-          const element: DesignElement = {
-            id,
-            type: "text",
-            view: get().viewAngle,
-            x: 50,
-            y: 150,
-            width: 200,
-            height: 50,
-            rotation: 0,
-            opacity: 1,
-            locked: false,
-            data: {
-              content: text,
-              fontFamily: "Anton, system-ui",
-              fontSize: 24,
-              fontWeight: "bold",
-              color: "#ffffff",
-              textAlign: "center",
-            } as TextElementData,
-          };
-          get().addElement(element);
         },
 
         addImageElement: (src: string) => {
@@ -336,8 +316,9 @@ export const useDesignerStore = create<DesignerStore>()(
             locked: false,
             data: {
               src,
-              alt: "Custom design element",
+              alt: "Uploaded logo",
               fit: "contain",
+              userUpload: true,
             },
           };
           get().addElement(element);

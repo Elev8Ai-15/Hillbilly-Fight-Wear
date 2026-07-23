@@ -114,7 +114,7 @@ export type ViewAngle = "front" | "back" | "left" | "right";
 
 export interface DesignElement {
   id: string;
-  type: "text" | "image" | "shape" | "clipart";
+  type: "text" | "image" | "shape";
   /** Which garment view this element belongs to. Older designs default to "front". */
   view?: ViewAngle;
   x: number;
@@ -124,7 +124,7 @@ export interface DesignElement {
   rotation: number;
   opacity: number;
   locked: boolean;
-  data: TextElementData | ImageElementData | ShapeElementData | ClipartElementData;
+  data: TextElementData | ImageElementData | ShapeElementData;
 }
 
 export interface TextElementData {
@@ -140,16 +140,14 @@ export interface TextElementData {
   arc?: number;
 }
 
-export interface ClipartElementData {
-  clipartId: string;
-  fill: string;
-  secondaryFill?: string;
-}
-
 export interface ImageElementData {
   src: string;
   alt: string;
   fit: "contain" | "cover" | "fill";
+  /** Set when the image came from the approved brand-graphics library. */
+  graphicId?: string;
+  /** Set when the user uploaded this image themselves (their own logo). */
+  userUpload?: boolean;
 }
 
 export interface ShapeElementData {

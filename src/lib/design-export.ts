@@ -25,6 +25,35 @@ const FONT_FILES: Record<string, string> = {
 };
 
 const fontDataCache = new Map<string, string>();
+const imageDataCache = new Map<string, string>();
+
+/** Inline non-data image hrefs (approved library graphics) so the SVG rasterizes. */
+async function inlineImages(clone: SVGSVGElement): Promise<void> {
+  const images = [...clone.querySelectorAll("image")];
+  for (const img of images) {
+    const href = img.getAttribute("href") || img.getAttribute("xlink:href");
+    if (!href || href.startsWith("data:")) continue;
+    try {
+      let dataUrl = imageDataCache.get(href);
+      if (!dataUrl) {
+        const res = await fetch(href);
+        if (!res.ok) continue;
+        const blob = await res.blob();
+        dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+        imageDataCache.set(href, dataUrl);
+      }
+      img.setAttribute("href", dataUrl);
+      img.removeAttribute("xlink:href");
+    } catch {
+      // Un-inlinable image just drops out of the export
+    }
+  }
+}
 
 async function buildFontStyle(clone: SVGSVGElement): Promise<string> {
   const used = new Set<string>();
@@ -78,6 +107,8 @@ export async function renderDesignToPng(scale = 2): Promise<string | null> {
   const height = CANVAS_H * scale;
   clone.setAttribute("width", String(width));
   clone.setAttribute("height", String(height));
+
+  await inlineImages(clone);
 
   const fontStyle = await buildFontStyle(clone);
   if (fontStyle) {
