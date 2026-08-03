@@ -1770,7 +1770,7 @@ app.get('/', (c) => {
     </div>
   </section>
 
-  <!-- Shop Now Section - All Products from Official Store (Organized by Category) -->
+  <!-- Shop Now Section - All Products (Organized by Category) -->
   <section id="shop" style="background: #f5f5f5; padding: 10px 0 40px;" aria-labelledby="shop-heading">
     <h2 id="shop-heading" class="sr-only">Shop Now</h2>
     
@@ -1817,12 +1817,6 @@ app.get('/', (c) => {
       <div class="product-grid shop-grid" role="list">
         ${decalsHtml}
       </div>
-    </div>
-    
-    <div class="view-all-wrapper">
-      <a href="https://hillbillyfightwear.com/collections/all" target="_blank" rel="noopener noreferrer" class="view-all-btn" aria-label="View all products on Official Store (opens in new window)">
-        <i class="fas fa-external-link-alt" aria-hidden="true"></i> View All on Official Store
-      </a>
     </div>
   </section>
   
@@ -3021,12 +3015,12 @@ app.get('/', (c) => {
       garments.find(g => g.id === 'zipup-hoodie')?.images || {}
     ).replace(/<\//g, '<\\/')};
     
-    // Shop modal: always displays Shopify product photos (no color-based preview changes)
+    // Shop modal: always displays the catalog product photos (no color-based preview changes)
     function renderGarmentModal(product, step) {
       modalState.step = step;
       var mc = document.getElementById('modalContent');
       
-      // Shop Now: always use Shopify product photos (no color-based preview changes)
+      // Shop Now: always use the catalog product photos (no color-based preview changes)
       var viewKey = modalState.modalView || 'front';
       var previewImg = (viewKey === 'back' && product.backImage) ? product.backImage : product.image;
       
@@ -3161,7 +3155,7 @@ app.get('/', (c) => {
       var viewKey = modalState.modalView || 'front';
       var displayImg = (viewKey === 'back' && product.backImage) ? product.backImage : product.image;
       
-      // Show front/back toggle for decals that have Shopify photography (backImage)
+      // Show front/back toggle for decals that have back photography (backImage)
       var viewToggleHtml = '';
       if (product.backImage) {
         var frontActive = viewKey === 'front' ? 'background:#8B0000; color:#fff;' : 'background:#f5f5f5; color:#333;';
