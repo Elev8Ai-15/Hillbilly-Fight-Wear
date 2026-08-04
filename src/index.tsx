@@ -197,6 +197,7 @@ app.get('/', (c) => {
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
@@ -3204,6 +3205,7 @@ app.get('/build', (c) => {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Build Y'Own Custom MMA Gear | Hillbilly Fightwear</title>
   <meta name="description" content="Design your own custom MMA t-shirts, hoodies, thermals & trucker hats. Pick your garment, choose a graphic, select placement — we print & ship free.">

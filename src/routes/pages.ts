@@ -196,6 +196,7 @@ pages.get('/checkout/success', (c) => {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Confirmed - Hillbilly Fightwear</title>
   <meta name="robots" content="noindex, nofollow">
@@ -292,6 +293,7 @@ pages.get('/privacy-policy', (c) => {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy - Hillbilly Fightwear</title>
   <meta name="description" content="Hillbilly Fightwear Privacy Policy — how we collect, use, and protect your personal data. GDPR & CCPA compliant. Payments secured by Stripe.">
@@ -463,6 +465,7 @@ pages.get('/cookie-policy', (c) => {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cookie Policy - Hillbilly Fightwear</title>
   <meta name="description" content="Hillbilly Fightwear Cookie Policy — learn how we use cookies to improve your shopping experience. Manage your cookie preferences here.">
@@ -586,6 +589,7 @@ pages.get('/contact', (c) => {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us - Hillbilly Fightwear | Custom MMA Gear Questions</title>
   <meta name="description" content="Contact Hillbilly Fightwear for custom MMA apparel, wholesale orders, sponsorships & more. Email brian@hillbillyfightwear.com — we respond within 24 hours.">
@@ -1013,6 +1017,7 @@ pages.get('/about', (c) => {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Hillbilly Fightwear | MMA Apparel Brand Story</title>
   <meta name="description" content="Hillbilly Fightwear is an American MMA apparel brand founded by Brian. We make custom t-shirts, hoodies, hats &amp; stickers for combat sports fans. All prices include free shipping &amp; tax.">
@@ -1309,7 +1314,7 @@ pages.get('/about', (c) => {
 pages.all('*', (c) => {
   const nonce = c.get('nonce')
   return c.html(`<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en"><head><meta charset="UTF-8"><meta name="color-scheme" content="light"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Page Not Found - Hillbilly Fightwear</title><meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="/static/tailwind.css">
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
