@@ -222,7 +222,7 @@ app.get('/', (c) => {
   <meta property="og:url" content="https://hillbillyfightwear.com/">
   <meta property="og:title" content="MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear">
   <meta property="og:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, 2 for $50 on shirts & tanks. Build your own – make your statement!">
-  <meta property="og:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg">
+  <meta property="og:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.webp">
   <meta property="og:site_name" content="Hillbilly Fightwear">
   <meta property="og:locale" content="en_US">
   
@@ -231,7 +231,7 @@ app.get('/', (c) => {
   <meta name="twitter:url" content="https://hillbillyfightwear.com/">
   <meta name="twitter:title" content="MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear">
   <meta name="twitter:description" content="Rugged custom MMA t-shirts, hoodies &amp; trucker hats. Free shipping + tax, 2 for $50 on shirts & tanks. Build your own – make your statement!">
-  <meta name="twitter:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg">
+  <meta name="twitter:image" content="https://hillbillyfightwear.com/images/slides/slide-cage-grapple.webp">
   
   <!-- Mobile & PWA -->
   <meta name="theme-color" content="#8B0000">
@@ -263,7 +263,7 @@ app.get('/', (c) => {
       "description": "Hillbilly Fightwear - the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs.",
       "url": "https://hillbillyfightwear.com",
       "logo": "https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png",
-      "image": "https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg",
+      "image": "https://hillbillyfightwear.com/images/slides/slide-cage-grapple.webp",
       "priceRange": "$$",
       "currenciesAccepted": "USD",
       "paymentAccepted": "Credit Card, Debit Card",
@@ -1857,7 +1857,7 @@ app.get('/', (c) => {
   <!-- Feature Row -->
   <section class="feature-row" style="background: #f5f5f5;">
     <div class="feature-image">
-      <img src="/images/slides/slide-cage-grapple.jpg" alt="Fighter grappling in cage - Hillbilly Fightwear MMA gear" loading="lazy">
+      <img src="/images/slides/slide-cage-grapple.webp" alt="Fighter grappling in cage - Hillbilly Fightwear MMA gear" loading="lazy">
     </div>
     <div class="feature-text">
       <h2>Custom Apparel Builder</h2>
