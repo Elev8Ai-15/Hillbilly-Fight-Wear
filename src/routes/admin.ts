@@ -8,6 +8,9 @@
 // ============================================
 import { Hono } from 'hono'
 import { escHtml } from '../utils/html'
+import { rateLimit } from '../utils/rate-limit'
+
+const loginLimit = rateLimit({ windowMs: 15 * 60 * 1000, max: 5, message: 'Too many login attempts — try again in 15 minutes.' })
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
@@ -34,21 +37,28 @@ async function stripeGet(endpoint: string, secretKey: string): Promise<any> {
 // AUTH MIDDLEWARE — checks cookie or query param
 // ============================================
 function getAdminPassword(env: Bindings): string {
-  return env.ADMIN_PASSWORD || 'hillbilly2026'
+  // Fail closed: no fallback. If ADMIN_PASSWORD isn't set, /admin is disabled.
+  return env.ADMIN_PASSWORD || ''
 }
 
-function isAuthenticated(c: any): boolean {
-  const env = c.env as Bindings
-  const password = getAdminPassword(env)
-  
-  // Check cookie
+// Session cookie holds an HMAC of a fixed label keyed by the password, so the
+// raw password never travels in the cookie. Changing the password revokes all
+// sessions.
+async function adminToken(password: string): Promise<string> {
+  const enc = new TextEncoder()
+  const key = await crypto.subtle.importKey('raw', enc.encode(password), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode('hfw-admin-session-v1'))
+  return [...new Uint8Array(sig)].map((b) => b.toString(16).padStart(2, '0')).join('')
+}
+
+async function isAuthenticated(c: any): Promise<boolean> {
+  const password = getAdminPassword(c.env as Bindings)
+  if (!password) return false
+
   const cookie = c.req.header('cookie') || ''
   const match = cookie.match(/hfw_admin=([^;]+)/)
-  if (match && match[1] === encodeURIComponent(password)) {
-    return true
-  }
-  
-  return false
+  if (!match) return false
+  return match[1] === (await adminToken(password))
 }
 
 // ============================================
@@ -94,21 +104,22 @@ admin.get('/login', (c) => {
 </html>`)
 })
 
-admin.post('/login', async (c) => {
+admin.post('/login', loginLimit, async (c) => {
   const body = await c.req.parseBody()
   const password = String(body.password || '')
   const correctPassword = getAdminPassword(c.env as Bindings)
-  
-  if (password === correctPassword) {
+
+  if (correctPassword && password === correctPassword) {
+    const token = await adminToken(correctPassword)
     return new Response(null, {
       status: 302,
       headers: {
         'Location': '/admin',
-        'Set-Cookie': `hfw_admin=${encodeURIComponent(password)}; Path=/admin; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`,
+        'Set-Cookie': `hfw_admin=${token}; Path=/admin; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`,
       },
     })
   }
-  
+
   return c.redirect('/admin/login?error=1', 302)
 })
 
@@ -126,7 +137,7 @@ admin.get('/logout', (c) => {
 // API: Sales data from Stripe
 // ============================================
 admin.get('/api/sales', async (c) => {
-  if (!isAuthenticated(c)) return c.json({ error: 'Unauthorized' }, 401)
+  if (!(await isAuthenticated(c))) return c.json({ error: 'Unauthorized' }, 401)
   
   const env = c.env as Bindings
   if (!env.STRIPE_SECRET_KEY) {
@@ -261,7 +272,7 @@ admin.get('/api/sales', async (c) => {
 // API: Stripe checkout sessions (more detailed order info)
 // ============================================
 admin.get('/api/sessions', async (c) => {
-  if (!isAuthenticated(c)) return c.json({ error: 'Unauthorized' }, 401)
+  if (!(await isAuthenticated(c))) return c.json({ error: 'Unauthorized' }, 401)
   
   const env = c.env as Bindings
   if (!env.STRIPE_SECRET_KEY) {
@@ -304,7 +315,7 @@ admin.get('/api/sessions', async (c) => {
 const CF_ZONE_ID = 'f6cf84aaf9620dcd00f5a4b9be7271a9'
 
 admin.get('/api/traffic', async (c) => {
-  if (!isAuthenticated(c)) return c.json({ error: 'Unauthorized' }, 401)
+  if (!(await isAuthenticated(c))) return c.json({ error: 'Unauthorized' }, 401)
 
   const env = c.env as Bindings
   const cfToken = env.CF_API_TOKEN
@@ -422,8 +433,8 @@ admin.get('/api/traffic', async (c) => {
 // ============================================
 // MAIN DASHBOARD PAGE
 // ============================================
-admin.get('/', (c) => {
-  if (!isAuthenticated(c)) return c.redirect('/admin/login')
+admin.get('/', async (c) => {
+  if (!(await isAuthenticated(c))) return c.redirect('/admin/login')
   
   const nonce = c.get('nonce') || ''
   

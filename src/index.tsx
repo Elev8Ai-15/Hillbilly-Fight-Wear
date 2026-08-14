@@ -10,6 +10,7 @@ import {
   type ShopProduct
 } from './data/catalog'
 import { escHtml } from './utils/html'
+import { GA4_ID } from './utils/analytics'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
@@ -54,11 +55,11 @@ app.use('*', async (c, next) => {
   // ---- Content-Security-Policy (nonce-based, no unsafe-eval) ----
   c.res.headers.set('Content-Security-Policy', [
     `default-src 'self'`,
-    `script-src 'self' 'nonce-${nonce}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com`,
+    `script-src 'self' 'nonce-${nonce}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com https://static.cloudflareinsights.com`,
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net`,
     `img-src 'self' data: https: blob:`,
     `font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net`,
-    `connect-src 'self' https://api.stripe.com https://api.resend.com`,
+    `connect-src 'self' https://api.stripe.com https://api.resend.com https://*.google-analytics.com https://www.googletagmanager.com https://cloudflareinsights.com`,
     `frame-src 'self' https://js.stripe.com https://open.spotify.com https://anchor.fm https://www.youtube.com https://youtube.com`,
     `frame-ancestors 'self' https://*.hillbillyfightwear.com https://*.pages.dev https://*.sandbox.novita.ai https://*.sandbox.gensparksite.com`,
     `object-src 'none'`,
@@ -271,7 +272,7 @@ app.get('/', (c) => {
         "addressCountry": "US"
       },
       "sameAs": [
-        "https://www.facebook.com/hillbillyfightwear",
+        "https://www.facebook.com/profile.php?id=100063347762281",
         "https://www.instagram.com/hillbillyfightwear",
         "https://anchor.fm/hillbillyfightwear"
       ],
@@ -2359,9 +2360,21 @@ app.get('/', (c) => {
       applyConsent(prefs);
     }
     
+    var HFW_GA4_ID = ${JSON.stringify(GA4_ID)};
     function applyConsent(prefs) {
-      // Placeholder for future analytics/marketing cookie integrations
-      // When adding GA, FB Pixel etc., conditionally load scripts based on prefs
+      // GA4 loads only after analytics consent; no-op until GA4_ID is set
+      // in src/utils/analytics.ts
+      if (prefs && prefs.analytics && HFW_GA4_ID && !window.__gaLoaded) {
+        window.__gaLoaded = true;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function() { dataLayer.push(arguments); };
+        gtag('js', new Date());
+        gtag('config', HFW_GA4_ID, { anonymize_ip: true });
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + HFW_GA4_ID;
+        document.head.appendChild(s);
+      }
     }
     
     // Check consent on page load

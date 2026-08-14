@@ -737,26 +737,9 @@ api.get('/order/receipt/:sessionId', async (c) => {
     result.orderInfo.orderTotal = totalStr
     result.orderInfo.orderSource = orderSource
 
-    // Generate and send receipt emails if we have pricing data
-    const resendKey = c.env?.RESEND_API_KEY
-    let emailsSent = false
-    if (result.pricing) {
-      const htmlReceipt = generateShopReceipt(result.orderInfo, result.pricing)
-      const textReceipt = generateShopReceiptPlainText(result.orderInfo, result.pricing)
-      const emailResult = await sendOrderReceiptEmails(resendKey, result.orderInfo, htmlReceipt, textReceipt)
-      emailsSent = emailResult.ownerSent || emailResult.customerSent
-    } else if (orderSource === 'hillbilly-fightwear-builder' && result.session.metadata?.pricing_json) {
-      // Builder order — try to generate builder receipt
-      try {
-        const builderPricing = JSON.parse(result.session.metadata.pricing_json)
-        const htmlReceipt = generateBuilderReceipt(result.orderInfo, builderPricing)
-        const textReceipt = `HILLBILLY FIGHTWEAR - CUSTOM ORDER CONFIRMATION\n${'='.repeat(50)}\n\nOrder: ${result.orderInfo.orderId}\nGarment: ${builderPricing.garmentName} (${builderPricing.size}, ${builderPricing.color})\nGraphic: ${builderPricing.primaryGraphic?.name || 'N/A'}\nTotal: $${builderPricing.total?.toFixed(2) || totalStr}\n\nQuestions? Contact brian@hillbillyfightwear.com`
-        const emailResult = await sendOrderReceiptEmails(resendKey, result.orderInfo, htmlReceipt, textReceipt)
-        emailsSent = emailResult.ownerSent || emailResult.customerSent
-      } catch (e) {
-        console.error('Builder receipt generation error:', e)
-      }
-    }
+    // Display-only: the Stripe webhook is the single sender of receipt emails.
+    // Sending here too caused duplicate emails — and this is a GET the success
+    // page fetches, so every page refresh re-sent them.
 
     return c.json({
       orderId: result.orderInfo.orderId,
@@ -764,7 +747,7 @@ api.get('/order/receipt/:sessionId', async (c) => {
       customerName: result.orderInfo.customerName,
       total: totalStr,
       metadata: result.session.metadata || {},
-      emailsSent,
+      emailsSent: false,
     })
   } catch (error) {
     console.error('Receipt retrieval error:', error)
@@ -1090,18 +1073,18 @@ From: Hillbilly Fightwear Website Contact Form
       })
     }
 
-    // Email sending failed — log it but still show success to user
+    // Email send failed — tell the truth so the lead isn't silently lost
     console.error('Contact email send failed:', result.error)
     return c.json({
-      success: true,
-      message: 'Thank you! Your message has been received. We\'ll get back to you at ' + email + ' within 24-48 hours.',
-    })
+      success: false,
+      error: 'Your message could not be sent. Please email us directly at brian@hillbillyfightwear.com.',
+    }, 502)
   } catch (error) {
     console.error('Contact form email error:', error)
     return c.json({
-      success: true,
-      message: 'Thank you! Your message has been received. We\'ll get back to you within 24-48 hours.',
-    })
+      success: false,
+      error: 'Your message could not be sent. Please email us directly at brian@hillbillyfightwear.com.',
+    }, 500)
   }
 })
 

@@ -475,6 +475,10 @@ export function generateStripeCheckoutParams(
   params.append('payment_method_types[]', 'card')
   params.append('billing_address_collection', 'auto')
   params.append('adaptive_pricing[enabled]', 'false')
+  // Build the marketing list: create a Customer on every order and show the
+  // "email me offers" checkbox — feeds Stripe's abandoned-cart recovery too
+  params.append('customer_creation', 'always')
+  params.append('consent_collection[promotions]', 'auto')
 
   if (customerEmail) {
     params.append('customer_email', customerEmail)

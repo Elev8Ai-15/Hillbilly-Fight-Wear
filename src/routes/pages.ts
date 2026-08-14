@@ -5,6 +5,7 @@
 // All pages share the CSP nonce from the security middleware.
 // ============================================
 import { Hono } from 'hono'
+import { GA4_ID } from '../utils/analytics'
 
 type Variables = {
   nonce: string
@@ -251,6 +252,9 @@ pages.get('/checkout/success', (c) => {
       // SEC: Validate session_id format before sending to API (Stripe session IDs are alphanumeric + underscores)
       if (!/^cs_[a-zA-Z0-9_]{10,200}$/.test(sessionId)) return;
 
+      // Payment completed — clear the cart so purchased items don't linger
+      try { localStorage.removeItem('hfw_cart'); } catch (e) {}
+
       var detailsEl = document.getElementById('orderDetails');
       var statusEl = document.getElementById('emailStatus');
 
@@ -281,6 +285,27 @@ pages.get('/checkout/success', (c) => {
             statusEl.innerHTML = '<i class="fas fa-envelope"></i> A confirmation email will be sent shortly.';
             statusEl.className = 'email-status';
           }
+
+          // GA4 purchase event — only with analytics consent and a configured ID
+          try {
+            var HFW_GA4_ID = ${JSON.stringify(GA4_ID)};
+            var consent = JSON.parse(localStorage.getItem('cookieConsent') || 'null');
+            if (HFW_GA4_ID && consent && consent.analytics && data.total) {
+              window.dataLayer = window.dataLayer || [];
+              window.gtag = window.gtag || function() { dataLayer.push(arguments); };
+              gtag('js', new Date());
+              gtag('config', HFW_GA4_ID, { send_page_view: true, anonymize_ip: true });
+              var gs = document.createElement('script');
+              gs.async = true;
+              gs.src = 'https://www.googletagmanager.com/gtag/js?id=' + HFW_GA4_ID;
+              document.head.appendChild(gs);
+              gtag('event', 'purchase', {
+                transaction_id: data.orderId || sessionId,
+                value: parseFloat(data.total),
+                currency: 'USD'
+              });
+            }
+          } catch (e) {}
         })
         .catch(function() {
           statusEl.innerHTML = '<i class="fas fa-envelope"></i> A confirmation email will be sent shortly.';
