@@ -1,10 +1,10 @@
-// Floating chat widget for the "Duke" chat agent (see utils/chat.ts).
+// Floating chat widget for the "Merica" chat agent (see utils/chat.ts).
 // Injected before </body> on all public pages; needs the page's CSP nonce.
 export function chatWidget(nonce: string): string {
   return `<div id="hfwChat">
   <button id="hfwChatBtn" aria-label="Chat with us" title="Chat with us">&#128172;</button>
   <div id="hfwChatPanel" role="dialog" aria-label="Chat with Hillbilly Fightwear">
-    <div id="hfwChatHead">Duke &mdash; Hillbilly Fightwear<button id="hfwChatClose" aria-label="Close chat">&times;</button></div>
+    <div id="hfwChatHead">Merica &mdash; Hillbilly Fightwear<button id="hfwChatClose" aria-label="Close chat">&times;</button></div>
     <div id="hfwChatMsgs" aria-live="polite"></div>
     <form id="hfwChatForm">
       <input id="hfwChatInput" type="text" maxlength="500" placeholder="Ask about sizes, gear, shipping..." autocomplete="off">
@@ -33,7 +33,7 @@ export function chatWidget(nonce: string): string {
 </style>
 <script nonce="${nonce}">
 (function() {
-  var GREETING = "Howdy! I'm Duke. Ask me about our gear, sizes, the 2-for-$50 deal, or the custom builder.";
+  var GREETING = "Howdy! I'm Merica. Ask me about our gear, sizes, the 2-for-$50 deal — or let me walk you through building your own custom piece.";
   var root = document.getElementById('hfwChat');
   var msgsEl = document.getElementById('hfwChatMsgs');
   var input = document.getElementById('hfwChatInput');
