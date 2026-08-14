@@ -1993,7 +1993,17 @@ app.get('/', (c) => {
       <p style="margin: 0 0 10px;"><strong>Hillbilly Fightwear</strong> - Official MMA & Combat Sports Apparel</p>
       <p style="margin: 0; font-size: 0.9rem; color: #999;">© ${new Date().getFullYear()} Hillbilly Fightwear. All rights reserved.</p>
       <!-- GEO: Freshness signal — visible last-updated date -->
-      <p style="margin: 4px 0 0; font-size: 0.8rem; color: #666;">Catalog last updated: April 2026</p>
+      <p style="margin: 4px 0 0; font-size: 0.8rem; color: #666;">Catalog last updated: August 2026</p>
+      <div style="margin: 26px auto 6px; max-width: 430px; text-align: left;">
+        <p style="margin: 0 0 8px; font-weight: 600; letter-spacing: .04em; text-align: center;">GET FIRST DIBS ON NEW DROPS</p>
+        <form id="newsletterForm" style="display: flex; gap: 8px;">
+          <label for="newsletterEmail" class="sr-only">Email address</label>
+          <input id="newsletterEmail" type="email" required maxlength="254" placeholder="your@email.com" autocomplete="email"
+            style="flex: 1; min-width: 0; padding: 10px 12px; border-radius: 5px; border: 1px solid #444; background: #262626; color: #fff;">
+          <button type="submit" style="background: #8B0000; color: #fff; border: 0; padding: 10px 18px; border-radius: 5px; font-weight: 700; cursor: pointer;">Sign Up</button>
+        </form>
+        <p id="newsletterStatus" role="status" style="margin: 8px 0 0; font-size: 0.85rem; color: #999; text-align: center;">No spam — new gear &amp; deals only. Unsubscribe anytime.</p>
+      </div>
       <nav aria-label="Footer navigation" style="margin-top: 20px;">
         <a href="/build" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Build Y'Own</a>
         <a href="#shop" style="color: #8B0000; margin: 0 15px; text-decoration: none;">Shop Now</a>
@@ -2416,6 +2426,30 @@ app.get('/', (c) => {
       
       // Restore ADA settings
       restoreA11ySettings();
+
+      // Footer newsletter signup → /api/subscribe (Resend audience)
+      var nlForm = document.getElementById('newsletterForm');
+      if (nlForm) {
+        nlForm.addEventListener('submit', function(ev) {
+          ev.preventDefault();
+          var nlStatus = document.getElementById('newsletterStatus');
+          var nlEmail = document.getElementById('newsletterEmail');
+          nlStatus.textContent = 'Signing you up…';
+          fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: nlEmail.value })
+          })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+              nlStatus.textContent = d.success ? d.message : (d.error || 'Signup failed.');
+              if (d.success) nlForm.reset();
+            })
+            .catch(function() {
+              nlStatus.textContent = 'Signup failed. Email brian@hillbillyfightwear.com to join the list.';
+            });
+        });
+      }
       
       // ==========================================
       // GLOBAL EVENT DELEGATION

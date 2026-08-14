@@ -1088,4 +1088,73 @@ From: Hillbilly Fightwear Website Contact Form
   }
 })
 
+// ============================================
+// POST /api/subscribe — footer newsletter signup → Resend audience
+// ============================================
+// ponytail: per-isolate cache; audience lookup re-runs when CF recycles the isolate
+let newsletterAudienceId: string | null = null
+
+async function getNewsletterAudienceId(key: string): Promise<string | null> {
+  if (newsletterAudienceId) return newsletterAudienceId
+  const headers = { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' }
+
+  const list = await fetch('https://api.resend.com/audiences', { headers })
+  if (list.ok) {
+    const data: any = await list.json()
+    const found = (data?.data || []).find((a: any) => a?.name === 'HFW Newsletter')
+    if (found?.id) {
+      newsletterAudienceId = found.id
+      return newsletterAudienceId
+    }
+  }
+
+  const created = await fetch('https://api.resend.com/audiences', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ name: 'HFW Newsletter' }),
+  })
+  if (created.ok) {
+    const data: any = await created.json()
+    newsletterAudienceId = data?.id || null
+  }
+  return newsletterAudienceId
+}
+
+api.post('/subscribe', strictLimit, async (c) => {
+  let body: any
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ success: false, error: 'Invalid request.' }, 400)
+  }
+
+  const email = String(body?.email || '').trim().toLowerCase()
+  if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    return c.json({ success: false, error: 'Please enter a valid email address.' }, 400)
+  }
+
+  const key = c.env?.RESEND_API_KEY
+  if (!key) {
+    console.error('[SUBSCRIBE] RESEND_API_KEY not configured')
+    return c.json({ success: false, error: 'Signup is temporarily unavailable. Email brian@hillbillyfightwear.com to join the list.' }, 503)
+  }
+
+  try {
+    const audienceId = await getNewsletterAudienceId(key)
+    if (!audienceId) throw new Error('could not resolve Resend audience')
+
+    const res = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, unsubscribed: false }),
+    })
+    if (!res.ok) throw new Error(`Resend contacts ${res.status}: ${await res.text()}`)
+
+    return c.json({ success: true, message: "You're on the list — first dibs on new drops." })
+  } catch (e) {
+    console.error('[SUBSCRIBE] failed:', e)
+    return c.json({ success: false, error: 'Signup failed. Email brian@hillbillyfightwear.com to join the list.' }, 502)
+  }
+})
+
 export default api
