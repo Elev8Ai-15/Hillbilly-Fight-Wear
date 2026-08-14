@@ -5,7 +5,7 @@ import pageRoutes from './routes/pages'
 import adminRoutes from './routes/admin'
 import {
   garments, graphics, placements,
-  products, shopProducts, slides,
+  products, shopProducts, slides, productSlug,
   mensClothing, womensClothing, kidsClothing, hats, decals,
   type ShopProduct
 } from './data/catalog'
@@ -166,7 +166,7 @@ app.get('/', (c) => {
         <img src="${product.image}" alt="${escHtml(product.title)}" class="product-image product-img-front" loading="lazy" width="280" height="280">${product.backImage ? `
         <img src="${product.backImage}" alt="${escHtml(product.title)} - Back" class="product-image product-img-back" loading="lazy" width="280" height="280">` : ''}
       </div>${product.backImage ? '<div class="flip-hint"><i class="fas fa-sync-alt"></i> Hover for back</div>' : ''}
-      <h4 class="product-title">${escHtml(product.title)}</h4>
+      <h4 class="product-title"><a href="/product/${productSlug(product)}" class="product-title-link" data-action="productLink">${escHtml(product.title)}</a></h4>
       <div class="product-vendor">${escHtml(product.vendor)}</div>
       <div class="product-price" aria-label="Price: ${product.price}">${product.price}</div>
       <div class="price-includes-badge"><i class="fas fa-check-circle"></i> Tax &amp; Shipping Included</div>
@@ -180,8 +180,9 @@ app.get('/', (c) => {
   const hatsHtml = generateProductCards(hats)
   const decalsHtml = generateProductCards(decals)
 
-  // SEO: Generate Product structured data for top products (first 12 for performance)
-  const topProducts = shopProducts.slice(0, 12)
+  // SEO: Product structured data for every shop product, each pointing at
+  // its own indexable /product/<slug> page
+  const topProducts = shopProducts
   const productSchemaItems = topProducts.map(p => `{
       "@type": "Product",
       "name": "${p.title.replace(/"/g, '\\"')}",
@@ -192,7 +193,7 @@ app.get('/', (c) => {
         "price": "${p.priceNum.toFixed(2)}",
         "priceCurrency": "USD",
         "availability": "https://schema.org/InStock",
-        "url": "https://hillbillyfightwear.com/#shop",
+        "url": "https://hillbillyfightwear.com/product/${productSlug(p)}",
         "shippingDetails": {
           "@type": "OfferShippingDetails",
           "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" },
@@ -931,10 +932,12 @@ app.get('/', (c) => {
     }
     .product-card.has-back:hover .flip-hint { opacity: 0; }
     
-    .product-title { 
-      font-size: 1.1rem; 
-      font-weight: 600; 
-      margin: 10px 0 5px; 
+    .product-title-link { color: inherit; text-decoration: none; }
+    .product-title-link:hover { text-decoration: underline; }
+    .product-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 10px 0 5px;
       color: #333;
       /* Prevent long titles from breaking layout */
       overflow: hidden;

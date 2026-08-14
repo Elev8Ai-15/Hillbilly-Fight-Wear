@@ -343,6 +343,14 @@ export const decals: ShopProduct[] = [
 // Order: mens → womens → kids → hats → decals (matches UI category order)
 export const shopProducts: ShopProduct[] = [...mensClothing, ...womensClothing, ...kidsClothing, ...hats, ...decals]
 
+// Canonical URL slug for a product page: "/product/" + productSlug(p).
+// Ends with the id so the route can resolve the product even if the
+// title-derived part changes; the route 301s non-canonical slugs.
+export function productSlug(p: ShopProduct): string {
+  const t = p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+  return `${t}-${p.id}`
+}
+
 // Featured products for Build Your Own section (internal links, prices reflect base T-shirt cost)
 // Only 3 featured: GPG Design, Human Cockfighter, Thump a Stranger
 export const products = [

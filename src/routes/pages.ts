@@ -6,6 +6,8 @@
 // ============================================
 import { Hono } from 'hono'
 import { GA4_ID } from '../utils/analytics'
+import { shopProducts, productSlug } from '../data/catalog'
+import { escHtml } from '../utils/html'
 
 type Variables = {
   nonce: string
@@ -140,6 +142,158 @@ Customers can design their own apparel at /build. Choose a garment type, pick fr
 })
 
 // ============================================
+// SEO: Individual product pages — /product/<title-slug>-<id>
+// Server-rendered from the catalog so every product has its own
+// indexable URL, Product schema, and social card.
+// ============================================
+pages.get('/product/:slug', (c) => {
+  const slug = c.req.param('slug')
+  const id = slug.split('-').pop() || ''
+  const p = shopProducts.find((x) => x.id === id)
+  if (!p) return c.notFound()
+
+  // One canonical URL per product: 301 any stale/partial slug to it
+  const canonical = productSlug(p)
+  if (slug !== canonical) return c.redirect(`/product/${canonical}`, 301)
+
+  const nonce = c.get('nonce')
+  const url = `https://hillbillyfightwear.com/product/${canonical}`
+  const img = `https://hillbillyfightwear.com${p.image.split('?')[0]}`
+  const title = escHtml(p.title)
+  const descBits = [
+    `${p.title} from Hillbilly Fightwear — ${p.price}.`,
+    p.sizes?.length ? `Sizes ${p.sizes.join(', ')}.` : '',
+    p.colors?.length ? `Colors: ${p.colors.join(', ')}.` : '',
+    'Tax & free shipping included.',
+  ].filter(Boolean).join(' ')
+  const desc = escHtml(descBits)
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: p.title,
+    image: img,
+    description: descBits,
+    brand: { '@type': 'Brand', name: 'Hillbilly Fightwear' },
+    offers: {
+      '@type': 'Offer',
+      price: p.priceNum.toFixed(2),
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      url,
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'USD' },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'US' },
+      },
+    },
+  }
+
+  const sizeOptions = (p.sizes || []).map((s) => `<option value="${escHtml(s)}">${escHtml(s)}</option>`).join('')
+  const colorOptions = (p.colors || []).map((s) => `<option value="${escHtml(s)}">${escHtml(s)}</option>`).join('')
+  const styleOptions = (p.styles || []).map((s) => `<option value="${escHtml(s)}">${escHtml(s)}</option>`).join('')
+
+  return c.html(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title} | Hillbilly Fightwear</title>
+  <meta name="description" content="${desc}">
+  <link rel="canonical" href="${url}">
+  <meta property="og:type" content="product">
+  <meta property="og:title" content="${title} | Hillbilly Fightwear">
+  <meta property="og:description" content="${desc}">
+  <meta property="og:image" content="${img}">
+  <meta property="og:url" content="${url}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title} | Hillbilly Fightwear">
+  <meta name="twitter:image" content="${img}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script type="application/ld+json" nonce="${nonce}">${JSON.stringify(schema)}</script>
+  <style nonce="${nonce}">
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Oswald', sans-serif; background: #141414; color: #f2f2f2; min-height: 100vh; }
+    header { background: #0c0c0c; border-bottom: 3px solid #e91e8c; padding: 14px 20px; }
+    header a { color: #fff; text-decoration: none; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    header a span { color: #e91e8c; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 28px 20px 60px; }
+    .crumb { margin-bottom: 18px; }
+    .crumb a { color: #b8b8b8; text-decoration: none; font-size: 14px; }
+    .crumb a:hover { color: #e91e8c; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+    .imgs { display: grid; gap: 12px; }
+    .imgs img { width: 100%; height: auto; background: #fff; border-radius: 6px; }
+    h1 { font-size: 30px; text-transform: uppercase; letter-spacing: .02em; line-height: 1.15; margin-bottom: 8px; }
+    .price { font-size: 26px; color: #e91e8c; font-weight: 700; margin-bottom: 4px; }
+    .badge { display: inline-block; background: #1f2c1f; color: #7ed08a; font-size: 13px; padding: 3px 10px; border-radius: 4px; margin-bottom: 20px; }
+    label { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: #b8b8b8; margin: 14px 0 5px; }
+    select { width: 100%; max-width: 320px; padding: 10px 12px; background: #222; color: #fff; border: 1px solid #3a3a3a; border-radius: 5px; font-family: inherit; font-size: 15px; }
+    .btn { display: inline-block; margin-top: 24px; background: #e91e8c; color: #fff; border: 0; font-family: inherit; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 14px 34px; border-radius: 5px; cursor: pointer; }
+    .btn:hover { background: #c9166f; }
+    .btn.added { background: #2e7d32; }
+    .note { margin-top: 14px; color: #8d8d8d; font-size: 14px; }
+    .note a { color: #e91e8c; }
+  </style>
+</head>
+<body>
+  <header><a href="/">Hillbilly <span>Fightwear</span></a></header>
+  <main class="wrap">
+    <nav class="crumb"><a href="/#shop">&larr; All products</a></nav>
+    <div class="grid">
+      <div class="imgs">
+        <img src="${p.image}" alt="${title}" width="600">
+        ${p.backImage ? `<img src="${p.backImage}" alt="${title} - back" width="600" loading="lazy">` : ''}
+      </div>
+      <div>
+        <h1>${title}</h1>
+        <div class="price">${p.price}</div>
+        <div class="badge">Tax &amp; Free Shipping Included</div>
+        ${sizeOptions ? `<label for="optSize">Size</label><select id="optSize">${sizeOptions}</select>` : ''}
+        ${colorOptions ? `<label for="optColor">Color</label><select id="optColor">${colorOptions}</select>` : ''}
+        ${styleOptions ? `<label for="optStyle">Style</label><select id="optStyle">${styleOptions}</select>` : ''}
+        <button class="btn" id="addBtn">Add to Cart</button>
+        <p class="note">T-shirts &amp; tanks: 2 for $50 — <a href="/#shop">mix &amp; match in the shop</a>. Want your own design? <a href="/build">Build Y'Own</a>.</p>
+      </div>
+    </div>
+  </main>
+  <script nonce="${nonce}">
+    (function() {
+      var product = ${JSON.stringify({ id: p.id, title: p.title, priceNum: p.priceNum, image: p.image, type: p.type, garmentType: p.garmentType || '' }).replace(/<\//g, '<\\/')};
+      document.getElementById('addBtn').addEventListener('click', function() {
+        var pick = function(id) { var el = document.getElementById(id); return el ? el.value : ''; };
+        var size = pick('optSize'), color = pick('optColor'), style = pick('optStyle');
+        try {
+          var cart = JSON.parse(localStorage.getItem('hfw_cart') || '[]');
+          var existing = -1;
+          for (var i = 0; i < cart.length; i++) {
+            var it = cart[i];
+            if (it.productId === product.id && it.size === size && it.color === color && it.style === style) { existing = i; break; }
+          }
+          if (existing >= 0) { cart[existing].qty += 1; }
+          else {
+            cart.push({
+              productId: product.id, title: product.title, price: product.priceNum,
+              image: product.image, size: size, color: color, style: style, qty: 1,
+              type: product.type === 'decal' ? 'decal' : 'garment', garmentType: product.garmentType
+            });
+          }
+          localStorage.setItem('hfw_cart', JSON.stringify(cart));
+          var btn = document.getElementById('addBtn');
+          btn.textContent = 'Added \\u2713 \\u2014 Opening cart\\u2026';
+          btn.className = 'btn added';
+          setTimeout(function() { window.location.href = '/#shop'; }, 600);
+        } catch (e) { window.location.href = '/#shop'; }
+      });
+    })();
+  </script>
+</body>
+</html>`)
+})
+
+// ============================================
 // Legacy Shopify/WordPress-era URLs still in Google's index — 301 home.
 // Old store paths: /products/<slug>, /collections/<slug>, /pages/<slug>
 // ============================================
@@ -154,6 +308,12 @@ pages.get('/sitemap.xml', (c) => {
   // Real content-change date, not request time — new Date() told Google the
   // whole site changed daily, which erodes crawl trust
   const now = '2026-08-13'
+  const productUrls = shopProducts.map((p) => `  <url>
+    <loc>https://hillbillyfightwear.com/product/${productSlug(p)}</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`).join('\n')
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -192,6 +352,7 @@ pages.get('/sitemap.xml', (c) => {
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+${productUrls}
 </urlset>`
   return new Response(xml, {
     headers: {
