@@ -154,10 +154,11 @@ export async function createShopCheckoutSession(
     adjustedParams.append('payment_method_types[]', 'card')
     adjustedParams.append('billing_address_collection', 'auto')
     adjustedParams.append('adaptive_pricing[enabled]', 'false')
-    // Build the marketing list: create a Customer on every order and show the
-    // "email me offers" checkbox — feeds Stripe's abandoned-cart recovery too
+    // Build the marketing list: create a Customer on every order (feeds Stripe's
+    // abandoned-cart recovery). NOTE: do NOT add consent_collection[promotions]
+    // until the promotions ToS is accepted at dashboard.stripe.com/settings/checkout
+    // — live Stripe hard-rejects the session otherwise and checkout breaks.
     adjustedParams.append('customer_creation', 'always')
-    adjustedParams.append('consent_collection[promotions]', 'auto')
 
     // Calculate discount ratio
     const discountRatio = pricing.discount / pricing.subtotal
@@ -289,10 +290,11 @@ export async function createBuilderCheckoutSession(
   params.append('payment_method_types[]', 'card')
   params.append('billing_address_collection', 'auto')
   params.append('adaptive_pricing[enabled]', 'false')
-  // Build the marketing list: create a Customer on every order and show the
-  // "email me offers" checkbox — feeds Stripe's abandoned-cart recovery too
+  // Build the marketing list: create a Customer on every order (feeds Stripe's
+  // abandoned-cart recovery). NOTE: do NOT add consent_collection[promotions]
+  // until the promotions ToS is accepted at dashboard.stripe.com/settings/checkout
+  // — live Stripe hard-rejects the session otherwise and checkout breaks.
   params.append('customer_creation', 'always')
-  params.append('consent_collection[promotions]', 'auto')
 
   // Single line item: garment with front logo + mandatory back HFW logo (all included in base price)
   params.append('line_items[0][price_data][currency]', 'usd')
