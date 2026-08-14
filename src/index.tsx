@@ -10,7 +10,7 @@ import {
   type ShopProduct
 } from './data/catalog'
 import { escHtml } from './utils/html'
-import { GA4_ID } from './utils/analytics'
+import { GA4_ID, CF_BEACON } from './utils/analytics'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
@@ -1687,6 +1687,7 @@ app.get('/', (c) => {
       }
     }
   </style>
+${CF_BEACON}
 </head>
 <body>
   <!-- Accessibility: Skip to main content link -->
@@ -4137,6 +4138,7 @@ app.get('/build', (c) => {
       }
     }
   </style>
+${CF_BEACON}
 </head>
 <body>
   <!-- Header -->
