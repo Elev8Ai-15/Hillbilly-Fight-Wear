@@ -139,10 +139,20 @@ Customers can design their own apparel at /build. Choose a garment type, pick fr
 })
 
 // ============================================
+// Legacy Shopify/WordPress-era URLs still in Google's index — 301 home.
+// Old store paths: /products/<slug>, /collections/<slug>, /pages/<slug>
+// ============================================
+for (const path of ['/products', '/products/*', '/collections', '/collections/*', '/pages/*']) {
+  pages.get(path, (c) => c.redirect('https://hillbillyfightwear.com/#shop', 301))
+}
+
+// ============================================
 // SEO: XML Sitemap
 // ============================================
 pages.get('/sitemap.xml', (c) => {
-  const now = new Date().toISOString().split('T')[0]
+  // Real content-change date, not request time — new Date() told Google the
+  // whole site changed daily, which erodes crawl trust
+  const now = '2026-08-13'
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>

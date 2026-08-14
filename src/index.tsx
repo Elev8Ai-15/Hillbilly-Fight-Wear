@@ -36,6 +36,13 @@ const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 //  SEC-08  connect-src includes youtube for future API calls.
 // ============================================
 app.use('*', async (c, next) => {
+  // www → apex 301: both hosts serve 200 otherwise, splitting crawl budget
+  const url = new URL(c.req.url)
+  if (url.hostname === 'www.hillbillyfightwear.com') {
+    url.hostname = 'hillbillyfightwear.com'
+    return c.redirect(url.toString(), 301)
+  }
+
   // Generate a cryptographic nonce for CSP (per-request, 128-bit random base64)
   const nonceBytes = new Uint8Array(16)
   crypto.getRandomValues(nonceBytes)
@@ -203,7 +210,7 @@ app.get('/', (c) => {
   
   <!-- SEO Meta Tags -->
   <title>MMA Apparel &amp; Custom Fight Gear | Hillbilly Fightwear</title>
-  <meta name="description" content="Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs. Free shipping + tax, 2 for $50 on shirts & tanks. Build Y'Own and make your statement!">
+  <meta name="description" content="Hillbilly Fightwear - the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs. Free shipping + tax, 2 for $50 on shirts & tanks. Build Y'Own and make your statement!">
   <meta name="keywords" content="MMA apparel, custom MMA apparel, MMA t-shirts, MMA hoodies, hillbilly fightwear, fight wear, MMA trucker hat">
   <meta name="author" content="Hillbilly Fightwear">
   <meta name="robots" content="index, follow">
@@ -252,7 +259,7 @@ app.get('/', (c) => {
       "@context": "https://schema.org",
       "@type": "Store",
       "name": "Hillbilly Fightwear",
-      "description": "Hillbilly Fightwear – the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs.",
+      "description": "Hillbilly Fightwear - the working man and woman's MMA apparel brand. Custom t-shirts, hoodies, trucker hats & tanks with edgy designs.",
       "url": "https://hillbillyfightwear.com",
       "logo": "https://hillbillyfightwear.com/images/graphics/hillbilly-fightwear-logo.png",
       "image": "https://hillbillyfightwear.com/images/slides/slide-cage-grapple.jpg",

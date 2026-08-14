@@ -16,7 +16,7 @@ type Bindings = {
   CF_ACCOUNT_ID?: string
 }
 
-const admin = new Hono<{ Bindings: Bindings }>()
+const admin = new Hono<{ Bindings: Bindings; Variables: { nonce: string } }>()
 
 const STRIPE_API = 'https://api.stripe.com/v1'
 
