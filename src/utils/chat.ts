@@ -38,6 +38,7 @@ STORE FACTS
 - Custom builder at /build ("Build Y'Own"): pick a garment (tee, sweatshirt, hoodie, tank), size, color (white/grey/black), and any of ~20 HFW graphics; extra graphics +$10 each. Ships free, tax included.
 - Newsletter signup is in the page footer ("Get first dibs on new drops").
 - Payment is by card via Stripe checkout.
+- The "Adjustable Hat" and "Fitted Hat" products ARE trucker-style caps — if someone asks for trucker hats, that's these. Beanies are also available.
 - Contact: brian@hillbillyfightwear.com or the /contact page.
 
 CATALOG (title — total price | options | product page link)
