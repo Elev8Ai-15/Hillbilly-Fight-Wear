@@ -35,11 +35,13 @@ import {
   type OrderInfo,
 } from '../utils/email-receipt'
 import { rateLimit } from '../utils/rate-limit'
+import { runChat, MAX_CHAT_MESSAGES, MAX_CHAT_MESSAGE_CHARS, type ChatMessage } from '../utils/chat'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
   STRIPE_WEBHOOK_SECRET?: string
   RESEND_API_KEY?: string
+  ANTHROPIC_API_KEY?: string
 }
 
 // ============================================
@@ -1119,6 +1121,52 @@ async function getNewsletterAudienceId(key: string): Promise<string | null> {
   }
   return newsletterAudienceId
 }
+
+// ============================================
+// POST /api/chat — website chat agent "Duke" (knowledge-only, no tools)
+// PDR: dev/my-assistant/notes/hillbilly-chat-build/00-PDR-canonical.md
+// ============================================
+const chatLimit = rateLimit({ windowMs: 5 * 60 * 1000, max: 20, message: 'Whoa there — give it a minute and try again.' })
+
+api.post('/chat', chatLimit, async (c) => {
+  let body: any
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid request.' }, 400)
+  }
+
+  const raw = body?.messages
+  if (!Array.isArray(raw) || raw.length === 0 || raw.length > MAX_CHAT_MESSAGES) {
+    return c.json({ error: 'Invalid conversation.' }, 400)
+  }
+  const history: ChatMessage[] = []
+  for (const m of raw) {
+    const role = m?.role
+    const content = typeof m?.content === 'string' ? m.content.trim() : ''
+    if ((role !== 'user' && role !== 'assistant') || !content || content.length > MAX_CHAT_MESSAGE_CHARS) {
+      return c.json({ error: 'Invalid conversation.' }, 400)
+    }
+    history.push({ role, content })
+  }
+  if (history[history.length - 1].role !== 'user') {
+    return c.json({ error: 'Invalid conversation.' }, 400)
+  }
+
+  const apiKey = c.env?.ANTHROPIC_API_KEY
+  if (!apiKey) {
+    console.error('[CHAT] ANTHROPIC_API_KEY not configured')
+    return c.json({ error: 'Chat is taking a break. Email brian@hillbillyfightwear.com and we\'ll get you sorted.' }, 503)
+  }
+
+  try {
+    const reply = await runChat(apiKey, history)
+    return c.json({ reply })
+  } catch (e) {
+    console.error('[CHAT] failed:', e)
+    return c.json({ error: 'Chat is taking a break. Email brian@hillbillyfightwear.com and we\'ll get you sorted.' }, 502)
+  }
+})
 
 api.post('/subscribe', strictLimit, async (c) => {
   let body: any

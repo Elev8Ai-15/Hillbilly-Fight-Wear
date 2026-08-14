@@ -11,6 +11,7 @@
     "deploy": "npm run build && wrangler pages deploy dist"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.117.1",
     "hono": "^4.0.0"
   },
   "devDependencies": {

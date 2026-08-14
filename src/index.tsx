@@ -11,6 +11,7 @@ import {
 } from './data/catalog'
 import { escHtml } from './utils/html'
 import { GA4_ID, CF_BEACON } from './utils/analytics'
+import { chatWidget } from './utils/chat-widget'
 
 type Bindings = {
   STRIPE_SECRET_KEY?: string
@@ -3244,6 +3245,7 @@ ${CF_BEACON}
     // Init cart badge on page load
     updateCartBadge();
   </script>
+${chatWidget(nonce)}
 </body>
 </html>`)
 })
@@ -5751,6 +5753,7 @@ ${CF_BEACON}
       });
     }
   </script>
+${chatWidget(nonce)}
 </body>
 </html>`)
 })

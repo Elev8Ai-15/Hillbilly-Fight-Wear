@@ -6,6 +6,7 @@
 // ============================================
 import { Hono } from 'hono'
 import { GA4_ID, CF_BEACON } from '../utils/analytics'
+import { chatWidget } from '../utils/chat-widget'
 import { shopProducts, productSlug } from '../data/catalog'
 import { escHtml } from '../utils/html'
 
@@ -290,6 +291,7 @@ ${CF_BEACON}
       });
     })();
   </script>
+${chatWidget(nonce)}
 </body>
 </html>`)
 })
@@ -476,6 +478,7 @@ ${CF_BEACON}
         });
     })();
   </script>
+${chatWidget(nonce)}
 </body>
 </html>`)
 })
@@ -651,6 +654,7 @@ ${CF_BEACON}
       <p class="last-updated"><strong>Last Updated:</strong> February 11, 2026</p>
     </div>
   </div>
+${chatWidget(nonce)}
 </body>
 </html>`)
 })
@@ -776,6 +780,7 @@ ${CF_BEACON}
     </div>
   </div>
   
+${chatWidget(nonce)}
 </body>
 </html>`)
 })
@@ -1205,6 +1210,7 @@ ${CF_BEACON}
       });
     });
   </script>
+${chatWidget(nonce)}
 </body>
 </html>`)
 })
@@ -1506,6 +1512,7 @@ ${CF_BEACON}
       <a href="/privacy-policy">Privacy Policy</a>
     </p>
   </footer>
+${chatWidget(nonce)}
 </body>
 </html>`)
 })
@@ -1522,7 +1529,8 @@ pages.all('*', (c) => {
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
 <style nonce="${nonce}">body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;}.c{max-width:600px;margin:100px auto;padding:40px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);}.icon{width:80px;height:80px;background:#8B0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 30px;font-size:2.5rem;color:#fff;}h1{font-size:2rem;margin:0 0 15px;}p{color:#666;margin:0 0 30px;line-height:1.6;}.btn{display:inline-block;padding:15px 40px;background:#8B0000;color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-weight:600;border-radius:4px;transition:all 0.3s;margin:5px;}.btn:hover{background:#a00000;}.btn-o{background:transparent;color:#333;border:2px solid #333;}.btn-o:hover{background:#333;color:#fff;}</style>
 ${CF_BEACON}
-</head><body><div class="c"><div class="icon"><i class="fas fa-map-signs"></i></div><h1>Page Not Found</h1><p>Sorry, the page you are looking for does not exist or has been moved.</p><a href="/" class="btn">Go Home</a><a href="/build" class="btn btn-o">Build Y'Own</a></div></body></html>`, 404)
+</head><body><div class="c"><div class="icon"><i class="fas fa-map-signs"></i></div><h1>Page Not Found</h1><p>Sorry, the page you are looking for does not exist or has been moved.</p><a href="/" class="btn">Go Home</a><a href="/build" class="btn btn-o">Build Y'Own</a></div>${chatWidget(nonce)}
+</body></html>`, 404)
 })
 
 export default pages
