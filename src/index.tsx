@@ -5447,8 +5447,10 @@ ${CF_BEACON}
       // PERMANENT HFW BACK-NECK LOGO — always on back view for garments (not hats)
       // Included in purchase price, not an additional graphic, not user-editable.
       // Uses white-outline logo on dark garments, black-shadow on light garments.
+      // Hoodies still get it printed, but it sits UNDER the hood, so don't draw it.
       // ============================================================
-      var needsBackNeckLogo = cs.view === 'back' && !isHeadwear;
+      var isHoodie = cs.garment === 'hoodie' || cs.garment === 'zipup-hoodie';
+      var needsBackNeckLogo = cs.view === 'back' && !isHeadwear && !isHoodie;
       
       if (graphicsToShow.length === 0 && !needsBackNeckLogo) {
         canvas.renderAll();
@@ -5625,7 +5627,7 @@ ${CF_BEACON}
     };
     
     function getGraphicBounds(placementId, garmentId) {
-      var isZipUp = garmentId === 'zip-up-hoodie';
+      var isZipUp = garmentId === 'zipup-hoodie';
       var boundsMap = isZipUp ? PRINTABLE_BOUNDS_ZIPUP : PRINTABLE_BOUNDS;
       var b = boundsMap[placementId] || PRINTABLE_BOUNDS[placementId] || { minX: 0.10, minY: 0.10, maxX: 0.90, maxY: 0.90 };
       var w = canvas.width;
