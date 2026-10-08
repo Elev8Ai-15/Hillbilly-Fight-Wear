@@ -26,7 +26,7 @@ Hono + Cloudflare Pages site (project `hillbilly-fightwear`), Stripe LIVE, Resen
 ## 5. NEXT
 1. Write repo `DEPLOY.md` (deploy command below) so `/ship` works for this repo.
 2. Reach L5 on the builder: wait for a real custom order and quote its Stripe line item / receipt email.
-3. Optional: white hats (`trucker-hat-white.png` is still opaque white); same script approach if Brad sees them wash out.
+3. Optional cleanup (ask Brad before deleting): `public/images/garments/trucker-hat-*.png` + `beanie-*.png` are referenced nowhere (builder has no hats; shop hats use real product photos, which read fine on white, checked 10/08).
 
 ## 6. Landmines
 - Deploy: `npx --prefix C:\Users\bradg\dev\Hillbilly-Fight-Wear wrangler pages deploy C:\Users\bradg\dev\Hillbilly-Fight-Wear\dist --project-name hillbilly-fightwear --branch main` (run `npm --prefix <repo> run build` first). Wrangler is logged in on the desktop as of 10/08. Never borrow `CLOUDFLARE_API_TOKEN` from another repo's .env; the guard blocks it, correctly.
