@@ -2098,12 +2098,6 @@ ${CF_BEACON}
   <!-- Shop Products Data + Garment Color Image Map for JavaScript -->
   <script nonce="${nonce}">
     var allShopProducts = ${JSON.stringify(shopProducts).replace(/<\//g, '<\\/')};
-    var garmentColorImages = ${JSON.stringify(
-      garments.reduce((acc: Record<string, Record<string, { front: string; back?: string }>>, g) => {
-        acc[g.id] = g.images as Record<string, { front: string; back?: string }>
-        return acc
-      }, {} as Record<string, Record<string, { front: string; back?: string }>>)
-    ).replace(/<\//g, '<\\/')};
     // Graphics lookup map: graphicId → fullImage URL
     var graphicsMap = ${JSON.stringify(
       graphics.reduce((acc: Record<string, string>, g: { id: string; fullImage: string }) => {
@@ -2111,15 +2105,6 @@ ${CF_BEACON}
         return acc
       }, {} as Record<string, string>)
     ).replace(/<\//g, '<\\/')};
-    function getColorPreviewImage(product, color) {
-      if (!product.garmentType || !color) return product.image;
-      var colorKey = color.toLowerCase();
-      var gImages = garmentColorImages[product.garmentType];
-      if (gImages && gImages[colorKey] && gImages[colorKey].front) {
-        return gImages[colorKey].front;
-      }
-      return product.image;
-    }
   </script>
   
   <!-- GDPR Cookie Consent Banner -->
@@ -2925,19 +2910,9 @@ ${CF_BEACON}
       try {
         var product = allShopProducts.find(function(p) { return p.id === productId; });
         if (!product) return;
-        // Resolve the best preview image for the cart thumbnail:
-        // 1. If Zip-Up hoodie → use zip-up images.
-        // 2. Otherwise → use color-specific garment image.
-        // 3. Fallback → product's default image.
+        // Cart thumbnail = the product's real photo (shows the design). Size/color
+        // are listed as text under it. Blank garment shots hid the design.
         var cartImage = product.image;
-        if (color) {
-          if (style === 'Zip-Up' && product.garmentType === 'hoodie' && typeof zipupHoodieImages !== 'undefined') {
-            var ck = color.toLowerCase();
-            cartImage = (zipupHoodieImages[ck] && zipupHoodieImages[ck].front) || getColorPreviewImage(product, color);
-          } else {
-            cartImage = getColorPreviewImage(product, color);
-          }
-        }
         // Check for duplicate (same product, size, color, style)
         var existing = cart.findIndex(function(item) {
           return item.productId === productId && item.size === (size||'') && item.color === (color||'') && item.style === (style||'');
@@ -3068,12 +3043,6 @@ ${CF_BEACON}
       document.body.style.overflow = '';
     }
     
-    // Zip-up hoodie images for the Shop modal style selector.
-    // When a user selects "Zip-Up" style for a hoodie product, we swap the
-    // preview image from the pullover hoodie to the zip-up variant.
-    var zipupHoodieImages = ${JSON.stringify(
-      garments.find(g => g.id === 'zipup-hoodie')?.images || {}
-    ).replace(/<\//g, '<\\/')};
     
     // Shop modal: always displays the catalog product photos (no color-based preview changes)
     function renderGarmentModal(product, step) {
