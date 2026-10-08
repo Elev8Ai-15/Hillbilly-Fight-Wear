@@ -24,12 +24,13 @@ Hono + Cloudflare Pages site (project `hillbilly-fightwear`), Stripe LIVE, Resen
 - Before the first newsletter send: delete test contact bradgpowell1123+hfwtest@ from Resend audience "HFW Newsletter".
 
 ## 5. NEXT
-1. Write repo `DEPLOY.md` (deploy command below) so `/ship` works for this repo.
-2. Reach L5 on the builder: wait for a real custom order and quote its Stripe line item / receipt email.
-3. (Done 10/08, Brad OK'd) 6 unused hat images removed (`a590811`), archived at `C:\AbeVault\archive\2026-10-08\hillbilly-fight-wear-garments\`. Shop hat photos read fine on white.
+1. Reach L5 on the builder: wait for a real custom order and quote its Stripe line item / receipt email.
+2. Brian's three answers (returns window, size chart, 2-for-$50 on builds), then add them to the site + Merica.
+3. Stripe abandoned-cart toggle + promotions ToS (Brad, dashboard), then discuss re-adding `consent_collection`.
+Done 10/08: repo `DEPLOY.md` written; 6 unused hat images removed (`a590811`), archived at `C:\AbeVault\archive\2026-10-08\hillbilly-fight-wear-garments\`.
 
 ## 6. Landmines
-- Deploy: `npx --prefix C:\Users\bradg\dev\Hillbilly-Fight-Wear wrangler pages deploy C:\Users\bradg\dev\Hillbilly-Fight-Wear\dist --project-name hillbilly-fightwear --branch main` (run `npm --prefix <repo> run build` first). Wrangler is logged in on the desktop as of 10/08. Never borrow `CLOUDFLARE_API_TOKEN` from another repo's .env; the guard blocks it, correctly.
+- Deploy truth = repo `DEPLOY.md` (command, L4 check block, rollback). `git push` does NOT deploy. Run wrangler from the repo root. Wrangler is logged in on the desktop as of 10/08. Never borrow `CLOUDFLARE_API_TOKEN` from another repo's .env.
 - On Windows wrangler can print `Assertion failed ... async.c` on exit. Check the log or prod, not the exit text.
 - `/images/*` is cached 30 days, immutable. Any image swap needs a new `?v=N` in `src/data/catalog.ts`, or customers keep the old file.
 - White garments are GENERATED: edit `scripts/whiten_garments.py` knobs and re-run; don't hand-edit the PNGs.
