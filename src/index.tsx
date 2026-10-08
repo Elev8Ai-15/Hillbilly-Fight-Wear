@@ -5488,7 +5488,8 @@ ${CF_BEACON}
             if (loadedCount === totalToLoad) canvas.renderAll();
             return;
           }
-          imageUrlToLoad = graphic.fullImage;
+          // White garments print white ink as dark ink (fullImageDark), like the real shirts
+          imageUrlToLoad = (cs.color === 'white' && graphic.fullImageDark) ? graphic.fullImageDark : graphic.fullImage;
         }
         
         if (!placement) {

@@ -108,7 +108,16 @@ export const garments = [
 
 // Graphics with optional restrictions for specific garments
 // restrictToGarments: array of garment IDs this graphic is available for (empty = all)
-export const graphics = [
+export type Graphic = {
+  id: string
+  name: string
+  thumbnail: string
+  fullImage: string        // print art on black/grey garments
+  fullImageDark?: string   // print art on white garments (white ink flipped dark)
+  restrictToGarments: string[]
+}
+
+export const graphics: Graphic[] = [
   // HILLBILLY FIGHTWEAR LOGOS
   {
     id: 'hfw-black-shadow',
@@ -128,21 +137,24 @@ export const graphics = [
     id: 'hfw-logo',
     name: 'HFW Logo',
     thumbnail: '/images/graphics/hfw-logo-original.png?v=11',
-    fullImage: '/images/graphics/hfw-logo-original.png?v=11',
+    fullImage: '/images/graphics/print/hfw-logo-light.png?v=1',  // black-ink art flipped to white for dark garments
+    fullImageDark: '/images/graphics/print/hfw-logo-dark.png?v=1',  // white garments (original black ink)
     restrictToGarments: []
   },
   {
     id: 'human-cockfighter',
     name: 'Human Cockfighter',
     thumbnail: '/images/stickers/sticker-hcf.png?v=13',
-    fullImage: '/images/graphics/human-cockfighter.png?v=11',
+    fullImage: '/images/graphics/print/human-cockfighter-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/human-cockfighter-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   {
     id: 'thump-a-stranger',
     name: 'Thump A Stranger',
     thumbnail: '/images/stickers/sticker-thump.png?v=13',
-    fullImage: '/images/graphics/thump-a-stranger.png?v=11',
+    fullImage: '/images/graphics/print/thump-a-stranger-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/thump-a-stranger-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   {
@@ -156,14 +168,16 @@ export const graphics = [
     id: 'yycf-logo',
     name: 'YYCF Logo',
     thumbnail: '/images/graphics/yycf-logo.png?v=11',
-    fullImage: '/images/graphics/yycf-logo.png?v=11',
+    fullImage: '/images/graphics/print/yycf-logo-light.png?v=1',  // black-ink art flipped to white for dark garments
+    fullImageDark: '/images/graphics/print/yycf-logo-dark.png?v=1',  // white garments (original black ink)
     restrictToGarments: []
   },
   {
     id: 'fun-logo',
     name: 'FUN Logo',
     thumbnail: '/images/stickers/sticker-fun-ride.png?v=13',
-    fullImage: '/images/graphics/fun-logo.png?v=11',
+    fullImage: '/images/graphics/print/fun-logo-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/fun-logo-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   // NEW GRAPHICS - Added from Shop Now products
@@ -171,56 +185,64 @@ export const graphics = [
     id: 'myob',
     name: 'MYOB (Mind Y\'own Business)',
     thumbnail: '/images/stickers/sticker-myob.png?v=15',
-    fullImage: '/images/graphics/myob.png?v=11',
+    fullImage: '/images/graphics/print/myob-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/myob-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   {
     id: 'gnf',
     name: 'GNF',
     thumbnail: '/images/stickers/sticker-gnf.png?v=15',
-    fullImage: '/images/graphics/gnf.png?v=15',
+    fullImage: '/images/graphics/print/gnf-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/gnf-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   {
     id: 'wimb',
     name: 'WIMB (What\'s It Mean To You?)',
     thumbnail: '/images/graphics/wimb.png?v=11',
-    fullImage: '/images/graphics/wimb.png?v=11',
+    fullImage: '/images/graphics/print/wimb-light.png?v=1',  // black-ink art flipped to white for dark garments
+    fullImageDark: '/images/graphics/print/wimb-dark.png?v=1',  // white garments (original black ink)
     restrictToGarments: []
   },
   {
     id: 'cling-to-guns',
     name: 'Cling to Guns',
     thumbnail: '/images/stickers/sticker-your-neck.png?v=13',
-    fullImage: '/images/graphics/cling-to-guns.png?v=11',
+    fullImage: '/images/graphics/print/cling-to-guns-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/cling-to-guns-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   {
     id: 'yes-you-can',
     name: 'Yes, You Can',
     thumbnail: '/images/stickers/sticker-yes-you-can.png?v=13',
-    fullImage: '/images/graphics/yes-you-can.png?v=11',
+    fullImage: '/images/graphics/print/yes-you-can-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/yes-you-can-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   {
     id: 'put-it-on-em',
     name: 'Put It On Em',
     thumbnail: '/images/stickers/sticker-put-it-on-em.png?v=15',
-    fullImage: '/images/graphics/put-it-on-em.png?v=11',
+    fullImage: '/images/graphics/print/put-it-on-em-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/put-it-on-em-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   {
     id: 'obama-tap',
     name: 'Obama Tap',
     thumbnail: '/images/stickers/sticker-obama-tap.png?v=13',
-    fullImage: '/images/graphics/obama-tap.png?v=11',
+    fullImage: '/images/graphics/print/obama-tap-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/obama-tap-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   {
     id: 'good-for-community',
     name: 'Good for Community',
     thumbnail: '/images/stickers/sticker-community.png?v=13',
-    fullImage: '/images/graphics/good-for-community.png?v=11',
+    fullImage: '/images/graphics/print/good-for-community-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/good-for-community-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   // Hard Hittin' graphic removed from Build Your Own per request
@@ -228,7 +250,8 @@ export const graphics = [
     id: 'staunch-chm',
     name: 'Staunch Properties (CHM)',
     thumbnail: '/images/stickers/sticker-cunt.png?v=13',
-    fullImage: '/images/graphics/staunch-chm.png?v=11',
+    fullImage: '/images/graphics/print/staunch-chm-light.png?v=1',  // from the real sticker art (scripts/print_art_from_stickers.py)
+    fullImageDark: '/images/graphics/print/staunch-chm-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
   // SPECIAL: Thumpin' Is Lovin' - Women's Only (Tanks and T-Shirts)
