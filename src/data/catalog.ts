@@ -160,8 +160,10 @@ export const graphics: Graphic[] = [
   {
     id: 'gpg-design',
     name: 'GPG Design',
-    thumbnail: '/images/graphics/gpg-design.png?v=11',
-    fullImage: '/images/graphics/gpg-design.png?v=11',
+    // Same art as GNF (Brad 10/08): the old gpg-design.png had its white N erased
+    thumbnail: '/images/stickers/sticker-gnf.png?v=15',
+    fullImage: '/images/graphics/print/gnf-light.png?v=1',
+    fullImageDark: '/images/graphics/print/gnf-dark.png?v=1',
     restrictToGarments: []
   },
   {
@@ -376,7 +378,7 @@ export function productSlug(p: ShopProduct): string {
 // Featured products for Build Your Own section (internal links, prices reflect base T-shirt cost)
 // Only 3 featured: GPG Design, Human Cockfighter, Thump a Stranger
 export const products = [
-  { id: 1, title: 'T-Shirt - GPG Design', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/graphics/gpg-design.png', url: '/build?garment=tshirt&graphic=gpg-design' },
+  { id: 1, title: 'T-Shirt - GPG Design', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-gnf.png?v=15', url: '/build?garment=tshirt&graphic=gpg-design' },
   { id: 2, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-hcf.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
   { id: 3, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-thump.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
 ]
