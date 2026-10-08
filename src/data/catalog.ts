@@ -99,8 +99,7 @@ export const garments = [
     images: {
       white: { front: '/images/garments/tank-womens-white-front.png?v=2', back: '/images/garments/tank-womens-white-back.png?v=2' },
       black: { front: '/images/garments/tank-womens-black-front.png', back: '/images/garments/tank-womens-black-back.png' },
-      grey: { front: '/images/garments/tank-womens-grey-front.png', back: '/images/garments/tank-womens-grey-back.png' },
-      pink: { front: '/images/garments/tank-womens-pink-front.png', back: '/images/garments/tank-womens-pink-back.png' }
+      grey: { front: '/images/garments/tank-womens-grey-front.png', back: '/images/garments/tank-womens-grey-back.png' }
     }
   },
   // Trucker Hat and Beanie removed from Build Your Own section per request
@@ -279,7 +278,7 @@ export const mensClothing: ShopProduct[] = [
 ]
 
 // WOMENS CLOTHING - Tank Tops
-// Pink color option is available with garment preview images (pink-tinted variants)
+// Pink is an INK colour on some designs (e.g. Thumpin' Is Lovin' Hot Pink), never a garment colour.
 export const womensClothing: ShopProduct[] = [
   { id: 'w1', title: "Women's Tank - It's A Fun Ride", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/w1-fun-ride-tank.webp', backImage: '/images/products/web/womens-tank-back-universal.webp', type: 'garment', garmentType: 'tank-womens', sizes: ['S','M','L','XL'], colors: ['Black','White','Grey'], graphicId: 'fun-logo' },
   { id: 'w2', title: "Women's Tank - HFW", vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/w2-hfw-tank.webp', backImage: '/images/products/web/womens-tank-back-universal.webp', type: 'garment', garmentType: 'tank-womens', sizes: ['S','M','L','XL'], colors: ['Black','White','Grey'], graphicId: 'hfw-logo' },

@@ -4632,10 +4632,8 @@ ${CF_BEACON}
       }).join('');
     }
     
-    // Dynamic color rendering based on garment's available images
-    // Note: pink is excluded from selectable garment colors for tank-womens.
-    // Pink/purple are graphic-specific color variants (e.g. Thumpin' Is Lovin'),
-    // not garment fabric colors. The garment itself comes in black/white/grey.
+    // Dynamic color rendering based on garment's available images.
+    // Garments come in white/black/grey only; pink is an ink colour, not fabric.
     function renderColors(garmentId) {
       var grid = document.getElementById('colorGrid');
       var g = garments.find(function(x) { return x.id === garmentId; });
@@ -4643,11 +4641,7 @@ ${CF_BEACON}
         grid.innerHTML = '<div style="color: #999; font-size: 0.9rem;">Select a garment first</div>';
         return;
       }
-      // Filter out non-garment colors (pink is a graphic color option, not fabric)
-      var excludedColors = ['pink'];
-      var colors = Object.keys(g.images).filter(function(c) {
-        return excludedColors.indexOf(c) === -1;
-      });
+      var colors = Object.keys(g.images);
       grid.innerHTML = colors.map(function(c) {
         var sel = (state.color === c) ? ' selected' : '';
         // Map color names to CSS background values
@@ -5541,8 +5535,8 @@ ${CF_BEACON}
       if (needsBackNeckLogo) {
         // Pick the right logo variant based on garment color:
         //   Dark garments (black, grey) → white outline logo (visible on dark fabric)
-        //   Light garments (white, pink) → black shadow logo (visible on light fabric)
-        var isLightGarment = (cs.color === 'white' || cs.color === 'pink');
+        //   White garments → black shadow logo (visible on light fabric)
+        var isLightGarment = cs.color === 'white';
         var backNeckUrl = isLightGarment
           ? '/images/graphics/hfw-logo-black-shadow.png?v=11'
           : '/images/graphics/hfw-logo-white-outline.png?v=11';
