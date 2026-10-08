@@ -23,7 +23,7 @@ Hono + Cloudflare Pages site (project `hillbilly-fightwear`), Stripe LIVE, Resen
 - Before the first newsletter send: delete test contact bradgpowell1123+hfwtest@ from Resend audience "HFW Newsletter".
 
 ## 5. NEXT
-1. Optional cleanup (Brad decides): drop the dead `pink` entry from `tank-womens` in catalog.ts, the `excludedColors` filter in `renderColors()`, and archive the 2 pink images.
+1. (Done 10/08, Brad OK'd, `8bd6bf5`) Dead `pink` tank colour removed: catalog entry, `excludedColors` filter, pink ink branch; 2 images archived to `C:\AbeVault\archive\2026-10-08\hillbilly-fight-wear-garments\`. Live: pink image 404, page has 0 pink refs, women's tank = white/black/grey.
 2. Reach L5 on the builder: quote the first real custom order's Stripe line item / receipt email.
 3. Brian's three answers, then add them to the site + Merica.
 
