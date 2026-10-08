@@ -32,7 +32,7 @@ export const garments = [
     sizes: ['YS', 'YM', 'YL', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: { front: '/images/garments/tshirt-white-front.png', back: '/images/garments/tshirt-white-back.png' },
+      white: { front: '/images/garments/tshirt-white-front.png?v=2', back: '/images/garments/tshirt-white-back.png?v=2' },
       black: { front: '/images/garments/tshirt-black-front.png', back: '/images/garments/tshirt-black-back.png' },
       grey: { front: '/images/garments/tshirt-grey-front.png', back: '/images/garments/tshirt-grey-back.png' }
     }
@@ -45,7 +45,7 @@ export const garments = [
     sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: { front: '/images/garments/thermal-white-front.png', back: '/images/garments/thermal-white-back.png' },
+      white: { front: '/images/garments/thermal-white-front.png?v=2', back: '/images/garments/thermal-white-back.png?v=2' },
       black: { front: '/images/garments/thermal-black-front.png', back: '/images/garments/thermal-black-back.png' },
       grey: { front: '/images/garments/thermal-grey-front.png', back: '/images/garments/thermal-grey-back.png' }
     }
@@ -58,7 +58,7 @@ export const garments = [
     sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: { front: '/images/garments/hoodie-white-front.png', back: '/images/garments/hoodie-white-back.png' },
+      white: { front: '/images/garments/hoodie-white-front.png?v=2', back: '/images/garments/hoodie-white-back.png?v=2' },
       black: { front: '/images/garments/hoodie-black-front.png', back: '/images/garments/hoodie-black-back.png' },
       grey: { front: '/images/garments/hoodie-grey-front.png', back: '/images/garments/hoodie-grey-back.png' }
     }
@@ -71,7 +71,7 @@ export const garments = [
     sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: { front: '/images/garments/zipup-hoodie-white-front.png', back: '/images/garments/zipup-hoodie-white-back.png' },
+      white: { front: '/images/garments/zipup-hoodie-white-front.png?v=2', back: '/images/garments/zipup-hoodie-white-back.png?v=2' },
       black: { front: '/images/garments/zipup-hoodie-black-front.png', back: '/images/garments/zipup-hoodie-black-back.png' },
       grey: { front: '/images/garments/zipup-hoodie-grey-front.png', back: '/images/garments/zipup-hoodie-grey-back.png' }
     }
@@ -84,7 +84,7 @@ export const garments = [
     sizes: ['S', 'M', 'L', 'XL'],
     supportsPlacement: true,
     images: {
-      white: { front: '/images/garments/tank-mens-white-front.png', back: '/images/garments/tank-mens-white-back.png' },
+      white: { front: '/images/garments/tank-mens-white-front.png?v=2', back: '/images/garments/tank-mens-white-back.png?v=2' },
       black: { front: '/images/garments/tank-mens-black-front.png', back: '/images/garments/tank-mens-black-back.png' },
       grey: { front: '/images/garments/tank-mens-grey-front.png', back: '/images/garments/tank-mens-grey-back.png' }
     }
@@ -97,7 +97,7 @@ export const garments = [
     sizes: ['S', 'M', 'L', 'XL'],
     supportsPlacement: true,
     images: {
-      white: { front: '/images/garments/tank-womens-white-front.png', back: '/images/garments/tank-womens-white-back.png' },
+      white: { front: '/images/garments/tank-womens-white-front.png?v=2', back: '/images/garments/tank-womens-white-back.png?v=2' },
       black: { front: '/images/garments/tank-womens-black-front.png', back: '/images/garments/tank-womens-black-back.png' },
       grey: { front: '/images/garments/tank-womens-grey-front.png', back: '/images/garments/tank-womens-grey-back.png' },
       pink: { front: '/images/garments/tank-womens-pink-front.png', back: '/images/garments/tank-womens-pink-back.png' }
