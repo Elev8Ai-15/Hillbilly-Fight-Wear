@@ -87,8 +87,8 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
 | `/api/create-checkout` | POST | Builder checkout via Stripe |
 | `/api/contact` | POST | Submit contact form |
 | `/api/stripe/webhook` | POST | Stripe webhook handler |
-| `/api/stripe/sync-catalog` | POST | Sync products to Stripe |
-| `/api/send-receipt` | POST | Resend order receipt |
+| `/api/stripe/sync-catalog` | POST | Sync products to Stripe (owner-only: `x-admin-password` header) |
+| `/api/send-receipt` | POST | Resend order receipt (owner-only: `x-admin-password` header) |
 | `/api/preview-receipt` | POST | Preview receipt HTML |
 
 ## Tech Stack

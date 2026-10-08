@@ -42,6 +42,15 @@ type Bindings = {
   STRIPE_WEBHOOK_SECRET?: string
   RESEND_API_KEY?: string
   ANTHROPIC_API_KEY?: string
+  ADMIN_PASSWORD?: string
+}
+
+// Maintenance endpoints (catalog sync, receipt resend) are owner-only.
+// Send header `x-admin-password: <ADMIN_PASSWORD>`. Fails closed if the secret is unset.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Hono context
+function isOwner(c: any): boolean {
+  const pw = c.env?.ADMIN_PASSWORD
+  return !!pw && c.req.header('x-admin-password') === pw
 }
 
 // ============================================
@@ -608,6 +617,7 @@ api.post('/preview-receipt', standardLimit, async (c) => {
 // Push all products and prices to Stripe
 // ============================================
 api.post('/stripe/sync-catalog', strictLimit, async (c) => {
+  if (!isOwner(c)) return c.json({ error: 'Unauthorized' }, 401)
   const stripeKey = c.env?.STRIPE_SECRET_KEY
   if (!stripeKey) {
     return c.json({
@@ -901,6 +911,7 @@ api.post('/stripe/webhook', webhookLimit, async (c) => {
 // POST /api/send-receipt { sessionId: "cs_xxx" }
 // ============================================
 api.post('/send-receipt', strictLimit, async (c) => {
+  if (!isOwner(c)) return c.json({ error: 'Unauthorized' }, 401)
   const stripeKey = c.env?.STRIPE_SECRET_KEY
   if (!stripeKey) {
     return c.json({ error: 'Stripe not configured' }, 400)
