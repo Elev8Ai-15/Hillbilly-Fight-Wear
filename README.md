@@ -43,7 +43,7 @@ A full-featured e-commerce store with custom garment builder using Hono framewor
   2. Select Size (XS - XXXL, or hat sizes)
   3. Select Color (White, Grey, Black)
   4. Choose Graphics (20 HFW logos/designs)
-  5. Placement auto-assigned (front center; HFW logo printed inside collar)
+  5. Placement auto-assigned (front center + HFW 3" back neck)
 - **Real-time Fabric.js Canvas Preview** with front/back toggle
 - **Multiple Graphics Support** (+$10 each additional)
 - **Dynamic Pricing** with real-time order summary

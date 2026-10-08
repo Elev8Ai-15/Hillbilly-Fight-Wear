@@ -58,7 +58,7 @@ export type BuilderOrder = {
   graphic: string                    // User's chosen front logo (included in base price)
   placement: string                  // Fixed: 'full-front' for all shirts/tanks
   additionalGraphics: { graphic: string; placement: string }[]  // Optional second back graphic (+$15)
-  // Note: HFW logo prints INSIDE the collar automatically, not in additionalGraphics
+  // Note: Mandatory 3" HFW logo on back neck is automatic, not in additionalGraphics
 }
 
 export type PricingBreakdown = {
@@ -101,7 +101,7 @@ export type BuilderPricing = {
   size: string
   color: string
   primaryGraphic: { name: string; placement: string; price: number }  // price=0 (included in base)
-  backHfwLogo: { name: string; placement: string; price: number }    // HFW logo inside collar (included)
+  backHfwLogo: { name: string; placement: string; price: number }    // Mandatory 3" HFW logo (included)
   additionalGraphics: { name: string; placement: string; price: number }[]  // Optional +$15 each
   subtotal: number
   total: number
@@ -304,7 +304,7 @@ export function calculateCartPricing(cartItems: CartItem[]): PricingBreakdown {
 /**
  * Calculate pricing for the custom garment builder.
  * NEW MODEL:
- * - Base price includes garment + first front logo + HFW logo printed inside collar
+ * - Base price includes garment + first front logo + mandatory 3" HFW back neck logo
  * - T-Shirts & Tanks: $30 | Thermals: $40 | Hoodies: $50
  * - Additional second graphic on back: +$15
  * - No size/location selection for logos — positions are fixed
@@ -356,8 +356,8 @@ export function calculateBuilderPricing(order: BuilderOrder): BuilderPricing | {
       price: primaryPrice,
     },
     backHfwLogo: {
-      name: 'HFW Logo (Inside Collar)',
-      placement: 'Inside Collar',
+      name: 'HFW Logo (3" Back Neck)',
+      placement: 'Back Neck',
       price: 0,  // Included in base price
     },
     additionalGraphics: additionalGraphicDetails,
