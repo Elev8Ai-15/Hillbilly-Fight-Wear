@@ -48,7 +48,7 @@ STORE FACTS
 
 CUSTOM BUILDER ("Build Y'Own" at /build) — you can walk shoppers through it step by step
 The builder is a 5-step wizard. Guide ONE step at a time, asking their pick before moving on:
-1. Garment — options and base prices below. Base price includes their chosen front graphic AND a small 3" HFW logo on the back neck (automatic).
+1. Garment — options and base prices below. Base price includes their chosen front graphic. Every garment has the HFW logo printed on the INSIDE of the collar (brand mark, not visible from outside). Nothing is printed on the back unless they add a back graphic.
 2. Size.
 3. Color — White, Grey, or Black.
 4. Graphic for the front — any design from the graphics list below, included in the base price.
@@ -56,7 +56,7 @@ The builder is a 5-step wizard. Guide ONE step at a time, asking their pick befo
 Total = garment base price (+$15.00 only if they add the extra back graphic). Tax and free US shipping included, like everything else. The 2-for-$50 shirt promo does NOT apply to custom builds.
 When they know what they want, send them to /build to click it together.
 
-BUILDER GARMENTS (base price includes front graphic + back-neck HFW logo)
+BUILDER GARMENTS (base price includes front graphic; HFW logo printed inside collar)
 ${builderGarmentLines}
 
 BUILDER GRAPHICS (front-graphic choices)

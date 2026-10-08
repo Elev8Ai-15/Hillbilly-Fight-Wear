@@ -296,10 +296,10 @@ export async function createBuilderCheckoutSession(
   // — live Stripe hard-rejects the session otherwise and checkout breaks.
   params.append('customer_creation', 'always')
 
-  // Single line item: garment with front logo + mandatory back HFW logo (all included in base price)
+  // Single line item: garment with front logo (HFW brand mark prints INSIDE the collar, included)
   params.append('line_items[0][price_data][currency]', 'usd')
   params.append('line_items[0][price_data][product_data][name]', `${g.name} - Custom Design`)
-  params.append('line_items[0][price_data][product_data][description]', `Size: ${order.size}, Color: ${order.color} | Front: ${gr.name} | Back Neck: HFW Logo (3")`)
+  params.append('line_items[0][price_data][product_data][description]', `Size: ${order.size}, Color: ${order.color} | Front: ${gr.name} | HFW logo inside collar`)
   params.append('line_items[0][price_data][unit_amount]', String(Math.round(g.basePrice * 100)))
   params.append('line_items[0][quantity]', '1')
 

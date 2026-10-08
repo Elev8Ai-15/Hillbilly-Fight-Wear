@@ -1866,7 +1866,7 @@ ${CF_BEACON}
     </div>
     <div class="feature-text">
       <h2>Custom Apparel Builder</h2>
-      <p>Now you can create your own custom apparel with all of our artwork and logos. Choose your garment style, size, color, and front graphic. Every shirt includes a 3" HFW logo on the back neck. T-shirts, tanks, thermals, and hoodies available!</p>
+      <p>Now you can create your own custom apparel with all of our artwork and logos. Choose your garment style, size, color, and front graphic. Every garment has the HFW logo printed inside the collar. T-shirts, tanks, thermals, and hoodies available!</p>
     </div>
   </section>
 
@@ -4259,12 +4259,12 @@ ${CF_BEACON}
           </div>
         </div>
         
-        <!-- Mandatory Back HFW Logo indicator -->
+        <!-- HFW brand mark: printed inside the collar, never on the outside -->
         <div id="backLogoNotice" style="margin-top: 15px; padding: 12px 16px; background: linear-gradient(135deg, #f0f7ff 0%, #e8f0fe 100%); border: 1px solid #c0d8f0; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
           <i class="fas fa-check-circle" style="color: #2563eb; font-size: 1.1rem;"></i>
           <div>
-            <div style="font-size: 0.85rem; font-weight: 600; color: #1e40af;">3" HFW Logo on Back Neck</div>
-            <div style="font-size: 0.75rem; color: #666;">Included on all shirts &amp; tanks — mandatory</div>
+            <div style="font-size: 0.85rem; font-weight: 600; color: #1e40af;">HFW Logo Printed Inside the Collar</div>
+            <div style="font-size: 0.75rem; color: #666;">Our brand mark on every garment, on the inside. Nothing prints on the back unless you add it.</div>
           </div>
         </div>
         
@@ -4431,7 +4431,7 @@ ${CF_BEACON}
       initCanvas();
       renderGarments();
       renderGraphics();
-      // Placements no longer rendered — positions are fixed (front logo + back neck HFW)
+      // Placements no longer rendered — positions are fixed (front logo; HFW mark prints inside collar)
       state.placement = 'full-front';
       
       // ---- Event delegation: all click handlers via container listeners ----
@@ -5421,8 +5421,7 @@ ${CF_BEACON}
     var PRINT_AREA = {
       headwear:  { wFrac: 0.25, hFrac: 0.18 },
       small:     { wFrac: 0.18, hFrac: 0.13 },
-      full:      { wFrac: 0.40, hFrac: 0.35 },
-      backNeck:  { wFrac: 0.12, hFrac: 0.08 }  // Small 3" HFW logo on rear collar
+      full:      { wFrac: 0.40, hFrac: 0.35 }
     };
     
     function loadGraphicsOnTop(updateId, garmentScale, cs) {
@@ -5442,21 +5441,16 @@ ${CF_BEACON}
       });
       
       var isHeadwear = cs.garment === 'trucker-hat' || cs.garment === 'beanie';
-      
-      // ============================================================
-      // PERMANENT HFW BACK-NECK LOGO — always on back view for garments (not hats)
-      // Included in purchase price, not an additional graphic, not user-editable.
-      // Uses white-outline logo on dark garments, black-shadow on light garments.
-      // ============================================================
-      var needsBackNeckLogo = cs.view === 'back' && !isHeadwear;
-      
-      if (graphicsToShow.length === 0 && !needsBackNeckLogo) {
+
+      // No HFW logo is drawn on the garment: the brand mark is printed INSIDE the
+      // collar. The back only shows a graphic the customer adds themselves.
+      if (graphicsToShow.length === 0) {
         canvas.renderAll();
         return;
       }
-      
+
       var loadedCount = 0;
-      var totalToLoad = graphicsToShow.length + (needsBackNeckLogo ? 1 : 0);
+      var totalToLoad = graphicsToShow.length;
       
       // --- Render user-selected graphics (selectable, draggable) ---
       graphicsToShow.forEach(function(item) {
@@ -5534,58 +5528,6 @@ ${CF_BEACON}
           if (loadedCount === totalToLoad) canvas.renderAll();
         });
       });
-      
-      // --- Render permanent HFW back-neck logo (non-selectable, locked) ---
-      if (needsBackNeckLogo) {
-        // Pick the right logo variant based on garment color:
-        //   Dark garments (black, grey) → white outline logo (visible on dark fabric)
-        //   Light garments (white, pink) → black shadow logo (visible on light fabric)
-        var isLightGarment = (cs.color === 'white' || cs.color === 'pink');
-        var backNeckUrl = isLightGarment
-          ? '/images/graphics/hfw-logo-black-shadow.png?v=11'
-          : '/images/graphics/hfw-logo-white-outline.png?v=11';
-        
-        _loadFabricImage(backNeckUrl, function(logoImg, isError) {
-          if (updateId !== previewUpdateId) return; // Stale check
-          loadedCount++;
-          
-          if (!logoImg || isError || !logoImg.width || !logoImg.height) {
-            if (loadedCount === totalToLoad) canvas.renderAll();
-            return;
-          }
-          
-          // Size the logo to the back-neck print area (~3" on collar)
-          var area = PRINT_AREA.backNeck;
-          var maxW = canvas.width * area.wFrac;
-          var maxH = canvas.height * area.hFrac;
-          var logoScale = Math.min(maxW / logoImg.width, maxH / logoImg.height);
-          
-          logoImg.scale(logoScale);
-          logoImg.set({
-            // Centered horizontally, positioned at rear collar area
-            left: canvas.width * 0.50,
-            top: canvas.height * 0.17,
-            originX: 'center', originY: 'center',
-            // LOCKED — not user-editable, part of the purchase
-            selectable: false,
-            evented: false,
-            hasControls: false,
-            hasBorders: false,
-            lockMovementX: true,
-            lockMovementY: true,
-            lockRotation: true,
-            lockScalingX: true,
-            lockScalingY: true,
-            hoverCursor: 'default',
-            // Metadata
-            isBackNeckLogo: true,
-            isGraphic: false  // Not counted as a user graphic
-          });
-          
-          canvas.add(logoImg);
-          if (loadedCount === totalToLoad) canvas.renderAll();
-        });
-      }
     }
     
     // Placement position map (center coordinates as fraction of canvas dimensions)
@@ -5595,8 +5537,7 @@ ${CF_BEACON}
       'full-back':   { xFrac: 0.50, yFrac: 0.45 },
       'left-chest':  { xFrac: 0.35, yFrac: 0.32 },
       'right-chest': { xFrac: 0.65, yFrac: 0.32 },
-      'hat-front':   { xFrac: 0.50, yFrac: 0.42 },
-      'back-neck':   { xFrac: 0.50, yFrac: 0.17 }  // Rear collar center — permanent HFW logo
+      'hat-front':   { xFrac: 0.50, yFrac: 0.42 }
     };
     
     function getPlacementPosition(placementId, w, h) {
@@ -5667,9 +5608,9 @@ ${CF_BEACON}
         }
       }
       
-      // Mandatory HFW back neck logo — always shown when garment selected
-      if (state.garment) {
-        lines.push({ label: 'Back Neck: HFW Logo (3")', note: 'Included' });
+      // HFW brand mark is printed INSIDE the collar (a label, not an outside graphic)
+      if (state.garment && state.garment !== 'trucker-hat' && state.garment !== 'beanie') {
+        lines.push({ label: 'HFW logo printed inside collar', note: 'Included' });
       }
       
       // Additional back graphics (+$15 each)
