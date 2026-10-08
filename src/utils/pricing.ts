@@ -352,7 +352,7 @@ export function calculateBuilderPricing(order: BuilderOrder): BuilderPricing | {
     color: order.color,
     primaryGraphic: {
       name: gr.name,
-      placement: 'Front (Fixed)',
+      placement: placements.find(x => x.id === order.placement)?.name || order.placement,  // 'Full Front' | 'Full Back'
       price: primaryPrice,
     },
     backHfwLogo: {

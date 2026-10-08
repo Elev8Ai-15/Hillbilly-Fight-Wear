@@ -3368,7 +3368,7 @@ app.get('/build', (c) => {
       margin-top: 20px;
     }
     
-    .view-btn {
+    .view-btn, .print-side-btn {
       padding: 10px 25px;
       border: 2px solid #333;
       background: transparent;
@@ -3381,7 +3381,7 @@ app.get('/build', (c) => {
       border-radius: 4px;
     }
     
-    .view-btn.active, .view-btn:hover {
+    .view-btn.active, .view-btn:hover, .print-side-btn.selected, .print-side-btn:hover {
       background: #333;
       color: #fff;
     }
@@ -4149,7 +4149,7 @@ ${CF_BEACON}
       
       <!-- Step 4: Choose Front Logo (included in base price) -->
       <div class="option-group" id="step4">
-        <h3><span class="step-num">4</span> Choose Front Logo <span style="font-size: 0.75rem; color: #666; font-weight: 400;">(included in price)</span></h3>
+        <h3><span class="step-num">4</span> Choose Your Logo <span style="font-size: 0.75rem; color: #666; font-weight: 400;">(included in price)</span></h3>
         
         <!-- Tab switcher: HFW Graphics vs Custom Upload -->
         <div class="logo-tabs">
@@ -4164,6 +4164,12 @@ ${CF_BEACON}
         <!-- Tab content: HFW Graphics (default) -->
         <div id="tabContentHfw" style="display: block;">
           <div class="graphics-grid" id="graphicsGrid"></div>
+          <!-- Which side the included logo prints on -->
+          <div id="printSide" style="margin-top: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="font-weight: 600; font-size: 0.9rem;">Print it on:</span>
+            <button type="button" class="print-side-btn selected" data-print-side="full-front">Front</button>
+            <button type="button" class="print-side-btn" data-print-side="full-back">Back</button>
+          </div>
         </div>
         
         <!-- Tab content: Custom Sponsor Build -->
@@ -4239,10 +4245,10 @@ ${CF_BEACON}
         
         <!-- Optional: Add second back graphic -->
         <div class="additional-graphics" id="additionalGraphics" style="display: none;">
-          <h4 style="margin: 0 0 14px; font-size: 0.95rem; color: #92400e; font-weight: 700;"><i class="fas fa-star" style="color: #f59e0b; margin-right: 6px;"></i>Optional: Add a second graphic to the back <span style="background: #8B0000; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 4px;">+$15</span></h4>
+          <h4 style="margin: 0 0 14px; font-size: 0.95rem; color: #92400e; font-weight: 700;"><i class="fas fa-star" style="color: #f59e0b; margin-right: 6px;"></i>Optional: Add a second graphic to the <span class="other-side-name">back</span> <span style="background: #8B0000; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 4px;">+$15</span></h4>
           <div id="additionalList"></div>
           <button class="add-graphic-btn" id="addGraphicBtn">
-            <i class="fas fa-plus"></i> Add Back Graphic (+$15)
+            <i class="fas fa-plus"></i> Add <span class="other-side-label">Back</span> Graphic (+$15)
           </button>
         </div>
       </div>
@@ -4400,9 +4406,13 @@ ${CF_BEACON}
       initCanvas();
       renderGarments();
       renderGraphics();
-      // Placements no longer rendered — positions are fixed (front logo + back neck HFW)
+      // Included logo defaults to the front; "Print it on" switches it to the back
       state.placement = 'full-front';
-      
+      document.getElementById('printSide').addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-print-side]');
+        if (btn) selectPlacement(btn.dataset.printSide);
+      });
+
       // ---- Event delegation: all click handlers via container listeners ----
       // Garment grid
       document.getElementById('garmentGrid').addEventListener('click', function(e) {
@@ -4701,6 +4711,8 @@ ${CF_BEACON}
       
       // If switching to HFW tab, deactivate custom graphic (they can re-select an HFW one)
       // If switching to Custom tab with an uploaded image already active, keep it
+      // Custom sponsor uploads print on the front only
+      if (tab === 'custom-upload' && state.placement !== 'full-front') selectPlacement('full-front');
     }
     
     var MAX_UPLOAD_SIZE = 15 * 1024 * 1024; // 15 MB
@@ -4978,7 +4990,7 @@ ${CF_BEACON}
                 '<img loading="lazy" src="' + g.thumbnail + '" alt="' + g.name + '">' +
                 '<div>' +
                   '<div style="font-weight: 600; font-size: 0.85rem;">' + g.name + '</div>' +
-                  '<div style="font-size: 0.75rem; color: #666;">Back Placement &bull; +$15.00</div>' +
+                  '<div style="font-size: 0.75rem; color: #666;">' + sideName(ag.placement) + ' Placement &bull; +$15.00</div>' +
                 '</div>' +
               '</div>' +
               '<button class="remove-btn" data-remove-index="' + i + '">' +
@@ -5016,9 +5028,6 @@ ${CF_BEACON}
         }
       }
       renderColors(id);
-      
-      // Placement is now fixed: full-front for all garments (no headwear in builder)
-      state.placement = 'full-front';
       
       // Re-render graphics to filter based on garment restrictions
       renderGraphics();
@@ -5102,12 +5111,21 @@ ${CF_BEACON}
       dragHint.style.display = hasGraphics ? 'block' : 'none';
     }
     
+    // Included logo goes front OR back; the optional +$15 extra goes on the other side.
+    function otherSide(p) { return p === 'full-back' ? 'full-front' : 'full-back'; }
+    function sideName(p) { return p === 'full-back' ? 'Back' : 'Front'; }
+
     function selectPlacement(id) {
       state.placement = id;
-      
-      document.querySelectorAll('#placementGrid .placement-option').forEach(function(el) {
-        el.classList.toggle('selected', el.dataset.id === id);
+
+      document.querySelectorAll('.print-side-btn').forEach(function(el) {
+        el.classList.toggle('selected', el.dataset.printSide === id);
       });
+      // Keep any extra graphic on the opposite side
+      state.additionalGraphics.forEach(function(ag) { ag.placement = otherSide(id); });
+      document.querySelectorAll('.other-side-name').forEach(function(el) { el.textContent = sideName(otherSide(id)).toLowerCase(); });
+      document.querySelectorAll('.other-side-label').forEach(function(el) { el.textContent = sideName(otherSide(id)); });
+      renderAdditionalGraphics();
       
       // Auto-switch view based on placement
       if (id === 'full-back') {
@@ -5155,14 +5173,14 @@ ${CF_BEACON}
         '</div>';
       }).join('');
       
-      // Only back placement is available for additional graphics
+      // The extra graphic goes on the side the included logo is NOT on
+      var extraSide = otherSide(state.placement);
       var placementGrid = document.getElementById('modalPlacementGrid');
-      placementGrid.innerHTML = '<div class="placement-option selected" data-id="full-back">' +
-        'Full Back' +
+      placementGrid.innerHTML = '<div class="placement-option selected" data-id="' + extraSide + '">' +
+        'Full ' + sideName(extraSide) +
         '<span style="font-size:0.7rem; display:block; color:#8B0000;">+$15.00</span>' +
       '</div>';
-      // Auto-select full-back placement
-      modalSelectedPlacement = 'full-back';
+      modalSelectedPlacement = extraSide;
       
       document.getElementById('addGraphicModal').classList.add('active');
     }
@@ -5657,13 +5675,13 @@ ${CF_BEACON}
         }
       }
       
-      // Front logo — included in base price (shown as $0.00)
+      // Included logo (front or back) — in base price
       if (state.usingCustomGraphic && state.customUploadName) {
         lines.push({ label: 'Front: Custom — ' + state.customUploadName, note: 'Included' });
       } else if (state.graphic) {
         var gr = graphics.find(function(x) { return x.id === state.graphic; });
         if (gr) {
-          lines.push({ label: 'Front: ' + gr.name, note: 'Included' });
+          lines.push({ label: sideName(state.placement) + ': ' + gr.name, note: 'Included' });
         }
       }
       
@@ -5676,7 +5694,7 @@ ${CF_BEACON}
       state.additionalGraphics.forEach(function(ag) {
         var gr = graphics.find(function(x) { return x.id === ag.graphic; });
         if (gr) {
-          lines.push({ label: '+ Back: ' + gr.name, price: 15 });
+          lines.push({ label: '+ ' + sideName(ag.placement) + ': ' + gr.name, price: 15 });
           total += 15;
         }
       });

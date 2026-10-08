@@ -296,10 +296,10 @@ export async function createBuilderCheckoutSession(
   // — live Stripe hard-rejects the session otherwise and checkout breaks.
   params.append('customer_creation', 'always')
 
-  // Single line item: garment with front logo + mandatory back HFW logo (all included in base price)
+  // Single line item: garment with included logo (front or back) + mandatory back-neck HFW logo
   params.append('line_items[0][price_data][currency]', 'usd')
   params.append('line_items[0][price_data][product_data][name]', `${g.name} - Custom Design`)
-  params.append('line_items[0][price_data][product_data][description]', `Size: ${order.size}, Color: ${order.color} | Front: ${gr.name} | Back Neck: HFW Logo (3")`)
+  params.append('line_items[0][price_data][product_data][description]', `Size: ${order.size}, Color: ${order.color} | ${pricing.primaryGraphic.placement}: ${gr.name} | Back Neck: HFW Logo (3")`)
   params.append('line_items[0][price_data][unit_amount]', String(Math.round(g.basePrice * 100)))
   params.append('line_items[0][quantity]', '1')
 
@@ -307,7 +307,7 @@ export async function createBuilderCheckoutSession(
   pricing.additionalGraphics.forEach((ag, i) => {
     const idx = i + 1
     params.append(`line_items[${idx}][price_data][currency]`, 'usd')
-    params.append(`line_items[${idx}][price_data][product_data][name]`, `+ Back Graphic: ${ag.name}`)
+    params.append(`line_items[${idx}][price_data][product_data][name]`, `+ Extra Graphic: ${ag.name}`)
     params.append(`line_items[${idx}][price_data][product_data][description]`, `Placement: ${ag.placement}`)
     params.append(`line_items[${idx}][price_data][unit_amount]`, String(Math.round(ag.price * 100)))
     params.append(`line_items[${idx}][quantity]`, '1')
