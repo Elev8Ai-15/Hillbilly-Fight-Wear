@@ -45,9 +45,9 @@ export const garments = [
     sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     supportsPlacement: true,
     images: {
-      white: { front: '/images/garments/thermal-white-front.png?v=2', back: '/images/garments/thermal-white-back.png?v=2' },
-      black: { front: '/images/garments/thermal-black-front.png', back: '/images/garments/thermal-black-back.png' },
-      grey: { front: '/images/garments/thermal-grey-front.png', back: '/images/garments/thermal-grey-back.png' }
+      white: { front: '/images/garments/thermal-white-front.png?v=3', back: '/images/garments/thermal-white-back.png?v=2' },
+      black: { front: '/images/garments/thermal-black-front.png?v=2', back: '/images/garments/thermal-black-back.png' },
+      grey: { front: '/images/garments/thermal-grey-front.png?v=2', back: '/images/garments/thermal-grey-back.png' }
     }
   },
   {
