@@ -5319,6 +5319,7 @@ ${CF_BEACON}
         placement: state.placement,
         view: state.view,
         garment: state.garment,
+        color: state.color,  // back-neck logo picks dark/light ink from this
         additionalGraphics: state.additionalGraphics.slice(),
         customUploadUrl: state.customUploadUrl,
         usingCustomGraphic: state.usingCustomGraphic
@@ -5371,6 +5372,7 @@ ${CF_BEACON}
         canvas.add(garmentImg);
         
         // Load graphics on top of garment using snapshotted state
+        capturedState.garmentImg = garmentImg;  // back-neck logo finds the collar on it
         loadGraphicsOnTop(currentUpdateId, garmentScale, capturedState);
       });
     }
@@ -5394,6 +5396,35 @@ ${CF_BEACON}
       backNeck:  { wFrac: 0.12, hFrac: 0.08 }  // Small 3" HFW logo on rear collar
     };
     
+    // Gap between the collar's top edge and the logo, as a fraction of garment height.
+    // Calibration knob: raise it to drop the logo lower on the back.
+    var COLLAR_GAP = 0.035;
+
+    // Fraction (0..1) down the photo where the garment starts on its centre line,
+    // i.e. the top of the back collar. Works for opaque shots on a white backdrop
+    // (first non-white pixel) and transparent cutouts (first opaque pixel).
+    var _collarCache = {};
+    function findCollarTop(el) {
+      if (_collarCache[el.src] !== undefined) return _collarCache[el.src];
+      var w = el.naturalWidth || el.width, h = el.naturalHeight || el.height;
+      var c = document.createElement('canvas');
+      c.width = 1; c.height = h;
+      var ctx = c.getContext('2d');
+      ctx.drawImage(el, Math.floor(w / 2), 0, 1, h, 0, 0, 1, h);
+      var d = ctx.getImageData(0, 0, 1, h).data;
+      var transparentBg = d[3] < 128;
+      var run = 0, frac = 0.15;
+      for (var y = 0; y < h; y++) {
+        var i = y * 4;
+        var lum = (d[i] + d[i + 1] + d[i + 2]) / 3;
+        var isGarment = d[i + 3] >= 128 && (transparentBg || lum < 235);
+        run = isGarment ? run + 1 : 0;
+        if (run === 4) { frac = (y - 3) / h; break; }  // 4 in a row skips dither specks
+      }
+      _collarCache[el.src] = frac;
+      return frac;
+    }
+
     function loadGraphicsOnTop(updateId, garmentScale, cs) {
       // Build list of graphics visible in this view
       var graphicsToShow = [];
@@ -5532,10 +5563,14 @@ ${CF_BEACON}
           var logoScale = Math.min(maxW / logoImg.width, maxH / logoImg.height);
           
           logoImg.scale(logoScale);
+          // Sit the logo just under the back collar of THIS garment photo
+          // (each shot has its collar at a different height).
+          var g = cs.garmentImg;
+          var gTop = g.top - g.getScaledHeight() / 2;
+          var collarY = gTop + findCollarTop(g._element) * g.getScaledHeight();
           logoImg.set({
-            // Centered horizontally, positioned at rear collar area
             left: canvas.width * 0.50,
-            top: canvas.height * 0.17,
+            top: collarY + COLLAR_GAP * g.getScaledHeight() + logoImg.getScaledHeight() / 2,
             originX: 'center', originY: 'center',
             // LOCKED — not user-editable, part of the purchase
             selectable: false,
