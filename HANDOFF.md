@@ -1,47 +1,49 @@
 # HANDOFF: Hillbilly Fight Wear website (hillbillyfightwear.com)
-Updated 2026-10-08. Repo `C:\Users\bradg\dev\Hillbilly-Fight-Wear` (GitHub Elev8Ai-15/Hillbilly-Fight-Wear, branch `main`).
-Mirror of this file: repo root `HANDOFF.md`. Older history: `notes/hillbilly-chat-build/`, OneDrive-era memory `project_hillbilly_fightwear.md`.
+Updated 2026-10-08 (late). Repo `C:\Users\bradg\dev\Hillbilly-Fight-Wear` (GitHub Elev8Ai-15/Hillbilly-Fight-Wear, branch `main`).
+Mirror of this file: repo root `HANDOFF.md`. Deploy truth: repo `DEPLOY.md`. Older history: `notes/hillbilly-chat-build/`, OneDrive-era memory `project_hillbilly_fightwear.md`.
 
 ## 1. State in one paragraph
-Hono + Cloudflare Pages site (project `hillbilly-fightwear`), Stripe LIVE, Resend, Merica chat agent. 10/08 session fixed the Build Y'Own preview (hoodie backs no longer draw the 3" collar logo, since it prints under the hood; white garments no longer wash out), made the cart thumbnail show the real product photo, and locked two open maintenance endpoints. Everything is committed, pushed and deployed. GitHub was 12 commits behind before this session; it now matches local.
+Hono + Cloudflare Pages site (project `hillbilly-fightwear`), Stripe LIVE, Resend, Merica chat agent. The 10/08 session reworked the Build Y'Own preview. The 3" back-collar HFW logo now sits on each garment's real collar (it used to float above tees, thermals and tanks) and picks dark or light ink by garment color. Hoodies don't draw it (it's under the hood). White garments no longer wash out. Also: cart thumbnail shows the product photo, two maintenance endpoints are locked, unused hat images are archived, and DEPLOY.md is written. All committed, pushed and deployed. **Open finding:** the PINK women's tank images are broken (near-blank white, no pink), and anyone choosing pink sees an empty outline. Not fixed: the shade is Brad's/Brian's call.
 
 ## 2. LIVE
-- Hoodie/zip-up back preview: no collar logo; tee/tank/thermal still show it (`692a87b`). **L4**: live /build, real clicks, canvas objects = `["hoodie-black-back.png"]`.
-- White garments: 12 transparent images regenerated from the grey shots, `?v=2` cache-buster (`42ee7f4`). **L4**: live hoodie white back, canvas bg `#d5d5d5`, objects `["hoodie-white-back.png?v=2"]`, live PNG corner alpha 0.
-- Zip-up print bounds typo fix (`zip-up-hoodie` to `zipup-hoodie`, `692a87b`). **L3**.
-- Cart thumbnail = product photo (`4deb624`). **L3** live (tested on local copy: MYOB Hoodie Zip-Up Grey L shows `m1-myob-hoodie-front.webp`).
-- `/api/stripe/sync-catalog` + `/api/send-receipt` require header `x-admin-password` (`07a49bd`). **L4**: live unauthenticated POST returns `{"error":"Unauthorized"} [401]`. `ADMIN_PASSWORD` secret confirmed set.
-- Checkout, both paths. **L4**: live `/api/shop-checkout` (2 tees) returned `cs_live_a13qvX1t…`; `/api/create-checkout` (hoodie + back graphic) returned `cs_live_b18zam65…`. No payment made.
-- 2-for-$50: **L4** on the local copy, cart $60 to $50; server returned `"discount":"10.00","total":"50.00"`.
-- Merica: **L4** live, quoted "$65.00 total" and the 3" back-neck logo for a hoodie with a back graphic.
+- Back-collar logo on the real collar via `findCollarTop()` + `COLLAR_GAP=0.035`; color now in `capturedState`, so white/pink get the dark logo (`08acbf2`). **L4**: live /build, real clicks white tee back: `objs ["tshirt-white-back.png?v=2","hfw-logo-black-shadow.png?v=11"]`, `logoY 139`. Live JS sweep: tee 138-139, thermal 115-130, tank-mens 89-93, tank-womens 102-123, hoodies "no logo". Visual grid of all 13 non-hoodie backs checked on local (same build).
+- Hoodie/zip-up back preview: no collar logo (`692a87b`). **L4** live.
+- White garments: 12 transparent images generated from the grey shots, `?v=2` (`42ee7f4`). **L4** live.
+- Cart thumbnail = product photo (`4deb624`). **L3** live (local real-click test).
+- `/api/stripe/sync-catalog` + `/api/send-receipt` gated by `x-admin-password` (`07a49bd`). **L4**: live `{"error":"Unauthorized"} [401]`.
+- Checkout both paths. **L4**: live `cs_live_` sessions created, no payment.
+- 6 unused hat images removed (`a590811`), archived at `C:\AbeVault\archive\2026-10-08\hillbilly-fight-wear-garments\`. **L4**: live `trucker-hat-white.png` returns 404.
 
 ## 3. In flight
-- Branch `main`, last commit `42ee7f4`, nothing uncommitted, nothing half-done.
+- Branch `main`, last code commit `08acbf2` (deployed, dashboard shows `08acbf2`). DEPLOY.md + this handoff are committed in the same push as this note. Nothing uncommitted, nothing half-done.
 
 ## 4. OWED
-- **Brad**: Stripe abandoned-cart toggle + promotions ToS tick (discuss before re-adding `consent_collection`); optional GA4 ID for `src/utils/analytics.ts`.
-- **Brian**: returns window, size-chart measurements, "2-for-$50 on custom builds" decision (the cart doesn't apply it to builds; Merica says it doesn't).
+- **Brad/Brian**: what pink is the women's tank? Then re-make `tank-womens-pink-{front,back}.png` (extend `scripts/whiten_garments.py` with a tint) and bump to `?v=2`.
+- **Brad**: Stripe abandoned-cart toggle + promotions ToS tick (discuss before re-adding `consent_collection`); optional GA4 ID.
+- **Brian**: returns window, size chart, "2-for-$50 on custom builds" decision.
 - Before the first newsletter send: delete test contact bradgpowell1123+hfwtest@ from Resend audience "HFW Newsletter".
 
 ## 5. NEXT
-1. Reach L5 on the builder: wait for a real custom order and quote its Stripe line item / receipt email.
-2. Brian's three answers (returns window, size chart, 2-for-$50 on builds), then add them to the site + Merica.
-3. Stripe abandoned-cart toggle + promotions ToS (Brad, dashboard), then discuss re-adding `consent_collection`.
-Done 10/08: repo `DEPLOY.md` written; 6 unused hat images removed (`a590811`), archived at `C:\AbeVault\archive\2026-10-08\hillbilly-fight-wear-garments\`.
+1. Ask Brad for the pink shade, then fix the pink tank images (same script approach, `?v=2`).
+2. Reach L5 on the builder: quote the first real custom order's Stripe line item / receipt email.
+3. Brian's three answers, then add them to the site + Merica.
 
 ## 6. Landmines
-- Deploy truth = repo `DEPLOY.md` (command, L4 check block, rollback). `git push` does NOT deploy. Run wrangler from the repo root. Wrangler is logged in on the desktop as of 10/08. Never borrow `CLOUDFLARE_API_TOKEN` from another repo's .env.
-- On Windows wrangler can print `Assertion failed ... async.c` on exit. Check the log or prod, not the exit text.
-- `/images/*` is cached 30 days, immutable. Any image swap needs a new `?v=N` in `src/data/catalog.ts`, or customers keep the old file.
-- White garments are GENERATED: edit `scripts/whiten_garments.py` knobs and re-run; don't hand-edit the PNGs.
-- The 3" HFW logo prints OUTSIDE on the back collar of every garment. Order text and Stripe say "Back Neck: HFW Logo (3")". Correct, leave it. Hoodies hide it in the preview only.
+- Deploy truth = repo `DEPLOY.md`. `git push` does NOT deploy. From Claude Code Bash pass `--commit-hash $(git -C $R rev-parse HEAD)` (cwd resets to my-assistant every call). Wrangler is logged in on the desktop. Never borrow `CLOUDFLARE_API_TOKEN` from another repo's .env.
+- Local preview server (`hfw-site`, port 8789) goes stale if `dist/` is wiped: restart it and grep the served page for the new code before testing.
+- Browser-pane screenshots often come back blank or time out: `tabs_select` first, or verify via `canvas.getObjects()` in JS.
+- On Windows wrangler can print `Assertion failed ... async.c` on exit. Trust "Deployment complete!" or the live check.
+- `/images/*` is cached 30 days, immutable. Any image swap needs a new `?v=N` in `src/data/catalog.ts`.
+- White garments are GENERATED by `scripts/whiten_garments.py`; don't hand-edit the PNGs.
+- 3" HFW logo prints OUTSIDE on the back collar of every garment. Order text "Back Neck: HFW Logo (3")" is correct. Hoodies hide it in the preview only. Logo height knob: `COLLAR_GAP` in `src/index.tsx`.
 - 🔴 No payment/checkout param changes without discussing with Brad (8/13 `consent_collection` broke live checkout).
-- Secrets (Pages): `STRIPE_SECRET_KEY`, `RESEND_API_KEY`, `ANTHROPIC_API_KEY`, `ADMIN_PASSWORD`. Local `.dev.vars` has no Stripe key (checkout runs in demo mode locally).
-- Pillow gotcha: `Image.fromarray(...)` images are read-only; `ImageDraw.floodfill` silently no-ops without `.copy()`.
+- Secrets (Pages): `STRIPE_SECRET_KEY`, `RESEND_API_KEY`, `ANTHROPIC_API_KEY`, `ADMIN_PASSWORD`. Local `.dev.vars` has no Stripe key.
 
 ## 7. Evidence log
 No L5 this session (no real customer order exercised the changed paths). Newest L4 quotes:
+- Live /build real clicks, white tee back: `{"color":"white","garment":"tshirt","logoY":139,"objs":["tshirt-white-back.png?v=2","hfw-logo-black-shadow.png?v=11"],"view":"back"}`
+- Live deployment list: `08acbf2   just now` (Production)
+- Live: `hat img: 404  build: 200  home: 200  tee white: 200`
 - Live /build white hoodie back: `{"bg":"#d5d5d5","color":"white","garment":"hoodie","objs":["hoodie-white-back.png?v=2"],"view":"back"}`
 - Live: `stripe/sync-catalog: {"error":"Unauthorized"} [401]` · `send-receipt: {"error":"Unauthorized"} [401]`
 - Live: `SHOP: cs_live_a13qvX1t` · `BUILDER: cs_live_b18zam65`
-- Live /build hoodie black back: `{"canvas":["hoodie-black-back.png"],"garment":"hoodie","view":"back"}`

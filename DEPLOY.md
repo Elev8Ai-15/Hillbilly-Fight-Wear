@@ -6,7 +6,7 @@ refuses to proceed without it. The session-start hook prints it.
 | Field | Value |
 |---|---|
 | Does `git push` deploy? | **NO.** The Cloudflare Pages project has no Git connection. Push = GitHub backup only (Elev8Ai-15/Hillbilly-Fight-Wear, `main`). |
-| Deploy command (exact) | From the repo root: `npm run build` then `npx wrangler pages deploy dist --project-name hillbilly-fightwear --branch main` (PowerShell 7: `Set-Location C:\Users\bradg\dev\Hillbilly-Fight-Wear; npm run build; npx wrangler pages deploy dist --project-name hillbilly-fightwear --branch main`) |
+| Deploy command (exact) | Claude Code Bash (cwd resets to my-assistant, so pass the hash): `R=/c/Users/bradg/dev/Hillbilly-Fight-Wear; npm --prefix $R run build; npx --prefix $R wrangler pages deploy $R/dist --project-name hillbilly-fightwear --branch main --commit-hash $(git -C $R rev-parse HEAD)`. Brad's PowerShell 7: `Set-Location C:\Users\bradg\dev\Hillbilly-Fight-Wear; npm run build; npx wrangler pages deploy dist --project-name hillbilly-fightwear --branch main` |
 | Worker / second deploy | None for the site. (Separate repo `dev/hillbilly-marketing` has its own `hillbilly-engage` Worker; deploying the site does not touch it.) |
 | Prod URL | https://hillbillyfightwear.com (www and `hillbilly-fightwear.pages.dev` also attached; www 301s to apex) |
 | Health URL | `GET https://hillbillyfightwear.com/build` 200 proves the Worker renders the builder. It does NOT prove Stripe, Resend or Merica work; use the L4 block below. |
@@ -18,7 +18,8 @@ refuses to proceed without it. The session-start hook prints it.
 | Pre-launch scan gate | `ada-risk-check` local + live URL; `lockupscan.dev` live URL |
 
 ## Landmines
-- **Run wrangler from the repo root.** It stamps the deployment with the commit of the current folder. Run from elsewhere (e.g. `npx --prefix ...` from my-assistant), the dashboard shows another repo's hash (2026-10-08 deploy shows `04f8f58`, a my-assistant commit).
+- **Wrangler stamps the deploy with the commit of the current folder.** Run from elsewhere without `--commit-hash`, the dashboard shows another repo's hash (early 2026-10-08 deploys show `04f8f58`, a my-assistant commit). Claude Code's Bash resets cwd to my-assistant every call, so always pass `--commit-hash` there.
+- **Local preview server goes stale** if `dist/` is deleted and rebuilt (its watcher dies). Restart the `hfw-site` preview (my-assistant `.claude/launch.json`, port 8789) and confirm with `curl -s localhost:8789/build | grep <new code>`.
 - **`/images/*` is cached 30 days, `immutable`** (`public/_headers`). Replacing an image under the same URL does nothing for returning visitors. Bump `?v=N` on the path in `src/data/catalog.ts`.
 - **Checkout is LIVE Stripe.** No checkout/session param changes without discussing with Brad first: `consent_collection[promotions]` took checkout down on 2026-08-13.
 - On Windows, wrangler can print `Assertion failed ... async.c` on exit after a successful deploy. Trust `Deployment complete!` or the live check, not the exit text.
