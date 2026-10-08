@@ -3,7 +3,7 @@ Updated 2026-10-08 (late). Repo `C:\Users\bradg\dev\Hillbilly-Fight-Wear` (GitHu
 Mirror of this file: repo root `HANDOFF.md`. Deploy truth: repo `DEPLOY.md`. Older history: `notes/hillbilly-chat-build/`, OneDrive-era memory `project_hillbilly_fightwear.md`.
 
 ## 1. State in one paragraph
-Hono + Cloudflare Pages site (project `hillbilly-fightwear`), Stripe LIVE, Resend, Merica chat agent. The 10/08 session reworked the Build Y'Own preview. The 3" back-collar HFW logo now sits on each garment's real collar (it used to float above tees, thermals and tanks) and picks dark or light ink by garment color. Hoodies don't draw it (it's under the hood). White garments no longer wash out. Also: cart thumbnail shows the product photo, two maintenance endpoints are locked, unused hat images are archived, and DEPLOY.md is written. All committed, pushed and deployed. **Open finding:** the PINK women's tank images are broken (near-blank white, no pink), and anyone choosing pink sees an empty outline. Not fixed: the shade is Brad's/Brian's call.
+Hono + Cloudflare Pages site (project `hillbilly-fightwear`), Stripe LIVE, Resend, Merica chat agent. The 10/08 session reworked the Build Y'Own preview. The 3" back-collar HFW logo now sits on each garment's real collar (it used to float above tees, thermals and tanks) and picks dark or light ink by garment color. Hoodies don't draw it (it's under the hood). White garments no longer wash out. Also: cart thumbnail shows the product photo, two maintenance endpoints are locked, unused hat images are archived, and DEPLOY.md is written. All committed, pushed and deployed. Pink is a hot-pink INK, never a garment color (Brad 10/08). The builder already filters `pink` out of the women's tank colors, so the near-blank `tank-womens-pink-*` images are dead leftovers, not a customer bug.
 
 ## 2. LIVE
 - Back-collar logo on the real collar via `findCollarTop()` + `COLLAR_GAP=0.035`; color now in `capturedState`, so white/pink get the dark logo (`08acbf2`). **L4**: live /build, real clicks white tee back: `objs ["tshirt-white-back.png?v=2","hfw-logo-black-shadow.png?v=11"]`, `logoY 139`. Live JS sweep: tee 138-139, thermal 115-130, tank-mens 89-93, tank-womens 102-123, hoodies "no logo". Visual grid of all 13 non-hoodie backs checked on local (same build).
@@ -18,13 +18,12 @@ Hono + Cloudflare Pages site (project `hillbilly-fightwear`), Stripe LIVE, Resen
 - Branch `main`, last code commit `08acbf2` (deployed, dashboard shows `08acbf2`). DEPLOY.md + this handoff are committed in the same push as this note. Nothing uncommitted, nothing half-done.
 
 ## 4. OWED
-- **Brad/Brian**: what pink is the women's tank? Then re-make `tank-womens-pink-{front,back}.png` (extend `scripts/whiten_garments.py` with a tint) and bump to `?v=2`.
 - **Brad**: Stripe abandoned-cart toggle + promotions ToS tick (discuss before re-adding `consent_collection`); optional GA4 ID.
 - **Brian**: returns window, size chart, "2-for-$50 on custom builds" decision.
 - Before the first newsletter send: delete test contact bradgpowell1123+hfwtest@ from Resend audience "HFW Newsletter".
 
 ## 5. NEXT
-1. Ask Brad for the pink shade, then fix the pink tank images (same script approach, `?v=2`).
+1. Optional cleanup (Brad decides): drop the dead `pink` entry from `tank-womens` in catalog.ts, the `excludedColors` filter in `renderColors()`, and archive the 2 pink images.
 2. Reach L5 on the builder: quote the first real custom order's Stripe line item / receipt email.
 3. Brian's three answers, then add them to the site + Merica.
 
