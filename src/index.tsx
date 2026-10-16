@@ -3381,7 +3381,8 @@ app.get('/build', (c) => {
       border-radius: 4px;
     }
     
-    .view-btn.active, .view-btn:hover, .print-side-btn.selected, .print-side-btn:hover {
+    .print-side-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .view-btn.active, .view-btn:hover, .print-side-btn.selected, .print-side-btn:not(:disabled):hover {
       background: #333;
       color: #fff;
     }
@@ -4167,8 +4168,9 @@ ${CF_BEACON}
           <!-- Which side the included logo prints on -->
           <div id="printSide" style="margin-top: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
             <span style="font-weight: 600; font-size: 0.9rem;">Print it on:</span>
-            <button type="button" class="print-side-btn selected" data-print-side="full-front">Front</button>
-            <button type="button" class="print-side-btn" data-print-side="full-back">Back</button>
+            <button type="button" class="print-side-btn selected" data-print-side="full-front">Logo on Front</button>
+            <button type="button" class="print-side-btn" data-print-side="full-back">Logo on Back</button>
+            <span id="printSideLocked" style="display: none; font-size: 0.75rem; color: #666;">Remove the second graphic to switch sides.</span>
           </div>
         </div>
         
@@ -4980,7 +4982,13 @@ ${CF_BEACON}
         // Hide the "Add Back Graphic" button if already added one (limit 1 additional)
         var addBtn = document.getElementById('addGraphicBtn');
         if (addBtn) addBtn.style.display = state.additionalGraphics.length >= 1 ? 'none' : 'block';
-        
+
+        // Once a second graphic is on the other side, lock "Logo on Front/Back" so a
+        // click can't silently swap the two graphics (Brad hit this 10/16).
+        var locked = state.additionalGraphics.length > 0;
+        document.querySelectorAll('.print-side-btn').forEach(function(el) { el.disabled = locked; });
+        document.getElementById('printSideLocked').style.display = locked ? 'inline' : 'none';
+
         if (state.additionalGraphics.length > 0) {
           list.innerHTML = state.additionalGraphics.map(function(ag, i) {
             var g = graphics.find(function(x) { return x.id === ag.graphic; });
@@ -5552,13 +5560,12 @@ ${CF_BEACON}
       
       // --- Render permanent HFW back-neck logo (non-selectable, locked) ---
       if (needsBackNeckLogo) {
-        // Pick the right logo variant based on garment color:
-        //   Dark garments (black, grey) → white outline logo (visible on dark fabric)
-        //   White garments → black shadow logo (visible on light fabric)
+        // Plain HFW lettering (the only approved logo): white ink on black/grey,
+        // black ink on white garments.
         var isLightGarment = cs.color === 'white';
         var backNeckUrl = isLightGarment
-          ? '/images/graphics/hfw-logo-black-shadow.png?v=11'
-          : '/images/graphics/hfw-logo-white-outline.png?v=11';
+          ? '/images/graphics/print/hfw-logo-dark.png?v=2'
+          : '/images/graphics/print/hfw-logo-light.png?v=2';
         
         _loadFabricImage(backNeckUrl, function(logoImg, isError) {
           if (updateId !== previewUpdateId) return; // Stale check

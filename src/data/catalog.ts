@@ -118,27 +118,14 @@ export type Graphic = {
 }
 
 export const graphics: Graphic[] = [
-  // HILLBILLY FIGHTWEAR LOGOS
-  {
-    id: 'hfw-black-shadow',
-    name: 'HFW Black Shadow',
-    thumbnail: '/images/graphics/hfw-logo-black-shadow.png?v=11',
-    fullImage: '/images/graphics/hfw-logo-black-shadow.png?v=11',
-    restrictToGarments: []
-  },
-  {
-    id: 'hfw-white-outline',
-    name: 'HFW White Outline',
-    thumbnail: '/images/graphics/hfw-logo-white-outline.png?v=11',
-    fullImage: '/images/graphics/hfw-logo-white-outline.png?v=11',
-    restrictToGarments: []
-  },
+  // HILLBILLY FIGHTWEAR LOGO (plain lettering only; the 3D "Black Shadow" / "White
+  // Outline" versions were not approved, Brad 10/16)
   {
     id: 'hfw-logo',
     name: 'HFW Logo',
-    thumbnail: '/images/graphics/hfw-logo-original.png?v=11',
-    fullImage: '/images/graphics/print/hfw-logo-light.png?v=1',  // black-ink art flipped to white for dark garments
-    fullImageDark: '/images/graphics/print/hfw-logo-dark.png?v=1',  // white garments (original black ink)
+    thumbnail: '/images/graphics/print/hfw-logo-dark.png?v=2',
+    fullImage: '/images/graphics/print/hfw-logo-light.png?v=2',  // black-ink art flipped to white for dark garments
+    fullImageDark: '/images/graphics/print/hfw-logo-dark.png?v=2',  // white garments (original black ink)
     restrictToGarments: []
   },
   {
@@ -286,8 +273,8 @@ export const placements = [
 // type: 'garment' = clothing/hats (shows size→color flow), 'decal' = stickers/decals (shows expanded view)
 // MENS CLOTHING - T-Shirts and Hoodies
 export const mensClothing: ShopProduct[] = [
-  { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/m1-myob-hoodie-front.webp', backImage: '/images/products/web/m1-myob-hoodie-back.webp', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'myob', backGraphicId: 'hfw-black-shadow' },
-  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/m2-thump-hoodie-front.webp', backImage: '/images/products/web/m2-thump-hoodie-back.webp', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'thump-a-stranger', backGraphicId: 'hfw-black-shadow' },
+  { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/m1-myob-hoodie-front.webp', backImage: '/images/products/web/m1-myob-hoodie-back.webp', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'myob' },
+  { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/m2-thump-hoodie-front.webp', backImage: '/images/products/web/m2-thump-hoodie-back.webp', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'thump-a-stranger' },
   { id: 'm3', title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m3-hfw-classic-front.webp', backImage: '/images/products/web/m3-hfw-classic-back.webp', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'hfw-logo' },
   { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m4-yycf-front.webp', backImage: '/images/products/web/m4-yycf-back.webp', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'yycf-logo' },
   { id: 'm5', title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m5-fun-ride-front.webp', backImage: '/images/products/web/m5-fun-ride-back.webp', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'fun-logo' },
@@ -316,7 +303,7 @@ export const womensClothing: ShopProduct[] = [
 
 // KIDS CLOTHING - Youth Hoodie
 export const kidsClothing: ShopProduct[] = [
-  { id: 'k1', title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/k1-youth-hoodie-front.webp', backImage: '/images/products/web/k1-youth-hoodie-back.webp', type: 'garment', garmentType: 'hoodie', sizes: ['YS','YM','YL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'hfw-black-shadow', backGraphicId: 'hfw-logo' }
+  { id: 'k1', title: 'Youth Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/k1-youth-hoodie-front.webp', backImage: '/images/products/web/k1-youth-hoodie-back.webp', type: 'garment', garmentType: 'hoodie', sizes: ['YS','YM','YL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'hfw-logo', backGraphicId: 'hfw-logo' }
 ]
 
 // HATS - Trucker Hats and Beanies

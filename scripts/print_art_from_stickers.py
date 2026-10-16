@@ -40,6 +40,8 @@ BLACK_INK_ART = {
     "yycf-logo": "yycf-logo.png",
     "wimb": "wimb.png",
 }
+# hfw-logo-original.png has a stray tiny "HFW" far below the lettering (not on real shirts)
+STRIP_STRAY = {"hfw-logo-original.png"}
 # Clear stickers: dark letters + thin cut line, no black backing (handled differently)
 CLEAR_STICKERS = {"sticker-obama-tap.png", "sticker-community.png"}
 
@@ -125,6 +127,13 @@ def black_ink_art(src: Path) -> tuple[Image.Image, Image.Image]:
     original is the white-garment version; neutral ink flips to white for dark ones."""
     rgba = np.asarray(Image.open(src).convert("RGBA")).astype(np.float32)
     rgb, alpha = rgba[..., :3].copy(), rgba[..., 3].astype(np.uint8)
+    if src.name in STRIP_STRAY:
+        # keep only the main lettering block; drop stray marks far from it
+        from scipy import ndimage
+        near = ndimage.binary_dilation(alpha > 20, iterations=12)
+        labels, n = ndimage.label(near)
+        sizes = ndimage.sum(near, labels, range(1, n + 1))
+        alpha = np.where(labels == 1 + int(np.argmax(sizes)), alpha, 0).astype(np.uint8)
     value = rgb.max(axis=2)
     neutral = (value - rgb.min(axis=2)) / np.maximum(value, 1) < NEUTRAL_SAT
     light_rgb = rgb.copy()
