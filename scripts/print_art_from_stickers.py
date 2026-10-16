@@ -37,8 +37,9 @@ STICKERS = {
 # Real art that only exists in black ink (graphics/ folder): needs a white-ink version for dark garments
 BLACK_INK_ART = {
     "hfw-logo": "hfw-logo-original.png",
-    "yycf-logo": "yycf-logo.png",
     "wimb": "wimb.png",
+    "hard-hittin": "hard-hittin.png",   # added to the builder (Brad 10/16)
+    # yycf-logo removed 10/16: duplicate of yes-you-can (Brad kept the sticker art)
 }
 # hfw-logo-original.png has a stray tiny "HFW" far below the lettering (not on real shirts)
 STRIP_STRAY = {"hfw-logo-original.png"}
@@ -137,7 +138,9 @@ def black_ink_art(src: Path) -> tuple[Image.Image, Image.Image]:
     value = rgb.max(axis=2)
     neutral = (value - rgb.min(axis=2)) / np.maximum(value, 1) < NEUTRAL_SAT
     light_rgb = rgb.copy()
-    light_rgb[neutral] = 255
+    # flip grey ink AND any dark ink (hard-hittin's black has a faint colour tint,
+    # which left the white version mottled); bright coloured ink stays as is
+    light_rgb[neutral | (value < 160)] = 255
     li = Image.fromarray(np.dstack([light_rgb.astype(np.uint8), alpha]))
     di = Image.fromarray(np.dstack([rgb.astype(np.uint8), alpha]))
     box = li.getbbox()

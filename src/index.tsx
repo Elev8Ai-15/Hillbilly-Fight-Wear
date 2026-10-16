@@ -4496,7 +4496,10 @@ ${CF_BEACON}
         selectGarment('tshirt');
       }
       if (params.get('graphic')) {
-        selectGraphic(params.get('graphic'));
+        // Duplicates removed 10/16: keep old links working
+        var GRAPHIC_ALIASES = { 'gpg-design': 'gnf', 'yycf-logo': 'yes-you-can' };
+        var gParam = params.get('graphic');
+        selectGraphic(GRAPHIC_ALIASES[gParam] || gParam);
       }
       
       // ---- Custom Sponsor Build: Tab switching ----
@@ -5565,7 +5568,7 @@ ${CF_BEACON}
         var isLightGarment = cs.color === 'white';
         var backNeckUrl = isLightGarment
           ? '/images/graphics/print/hfw-logo-dark.png?v=2'
-          : '/images/graphics/print/hfw-logo-light.png?v=2';
+          : '/images/graphics/print/hfw-logo-light.png?v=3';
         
         _loadFabricImage(backNeckUrl, function(logoImg, isError) {
           if (updateId !== previewUpdateId) return; // Stale check

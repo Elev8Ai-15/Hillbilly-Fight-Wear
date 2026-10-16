@@ -124,7 +124,7 @@ export const graphics: Graphic[] = [
     id: 'hfw-logo',
     name: 'HFW Logo',
     thumbnail: '/images/graphics/print/hfw-logo-dark.png?v=2',
-    fullImage: '/images/graphics/print/hfw-logo-light.png?v=2',  // black-ink art flipped to white for dark garments
+    fullImage: '/images/graphics/print/hfw-logo-light.png?v=3',  // black-ink art flipped to white for dark garments
     fullImageDark: '/images/graphics/print/hfw-logo-dark.png?v=2',  // white garments (original black ink)
     restrictToGarments: []
   },
@@ -144,21 +144,14 @@ export const graphics: Graphic[] = [
     fullImageDark: '/images/graphics/print/thump-a-stranger-dark.png?v=1',  // white garments
     restrictToGarments: []
   },
+  // 'gpg-design' (duplicate of GNF) and 'yycf-logo' (duplicate of Yes, You Can) removed
+  // 10/16 (Brad). Old ?graphic= links for them are aliased in the /build page script.
   {
-    id: 'gpg-design',
-    name: 'GPG Design',
-    // Same art as GNF (Brad 10/08): the old gpg-design.png had its white N erased
-    thumbnail: '/images/stickers/sticker-gnf.png?v=15',
-    fullImage: '/images/graphics/print/gnf-light.png?v=1',
-    fullImageDark: '/images/graphics/print/gnf-dark.png?v=1',
-    restrictToGarments: []
-  },
-  {
-    id: 'yycf-logo',
-    name: 'YYCF Logo',
-    thumbnail: '/images/graphics/yycf-logo.png?v=11',
-    fullImage: '/images/graphics/print/yycf-logo-light.png?v=1',  // black-ink art flipped to white for dark garments
-    fullImageDark: '/images/graphics/print/yycf-logo-dark.png?v=1',  // white garments (original black ink)
+    id: 'hard-hittin',
+    name: "Hard Hittin' HFW",
+    thumbnail: '/images/graphics/print/hard-hittin-dark.png?v=1',
+    fullImage: '/images/graphics/print/hard-hittin-light.png?v=1',  // black-ink art flipped to white for dark garments
+    fullImageDark: '/images/graphics/print/hard-hittin-dark.png?v=1',  // white garments (original black ink)
     restrictToGarments: []
   },
   {
@@ -190,7 +183,7 @@ export const graphics: Graphic[] = [
     id: 'wimb',
     name: 'WIMB (What\'s It Mean To You?)',
     thumbnail: '/images/graphics/wimb.png?v=11',
-    fullImage: '/images/graphics/print/wimb-light.png?v=1',  // black-ink art flipped to white for dark garments
+    fullImage: '/images/graphics/print/wimb-light.png?v=2',  // black-ink art flipped to white for dark garments
     fullImageDark: '/images/graphics/print/wimb-dark.png?v=1',  // white garments (original black ink)
     restrictToGarments: []
   },
@@ -276,7 +269,7 @@ export const mensClothing: ShopProduct[] = [
   { id: 'm1', title: 'MYOB Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/m1-myob-hoodie-front.webp', backImage: '/images/products/web/m1-myob-hoodie-back.webp', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'myob' },
   { id: 'm2', title: 'Thump a Stranger Hoodie', vendor: 'Hillbilly Fightwear', price: '$50.00', priceNum: 50, image: '/images/products/web/m2-thump-hoodie-front.webp', backImage: '/images/products/web/m2-thump-hoodie-back.webp', type: 'garment', garmentType: 'hoodie', sizes: ['S','M','L','XL','XXL'], colors: ['Black','White','Grey'], styles: ['Pullover','Zip-Up'], graphicId: 'thump-a-stranger' },
   { id: 'm3', title: 'T-Shirt - HFW Classic', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m3-hfw-classic-front.webp', backImage: '/images/products/web/m3-hfw-classic-back.webp', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'hfw-logo' },
-  { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m4-yycf-front.webp', backImage: '/images/products/web/m4-yycf-back.webp', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'yycf-logo' },
+  { id: 'm4', title: 'T-Shirt - YYCF', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m4-yycf-front.webp', backImage: '/images/products/web/m4-yycf-back.webp', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'yes-you-can' },
   { id: 'm5', title: 'T-Shirt - Fun Ride', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m5-fun-ride-front.webp', backImage: '/images/products/web/m5-fun-ride-back.webp', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'fun-logo' },
   { id: 'm6', title: 'T-Shirt - GNF', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m6-gnf-front.webp', backImage: '/images/products/web/m6-gnf-back.webp', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'gnf' },
   { id: 'm7', title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$30.00', priceNum: 30, image: '/images/products/web/m7-hcf-front.webp', backImage: '/images/products/web/m7-hcf-back.webp', type: 'garment', garmentType: 'tshirt', sizes: ['S','M','L','XL','XXL','XXXL'], colors: ['Black','White','Grey'], graphicId: 'human-cockfighter' },
@@ -363,9 +356,9 @@ export function productSlug(p: ShopProduct): string {
 }
 
 // Featured products for Build Your Own section (internal links, prices reflect base T-shirt cost)
-// Only 3 featured: GPG Design, Human Cockfighter, Thump a Stranger
+// Only 3 featured: GNF, Human Cockfighter, Thump a Stranger
 export const products = [
-  { id: 1, title: 'T-Shirt - GPG Design', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-gnf.png?v=15', url: '/build?garment=tshirt&graphic=gpg-design' },
+  { id: 1, title: 'T-Shirt - GNF', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-gnf.png?v=15', url: '/build?garment=tshirt&graphic=gnf' },
   { id: 2, title: 'T-Shirt - Human Cockfighter', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-hcf.png', url: '/build?garment=tshirt&graphic=human-cockfighter' },
   { id: 3, title: 'T-Shirt - Thump a Stranger', vendor: 'Hillbilly Fightwear', price: '$30.00', image: '/images/stickers/sticker-thump.png', url: '/build?garment=tshirt&graphic=thump-a-stranger' }
 ]

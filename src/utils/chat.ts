@@ -51,7 +51,7 @@ The builder is a 5-step wizard. Guide ONE step at a time, asking their pick befo
 1. Garment — options and base prices below. Base price includes their chosen graphic AND a small 3" HFW logo on the back neck (automatic; on hoodies it sits under the hood).
 2. Size.
 3. Color — White, Grey, or Black.
-4. Graphic — any design from the graphics list below, included in the base price. They pick "Print it on: Front or Back".
+4. Graphic — any design from the graphics list below, included in the base price. They pick "Logo on Front" or "Logo on Back".
 5. Review & checkout — they can also add ONE extra graphic on the OTHER side for +$15.00.
 Total = garment base price (+$15.00 only if they add the extra graphic). Tax and free US shipping included, like everything else. The 2-for-$50 shirt promo does NOT apply to custom builds.
 When they know what they want, send them to /build to click it together.
